@@ -1312,11 +1312,13 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        c2.putImageData(id,0,0);const t=new THREE.CanvasTexture(cv);t.flipY=map.flipY;t.colorSpace=map.colorSpace;t.wrapS=map.wrapS;t.wrapT=map.wrapT;t.anisotropy=4;map=t;RIG.fix={hair:nh,grey:ng,skin:[sr|0,sg|0,sb|0]}}}catch(e){console.warn('surfista 3D textura:',e)}
    si.needsUpdate=sw.needsUpdate=true;
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
-   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.vertexShader='varying float vMY;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;');
-     sh.fragmentShader='uniform float uAlt;varying float vMY;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.vertexShader='varying float vMY;varying vec3 vMN;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;');
+     sh.fragmentShader='uniform float uAlt;varying float vMY;varying vec3 vMN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
      if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
        c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
-       c=mix(c,vec3(0.96,0.80,0.46)*(0.55+1.6*l),smoothstep(0.30,0.12,l)*smoothstep(0.885,0.915,vMY));   // and sun-bleached blond hair
+       float face=smoothstep(-0.015,-0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
+       float hy=mix(0.925,0.86,smoothstep(-0.01,0.02,vMN.x));   // down to the neck at the back, only the crown at the front
+       c=mix(c,vec3(0.86,0.60,0.24)*(0.55+1.4*l),smoothstep(0.2,0.07,l)*smoothstep(hy,hy+0.025,vMY)*(1.-face));   // only the dark hair turns sun-bleached golden
        diffuseColor.rgb=c;}`)};
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
@@ -1589,7 +1591,7 @@ function setCam(i){game.cam=((i%3)+3)%3;$('camBtn').textContent='CAMERA: '+['CHA
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 $('goDesk').addEventListener('click',e=>{e.stopPropagation();beginPlay()});
-function setMirror(m){MIRROR=m?1:0;gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
+function setMirror(m){MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else riderG.scale.set(1,1,1);   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.target.blur()});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.target.blur()});
 try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}
