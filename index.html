@@ -1535,6 +1535,22 @@ function dropTick(dt){
   if(AT.push>0){npcG.updateMatrixWorld(true);if(D.ph==='fall')_nv.copy(npcBoard.position);else _nv.set(-0.78,0.06,0).applyMatrix4(npcG.matrixWorld);riderG.updateMatrixWorld(true);D.hand.copy(_nv);riderG.worldToLocal(D.hand)}
   if(D.ph!=='push'&&D.ph!=='fall')AT.push=0}
 
+/* Bodyboarder: once a wave she paddles past on the flat water in front of the wave, and he turns his head to watch her go by */
+const BB={on:false,done:false,wid:-1,s:0,t:0,ready:false,flip:0,lookSign:1,dir:0},BBS=mkS();
+const bbG=new THREE.Group();bbG.visible=false;scene.add(bbG);
+new GLTFLoader().load('bodyboarder.glb',g=>{const m=g.scene;m.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false}});
+  const box=new THREE.Box3().setFromObject(m),sz=box.getSize(new V3()),c=box.getCenter(new V3());m.position.set(-c.x,-box.min.y,-c.z);
+  const inner=new THREE.Group();inner.add(m);if(sz.z>sz.x)inner.rotation.y=PI/2;const L=Math.max(sz.x,sz.z);inner.scale.setScalar(1.8/L);
+  BB.inner=inner;bbG.add(inner);BB.ready=true},undefined,()=>{});
+function bbTick(dt,time){if(!BB.ready)return;
+  if(BB.wid!==game.waveId){BB.wid=game.waveId;BB.done=false;BB.on=false;bbG.visible=false}
+  if(game.state!=='ride'||game.replay||game.attract){bbG.visible=false;BB.on=false;return}
+  if(!BB.on){if(BB.done||game.waveAge<18||game.waveAge>46||sf.mode!=='ride'||game.inTube||DROP.on)return;BB.on=true;BB.s=sf.s+16;BB.t=0}
+  BB.t+=dt;BB.s-=2.0*dt;   // she paddles along the wave, he comes the other way
+  sampleSurf(BB.s,-3.4,BBS);bbG.position.copy(BBS.pos);bbG.position.y+=0.02+0.03*Math.sin(time*3.1);
+  bbG.rotation.set(0.05*Math.sin(time*4.4),PI*(1-BB.flip)+0.12*Math.sin(time*3.3),0.03*Math.sin(time*2.3));bbG.visible=true;
+  if(BB.s<sf.s-14||BB.t>16){BB.on=false;BB.done=true;bbG.visible=false}}
+
 /* ───────────────────────── input ───────────────────────── */
 const keys={},input={x:0,y:0,crouch:false,stall:false};
 addEventListener('keydown',e=>{
@@ -1984,13 +2000,13 @@ function placeSurfer(dt,time){
     if(input.stall){sh=-0.09;pitchT=0.09}
     {const tk=A.tbk=damp(A.tbk||0,game.inTube?1:0,game.inTube?3.2:2.4,dt);cT=lerp(cT,Math.max(cT,0.94),tk);AT.tube=tk;   // eases into the barrel stance and back out, no step
      if(game.inTube&&input.x>0.3)cT=lerp(cT,0.78+0.16*Math.sin(time*7.5),0.8)}   // pumping for speed inside
-    if(sf.introT>0&&!intro)cT=0.28;   // stretched out down the face
-    else if(sf.openT>0)cT=Math.max(cT,0.88-0.3*sstep(0.45,0,sf.openT));   // compressing into the bottom turn, then rising out of it
+    if(sf.introT>0&&!intro)cT=lerp(0.5,0.3,sstep(0.5,0.2,sf.introT));   // stretched out down the face
+    else if(sf.openT>0)cT=Math.max(cT,lerp(0.32,0.84,sstep(1.9,1.3,sf.openT))-0.28*sstep(0.7,0,sf.openT));   // compressing into the bottom turn, then rising out of it
     AT.lay=0.78*sstep(0.28,0.55,sf.layT)*(1-sstep(0.80,0.95,sf.layT));   // down at the start, back up by the time the tail comes roundif(AT.lay>0.05){cT=Math.max(cT,0.82);sh=-0.10}
     AT.crouch=cT;AT.shiftX=sh;
     AT.tw=clamp(0.75+clamp(-sf.steer*0.7-sf.om*0.06,-0.95,0.75),-0.45,1.6)-0.95*AT.lay;   /* layback: chest twisted back toward the tail *//* chest and head go round with the body when the board spins: nothing is held back on the wave */AT.snap=snapT;AT.speed=sf.V;
     AT.intent=clamp(sf.steer*0.85+sf.rail*0.45,-1,1);AT.vup=sstep(1.5,6,vpv);
-    AT.look=clamp(sf.steer*0.40+sf.rail*0.15,-0.75,0.75);{const R2=sf.rh;AT.gz=R2&&R2.ph===0&&!R2.up?(R2.climb?(rel<0.5?-0.42:0.30):-0.14):(R2&&R2.ph===1?0.12:0);   /* backside hit: eyes down through the bottom turn, then up at the foam */
+    AT.look=clamp(sf.steer*0.40+sf.rail*0.15,-0.75,0.75);if(BB.on){const ds=BB.s-sf.s,k=sstep(9,2,Math.abs(ds))*(ds<0?1:0.5);AT.look=lerp(AT.look,BB.lookSign*(ds<0?0.85:0.35),k)}/* a look back at the bodyboarder as she paddles past */{const R2=sf.rh;AT.gz=R2&&R2.ph===0&&!R2.up?(R2.climb?(rel<0.5?-0.42:0.30):-0.14):(R2&&R2.ph===1?0.12:0);   /* backside hit: eyes down through the bottom turn, then up at the foam */
      if(R2&&R2.ph===0&&R2.climb)AT.crouch=rel<0.5?Math.max(AT.crouch,0.90):Math.min(AT.crouch,0.52);if(R2&&R2.ph===1)AT.crouch=Math.max(AT.crouch,0.76);
      AT.bsh=bsK;if(bsK>0.5){const fw=R2&&R2.ph===1?sstep(0.35,0.05,sf.pivot):0;AT.gz=lerp(-0.45,0,fw);AT.crouch=Math.max(AT.crouch,0.80);AT.tw=lerp(AT.tw,0.35,0.8*(1-fw));AT.look=lerp(0.55,0,fw)}}   // coming off the snap his eyes go back down the line   // backside hit: folded over the toes, eyes down the face   // the head leads the turn a little and never looks back against the spin
     AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);
@@ -2008,7 +2024,7 @@ function placeSurfer(dt,time){
     if(sf.flip){tL.crossVectors(bX,bY).normalize();bP.addScaledVector(bY,0.6);bX.applyAxisAngle(tL,sf.flip);bY.applyAxisAngle(tL,sf.flip);bP.addScaledVector(bY,-0.6)}   // rotate about the body, not the board
     spin=sf.spin;sf.lam=damp(sf.lam,0,8,dt);
     bY.applyAxisAngle(bX,0.40*A.grab*Math.sin(PI*u));
-    AT.crouch=lerp(1.0,0.45,sstep(0.62,1,u));AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.speed=sf.V;AT.tw=0.75-input.x*0.28;AT.look=0.35-input.x*0.22;AT.shiftX=0;AT.rail=0;AT.lt=0;AT.drag=0;AT.hip=-input.x*0.3;AT.claim=0;
+    AT.crouch=lerp(0.72,0.45,sstep(0.62,1,u));AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.speed=sf.V;AT.tw=0.75-input.x*0.1;AT.look=0.3-input.x*0.08;AT.shiftX=0;AT.rail=0;AT.lt=0;AT.drag=0;AT.hip=-input.x*0.1;   // airs and alley-oops: relaxed, not wrung outAT.claim=0;
     airT=1;grabT=input.crouch?1:0;
     sampleSurf(sf.s,S.top-0.5,S2);setShadow(S2,S2.ts,0.30/(1+sf.h*0.6),1+sf.h*0.25);
   }else if(sf.mode==='float'){
@@ -2102,7 +2118,7 @@ function updateCamera(dt,time){
     if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
     else if(game.replay)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
     else if(game.attract)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(clockT/5.5)%REPLAY_SHOTS.length];   // start screen: the replay director
-    else{if(sf.openCam&&game.waveAge>3.6){sf.openCam=false;camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
+    else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
       kind=sf.openCam?'tele':sf.straight?'beach':['follow','tele','front'][game.cam];if(kind!==lastShot&&(kind==='beach'||lastShot==='beach'))camInit=false;
       if(game.cam===1&&kind==='tele'&&game.state==='ride'){const now=game.waveAge;   // the side camera cuts to the chase now and then: on a move, or every so often
         if(game.marks.length!==(game.mkN||0)){if(game.marks.length>(game.mkN||0)&&(game.chN||0)<2&&now>14&&now-(game.chEnd||-99)>18){game.chEnd=now+2.4;game.chN=(game.chN||0)+1}game.mkN=game.marks.length}
@@ -2259,7 +2275,7 @@ function tick(dtR,draw){
       if(sf.exV)sf.exT=(sf.exT||0)+h}
   }
   if(game.state==='ride'){const f={t:game.t,age:game.waveAge,H:game.Hbase,rk:game.rhK||0,tube:game.inTube,ix:input.x,cr:input.crouch,st:input.stall,sf:{}};for(const k of REC_KEYS)f.sf[k]=sf[k];game.rec.push(f)}
-  mk_('phys');placeSurfer(dt*MOVE,clockT);dropTick(dt*MOVE);mk_('rider');
+  mk_('phys');placeSurfer(dt*MOVE,clockT);dropTick(dt*MOVE);bbTick(dt*MOVE,clockT);mk_('rider');
   if(game.inTube&&Math.random()<dtR*0.35)spawnDrops(1);updateDrops(dtR);
   sunL.target.position.copy(sf.pos);sunL.position.copy(sf.pos).addScaledVector(SUN,14);
   emitWave(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
@@ -2282,7 +2298,7 @@ function tick(dtR,draw){
     elBar.style.transform=`scaleX(${clamp(1-game.waveAge/game.waveDur,0,1)})`}
 }
 buildWave(0);
-window.__g={stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,npcG,get npcBoard(){return npcBoard},colAEnd,colH,PY,PZ,NV,R_CUR,NC,colIndex,setRider,sheet(n,dt,cols,zoom,yoff,cb){window.__manual=true;const c=renderer.domElement;let o=document.getElementById('sheet');
+window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,npcG,get npcBoard(){return npcBoard},colAEnd,colH,PY,PZ,NV,R_CUR,NC,colIndex,setRider,sheet(n,dt,cols,zoom,yoff,cb){window.__manual=true;const c=renderer.domElement;let o=document.getElementById('sheet');
   if(!o){o=document.createElement('canvas');o.id='sheet';o.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:99;background:#000';document.body.appendChild(o)}
   if(!n){o.remove();return 'off'}
   o.width=innerWidth*2;o.height=innerHeight*2;const x=o.getContext('2d'),rows=Math.ceil(n/cols),cw=o.width/cols,ch=o.height/rows;
