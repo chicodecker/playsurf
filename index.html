@@ -1834,7 +1834,7 @@ function stepRide(dt){
   if(sf.bsHit&&sf.pivot<=0)sf.bsHit=0;{const mv=(sf.rh&&sf.rh.ph===1)||sf.bsHit?sstep(0.34,0.06,sf.pivot):1;   // the rebound pivots on the foam before it drops
    sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;sf.p+=sf.V*st*mv*dt}
      // deep in the pocket, then out through the mouth
-  if(sf.p>0&&top>0.5){const fi=colIndex(sf.s),i0=Math.floor(fi),t1=lerp(colTop[i0],colTop[Math.min(i0+1,NS-1)],fi-i0);if(t1>0.5)sf.p*=clamp(t1/top,0.94,1.015)}
+  if(sf.p>0&&top>0.5){const fi=colIndex(sf.s),i0=Math.floor(fi),t1=lerp(colTop[i0],colTop[Math.min(i0+1,NS-1)],fi-i0);if(t1>0.5)sf.p*=clamp(t1/top,0.985,1.015)}
   if(sf.mode==='ride'&&sf.p>top-0.05)sf.p=Math.min(sf.p,top-0.05);   // the top dropped under him: he stays on the face, not launched off it
   if(sf.p<-1.6)sf.p+=2.4*dt*clamp((-sf.p-1.6)/2+0.3,0,1.5);   // room to carve the bottom turn a little way out past the base
   if(sf.p<-9)sf.p=-9;
