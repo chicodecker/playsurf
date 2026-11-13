@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://playsurfgame.com/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-image.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/jogo-de-surf</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/free-surf-game</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.8</priority>
+  </url>
+</urlset>
