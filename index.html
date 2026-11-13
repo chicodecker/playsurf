@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PlaySurf | Free Online Surf Game · The Ultimate Surfing Game</title>
+<title>PlaySurf | The Ultimate Surfing Game</title>
 <meta name="description" content="PlaySurf. The Ultimate Surfing Game. Surfe uma esquerda perfeita de piscina de ondas, de dia ou sob os refletores. Jogo de surf 3D grátis no navegador, by Decker Games.">
 <meta property="og:title" content="PlaySurf | The Ultimate Surfing Game">
 <meta property="og:description" content="Surfe uma esquerda perfeita de piscina, de dia ou sob os refletores. Grátis no navegador.">
@@ -1627,7 +1627,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
 function startWave(att){SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
-  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:24,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openCam:true,openTube:false,endCl:false,claimV:0,exV:0,exT:0,exLand:false,straight:false});
+  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:24,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,exV:0,exT:0,exLand:false,straight:false});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.94*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
@@ -1758,7 +1758,9 @@ function stepRide(dt){
   if(sf.introT>0){sf.introT-=dt;
     if(sf.introT>0.5){sf.th=damp(sf.th,-0.3,4,dt);sf.V=damp(sf.V,CP+0.3,2,dt);sf.p=0.94*top;sf.om=0;sf.rail=0;sf.steer=0;return}
     thT=-1.32;rate=4.4}   // a late, steep drop from the very top
-  else if(sf.openT>0){sf.openT-=dt;thT=lerp(-1.0,1.0,sstep(1.85,1.05,sf.openT));rate=3.8;if(sf.p>0.82*top)sf.openT=0}   // one round bottom turn that carries on up to the lip
+  else if(sf.openT>0){sf.openT-=dt;   // the first bottom turn, built from the same moves as the rest of the wave: the glide off the foam, the round turn at the base, the climb to the lip
+    if(sf.openT>1.65){thT=-0.95;rate=2.6}else if(sf.openT>1.0&&sf.p<0.3*top){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}else{sf.openT=Math.min(sf.openT,0.99);thT=1.38;rate=5.2*(0.55+0.45*clamp(sf.V/7,0,1.3));sf.openC=(sf.openC||0)+dt;sf.openT=sf.openC>2.2?0:Math.max(sf.openT,0.05)}
+    if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
   else if(sf.pivot>0){thT=sf.pivotTh;rate=5.4;sf.pivot-=dt;piv=true}
   else if(sf.straight){thT=-1.5;rate=2.4}   // the end: straight in to the beach, no more running along the wave
   else if(sf.glideT>0&&!sf.rh){thT=-0.95;rate=2.6}   // coming down off the foam: one long smooth carve down the face
@@ -2085,7 +2087,7 @@ function boardSpray(dt){
       rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0)}}
 
 /* ───────────────────────── camera ───────────────────────── */
-const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camFov=30,camInit=false,camFocus=20,lastShot='';
+const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='';
 const REPLAY_SHOTS=['follow','tele'];   // replays and the start screen cut between chase and side only
 const SCam=mkS(),_bd=new V3();
 function shot(kind,p,tk,ak){
@@ -2125,15 +2127,16 @@ function updateCamera(dt,time){
         if(now<game.chEnd)kind='follow'}
       // whatever camera is selected, in the tube the view is from behind him inside the barrel; the other cameras cut in and back out
       if(kind!=='follow'&&!sf.openCam&&kind!=='beach'){if((game.inTube&&sf.tube>0.35)||sf.tubeK>(lastShot==='follow'?0.35:0.6))kind='follow'}
-      if(kind!==lastShot&&(kind==='follow'||lastShot==='follow'))camInit=false}   // a clean cut between the cameras
+      if(kind!==lastShot&&(kind==='follow'||lastShot==='follow'))camBlend=1}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
     fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=5;rl=8.5}}
   if((game.replay||game.attract)&&kind!==lastShot)camInit=false;lastShot=kind;
   if(game.dbgCam){const q=game.dbgCam;cT1.set(sf.pos.x+q[0],sf.pos.y+q[1],sf.pos.z+q[2]);cT2.set(sf.pos.x+(q[5]||0),sf.pos.y+(q[4]||0.65),sf.pos.z+(q[6]||0));fov=q[3];camP.copy(cT1);camL.copy(cT2);camFov=fov}
   if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true}
-  camP.x=damp(camP.x,cT1.x,rp*1.5,dt);camP.y=damp(camP.y,cT1.y,rp*0.8,dt);camP.z=damp(camP.z,cT1.z,rp*0.8,dt);
-  camL.x=damp(camL.x,cT2.x,rl,dt);camL.y=damp(camL.y,cT2.y,rl*0.7,dt);camL.z=damp(camL.z,cT2.z,rl*0.7,dt);
-  camFov=damp(camFov,fov,3,dt);
+  camBlend=Math.max(0,camBlend-dt/0.9);const bk=camBlend>0?lerp(1,0.55,camBlend):1;   // during a glide the camera eases across, then locks back on
+  camP.x=damp(camP.x,cT1.x,rp*1.5*bk,dt);camP.y=damp(camP.y,cT1.y,rp*0.8*bk,dt);camP.z=damp(camP.z,cT1.z,rp*0.8*bk,dt);
+  camL.x=damp(camL.x,cT2.x,rl*Math.max(bk,0.8),dt);camL.y=damp(camL.y,cT2.y,rl*0.7*Math.max(bk,0.8),dt);camL.z=damp(camL.z,cT2.z,rl*0.7*Math.max(bk,0.8),dt);
+  camFov=damp(camFov,fov,camBlend>0?2:3,dt);
   const hx=Math.sin(time*0.83)*0.07+Math.sin(time*2.1)*0.02,hy=Math.sin(time*1.17+1)*0.06+Math.sin(time*0.6)*0.08;
   const shk=game.shake||0;game.shake=damp(shk,0,7,dt);
   camera.position.set(camP.x+hx+rnd(-1,1)*shk*0.09,Math.max(camP.y+hy+rnd(-1,1)*shk*0.09,0.45),camP.z);
