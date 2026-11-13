@@ -83,7 +83,7 @@ h1 em{display:block;font-size:.13em;letter-spacing:.62em;font-weight:600;font-st
 @keyframes dgIn{0%{opacity:0;transform:translateY(18px) skewX(-8deg) scale(.96)}100%{opacity:1;transform:none}}
 @keyframes dgLine{to{width:62%}}
 @keyframes introOut{to{opacity:0;visibility:hidden}}
-#menu.panel{background:linear-gradient(90deg,rgba(2,10,14,.66) 0%,rgba(2,10,14,.34) 36%,rgba(2,10,14,0) 60%)}
+#menu.panel{overflow-y:auto;justify-content:safe center;background:linear-gradient(90deg,rgba(2,10,14,.66) 0%,rgba(2,10,14,.34) 36%,rgba(2,10,14,0) 60%)}
 .playRow{margin:14px 0 0 2px}
 .playLbl{display:block;font-size:14px;letter-spacing:.46em;font-weight:700;opacity:.92;margin:0 0 12px 3px;text-shadow:0 2px 14px rgba(0,0,0,.5)}
 .pbtns{display:flex;gap:14px;flex-wrap:wrap}
@@ -104,6 +104,33 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
 .tod button{pointer-events:auto;cursor:pointer;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:4px;padding:6px 14px;font:700 13px/1.2 inherit;font-family:inherit;letter-spacing:.18em;opacity:.75}
 .tod button.on{background:#ffd94a;color:#111;border-color:#ffd94a;opacity:1}
 @media (max-width:1000px),(max-height:720px){h1{font-size:clamp(48px,min(11vw,13vh),120px)}.logoH .psLogo{width:min(56vw,460px)}.sub{font-size:13px;margin:10px 0 10px 4px;line-height:1.35}.grid{font-size:12px;gap:2px 14px}.go{margin-top:12px;font-size:16px}.cred{margin-top:6px}}
+/* progression: spots, boards, trophies */
+.pbtn.sm{font-size:14px;padding:11px 18px;letter-spacing:.14em}
+.pbtn.wv.lock{opacity:.5;border-style:dashed}
+.pbtn.wv.lock.sel{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.55)}
+.pbtn.wv i.req{color:#ffd94a;opacity:1}
+.bdInfo{align-self:center;font-size:12px;letter-spacing:.16em;opacity:.85;max-width:300px;line-height:1.5}
+.prog{display:flex;align-items:center;gap:14px;margin:16px 0 0 4px;font-size:13px;letter-spacing:.24em;font-weight:700;pointer-events:auto;flex-wrap:wrap}
+.xpbar{width:180px;height:6px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}.xpbar i{display:block;height:100%;background:#9ff5dc;width:0;transition:width .8s}
+#trophies{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,10,14,.82);pointer-events:auto;z-index:40;transition:opacity .4s}
+#trophies.off{opacity:0;pointer-events:none}
+.trBox{max-width:900px;width:92vw;max-height:86vh;overflow:auto;padding:26px 28px}
+.trBox h3{font-size:16px;letter-spacing:.5em;margin-bottom:6px}.trBox p{font-size:12px;letter-spacing:.14em;opacity:.75;margin-bottom:16px}
+#trGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.tr{border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:12px 14px;opacity:.45}
+.tr.on{opacity:1;border-color:#ffd94a;background:rgba(255,217,74,.08)}
+.tr b{display:block;font-size:14px;letter-spacing:.16em;margin-bottom:4px}.tr span{font-size:12px;letter-spacing:.06em;opacity:.85}
+.tr.on b:before{content:'\1F3C6  '}
+#toast{position:absolute;left:50%;top:calc(var(--bar,5.5vh) + 8vh);transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;z-index:45}
+#toast div{background:rgba(8,20,28,.88);border:1px solid #ffd94a;color:#fff;border-radius:999px;padding:10px 22px;font-size:14px;letter-spacing:.2em;font-weight:700;animation:toastIn 3.8s forwards;white-space:nowrap}
+@keyframes toastIn{0%{opacity:0;transform:translateY(-10px)}10%{opacity:1;transform:none}82%{opacity:1}100%{opacity:0}}
+#end .prg{margin:14px 0 0 4px;font-size:14px;letter-spacing:.16em}
+#end .prg .xpbar{width:240px;display:inline-block;vertical-align:middle;margin:0 12px}
+#end .unl{margin:10px 0 0 4px;display:flex;flex-direction:column;gap:6px}
+#end .unl div{font-size:15px;letter-spacing:.18em;font-weight:700;color:#ffd94a}
+#end .goal{margin:8px 0 0 4px;font-size:13px;letter-spacing:.14em;opacity:.8}
+#end .endBtns{display:flex;gap:12px;margin:16px 0 0 4px;flex-wrap:wrap}
+#end.panel{overflow-y:auto;justify-content:safe center;padding-block:calc(var(--bar,5.5vh) + 2vh)}
 #end h2{font-size:15px;letter-spacing:.5em;font-weight:600;opacity:.8}
 #end .nota{font-size:clamp(90px,15vw,200px);font-style:italic;font-weight:800;line-height:.9}
 #end .nota small{font-size:.16em;letter-spacing:.3em;font-style:normal;font-weight:600;opacity:.7;margin-left:14px}
@@ -168,9 +195,13 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     
     <div class="playRow"><span class="playLbl">1 · CHOOSE YOUR WAVE</span>
       <div class="pbtns"><button id="goLeft" class="pbtn wv sel">LEFT <i>GOOFY</i></button><button id="goRight" class="pbtn wv">RIGHT <i>REGULAR</i></button></div></div>
-    <div class="playRow"><span class="playLbl">2 · PLAY NOW</span>
+    <div class="playRow"><span class="playLbl">2 · CHOOSE YOUR SPOT</span>
+      <div class="pbtns" id="spotBtns"></div></div>
+    <div class="playRow"><span class="playLbl">3 · YOUR BOARD</span>
+      <div class="pbtns"><button id="bdPrev" class="pbtn wv sm" aria-label="Previous board">&#9664;</button><button id="bdName" class="pbtn wv sel sm">CLASSIC</button><button id="bdNext" class="pbtn wv sm" aria-label="Next board">&#9654;</button><span id="bdInfo" class="bdInfo"></span></div></div>
+    <div class="playRow"><span class="playLbl">4 · PLAY NOW</span>
       <div class="pbtns"><button id="goDesk" class="pbtn">DESKTOP</button><button id="goMob" class="pbtn soon" disabled aria-disabled="true" tabindex="-1">MOBILE <i>SOON</i></button></div></div>
-    <div class="howto"><div class="htl">HOW TO PLAY</div>
+    <details class="howto" id="howto" open><summary>HOW TO PLAY</summary>
     <div class="grid">
       <b>Bottom Turn</b><span>drop down and point <span class="kk">↑</span> at the bottom — that's where the speed comes from</span>
       <b>Snap</b><span>climb and tap <span class="kk">↓</span> at the top — he turns, throws the tail and comes back</span>
@@ -183,12 +214,15 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
       <b>Barrel</b><span>after the drop and the first open wall the first section throws the lip; near the end a small one comes back: stay on the wall and it covers you; <span class="kk">SHIFT</span> brakes to get deeper, <span class="kk">→</span> pumps for speed; his hand trails on the wall</span>
       <b>Foam</b><span>later sections crumble: go straight up for a <em>foam hit</em>, or come in sideways for a <em>floater</em> across the top</span>
       <b>Air</b><span>hit the lip fast with <span class="kk">SPACE</span>; in the air <span class="kk">←</span><span class="kk">→</span> spin, <span class="kk">↑</span><span class="kk">↓</span> flip, <span class="kk">SPACE</span> grabs</span>
-    </div></div>
+    </div></details>
+    <div class="prog"><span id="lvl">LEVEL 1</span><div class="xpbar"><i id="xpFill"></i></div><span id="xpTxt"></span><button id="trBtn" class="pbtn wv sm">TROPHIES 0/12</button></div>
     <div class="tod"><button id="todD" class="on">☀ DAY</button><button id="todN">☾ NIGHT</button><span>N toggles</span></div>
     <div id="rdRow" style="display:none"><button id="rdN"></button><button id="rdC"></button></div>
     <p class="cred">3D surfer: made with Magnific (Tripo) · Music: original tracks made with Suno</p>
   </div>
   <div id="end" class="panel off"></div>
+  <div id="trophies" class="off"><div class="trBox"><h3>TROPHIES</h3><p id="trSub"></p><div id="trGrid"></div><button id="trClose" class="pbtn sm">CLOSE</button></div></div>
+  <div id="toast"></div>
   <div id="rep">REPLAY</div>
   <div id="music"><button id="mPrev" aria-label="Previous track">&#9198;</button><div class="mInfo"><small>&#9835; NOW PLAYING</small><b id="mTitle"></b><span id="mBand"></span></div><button id="mNext" aria-label="Next track">&#9197;</button></div>
   <div id="pause">PAUSED</div>
@@ -653,6 +687,11 @@ function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
 const game={hl:false,showCard:null,waveId:0,cardAt:0,night:0,inTube:false,secAge:-1,replay:null,rec:[],marks:[],state:'menu',t:0,waveAge:0,Hbase:1,xOff:rnd(1500),pts:0,combo:0,comboT:-99,list:[],photos:[],heat:[],
   best:(()=>{try{return +(localStorage.getItem('surfpool_best')||0)}catch(e){return 0}})(),ts:1,slowT:0,cam:1,paused:false,shotReq:null,waveDur:80,endKind:''};
 
+// spots: each one its own wave and scenery; the next one opens when the score at the one before is good enough (more can be added to the list)
+const SPOTS=[{id:1,name:'POOL',full:'PLAYSURF POOL',sub:'WAVE POOL',hK:1,eL:1},
+  {id:2,name:"TEAHUPO'O",full:"TEAHUPO'O",sub:'HEAVY SLAB · TUBES & AIRS',hK:1.25,eL:1.75,req:{spot:1,nota:7}},
+  {id:3,name:'PIPELINE',full:'PIPELINE',sub:'COMING SOON',soon:true,req:{spot:2,nota:7.5}}];
+let SPOT=SPOTS[0];
 function wallLen(X){return 48+5*(Math.sin(X*0.043+1.3)*0.6+Math.sin(X*0.105+4.1)*0.4)}
 function wOf(s,Lw){if(s<=4.5)return 1;if(s<9)return lerp(1,0.64,sstep(4.5,9,s));return lerp(0.64,0.56,sstep(9,36,s))}   // no fading shoulder: the wall keeps its shape all the way down the line
 // Sections drift back along the wall toward the curl. A stretch of open wall first, then a long tube (open at both ends, so he slips in under the lip).
@@ -682,10 +721,10 @@ function secAt(s,age){let v=0;secClose=0;secFoam=0;secJct=0;if(age<0)return 0;
 function buildWave(t){
   secUpdate(game.secAge);const adv=CP*t+game.xOff,rk=game.rhK||0;   // rk: during a roundhouse the curl stops throwing and piles up as foam, so there is a junction to hit
   for(let i=0;i<NS;i++){
-    const s=colS[i],X=s+adv,Lw=wallLen(X),Hs=game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s));
+    const s=colS[i],X=s+adv,Lw=wallLen(X),Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s));
     let o=scA;
     if(s>=0){
-      const ef=endFoam(s,game.secAge),sv=secAt(s,game.secAge),fo=Math.max(secFoam,rk*(1-sstep(3.0,7.5,s)),0.45*secJct,0.6*ef),e=Math.max(clamp(1-(s-0.3)/9.5,0,1)*(1-secJct),sv*(0.45+0.55*secClose))*(1-fo),fade=1-0.74*sstep(150,205,s);
+      const ef=endFoam(s,game.secAge),sv=secAt(s,game.secAge),fo=Math.max(secFoam,rk*(1-sstep(3.0,7.5,s)),0.45*secJct,0.6*ef),e=Math.max(clamp(1-(s-0.3)/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose))*(1-fo),fade=1-0.74*sstep(150,205,s);
       const w0=Math.max(wOf(s,Lw),fo*0.9,0.95*secJct),w=(w0+(1-w0)*sv*sv)*sstep(0.25,0.6,game.Hbase);   // blends in with no kink where a section starts
       profile(scA,0.28*fade,w,(205+65*e)*DEG,lerp(2.0*fade,4.0,sstep(0,0.42,w))*Hs*(1-0.10*fo)*(1-0.38*ef)*(1+0.30*secJct),0,0,false,sstep(0.35,0.95,e),fo,s,t);   // turning to white water at the end, the wave also loses height
       colW[i]=w;colFoam[i]=fo;colSecF[i]=Math.max(secFoam,0.45*secJct);colEnd[i]=ef;
@@ -727,12 +766,12 @@ waveGeo.setAttribute('aInfo',new THREE.BufferAttribute(gInf,4).setUsage(THREE.Dy
  waveGeo.setIndex(new THREE.BufferAttribute(idx,1));waveGeo.addGroup(0,n0,0);waveGeo.addGroup(n0,k-n0,1)}
 const waveDef={
   uniforms:{uSun:{value:SUN},uNight:TOD,uNoise:{value:noiseTex},uTime:{value:0},uX:{value:0},uPool:{value:new THREE.Vector4(62,0.866,0.5,0)},
-    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1}},
+    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0}},
   vertexShader:`attribute vec4 aInfo;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     void main(){vP=position;vN=normal;vI=aInfo;gl_Position=projectionMatrix*viewMatrix*vec4(position,1.);}`,
   fragmentShader:`precision highp float;
     uniform sampler2D uNoise;uniform float uTime;uniform float uX;uniform vec4 uPool;varying vec3 vP;varying vec3 vN;varying vec4 vI;
-    uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK;
+    uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef;
     ${SKY_GLSL}
     void main(){
       vec3 Ng=vN;if(dot(Ng,Ng)<1e-6)Ng=vec3(0.,1.,0.);Ng=normalize(Ng);vec3 Vv=cameraPosition-vP;float dist=length(Vv);vec3 V=Vv/dist;
@@ -774,7 +813,8 @@ const waveDef={
        float lane=1.-smoothstep(0.10,0.20,abs(fract(fu.y/10.)-0.5)*10.),cross=1.-smoothstep(0.08,0.16,abs(fract(fu.x/25.)-0.5)*25.);
        float cau=smoothstep(0.45,0.95,texture2D(uNoise,fu*0.21+w1*0.35).a)*0.6;
        float tile=max(1.-smoothstep(0.015,0.05,abs(fract(fu.x/2.5)-0.5)*2.5),1.-smoothstep(0.015,0.05,abs(fract(fu.y/2.5)-0.5)*2.5));
-       vec3 floorC=uFl*(0.86+0.46*cau)*(1.-0.16*tile);floorC=mix(floorC,uFlL,max(lane,cross*0.6)*0.8);
+       lane*=1.-uReef;cross*=1.-uReef;tile*=1.-uReef;vec3 floorC=uFl*(0.86+0.46*cau)*(1.-0.16*tile);floorC=mix(floorC,uFlL,max(lane,cross*0.6)*0.8);
+       if(uReef>0.5){float rr=texture2D(uNoise,fu*0.031+vec2(0.37,0.11)).a*0.65+texture2D(uNoise,fu*0.11).b*0.35;floorC=mix(uFlL,uFl,smoothstep(0.32,0.68,rr))*(0.82+0.5*cau);}   // a coral reef under the water
        float vis=(1.-fres)*smoothstep(0.06,0.55,ndv)*(1.-steep)*(1.-steep)*(1.-clamp(foamA,0.,1.))*(1.-occ)*0.68;
        body=mix(body,floorC*uFlK,vis);}
       float sd=max(dot(R,L),0.);
@@ -1018,13 +1058,68 @@ function setTOD(n){n=n?1:0;TOD.value=n;game.night=n;try{localStorage.setItem('su
     S3(U.uWA,0.001,0.048,0.105);S3(U.uWB,0.003,0.215,0.360);S3(U.uG1,0.0,0.30,0.44);S3(U.uG2,0.06,0.80,0.78);S3(U.uFl,0.16,0.58,0.88);S3(U.uFlL,0.04,0.20,0.36);S3(U.uSpecC,1.0,0.96,0.88);
     S3(U.uFoamA,0.62,0.76,0.88);S3(U.uFoamB,1.0,0.99,0.97);U.uFlK.value=0.95;partMat.uniforms.uTint.value.set(1,1,1);
     palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
-  if(typeof cityNight==='function')cityNight(n);bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
+  if(typeof cityNight==='function')cityNight(n);spotTint(n);bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
+
+/* ───────────────────────── spots ───────────────────────── */
+// Teahupo'o: open ocean over a reef, the green peaks of Tahiti behind; the wave is bigger and keeps throwing: barrel after barrel with open wall between for airs
+const tahitiG=new THREE.Group();tahitiG.visible=false;scene.add(tahitiG);
+{const mat=new THREE.MeshStandardMaterial({color:0x3a6a45,roughness:0.95,flatShading:true});
+ const PK=[[-118,560,200],[-104,620,300],[-92,560,250],[-80,640,380],[-68,600,280],[-56,660,340],[-44,600,230],[-30,640,300],[-16,600,260],[0,660,340],[14,620,230],[160,600,240],[176,640,320],[192,600,260]];   // [bearing, range, height]
+ PK.forEach(([a,R0,h0],i)=>{const h=h0*0.34,R=R0*1.2,g=new THREE.ConeGeometry(h*1.7,h,32,12,true),P=g.attributes.position;   // far off and hazy: a few degrees over the horizon
+   for(let k=0;k<P.count;k++){const x=P.getX(k),y=P.getY(k),z=P.getZ(k),an=Math.atan2(z,x),u=y/h+0.5;
+     const rid=1+0.30*Math.sin(an*3+i*1.7)+0.17*Math.sin(an*7+i*0.9)+0.09*Math.sin(an*13+i*2.3)+0.12*Math.sin(u*9+an*4+i);   // ridges and gullies
+     P.setXYZ(k,x*rid,y+h*0.05*Math.sin(an*5+i)*u*(1-u)*4,z*rid)}
+   g.computeVertexNormals();const m=new THREE.Mesh(g,mat);const th=a*DEG;m.position.set(26+R*Math.cos(th),h*0.5-4,5+R*Math.sin(th));m.rotation.y=i*1.3;m.scale.set(1.3,1,1.1);tahitiG.add(m)})}
+const SEC_BY={1:SEC.map(C=>({...C})),
+  2:[{t0:7,c0:46,v:2.0,h:10.5,k:0,d:10,fol:1},{t0:24,c0:44,v:2.2,h:10,k:0,d:9,fol:1},{t0:41,c0:44,v:2.0,h:10,k:0,d:9,fol:1},{t0:57,c0:42,v:2.2,h:9.5,k:0,d:8.5,fol:1},{t0:67,c0:46,v:2.6,h:7.5,k:2}]};
+function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
+  PROG.spot=SPOT.id;progSave();setTOD(game.night);if(typeof progUI==='function')progUI()}
+function spotTint(n){const on=SPOT.id===2,U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);
+  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;U.uReef.value=on?1:0;
+  if(!on)return;
+  if(n){S3(U.uWA,0.0,0.016,0.050);S3(U.uWB,0.0,0.090,0.200);S3(U.uFl,0.04,0.16,0.20);S3(U.uFlL,0.01,0.05,0.08);U.uFlK.value=0.55}
+  else{S3(U.uWA,0.0,0.030,0.085);S3(U.uWB,0.0,0.150,0.300);S3(U.uG1,0.0,0.26,0.40);S3(U.uG2,0.12,0.90,0.84);S3(U.uFl,0.12,0.40,0.42);S3(U.uFlL,0.03,0.12,0.15);U.uFlK.value=0.72;scene.fog.color.setRGB(0.58,0.76,0.92)}}
+
+/* ───────────────────────── progression ───────────────────────── */
+// XP from every wave, the best score at each spot, trophies, boards; all kept in this browser
+const PROG=(()=>{let d={};try{d=JSON.parse(localStorage.getItem('playsurf_prog')||'{}')||{}}catch(e){}
+  return Object.assign({xp:0,waves:0,best:{},tro:{},board:'classic',celeb:[],spot:1},d)})();
+function progSave(){try{localStorage.setItem('playsurf_prog',JSON.stringify(PROG))}catch(e){}}
+const BOARDS=[
+  {id:'classic',name:'CLASSIC',sub:"6'0 THRUSTER · ALL-ROUND",L:1.86,W:0.49,pal:[0xf6f2e8,0x12b5a6,0x1b1f24],pat:'nose',fins:3,spd:1,trn:1},
+  {id:'fish',name:'FISH',sub:"5'6 TWIN · MORE SPEED",L:1.72,W:0.53,pal:[0xffd94a,0xff6b3d,0x1b1f24],pat:'rails',fins:2,spd:1.05,trn:0.97,req:{xp:20000}},
+  {id:'twin',name:'RETRO TWIN',sub:"5'10 · LOOSER TURNS",L:1.80,W:0.51,pal:[0xf3e6cf,0xd2452f,0x2a1f1a],pat:'stripe',fins:2,spd:1.02,trn:1.07,req:{nota:8}},
+  {id:'gun',name:"TEAHUPO'O GUN",sub:"6'8 · FAST AND STABLE",L:2.02,W:0.46,pal:[0x0e2a3b,0x22d3c5,0x0a0d10],pat:'full',fins:3,spd:1.07,trn:0.95,req:{tro:'bigwave'}},
+  {id:'pro',name:'PRO MODEL',sub:"6'0 · SPEED AND BITE",L:1.84,W:0.49,pal:[0x14171b,0xffd94a,0x14171b],pat:'fade',fins:3,spd:1.05,trn:1.05,req:{nota:9.5}}];
+let BOARD=BOARDS[0];
+const TROPHIES=[
+  {id:'first',n:'FIRST WAVE',d:'Ride a wave to the end'},
+  {id:'barrel',n:'TUBED',d:'Get your first barrel'},
+  {id:'huge',n:'HUGE BARREL',d:'Stay in the barrel for 3.5 s'},
+  {id:'air',n:'TAKE OFF',d:'Land an air'},
+  {id:'air360',n:'FULL ROTATION',d:'Land an Air 360'},
+  {id:'combo5',n:'COMBO ×5',d:'Chain five moves'},
+  {id:'n8',n:'SCORE 8',d:'Score 8.0 on a wave'},
+  {id:'n95',n:'PERFECT 9.5',d:'Score 9.5 on a wave'},
+  {id:'show',n:'SHOWMAN',d:'See all six celebrations'},
+  {id:'spot2',n:"TEAHUPO'O OPEN",d:"Unlock Teahupo'o"},
+  {id:'bigwave',n:'BIG WAVE RIDER',d:"Ride a wave to the end at Teahupo'o"},
+  {id:'quiver',n:'FULL QUIVER',d:'Unlock every board'}];
+const bestAt=id=>+(PROG.best[id]||0),bestAny=()=>Math.max(0,...Object.values(PROG.best).map(Number));
+function reqMet(r){if(!r)return true;if(r.xp&&PROG.xp<r.xp)return false;if(r.tro&&!PROG.tro[r.tro])return false;if(r.nota&&(r.spot?bestAt(r.spot):bestAny())<r.nota)return false;return true}
+function reqText(r){if(!r)return '';const parts=[];if(r.nota)parts.push('SCORE '+r.nota.toFixed(1)+(r.spot?' AT '+SPOTS.find(o=>o.id===r.spot).name:''));if(r.xp)parts.push(r.xp.toLocaleString('en-US')+' XP');if(r.tro)parts.push('TROPHY: '+TROPHIES.find(t=>t.id===r.tro).n);return parts.join(' · ')}
+const spotOpen=o=>!o.soon&&reqMet(o.req),boardOpen=b=>reqMet(b.req);
+const lvlOf=xp=>1+Math.floor(Math.sqrt(xp/4000)),lvlXP=l=>(l-1)*(l-1)*4000;
+function toast(t){const e=document.createElement('div');e.textContent=t;$('toast').appendChild(e);setTimeout(()=>e.remove(),3900)}
+function giveTro(id){if(game.attract||PROG.tro[id])return false;PROG.tro[id]=Date.now();progSave();const T=TROPHIES.find(t=>t.id===id);toast('TROPHY · '+T.n);(game.newTro=game.newTro||[]).push(T.n);sfxChime&&sfxChime(4);return true}
+function openState(){return {s:SPOTS.filter(spotOpen).map(o=>o.id),b:BOARDS.filter(boardOpen).map(b=>b.id)}}
 
 /* ───────────────────────── board ───────────────────────── */
 const boardG=new THREE.Group();scene.add(boardG);
-(function buildBoard(){
-  const L=1.86,W=0.49,T=0.066,NL=30,NRg=14,pos=[],col=[],idx=[];
-  const cW=new THREE.Color(0xf6f2e8),cA=new THREE.Color(0x12b5a6),cP=new THREE.Color(0x1b1f24),c=new THREE.Color();
+function buildBoard(B){
+  boardG.children.filter(o=>o.userData.board).forEach(o=>{boardG.remove(o);o.geometry.dispose();if(o.material.dispose)o.material.dispose()});
+  const L=B.L,W=B.W,T=0.066,NL=30,NRg=14,pos=[],col=[],idx=[];
+  const cW=new THREE.Color(B.pal[0]),cA=new THREE.Color(B.pal[1]),cP=new THREE.Color(B.pal[2]),c=new THREE.Color(),pat=B.pat;
   for(let i=0;i<=NL;i++){const u=i/NL,x=(u-0.5)*L;
     const w=u<0.5?W/2*(1-Math.pow(1-2*u,2.6)*0.56):W/2*Math.pow(Math.max(0,1-Math.pow(2*u-1,2.3)),0.82);
     const rock=0.11*Math.pow(Math.max(0,(u-0.55)/0.45),2.3)+0.03*Math.pow(Math.max(0,(0.25-u)/0.25),2);
@@ -1032,19 +1127,25 @@ const boardG=new THREE.Group();scene.add(boardG);
     for(let k=0;k<NRg;k++){const ph=2*PI*k/NRg,sn=Math.sin(ph),cs=Math.cos(ph);
       pos.push(x,rock+(sn>0?sn*th*0.55:sn*th*0.45),cs*w);
       c.copy(cW);
+      if(pat==='full')c.copy(cA).lerp(cW,0.15+0.15*sstep(0.3,0.9,u));else if(pat==='fade')c.lerp(cA,sstep(0.25,0.85,u));
       if(sn>0.2&&u<0.26&&u>0.03&&Math.abs(cs)<0.75)c.copy(cP);
-      else if(u>0.74)c.lerp(cA,sstep(0.74,0.80,u));
+      else if(pat==='nose'&&u>0.74)c.lerp(cA,sstep(0.74,0.80,u));
+      else if(pat==='rails'&&Math.abs(cs)>0.80)c.copy(cA);
+      else if(pat==='stripe'&&Math.abs(u-0.52)<0.035)c.copy(cA);
+      else if(pat==='full'&&sn<-0.2)c.copy(cW).lerp(cA,0.35);
       else if(sn>0.2&&Math.abs(cs)<0.08)c.set(0xc9b48a);
       col.push(c.r,c.g,c.b)}}
   for(let i=0;i<NL;i++)for(let k=0;k<NRg;k++){const a=i*NRg+k,b=i*NRg+(k+1)%NRg,d=a+NRg,e=b+NRg;idx.push(a,d,b,b,d,e)}
   const tc=pos.length/3;pos.push(-L/2,0.03,0);col.push(cW.r,cW.g,cW.b);for(let k=0;k<NRg;k++)idx.push(tc,k,(k+1)%NRg);
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
   g.setIndex(idx);g.computeVertexNormals();
-  boardG.add(new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:0.2,clearcoat:1,clearcoatRoughness:0.08,side:THREE.DoubleSide})));
+  {const m=new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:0.2,clearcoat:1,clearcoatRoughness:0.08,side:THREE.DoubleSide}));m.userData.board=1;boardG.add(m)}
   const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute([0.07,0,0,-0.05,0,0,-0.10,-0.125,0],3));fg.computeVertexNormals();
   const fm=new THREE.MeshStandardMaterial({color:0x10151a,roughness:0.3,side:THREE.DoubleSide});
-  [[-0.80,0,0],[-0.60,0.17,0.12],[-0.60,-0.17,-0.12]].forEach(([x,z,cant])=>{const m=new THREE.Mesh(fg,fm);m.position.set(x,0.0,z);m.rotation.x=cant;boardG.add(m)});
-})();
+  const tx=-L/2;(B.fins===2?[[tx+0.20,0.15,0.12],[tx+0.20,-0.15,-0.12]]:[[tx+0.13,0,0],[tx+0.33,0.17,0.12],[tx+0.33,-0.17,-0.12]]).forEach(([x,z,cant],i)=>{const m=new THREE.Mesh(i?fg:fg.clone(),i?fm:fm.clone());m.position.set(x,0.0,z);m.rotation.x=cant;m.userData.board=1;boardG.add(m)});
+}
+function setBoard(id){const b=BOARDS.find(o=>o.id===id);BOARD=b&&boardOpen(b)?b:BOARDS[0];PROG.board=BOARD.id;progSave();buildBoard(BOARD);if(typeof progUI==='function')progUI()}
+buildBoard(BOARD);
 
 /* ───────────────────────── rider ───────────────────────── */
 const riderG=new THREE.Group();scene.add(riderG);
@@ -1617,6 +1718,7 @@ addEventListener('keydown',e=>{
   if(e.code==='KeyN')setTOD(!game.night);if(e.code==='KeyG'&&game.state==='ride'&&sf.mode==='ride'&&!sf.c360&&!sf.rh&&!game.inTube&&sf.introT<=0&&!(sf.openT>0))sf.c360={t:0,acc:0,pth:sf.th};if(e.code==='KeyF')game.npReq=game.waveAge;
   
   if(e.code==='Digit1')setCam(0);if(e.code==='Digit2')setCam(1);if(e.code==='Digit3')setCam(2);
+  if(e.code==='Escape'&&game.state==='end'&&!game.attract){toMenu();return}
   if(e.code==='KeyP'||e.code==='Escape'){if(game.state==='ride'&&!game.attract){game.paused=!game.paused;$('pause').style.display=game.paused?'flex':'none'}}
   if(e.code==='KeyM'){audio.muted=!audio.muted;if(audio.master)audio.master.gain.value=audio.muted?0:0.55;MUS.el.muted=audio.muted}
   if(e.code==='BracketRight'||e.code==='KeyT'){musicGo();musicSet(MUS.i+1)}if(e.code==='BracketLeft'){musicGo();musicSet(MUS.i-1)}
@@ -1630,6 +1732,21 @@ function setMirror(m){MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else rid
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.target.blur()});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.target.blur()});
 try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}
+try{if(innerHeight<980)$('howto').removeAttribute('open')}catch(e){}   // short screens: the move list starts folded so the steps fit
+function progUI(){
+  const sb=$('spotBtns');if(sb)sb.innerHTML=SPOTS.map(o=>{const op=spotOpen(o);return `<button class="pbtn wv sm${o.id===SPOT.id?' sel':''}${op?'':' lock'}" data-spot="${o.id}">SPOT ${o.id} · ${o.name}<i${op?'':' class="req"'}>${o.soon?'SOON':op?o.sub:'&#128274; '+reqText(o.req)}</i></button>`}).join('');
+  const op=boardOpen(BOARD);$('bdName').textContent=BOARD.name;$('bdInfo').innerHTML=BOARD.sub+'<br>'+BOARDS.filter(boardOpen).length+'/'+BOARDS.length+' BOARDS';
+  const lv=lvlOf(PROG.xp);$('lvl').textContent='LEVEL '+lv;$('xpFill').style.width=(clamp((PROG.xp-lvlXP(lv))/(lvlXP(lv+1)-lvlXP(lv)),0,1)*100).toFixed(1)+'%';$('xpTxt').textContent=PROG.xp.toLocaleString('en-US')+' XP';
+  const nT=TROPHIES.filter(t=>PROG.tro[t.id]).length;$('trBtn').textContent='TROPHIES '+nT+'/'+TROPHIES.length;
+  $('trSub').textContent=nT+' OF '+TROPHIES.length+' · LEVEL '+lv+' · '+PROG.xp.toLocaleString('en-US')+' XP · '+PROG.waves+' WAVES';
+  $('trGrid').innerHTML=TROPHIES.map(t=>`<div class="tr${PROG.tro[t.id]?' on':''}"><b>${t.n}</b><span>${t.d}</span></div>`).join('')+BOARDS.map(b=>`<div class="tr${boardOpen(b)?' on':''}"><b>BOARD · ${b.name}</b><span>${boardOpen(b)?b.sub:'&#128274; '+reqText(b.req)}</span></div>`).join('')}
+$('spotBtns').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();b.blur();const o=SPOTS.find(x=>x.id===+b.dataset.spot);
+  if(!o)return;if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}if(o.id!==SPOT.id){setSpot(o.id);if(game.attract)startAttract()}});
+{const cyc=d=>{const i=BOARDS.indexOf(BOARD);for(let k=1;k<=BOARDS.length;k++){const b=BOARDS[(i+d*k+BOARDS.length*9)%BOARDS.length];if(boardOpen(b)){setBoard(b.id);return}}};
+ $('bdPrev').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(-1)});$('bdNext').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(1)});
+ $('bdName').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(1)})}
+$('trBtn').addEventListener('click',e=>{e.stopPropagation();e.target.blur();progUI();$('trophies').classList.remove('off')});
+$('trClose').addEventListener('click',e=>{e.stopPropagation();$('trophies').classList.add('off')});$('trophies').addEventListener('click',e=>{if(e.target.id==='trophies')$('trophies').classList.add('off')});
 const vin=$('vin');function introEnd(){const it=$('intro');if(it.classList.contains('off')||it.classList.contains('fade'))return;it.classList.add('fade');setTimeout(()=>it.classList.add('off'),1100);if(audio.ctx)setTimeout(musicGo,900)}
 vin.addEventListener('ended',introEnd);vin.addEventListener('error',()=>setTimeout(introEnd,600));
 vin.addEventListener('playing',()=>$('intro').classList.add('live'));
@@ -1638,7 +1755,8 @@ setTimeout(()=>{if(vin.paused||vin.readyState<2)introEnd()},9000);   // never st
 $('intro').addEventListener('click',()=>{if(vin.muted&&!vin.ended){vin.muted=false;vin.volume=0.9;$('intro').classList.add('snd');initAudio()}else introEnd()});
 $('rdN').addEventListener('click',e=>{e.stopPropagation();setRider(1);e.target.blur()});$('rdC').addEventListener('click',e=>{e.stopPropagation();setRider(0);e.target.blur()});
 $('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);e.target.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();setTOD(1);e.target.blur()});
-$('end').addEventListener('click',()=>{if(game.state==='end'&&game.endT>1.2)startWave()});
+$('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(b.id==='eMenu')toMenu();else{if(b.dataset.spot)setSpot(+b.dataset.spot);startWave()}return}if(game.state==='end'&&game.endT>1.2)startWave()});
+function toMenu(){startAttract();progUI()}   // back to the start screen: pick a spot or a board you just opened
 addEventListener('pointerdown',()=>{if(game.state==='end'&&game.hl&&game.showCard)game.showCard()});
 function readInput(){
   let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
@@ -1691,7 +1809,7 @@ function startWave(att){SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game
   riderG.visible=boardG.visible=true;
   $('menu').classList.add('off');$('end').classList.add('off');$('hud').classList.add('on');$('wavebar').classList.add('on');$('camBtn').classList.add('on');$('keys').classList.add('on');
   setTimeout(()=>$('keys').classList.remove('on'),9000);$('pop').innerHTML='';
-  if(game.attract){$('menu').classList.remove('off');return}   // behind the start screen
+  if(game.attract){$('menu').classList.remove('off');progUI();return}   // behind the start screen
   sfxNoise(1.2,900,0.25)}
 function startAttract(){startWave(true)}
 function beginPlay(){initAudio();game.ts=1;startWave();musicGo()}
@@ -1721,6 +1839,7 @@ function award(name,pts,small){
   let tot=pts,mult=1;
   if(!small){const now=game.waveAge;game.marks.push(now);game.combo=now-game.comboT<5.5?game.combo+1:1;game.comboT=now;mult=1+0.25*Math.min(game.combo-1,6)}
   tot=Math.round(pts*mult/10)*10;game.pts+=tot;game.list.push({name,pts:tot,t:game.waveAge,small:!!small});
+  if(/Barrel/.test(name))giveTro('barrel');if(name==='Huge Barrel')giveTro('huge');if(/^(Air|Backflip|Frontflip|Nose Pick)/.test(name))giveTro('air');if(/^(Air|Nose Pick).*360/.test(name))giveTro('air360');if(game.combo>=5)giveTro('combo5');
   const el=document.createElement('div');el.className='p'+(small?' sm':'');
   el.innerHTML=`<b>${name}</b><span>+${tot}${mult>1?`<i>×${mult}</i>`:''}</span>`;$('pop').appendChild(el);setTimeout(()=>el.remove(),2300);
   if(!small){sfxChime(Math.min(game.combo+1,4));if(name.indexOf('Barrel')===0){sf.claimT=1.5;sf.claimV=pickClaim()}return tot}return tot}
@@ -1780,6 +1899,12 @@ function endRide(kind){
   const lo=js.indexOf(srt[0]),hi=js.lastIndexOf(srt[4]);
   game.heat.push(fin);const top2=[...game.heat].sort((a,b)=>b-a).slice(0,2),sum=top2.reduce((a,b)=>a+b,0);
   if(fin>game.best){game.best=fin;try{localStorage.setItem('surfpool_best',fin.toFixed(2))}catch(e){}}
+  const o0=openState(),lv0=lvlOf(PROG.xp),gain=Math.round(game.pts*(SPOT.id===2?1.25:1));PROG.xp+=gain;PROG.waves++;if(fin>bestAt(SPOT.id))PROG.best[SPOT.id]=+fin.toFixed(2);progSave();
+  if(kind==='done')giveTro('first');if(kind==='done'&&SPOT.id===2)giveTro('bigwave');if(fin>=8)giveTro('n8');if(fin>=9.5)giveTro('n95');
+  const o1=openState(),unl=[];const nsId=o1.s.find(x=>o0.s.indexOf(x)<0),newSpot=nsId?SPOTS.find(o=>o.id===nsId):null;o1.s.filter(x=>o0.s.indexOf(x)<0).forEach(x=>{unl.push('NEW SPOT UNLOCKED · '+SPOTS.find(o=>o.id===x).full);if(x===2)giveTro('spot2')});
+  o1.b.filter(x=>o0.b.indexOf(x)<0).forEach(x=>unl.push('NEW BOARD · '+BOARDS.find(b=>b.id===x).name));if(o1.b.length===BOARDS.length)giveTro('quiver');
+  const lv1=lvlOf(PROG.xp);if(lv1>lv0)unl.push('LEVEL UP · '+lv1);(game.newTro||[]).forEach(n=>unl.push('TROPHY · '+n));game.newTro=[];
+  const nxt=SPOTS.find(o=>!spotOpen(o)&&!o.soon)||BOARDS.find(b=>!boardOpen(b)),goal=nxt?(nxt.full?'NEXT: '+nxt.full+' — ':'NEXT BOARD: '+nxt.name+' — ')+reqText(nxt.req):'',xpK=clamp((PROG.xp-lvlXP(lv1))/(lvlXP(lv1+1)-lvlXP(lv1)),0,1);
   const agg={};game.list.forEach(m=>{agg[m.name]=agg[m.name]||{n:0,p:0};agg[m.name].n++;agg[m.name].p+=m.pts});
   const head={wipe:'WIPEOUT! — RIDE OVER',done:'END OF THE POOL',kick:'KICKED OUT OVER THE TOP'}[kind];
   const wave=game.waveId;
@@ -1790,8 +1915,11 @@ function endRide(kind){
       <div class="judges">${js.map((j,i)=>`<i class="${i===lo||i===hi?'x':''}">${j.toFixed(1)}</i>`).join('')}</div>
       <div class="list">${Object.keys(agg).length?Object.entries(agg).map(([k,v])=>`${v.n>1?v.n+'× ':''}${k}<b>${v.p}</b>`).join(' &nbsp;·&nbsp; '):'No scored moves — use ↑ and ↓ to climb and drop on the wall.'}</div>
       <div class="photos">${game.photos.map(p=>`<div class="ph"><img src="${p.cv.toDataURL('image/jpeg',0.86)}">${p.name}</div>`).join('')}</div>
-      <div class="heat">HEAT TOTAL<b>${sum.toFixed(2)}</b>BEST WAVE<b>${game.best.toFixed(2)}</b>WAVES<b>${game.heat.length}</b></div>
-      <p class="go">ENTER — NEXT WAVE</p>`;
+      <div class="heat">HEAT TOTAL<b>${sum.toFixed(2)}</b>BEST AT ${SPOT.name}<b>${bestAt(SPOT.id).toFixed(2)}</b>WAVES<b>${game.heat.length}</b></div>
+      <div class="prg">+${gain.toLocaleString('en-US')} XP<span class="xpbar"><i style="width:${(xpK*100).toFixed(1)}%"></i></span>LEVEL ${lv1}</div>
+      ${unl.length?`<div class="unl">${unl.map(u=>`<div>${u}</div>`).join('')}</div>`:''}${goal?`<div class="goal">${goal}</div>`:''}
+      <div class="endBtns"><button class="pbtn sm" id="eNext">NEXT WAVE</button>${newSpot?`<button class="pbtn sm" data-spot="${newSpot.id}">RIDE ${newSpot.full}</button>`:''}<button class="pbtn wv sm" id="eMenu">MENU · SPOTS &amp; BOARDS</button></div>
+      <p class="go">ENTER — NEXT WAVE · ESC — MENU</p>`;
     $('end').classList.remove('off')};
   setTimeout(()=>{
     if(game.state!=='end'||game.waveId!==wave)return;
@@ -1857,7 +1985,7 @@ function stepRide(dt){
   if(piv){sf.om=damp(sf.om,clamp(d*6,-rate,rate),8,dt);sf.rail=damp(sf.rail,clamp(sf.om/4.5,-1,1),8,dt)}
   else if(sld){sf.om=damp(sf.om,clamp(d*6,-rate,rate),12,dt);sf.rail=damp(sf.rail,clamp(sf.om/4.5,-1,1)*0.6-0.25*Math.abs(Math.sin(sf.slip)),8,dt)}
   else{const rT=clamp((d-sf.om*0.15)*2.6,-1,1),rr=((mag>0.3||auto)&&!(sf.tt&&sf.tt.ph>0)?(inp.crouch?7.2:5.4)*(rel>0.72?1.3:1):3.2)*dt;
-    sf.rail+=clamp((rT-sf.rail)*Math.min(1,16*dt),-rr,rr);sf.om=damp(sf.om,sf.rail*rate,16,dt)}
+    sf.rail+=clamp((rT-sf.rail)*Math.min(1,16*dt),-rr,rr);sf.om=damp(sf.om,sf.rail*rate*BOARD.trn,16,dt)}
   // rabeta: a quick tap snaps and the board comes straight back; holding the turn pushes the tail right round until he rides tail-first
   {const key=mag>0.3&&sf.introT<=0,dn=key&&inp.y<-0.3,sth0=Math.sin(sf.th);
    if(!sf.tt&&!sf.rh&&dn&&rel>0.42&&Math.cos(sf.th)>-0.3&&sf.V>4.2&&(piv||sth0>0.3||now-sf.lastTop<0.55)){
@@ -1881,7 +2009,7 @@ function stepRide(dt){
    if(asl>0.05)sf.burst=Math.max(sf.burst,side*1.15)}
   sf.th=wrapPi(sf.th+sf.om*(!piv&&!(sf.tt&&sf.tt.ph>0)?1+0.35*Math.min(Math.abs(sf.slip),1):1)*dt);
   const pw=sstep(0.2,0.9,game.Hbase);
-  const Vtrim=3.8+8.4*sstep(0,0.85,sinA)*pw;
+  const Vtrim=(3.8+8.4*sstep(0,0.85,sinA)*pw)*BOARD.spd;
   let acc=(Vtrim-sf.V)*(sf.V>Vtrim?0.20:0.65)-Math.abs(Math.sin(sf.slip))*Math.max(0,sf.V-6.2)*4.5;
   if(sf.tt&&sf.tt.ph>0)acc+=(CP+0.3-sf.V)*2.6;
   {const sth=Math.sin(sf.th);acc+=-G*(sth>0?0.52-0.24*sstep(0.35,0.85,sth):0.82)*sinA*sth;if(sth>0.4&&!sf.rh&&rel>0.1&&sf.V<CP+3.2)acc+=2.8*sstep(0.4,0.8,sth)}   // the bottom turn carries him up to the lip
@@ -2146,7 +2274,7 @@ function placeSurfer(dt,time){
     if(sf.exT<T){const hh=(sf.exV===1?0.32:0.42)*Math.sin(PI*u);   // a small pop, not a launchboardG.position.y+=hh;riderG.position.y+=hh;
       if(sf.exV===1)boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,0.30*Math.sin(PI*u)*(1-u)));else boardG.quaternion.multiply(qS.setFromAxisAngle(UPV,2*PI*sstep(0.1,0.88,u)));
       AT.crouch=u<0.12?0.85:u<0.8?0.7:0.55;AT.claim=0}
-    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);sf.celebN=''}}}
+    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);if(!game.attract){const v=sf.claimV;if(PROG.celeb.indexOf(v)<0){PROG.celeb.push(v);progSave()}if(PROG.celeb.length>=CELEB.length)giveTro('show')}sf.celebN=''}}}
   A.prone=proneT>A.prone?Math.min(proneT,A.prone+dt/0.3):Math.max(proneT,A.prone-dt/0.48);
   A.flail=damp(A.flail,0,8,dt);A.grab=damp(A.grab,grabT,12,dt);A.air=damp(A.air,airT,9,dt);A.claim=damp(A.claim,AT.claim,7,dt);
   if(dt>1e-4){A.aa=damp(A.aa,clamp((sf.om-A.omPrev)/dt,-30,30),10,dt);A.omPrev=sf.om}
@@ -2167,7 +2295,7 @@ function boardSpray(dt){
       rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0)}}
 
 /* ───────────────────────── camera ───────────────────────── */
-const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',camRP=3.2,camRL=7;const _oT1=new V3,_oT2=new V3;
+const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',blendDur=1.2,camRP=3.2,camRL=7;const _oT1=new V3,_oT2=new V3;
 const REPLAY_SHOTS=['follow','tele'];   // replays and the start screen cut between chase and side only
 const SCam=mkS(),_bd=new V3();
 function shot(kind,p,tk,ak){
@@ -2210,17 +2338,19 @@ function updateCamera(dt,time){
         if(now<game.chEnd)kind='follow'}
       // whatever camera is selected, in the tube the view is from behind him inside the barrel; the other cameras cut in and back out
       if(!sf.openCam&&kind!=='beach'){const fo=lastShot==='follow',bi=Math.floor(colIndex(sf.s-2.3)),open=colAEnd[bi]>(fo?3.0:3.4)&&sf.s>(fo?2.2:3.0);   // the chase sits behind him only where the barrel is still open behind; deeper than that it would be inside the closed-out curtain, so the side camera looks in from the channel
-        if(lastShot==='barrel'&&(game.inTube||sf.tubeK>0.2))kind='barrel';else if((game.inTube&&sf.tube>0.35)||sf.tubeK>(fo||lastShot==='barrel'?0.35:0.6))kind=lastShot==='barrel'||!open||(kind!=='follow'&&!fo)?'barrel':'follow'}   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
+        if(lastShot==='barrel'&&(game.inTube||sf.tubeK>0.2))kind='barrel';else if((game.inTube&&sf.tube>(open&&fo?0.35:0.04))||sf.tubeK>(fo||lastShot==='barrel'?0.35:0.6))kind=lastShot==='barrel'||!open||(kind!=='follow'&&!fo)?'barrel':'follow'}   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
       if(kind!==lastShot){const fb=(kind==='follow'&&lastShot==='barrel')||(kind==='barrel'&&lastShot==='follow');   // behind him <-> ahead of him: a clean cut (a glide would fly through him)
-        if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot}}}   // side <-> chase: a quick glide between the two, not a jump cut
+        if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot;blendDur=kind==='barrel'||lastShot==='barrel'?0.9:1.2}}}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
     if(camBlend>0&&blendFrom&&blendFrom!==kind&&blendFrom!=='beach'){const of=shot(blendFrom,p,sf.tubeK,sf.airK);_oT1.copy(cT1);_oT2.copy(cT2);fov=shot(kind,p,sf.tubeK,sf.airK);   // a glide: both shots keep tracking him and the frame eases from one to the other
-      const e=1-camBlend,k=e*e*e*(e*(e*6-15)+10);cT1.lerpVectors(_oT1,cT1,k);cT2.lerpVectors(_oT2,cT2,k);fov=lerp(of,fov,k)}
+      const e=1-camBlend,sm=u=>{u=clamp(u,0,1);return u*u*u*(u*(u*6-15)+10)},k=sm(e);let kx=k,kz=k;
+      if(kind==='barrel'){kx=sm(e*1.7);kz=sm((e-0.2)/0.8)}else if(blendFrom==='barrel'){kz=sm(e*1.6);kx=sm((e-0.35)/0.65)}   // into the barrel: along the wave first, then in through the mouth under the lip (never through the curtain)
+      cT1.set(lerp(_oT1.x,cT1.x,kx),lerp(_oT1.y,cT1.y,kz),lerp(_oT1.z,cT1.z,kz));cT2.lerpVectors(_oT2,cT2,k);fov=lerp(of,fov,k)}
     else fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}else if(kind==='barrel'){rp=2.4;rl=5}}   // in the barrel the camera floats along with him
   if((game.replay||game.attract)&&kind!==lastShot)camInit=false;lastShot=kind;
   if(game.dbgCam){const q=game.dbgCam;cT1.set(sf.pos.x+q[0],sf.pos.y+q[1],sf.pos.z+q[2]);cT2.set(sf.pos.x+(q[5]||0),sf.pos.y+(q[4]||0.65),sf.pos.z+(q[6]||0));fov=q[3];camP.copy(cT1);camL.copy(cT2);camFov=fov}
   if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true;camRP=rp;camRL=rl}
-  camBlend=Math.max(0,camBlend-dt/1.2);const bk=1;camRP=damp(camRP,rp,4,dt);camRL=damp(camRL,rl,4,dt);rp=camRP;rl=camRL;   // the follow rates ease too, so a change of shot never jolts the camera's speed   // during a glide the camera eases across, then locks back on
+  camBlend=Math.max(0,camBlend-dt/blendDur);const bk=1;camRP=damp(camRP,rp,4,dt);camRL=damp(camRL,rl,4,dt);rp=camRP;rl=camRL;   // the follow rates ease too, so a change of shot never jolts the camera's speed   // during a glide the camera eases across, then locks back on
   camP.x=damp(camP.x,cT1.x,rp*1.5*bk,dt);camP.y=damp(camP.y,cT1.y,rp*0.8*bk,dt);camP.z=damp(camP.z,cT1.z,rp*0.8*bk,dt);
   camL.x=damp(camL.x,cT2.x,rl*Math.max(bk,0.8),dt);camL.y=damp(camL.y,cT2.y,rl*0.7*Math.max(bk,0.8),dt);camL.z=damp(camL.z,cT2.z,rl*0.7*Math.max(bk,0.8),dt);
   camFov=damp(camFov,fov,camBlend>0?2:3,dt);
@@ -2270,6 +2400,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       gl_FragColor=vec4(col,1.);}`});
 composer.addPass(gradePass);
 setTOD((()=>{try{return +(localStorage.getItem('surfpool_night')||0)}catch(e){return 0}})());
+setBoard(PROG.board);setSpot(spotOpen(SPOTS.find(o=>o.id===PROG.spot)||SPOTS[0])?PROG.spot:1);
 function resize(){const w=Math.max(innerWidth,16),h=Math.max(innerHeight,16);renderer.setSize(w,h,false);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);
   camera.aspect=w/h;camera.updateProjectionMatrix();gradePass.uniforms.uAspect.value=w/h;
   document.documentElement.style.setProperty('--bar',clamp((h-w/2.2)/2,h*0.045,h*0.115).toFixed(0)+'px')}
@@ -2397,7 +2528,7 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
     const cx=clamp((pv.x*.5+.5)*c.width,sw/2,c.width-sw/2),cy=clamp((1-(pv.y*.5+.5))*c.height,sh/2,c.height-sh/2);
     x.drawImage(c,cx-sw/2,cy-sh/2,sw,sh,(i%cols)*cw,Math.floor(i/cols)*ch,cw,ch);
     x.fillStyle='#fff';x.font='22px monospace';x.fillText(i+' '+sf.mode[0]+' th'+sf.th.toFixed(1)+' r'+sf.rail.toFixed(1)+' c'+A.crouch.x.toFixed(2),(i%cols)*cw+8,Math.floor(i/cols)*ch+26)}
-  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP}};
+  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI};
 startAttract();
 requestAnimationFrame(frame);
 </script>
