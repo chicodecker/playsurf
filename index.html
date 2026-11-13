@@ -87,6 +87,7 @@ h1 em{display:block;font-size:.13em;letter-spacing:.62em;font-weight:600;font-st
 .playRow{margin:14px 0 0 2px}
 .playLbl{display:block;font-size:14px;letter-spacing:.46em;font-weight:700;opacity:.92;margin:0 0 12px 3px;text-shadow:0 2px 14px rgba(0,0,0,.5)}
 .pbtns{display:flex;gap:14px;flex-wrap:wrap}
+.pbtn.wv{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.55);box-shadow:none}.pbtn.wv.sel{background:#fff;color:#0b1520;border-color:#fff}.pbtn.wv i{font-style:normal;font-size:.5em;letter-spacing:.22em;margin-left:9px;opacity:.75}
 .pbtn{pointer-events:auto;cursor:pointer;font:800 21px/1 inherit;font-family:inherit;letter-spacing:.16em;padding:17px 34px;border-radius:999px;border:2px solid #ffd94a;background:#ffd94a;color:#0b1520;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .15s,box-shadow .15s}
 .pbtn:hover,.pbtn:focus-visible{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 36px rgba(255,217,74,.35);outline:none}
 .pbtn.soon{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.5);opacity:.38;cursor:not-allowed;pointer-events:none;box-shadow:none}
@@ -152,7 +153,9 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
   </div>
   <div id="menu" class="panel"><h1 class="srh">PlaySurf: Free Online Surf Game</h1>
     
-    <div class="playRow"><span class="playLbl">PLAY NOW</span>
+    <div class="playRow"><span class="playLbl">1 · CHOOSE YOUR WAVE</span>
+      <div class="pbtns"><button id="goLeft" class="pbtn wv sel">LEFT <i>GOOFY</i></button><button id="goRight" class="pbtn wv">RIGHT <i>REGULAR</i></button></div></div>
+    <div class="playRow"><span class="playLbl">2 · PLAY NOW</span>
       <div class="pbtns"><button id="goDesk" class="pbtn">DESKTOP</button><button id="goMob" class="pbtn soon" disabled aria-disabled="true" tabindex="-1">MOBILE <i>SOON</i></button></div></div>
     <div class="howto"><div class="htl">HOW TO PLAY</div>
     <div class="grid">
@@ -161,6 +164,7 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
       <b>Tail Throw</b><span>at the top, <em>hold</em> <span class="kk">↓</span> — the tail comes round and he rides it out; let go to finish the spin</span>
       <b>Layback</b><span>hold <span class="kk">SHIFT</span> during a snap or a hit — he lays back on the water and the wave stands him up again</span>
       <b>Off the Lip</b><span>go straight up to the lip and let the board pivot</span>
+      <b>Carve 360</b><span><span class="kk">G</span> on the open face: one full turn on the rail, round by the bottom and back on line</span>
       <b>Nose Pick</b><span>at the lip, <span class="kk">F</span>: a little air, his front foot kicks the nose and the board turns over forward under him</span>
       <b>Roundhouse</b><span>out on the shoulder, one tap of <span class="kk">←</span>: a long carve back to where the foam begins and a backside snap off it (<span class="kk">→</span> cancels)</span>
       <b>Barrel</b><span>after the drop and the first open wall the first section throws the lip; near the end a small one comes back: stay on the wall and it covers you; <span class="kk">SHIFT</span> brakes to get deeper, <span class="kk">→</span> pumps for speed; his hand trails on the wall</span>
@@ -366,14 +370,16 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
 // brand type comes from the web fonts; anything painted on a canvas is repainted once they have arrived
 const SCRIPT='Pacifico,"Brush Script MT",cursive',CONDF='"Barlow Condensed","Avenir Next Condensed","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('100px Pacifico'),document.fonts.load('800 40px "Barlow Condensed"')]).then(()=>fn(),()=>{})}catch(e){}}
-const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=128;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;
+const ALT={value:0};let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
+const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=128;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;TXT.push(t);
   whenFonts(()=>{x.fillStyle='#0d2530';x.fillRect(0,0,1024,128);x.fillStyle='#12b5a6';x.fillRect(0,112,1024,16);x.textBaseline='middle';
     x.font=`76px ${SCRIPT}`;x.lineWidth=10;x.lineJoin='round';x.strokeStyle='#06162b';x.strokeText('PlaySurf',36,52);x.fillStyle='#f2fbff';x.fillText('PlaySurf',36,52);
     {const sl='T H E   U L T I M A T E   S U R F I N G   G A M E',F=p=>`800 ${p}px ${CONDF}`;x.font=F(fitFont(x,sl,F,32,1024-440-24));x.fillStyle='#ffd94a';x.fillText(sl,440,60)}t.needsUpdate=true});
   return t})();
 const FONT='"Avenir Next Condensed","Barlow Condensed","Helvetica Neue",Arial,sans-serif';
+function txtFlip(t,f){t.wrapS=THREE.RepeatWrapping;const r=(t.userData.baseFlip?-1:1)*(f?-1:1);t.repeat.x=r;t.offset.x=r<0?1:0;t.needsUpdate=true}
 function brandTex(w,h,draw,flip){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;
-  if(flip){t.wrapS=THREE.RepeatWrapping;t.repeat.x=-1;t.offset.x=1}return t}
+  t.userData.baseFlip=!!flip;if(flip){t.wrapS=THREE.RepeatWrapping;t.repeat.x=-1;t.offset.x=1}TXT.push(t);return t}
 function fitFont(x,txt,font,px,maxW){x.font=font(px);const m=x.measureText(txt).width;return m>maxW?px*maxW/m:px}
 function rrect(x,X,Y,W,H,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+H,r);x.arcTo(X+W,Y+H,X,Y+H,r);x.arcTo(X,Y+H,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath()}
 function drawDG(x,w,h,bg,sub,c1,c2,k){if(bg){x.fillStyle=bg;x.fillRect(0,0,w,h)}   // the open ad slot: YOUR BRAND HERE
@@ -517,14 +523,14 @@ neonWord.position.set(9,NEON.y+3.2,0.25);neonSub.position.set(9,NEON.y-8.6,0.25)
 const neonWave=new THREE.Mesh(new THREE.PlaneGeometry(21,21),neonMat(neonWaveTex));neonWave.position.set(-28.5,NEON.y+1.2,0.25);neonWave.renderOrder=3;neonG.add(neonWave);
 neonWord.visible=neonSub.visible=neonWave.visible=false;   // replaced by the LED wall below
 const signTex=new THREE.TextureLoader().load('sign-logo.webp');signTex.colorSpace=THREE.SRGBColorSpace;signTex.anisotropy=8;
-const ledMat=new THREE.ShaderMaterial({uniforms:{map:{value:signTex},uRes:{value:new THREE.Vector2(256,143)},uK:{value:1.35},uT:{value:0}},toneMapped:false,fog:false,
+const ledMat=new THREE.ShaderMaterial({uniforms:{map:{value:signTex},uRes:{value:new THREE.Vector2(256,143)},uK:{value:1.35},uT:{value:0},uFlip:{value:0}},toneMapped:false,fog:false,
   vertexShader:`varying vec2 vU;void main(){vU=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`uniform sampler2D map;uniform vec2 uRes;uniform float uK;uniform float uT;varying vec2 vU;
-   void main(){vec2 u=(vU-0.5)*(1.0-0.025*(0.5+0.5*sin(uT*0.4)))+0.5;u+=vec2(sin(u.y*22.+uT*1.7),cos(u.x*17.+uT*1.3))*0.0022;   // breathing, and the water rippling
+  fragmentShader:`uniform sampler2D map;uniform vec2 uRes;uniform float uK;uniform float uT;uniform float uFlip;varying vec2 vU;
+   void main(){vec2 vU2=vec2(mix(vU.x,1.-vU.x,uFlip),vU.y);vec2 u=(vU2-0.5)*(1.0-0.025*(0.5+0.5*sin(uT*0.4)))+0.5;u+=vec2(sin(u.y*22.+uT*1.7),cos(u.x*17.+uT*1.3))*0.0022;   // breathing, and the water rippling
      vec2 g=u*uRes;float px=max(fwidth(g.x),fwidth(g.y)),near=smoothstep(0.9,0.35,px);
      float led=mix(1.,0.25+0.95*smoothstep(0.52,0.16,length(fract(g)-0.5)),near);   // round LEDs up close; from far away they melt into the picture
      vec3 c=mix(texture2D(map,u).rgb,texture2D(map,(floor(g)+0.5)/uRes).rgb,near);
-     float d=fract(vU.x*0.8+vU.y*0.35-uT*0.14);c+=vec3(0.30*smoothstep(0.05,0.,abs(d-0.5)));   // a sweep of light every few seconds
+     float d=fract(vU2.x*0.8+vU2.y*0.35-uT*0.14);c+=vec3(0.30*smoothstep(0.05,0.,abs(d-0.5)));   // a sweep of light every few seconds
      gl_FragColor=vec4(c*led*uK,1.);
      #include <colorspace_fragment>
    }`});
@@ -1306,6 +1312,12 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        c2.putImageData(id,0,0);const t=new THREE.CanvasTexture(cv);t.flipY=map.flipY;t.colorSpace=map.colorSpace;t.wrapS=map.wrapS;t.wrapT=map.wrapT;t.anisotropy=4;map=t;RIG.fix={hair:nh,grey:ng,skin:[sr|0,sg|0,sb|0]}}}catch(e){console.warn('surfista 3D textura:',e)}
    si.needsUpdate=sw.needsUpdate=true;
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
+   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.vertexShader='varying float vMY;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;');
+     sh.fragmentShader='uniform float uAlt;varying float vMY;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+     if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
+       c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
+       c=mix(c,vec3(0.96,0.80,0.46)*(0.55+1.6*l),smoothstep(0.30,0.12,l)*smoothstep(0.885,0.915,vMY));   // and sun-bleached blond hair
+       diffuseColor.rgb=c;}`)};
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
@@ -1565,7 +1577,7 @@ addEventListener('keydown',e=>{
   if((e.code==='Enter'||e.code==='NumpadEnter')&&game.attract){beginPlay();return}
   if(e.code==='Enter'||e.code==='NumpadEnter'){if(game.state==='end'&&game.hl){if(game.showCard)game.showCard()}else if(game.state==='menu'||(game.state==='end'&&performance.now()-(game.cardAt||0)>500))startWave()}
   if(e.code==='KeyC')setCam(game.cam+1);
-  if(e.code==='KeyN')setTOD(!game.night);if(e.code==='KeyF')game.npReq=game.waveAge;
+  if(e.code==='KeyN')setTOD(!game.night);if(e.code==='KeyG'&&game.state==='ride'&&sf.mode==='ride'&&!sf.c360&&!sf.rh&&!game.inTube&&sf.introT<=0&&!(sf.openT>0))sf.c360={t:0,acc:0,pth:sf.th};if(e.code==='KeyF')game.npReq=game.waveAge;
   
   if(e.code==='Digit1')setCam(0);if(e.code==='Digit2')setCam(1);if(e.code==='Digit3')setCam(2);
   if(e.code==='KeyP'||e.code==='Escape'){if(game.state==='ride'&&!game.attract){game.paused=!game.paused;$('pause').style.display=game.paused?'flex':'none'}}
@@ -1577,6 +1589,10 @@ function setCam(i){game.cam=((i%3)+3)%3;$('camBtn').textContent='CAMERA: '+['CHA
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 $('goDesk').addEventListener('click',e=>{e.stopPropagation();beginPlay()});
+function setMirror(m){MIRROR=m?1:0;gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
+  $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
+$('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.target.blur()});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.target.blur()});
+try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}
 const vin=$('vin');function introEnd(){const it=$('intro');if(it.classList.contains('off')||it.classList.contains('fade'))return;it.classList.add('fade');setTimeout(()=>it.classList.add('off'),1100);if(audio.ctx)setTimeout(musicGo,900)}
 vin.addEventListener('ended',introEnd);vin.addEventListener('error',()=>setTimeout(introEnd,600));
 vin.addEventListener('playing',()=>$('intro').classList.add('live'));
@@ -1588,10 +1604,10 @@ $('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);e.target.bl
 $('end').addEventListener('click',()=>{if(game.state==='end'&&game.endT>1.2)startWave()});
 addEventListener('pointerdown',()=>{if(game.state==='end'&&game.hl&&game.showCard)game.showCard()});
 function readInput(){
-  let x=(keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
+  let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
   let cr=!!keys.Space,stl=!!(keys.ShiftLeft||keys.ShiftRight);
   const gp=navigator.getGamepads?[...navigator.getGamepads()].find(g=>g):null;
-  if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0];y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;
+  if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;
     if(gp.buttons[9]?.pressed&&(game.attract||game.state==='menu'||game.state==='end'&&game.endT>1.2))beginPlay()}
   input.x=x;input.y=y;input.crouch=cr;input.stall=stl}
 
@@ -1768,7 +1784,8 @@ function stepRide(dt){
     if(sf.openT>1.65){thT=-0.95;rate=2.6}else if(sf.openT>1.0&&sf.p<0.3*top){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}else{sf.openT=Math.min(sf.openT,0.99);thT=1.38;rate=5.2*(0.55+0.45*clamp(sf.V/7,0,1.3));sf.openC=(sf.openC||0)+dt;sf.openT=sf.openC>2.2?0:Math.max(sf.openT,0.05)}
     if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
   else if(sf.pivot>0){thT=sf.pivotTh;rate=5.4;sf.pivot-=dt;piv=true}
-  else if(sf.straight){thT=-1.5;rate=2.4}   // the end: straight in to the beach, no more running along the wave
+  else if(sf.straight){thT=-1.5;rate=2.4}
+  else if(sf.c360){thT=sf.th-1.3;rate=4.4*(0.6+0.4*clamp(sf.V/7,0,1.3))}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
   else if(sf.glideT>0&&!sf.rh){thT=-0.95;rate=2.6}   // coming down off the foam: one long smooth carve down the face
   else if(auto){const R=sf.rh,tp=S.top;
     if(R.up){thT=0.9;rate=3.8;if(sf.p>0.55*tp||R.t>0.35)R.up=false}   // first up to the top of the shoulder, so the whole arc fits on the face
@@ -1820,6 +1837,7 @@ function stepRide(dt){
   if(sf.tt&&sf.tt.ph>0)acc+=(CP+0.3-sf.V)*2.6;
   {const sth=Math.sin(sf.th);acc+=-G*(sth>0?0.52-0.24*sstep(0.35,0.85,sth):0.82)*sinA*sth;if(sth>0.4&&!sf.rh&&rel>0.1&&sf.V<CP+3.2)acc+=2.8*sstep(0.4,0.8,sth)}   // the bottom turn carries him up to the lip
   acc-=0.010*sf.V*sf.V;
+  if(sf.c360)acc+=1.8;
   if(sf.introT>0&&sf.introT<=0.5)acc+=5.5;   // he throws himself into the drop
   if(sf.openT>0&&sf.introT<=0)acc+=Math.max(0,CP+3.2-sf.V)*2.5;   // and carries the speed through the bottom turn
   if(sf.boostT>0){sf.boostT-=dt;acc+=Math.max(0,sf.boostV-sf.V)*3.2}   // the spit-out speed comes on over a moment, not in one frame
@@ -1833,6 +1851,7 @@ function stepRide(dt){
   if(sf.glideT>0){acc+=5.0*Math.min(1,sf.glideT/0.3);sf.glideT=Math.max(0,sf.glideT-dt)}   // ...and the drop gives the speed back
   sf.V=clamp(sf.V+acc*dt,1.8,15.5);
   const st=Math.sin(sf.th),ct=Math.cos(sf.th);
+  if(sf.c360){const C=sf.c360;C.t+=dt;C.acc+=Math.abs(wrapPi(sf.th-C.pth));C.pth=sf.th;if(C.acc>=2*PI-0.15){sf.c360=null;sf.lastTop=now;const pt=1500+sf.V*45;award('Carve 360',pt);reqShot('Carve 360',pt,0)}else if(C.t>4)sf.c360=null}
   if(sf.bsHit&&sf.pivot<=0)sf.bsHit=0;{const mv=(sf.rh&&sf.rh.ph===1)||sf.bsHit?sstep(0.34,0.06,sf.pivot):1;   // the rebound pivots on the foam before it drops
    sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;sf.p+=sf.V*st*mv*dt}
      // deep in the pocket, then out through the mouth
@@ -2164,28 +2183,28 @@ composer.addPass(new OutputPass());
 const drops=[];for(let i=0;i<6;i++)drops.push(new THREE.Vector4(0.5,0.5,0.05,0));
 function spawnDrops(n){for(const d of drops){if(n<=0)break;if(d.w<0.05){const ex=Math.random()<0.5?rnd(0.04,0.26):rnd(0.74,0.96);d.set(ex,rnd(0.2,0.85),rnd(0.015,0.04),1);n--}}}
 function updateDrops(dt){for(const d of drops)if(d.w>0){d.w=Math.max(0,d.w-dt*0.26);d.y-=dt*0.012*(1+d.z*30)}}
-const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0}},
+const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0}},
   vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uSunK;varying vec2 vUv;
-    void main(){vec2 uv=vUv;float rim=0.;
-      for(int i=0;i<6;i++){vec4 d=uDrops[i];vec2 q=(vUv-d.xy)*vec2(uAspect,1.);float r=length(q)/d.z;
-        if(d.w>0.002&&r<1.){float k=sqrt(1.-r*r)*min(d.w*3.,1.);uv-=(vUv-d.xy)*k*k*0.7;}}
+  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uSunK;uniform float uFlip;varying vec2 vUv;
+    void main(){vec2 fUv=vec2(mix(vUv.x,1.-vUv.x,uFlip),vUv.y);vec2 uv=fUv;float rim=0.;
+      for(int i=0;i<6;i++){vec4 d=uDrops[i];vec2 q=(fUv-d.xy)*vec2(uAspect,1.);float r=length(q)/d.z;
+        if(d.w>0.002&&r<1.){float k=sqrt(1.-r*r)*min(d.w*3.,1.);uv-=(fUv-d.xy)*k*k*0.7;}}
       vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*0.014;
       vec3 col=vec3(texture2D(tDiffuse,uv+o).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-o).b);
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.22);
       col+=vec3(-0.018,0.008,0.020)*(1.-smoothstep(0.,0.45,l));   // teal shadows
       col+=vec3(0.030,0.012,-0.022)*smoothstep(0.45,1.,l);        // golden highlights
-      if(uSunK>0.001){vec2 dv=(vUv-uSun)*vec2(uAspect,1.);float dd=length(dv);
+      if(uSunK>0.001){vec2 dv=(fUv-uSun)*vec2(uAspect,1.);float dd=length(dv);
         float see=smoothstep(0.90,0.985,dot(texture2D(tDiffuse,uSun).rgb,vec3(0.3,0.59,0.11)));   // only when the sun itself is in view, not behind the wave
         float fl=exp(-dd*dd*26.)*0.30+exp(-dd*6.)*0.10+pow(max(0.,cos(atan(dv.y,dv.x)*6.+0.4)),48.)*exp(-dd*3.5)*0.22;
         vec2 ax=vec2(0.5)-uSun;vec3 gh=vec3(0.);
-        for(int i=1;i<5;i++){vec2 gp=uSun+ax*(0.42*float(i));float gd=length((vUv-gp)*vec2(uAspect,1.));float r=0.018+0.022*float(i);
+        for(int i=1;i<5;i++){vec2 gp=uSun+ax*(0.42*float(i));float gd=length((fUv-gp)*vec2(uAspect,1.));float r=0.018+0.022*float(i);
           gh+=vec3(1.,0.72,0.42)*smoothstep(r,r*0.55,gd)*0.05/float(i)+vec3(0.35,0.8,1.)*(smoothstep(r*1.7,r*1.4,gd)-smoothstep(r*1.4,r*1.1,gd))*0.035;}   // lens ghosts toward the centre
         col+=(vec3(1.,0.85,0.6)*fl+gh)*uSunK*see;}
       col=mix(col,col*col*(3.-2.*col),0.50);
       col=col*0.97+0.012;
-      vec2 cv=vUv-.5;col*=1.-dot(cv,cv)*0.9;
+      vec2 cv=fUv-.5;col*=1.-dot(cv,cv)*0.9;
       float g=fract(sin(dot(gl_FragCoord.xy+fract(uTime)*91.7,vec2(12.9898,78.233)))*43758.5453);
       col+=(g-.5)*0.032;
       gl_FragColor=vec4(col,1.);}`});
