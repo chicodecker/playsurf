@@ -1561,7 +1561,8 @@ setTimeout(()=>{const ld=new GLTFLoader();ld.setMeshoptDecoder(MeshoptDecoder);l
   const box=new THREE.Box3().setFromObject(m),sz=box.getSize(new V3()),c=box.getCenter(new V3());m.position.set(-c.x,-box.min.y,-c.z);
   const inner=new THREE.Group();inner.add(m);if(sz.z>sz.x)inner.rotation.y=PI/2;const L=Math.max(sz.x,sz.z);inner.scale.setScalar(1.8/L);
   BB.inner=inner;bbG.add(inner);BB.ready=true},undefined,()=>{})},4000);   // she only shows up mid-ride, so she loads after the intro
-function bbTick(dt,time){if(!BB.ready)return;
+function bbTick(dt,time){bbG.visible=false;BB.on=false;return;   // the bodyboarder is switched off
+  if(!BB.ready)return;
   if(BB.wid!==game.waveId){BB.wid=game.waveId;BB.done=false;BB.on=false;bbG.visible=false}
   if(game.state!=='ride'||game.replay||game.attract){bbG.visible=false;BB.on=false;return}
   if(!BB.on){if(BB.done||game.waveAge<20||game.waveAge>46||sf.mode!=='ride'||game.inTube||DROP.on||sf.s<9||sf.s>40)return;const s0=sf.s+13;if(colFoam[Math.round(colIndex(s0))]>0.08)return;sampleSurf(s0,0,BBS);BB.on=true;BB.s=s0;BB.p=0.28*BBS.top;BB.t=0}
