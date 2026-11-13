@@ -57,12 +57,12 @@ a{color:var(--acc)}
 var GC='https://playsurf.goatcounter.com/counter/';
 var M=[['30s',30],['1min',60],['3min',180],['5min',300],['10min',600],['20min',1200],['30min',1800]];
 function num(s){return parseInt(String(s||'0').replace(/\D/g,''),10)||0}
-function ymd(d){return d.toISOString().slice(0,10)}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function get(path,qs){return fetch(GC+encodeURIComponent(path)+'.json'+qs).then(function(r){return r.json()}).then(function(j){return{c:num(j.count),u:num(j.count_unique)}}).catch(function(){return{c:0,u:0}})}
 function fmt(sec){if(!sec)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);return m?(m+' min '+(s?s+' s':'')).trim():s+' s'}
 function load(d){
   var qs='';
-  if(d!=='all'){var e=new Date(),s=new Date();s.setDate(s.getDate()-(+d));qs='?start='+ymd(s)+'&end='+ymd(e)}
+  if(d!=='all'){var s=new Date();s.setDate(s.getDate()-(+d));qs='?start='+ymd(s)}
   document.getElementById('status').textContent='Carregando…';
   Promise.all([get('/',qs)].concat(M.map(function(m){return get('tempo-'+m[0],qs)}))).then(function(r){
     var v=r[0],ev=r.slice(1).map(function(x){return x.c});
