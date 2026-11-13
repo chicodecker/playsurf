@@ -2078,8 +2078,8 @@ function shot(kind,p,tk,ak){
     cT2.set(p.x+lerp(1.6,0.4,tk),p.y+lerp(1.25,0.7,tk)-ak*sf.h*0.45,p.z*0.8);return lerp(18.5,48,tk)+ak*2.5}
   if(kind==='beach'){sampleSurf(sf.s,Math.max(sf.p,0.3),SCam);_bd.copy(SCam.tp).setY(0);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize().multiplyScalar(-1);   // on the beach side, facing him as he comes in
     cT1.copy(p).addScaledVector(_bd,7.5);cT1.y=p.y+1.5;cT2.set(p.x,p.y+0.95,p.z);return 44}
-  if(kind==='front'){sampleSurf(sf.s,Math.max(sf.p,0.3),SCam);_bd.set(SCam.n.x,0,SCam.n.z);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize();   // head-on, from further down the line
-    cT1.set(p.x+13.5,p.y+1.7,p.z).addScaledVector(_bd,1.6);cT2.set(p.x,p.y+0.9,p.z);return 38}
+  if(kind==='front'){sampleSurf(sf.s,Math.max(sf.p,0.3),SCam);_bd.copy(SCam.tp).setY(0);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize().multiplyScalar(-1);   // square on to the wave, as if from the beach, close in
+    cT1.copy(p).addScaledVector(_bd,15);cT1.y=1.9;cT2.set(p.x,Math.max(1.2,p.y+0.6),p.z);return 40}
   if(kind==='drone'){cT1.set(p.x-4,9,15);cT2.set(p.x+2.2,p.y+0.2,p.z);return 36}
   if(kind==='follow'){
     // chase: behind and beach-side while he runs down the line; when he comes back at the curl it swings round to the shoulder so the rider and the
