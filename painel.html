@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel PlaySurf</title>
+<style>
+:root{--bg:#f4f7f9;--card:#fff;--ink:#10212b;--mute:#5c6f7a;--line:#dfe7ec;--acc:#0a84c6;--acc2:#7cc6ec}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1a21;--card:#14252e;--ink:#e8f1f5;--mute:#93a9b5;--line:#22404e;--acc:#4fb3ea;--acc2:#1f6f99}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 20px}
+.periods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.periods button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;font:inherit;cursor:pointer}
+.periods button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi .l{color:var(--mute);font-size:14px}
+.kpi .v{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:4px}
+.kpi .n{color:var(--mute);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:20px}
+.card h2{font-size:17px;margin:0 0 12px}
+.row{display:grid;grid-template-columns:110px 1fr 90px;gap:10px;align-items:center;margin:8px 0;font-size:15px}
+.bar{height:22px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:6px;min-width:2px}
+.row .p{text-align:right;font-variant-numeric:tabular-nums}
+.note{color:var(--mute);font-size:14px}
+a{color:var(--acc)}
+.err{color:#c0392b}
+</style>
+</head>
+<body>
+<main>
+<h1>Painel PlaySurf</h1>
+<p class="sub">Visitas e tempo de permanência em playsurfgame.com</p>
+<div class="periods" id="periods">
+<button data-d="0">Hoje</button><button data-d="7" class="on">7 dias</button><button data-d="30">30 dias</button><button data-d="all">Tudo</button>
+</div>
+<div class="kpis">
+<div class="kpi"><div class="l">Visitantes únicos</div><div class="v" id="uniq">–</div><div class="n">pessoas diferentes</div></div>
+<div class="kpi"><div class="l">Visitas</div><div class="v" id="views">–</div><div class="n">vezes que o jogo foi aberto</div></div>
+<div class="kpi"><div class="l">Tempo médio</div><div class="v" id="avg">–</div><div class="n">estimado, com a aba visível</div></div>
+<div class="kpi"><div class="l">Ficaram 5 min ou mais</div><div class="v" id="p5">–</div><div class="n">das visitas</div></div>
+</div>
+<div class="card">
+<h2>Quanto tempo as pessoas ficam</h2>
+<div id="rows"></div>
+<p class="note">Cada barra mostra a porcentagem das visitas que ficou pelo menos esse tempo com o jogo aberto e visível. O tempo só passou a ser medido a partir de 13/11/2026.</p>
+</div>
+<p class="note" id="status"></p>
+<p class="note">Detalhes (países, origem, celular x computador): <a href="https://playsurf.goatcounter.com" target="_blank" rel="noopener">painel completo do GoatCounter</a>.</p>
+</main>
+<script>
+var GC='https://playsurf.goatcounter.com/counter/';
+var M=[['30s',30],['1min',60],['3min',180],['5min',300],['10min',600],['20min',1200],['30min',1800]];
+function num(s){return parseInt(String(s||'0').replace(/\D/g,''),10)||0}
+function ymd(d){return d.toISOString().slice(0,10)}
+function get(path,qs){return fetch(GC+encodeURIComponent(path)+'.json'+qs).then(function(r){return r.json()}).then(function(j){return{c:num(j.count),u:num(j.count_unique)}}).catch(function(){return{c:0,u:0}})}
+function fmt(sec){if(!sec)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);return m?(m+' min '+(s?s+' s':'')).trim():s+' s'}
+function load(d){
+  var qs='';
+  if(d!=='all'){var e=new Date(),s=new Date();s.setDate(s.getDate()-(+d));qs='?start='+ymd(s)+'&end='+ymd(e)}
+  document.getElementById('status').textContent='Carregando…';
+  Promise.all([get('/',qs)].concat(M.map(function(m){return get('tempo-'+m[0],qs)}))).then(function(r){
+    var v=r[0],ev=r.slice(1).map(function(x){return x.c});
+    document.getElementById('uniq').textContent=v.u.toLocaleString('pt-BR');
+    document.getElementById('views').textContent=v.c.toLocaleString('pt-BR');
+    var base=Math.max(v.c,ev[0]||0),html='',avg=0,prevT=0,prevF=1;
+    M.forEach(function(m,i){
+      var f=base?Math.min(1,ev[i]/base):0;
+      avg+=(m[1]-prevT)*(prevF+f)/2;prevT=m[1];prevF=f;
+      html+='<div class="row"><span>'+m[0].replace('min',' min').replace('s',' s')+' ou mais</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+ev[i]+')</span></div>';
+    });
+    avg+=prevF*600;
+    document.getElementById('rows').innerHTML=html;
+    document.getElementById('avg').textContent=base?fmt(avg):'–';
+    document.getElementById('p5').textContent=base?Math.round(Math.min(1,ev[3]/base)*100)+'%':'–';
+    document.getElementById('status').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. Os números podem levar alguns minutos para aparecer.';
+  });
+}
+document.getElementById('periods').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});load(b.dataset.d)});
+load('7');
+</script>
+</body>
+</html>
