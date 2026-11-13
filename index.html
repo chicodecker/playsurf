@@ -811,7 +811,7 @@ const waveMesh=new THREE.Mesh(waveGeo,[waveMat,curMat]);waveMesh.frustumCulled=f
 /* ───────────────────────── surface sampling ───────────────────────── */
 function colIndex(s){let lo=0,hi=NS-1;if(s<=colS[0])return 0;if(s>=colS[hi])return hi-1e-4;
   while(hi-lo>1){const m=(lo+hi)>>1;if(colS[m]<=s)lo=m;else hi=m}return lo+(s-colS[lo])/(colS[hi]-colS[lo])}
-const cpA={z:0,y:0,a:0},cpB={z:0,y:0,a:0};
+const cpA={z:0,y:0,a:0},cpB={z:0,y:0,a:0},cpM={z:0,y:0,a:0},cpP={z:0,y:0,a:0};
 function colPoint(i,p,o){
   if(p<=0){o.z=colZ0[i]-p;o.y=0;o.a=0;return}
   const q=Math.min(p/colL[i],1)*NQ,j=Math.min(Math.floor(q),NQ-1),f=q-j,b=i*NV+NF+j,fa=i*(NQ+1)+j;
@@ -824,9 +824,13 @@ function sampleSurf(s,p,o){
   o.aMax=lerp(colAMax[i0],colAMax[i1],f);o.z0=lerp(colZ0[i0],colZ0[i1],f);o.H=lerp(colH[i0],colH[i1],f);o.cz=lerp(colCZ[i0],colCZ[i1],f);
   o.foam=lerp(colFoam[i0],colFoam[i1],f);o.tipZ=lerp(PZ[i0*NV+NF+NQ],PZ[i1*NV+NF+NQ],f);
   colPoint(i0,p,cpA);colPoint(i1,p,cpB);
-  const a=lerp(cpA.a,cpB.a,f);o.alpha=a;
-  o.pos.set(s,lerp(cpA.y,cpB.y,f),lerp(cpA.z,cpB.z,f));
-  o.ts.set(colS[i1]-colS[i0]||1,cpB.y-cpA.y,cpB.z-cpA.z).normalize();
+  const a=lerp(cpA.a,cpB.a,f),D=colS[i1]-colS[i0];o.alpha=a;
+  if(D>1e-6){const im=Math.max(i0-1,0),ip=Math.min(i1+1,NS-1);colPoint(im,p,cpM);colPoint(ip,p,cpP);   // cubic across the columns: position and slope both continuous,
+    const kM=D/(colS[i1]-colS[im]),kP=D/(colS[ip]-colS[i0]),m0y=(cpB.y-cpM.y)*kM,m0z=(cpB.z-cpM.z)*kM,m1y=(cpP.y-cpA.y)*kP,m1z=(cpP.z-cpA.z)*kP;   // so the board never kinks as it crosses one
+    const t=f,t2=t*t,t3=t2*t,h00=2*t3-3*t2+1,h10=t3-2*t2+t,h01=3*t2-2*t3,h11=t3-t2,d00=6*t2-6*t,d10=3*t2-4*t+1,d01=6*t-6*t2,d11=3*t2-2*t;
+    o.pos.set(s,h00*cpA.y+h10*m0y+h01*cpB.y+h11*m1y,h00*cpA.z+h10*m0z+h01*cpB.z+h11*m1z);
+    o.ts.set(D,d00*cpA.y+d10*m0y+d01*cpB.y+d11*m1y,d00*cpA.z+d10*m0z+d01*cpB.z+d11*m1z).normalize()}
+  else{o.pos.set(s,lerp(cpA.y,cpB.y,f),lerp(cpA.z,cpB.z,f));o.ts.set(1,cpB.y-cpA.y,cpB.z-cpA.z).normalize()}
   o.tp.set(0,Math.sin(a),-Math.cos(a));
   o.n.crossVectors(o.ts,o.tp).normalize();o.tp.crossVectors(o.n,o.ts);
   return o}
@@ -1327,15 +1331,17 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
    mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.vertexShader='varying float vMY;varying vec3 vMN;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;');
      sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uAlt;varying float vMY;varying vec3 vMN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
-     float material_eyeK=0.;float faceK=smoothstep(FSX*0.02,FSX*0.05,vMN.x)*smoothstep(0.85,0.875,vMY)*(1.-smoothstep(0.955,0.975,vMY));   // the face: texture softened so the blotches melt together
+     float material_eyeK=0.;float neckK=smoothstep(0.8,0.83,vMY)*(1.-smoothstep(0.91,0.93,vMY));float faceK=smoothstep(FSX*0.02,FSX*0.05,vMN.x)*smoothstep(0.85,0.875,vMY)*(1.-smoothstep(0.955,0.975,vMY));   // the face: texture softened so the blotches melt together
      if(faceK>0.01){vec2 o=vec2(0.0024,0.);vec3 av=(texture2D(map,vMapUv+o).rgb+texture2D(map,vMapUv-o).rgb+texture2D(map,vMapUv+o.yx).rgb+texture2D(map,vMapUv-o.yx).rgb+diffuseColor.rgb*2.)/6.;
        float la=dot(av,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,av,0.7*faceK);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.62,0.36,0.20)*(la/0.38),0.18*faceK*smoothstep(0.7,0.45,la));float lc=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb*=mix(1.,min(1.,0.3/max(lc,0.01)),faceK*smoothstep(0.28,0.42,lc));material_eyeK=faceK;}
+     {vec3 c0=diffuseColor.rgb;float cool0=max(c0.g,c0.b)-c0.r,neck=smoothstep(0.74,0.77,vMY)*(1.-smoothstep(0.915,0.93,vMY));   // a blue collar left in the model's texture at the base of the neck: painted over in skin
+      float l0=dot(c0,vec3(.3,.59,.11));float tealK=smoothstep(0.0,0.035,c0.g-c0.r)*smoothstep(0.0,0.03,c0.b-c0.r*0.9);diffuseColor.rgb=mix(c0,vec3(0.62,0.36,0.20)*clamp(l0/0.3,0.7,1.4),neck*tealK);}
      if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
        c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
        float face=smoothstep(FSX*0.015,FSX*0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
        float hy=mix(0.925,0.86,smoothstep(-FSX*0.01,-FSX*0.02,vMN.x));   // down to the neck at the back, only the crown at the front
        c=mix(c,vec3(0.86,0.60,0.24)*(0.55+1.4*l),smoothstep(0.2,0.07,l)*smoothstep(hy,hy+0.025,vMY)*(1.-face));   // only the dark hair turns sun-bleached golden
-       diffuseColor.rgb=c;}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=1.-faceK;material.roughness=mix(material.roughness,0.75,faceK);')};   /* no wet shine on the face: it picked out every bump */
+       diffuseColor.rgb=c;}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=1.-max(faceK,neckK);material.roughness=mix(material.roughness,0.75,max(faceK,neckK*0.8));')};   /* no wet shine on the face: it picked out every bump */
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
@@ -1398,6 +1404,7 @@ function poseRider(time,dt){
   _a.set(sf_*Math.sin(tw)+0.06-sx*0.4+0.018*Math.sin(time*1.7)+fl*Math.sin(time*9)*0.3,Math.cos(fold),-sf_*Math.cos(tw)-0.10*lamN+0.014*Math.sin(time*2.3+1)).normalize();_b.set(0.95,0.31,0);
   J.spine.lerpVectors(_b,_a,st).addScaledVector(WU,(0.13+0.16*toe+0.10*heel+0.42*sn*(1-lay)+0.3*cl)*st*(1-gr)*(1-0.75*Math.max(0,lay))*(1-0.85*bh)).normalize();
   if(lay>0.01)J.spine.addScaledVector(WU,-0.32*lay).normalize();   // back flat on the water
+  {const ln=A.lean=damp(A.lean||0,AT.lean||0,5,dt);if(Math.abs(ln)>0.003)J.spine.addScaledVector(_d.set(Math.cos(tw),0,Math.sin(tw)),ln*st).normalize()}   // swaying side to side (celebrations)
   if(bh>0.01){_c.set(0,0,-1).addScaledVector(WU,WU.z).normalize();_a.copy(_c).multiplyScalar(0.90).addScaledVector(WU,0.16).addScaledVector(XV,0.10).normalize();J.spine.lerp(_a,0.65*bh).normalize()}   // chest level with the world, out over the toes
   J.chest.copy(J.pel).addScaledVector(J.spine,0.52);
   _a.copy(XV).applyAxisAngle(J.spine,-tw);J.axis.lerpVectors(ZV,_a,st);J.axis.addScaledVector(J.spine,-J.axis.dot(J.spine)).normalize();
@@ -1407,7 +1414,7 @@ function poseRider(time,dt){
   _c.copy(WU).multiplyScalar(1-air).addScaledVector(J.spine,air).normalize();   // in the air the head turns and flips with the body instead of twisting to keep the horizon level
   _a.set(Math.cos(la),0,-Math.sin(la));_a.addScaledVector(_c,-_a.dot(_c)).normalize().addScaledVector(_c,-0.06+0.40*toe*(0.4+0.6*AT.vup)+0.22*cl-0.42*gr-0.25*air*(1-gr)-0.14*sn+(A.gz=damp(A.gz||0,AT.gz||0,6,dt))).normalize();
   _b.set(1,0.2,0);J.look.lerpVectors(_b,_a,st).normalize();
-  _y.copy(J.spine).multiplyScalar((0.50+0.6*air)*st).addScaledVector(_c,0.80*(1-0.5*air)*st).addScaledVector(UPV,1-st).addScaledVector(J.spine,0.9*pr).normalize();
+  _y.copy(J.spine).multiplyScalar((0.50+0.6*air)*st).addScaledVector(_c,0.80*(1-0.5*air)*st).addScaledVector(UPV,1-st).addScaledVector(J.spine,0.9*pr).addScaledVector(J.axis,(A.hroll=damp(A.hroll||0,AT.hroll||0,7,dt))*st).normalize();   // head tilt (celebrations)
   J.hbase.copy(J.neck).addScaledVector(_y,0.088).addScaledVector(J.look,0.008);
   J.head.copy(J.hbase).addScaledVector(_y,0.092).addScaledVector(J.look,0.016);
   // torso + neck in one skin
@@ -1426,6 +1433,7 @@ function poseRider(time,dt){
     _b.x+=Math.sin(time*7+i*2.1)*0.17*wl;_b.z+=Math.cos(time*9.3+i*1.3)*0.13*wl;_b.y+=Math.sin(time*11.5+i)*0.10*wl;m.quaternion.setFromUnitVectors(_c.set(0,-1,0),_b.normalize())}
   // arms: mostly low, lead arm forward and trail arm back along the board; they lead the turn (intent), a beat ahead of the board
   J.shF.copy(J.chest).addScaledVector(J.axis,0.186).addScaledVector(J.spine,0.014);J.shB.copy(J.chest).addScaledVector(J.axis,-0.186).addScaledVector(J.spine,0.014);
+  {const sg=(A.shrug=damp(A.shrug||0,AT.shrug||0,10,dt))*0.07;if(sg>0.001){J.shF.addScaledVector(J.spine,sg);J.shB.addScaledVector(J.spine,sg)}}   // shoulders up: a shrug
   const nK=1+1.8*rev,n1=(Math.sin(time*1.3)*0.025+Math.sin(time*2.9)*0.01+Math.sin(time*5.1)*0.012*rev)*nK,n2=(Math.sin(time*1.1+2)*0.025+Math.sin(time*3.3+1)*0.01+Math.sin(time*4.3+2)*0.012*rev)*nK,cv=1-sn,pump=clamp(-A.crouch.v*0.04,-0.05,0.08)*st;
   // Arms stay low and close to the body. Only the manoeuvre opens them: lead arm out toward the wave, palm up as if carrying a tray, trail arm stretched straight back.
   const tray=A.tray=damp(A.tray||0,clamp(Math.max(sn,th_*0.9,heelI*cv*0.55)*(1-rev)*(1-gr)*(1-air)*(1-bh),0,1),8,dt);
@@ -1447,6 +1455,16 @@ function poseRider(time,dt){
   else if(cl>0.01&&AT.claimV===7){const w=Math.min(1,cl),sh=0.035*Math.sin(time*9);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());_c.y=0;_c.normalize();   // both open hands up at the camera: a 10
     _b.copy(_c).multiplyScalar(1.0).addScaledVector(WU,0.38).normalize().multiplyScalar(0.6).add(J.shF);_b.addScaledVector(WU,sh);J.hFt.lerp(_b,w);
     _a.copy(_c).multiplyScalar(1.0).addScaledVector(WU,0.38).normalize().multiplyScalar(0.6).add(J.shB);_a.addScaledVector(WU,-sh);J.hBt.lerp(_a,w)}
+  else if(cl>0.01&&AT.claimV>=8){const w=Math.min(1,cl),e=AT.clE||0,v=AT.claimV,T=2*PI,F=J.front,S=J.axis,U=WU;   // end-of-wave celebrations: 67, macarena, "ihhh, não sei", "tô doidão"
+    const P=(o,b,f,s,u)=>o.copy(b).addScaledVector(F,f).addScaledVector(S,s).addScaledVector(U,u);
+    if(v===8){const k=0.09*Math.sin(e*T*2.3);P(_b,J.shF,0.40,0.05,-0.08+k);P(_a,J.shB,0.40,-0.05,-0.08-k)}   // 67: both palms up out front, weighing up and down
+    else if(v===9){const b=Math.floor(e/0.26),bl=b<0?-1:(b>>1),bt=b<1?-1:((b-1)>>1);   // macarena: one move per beat, right arm then left
+      const pose=(o,i,side,sh,shO)=>{if(i<0)P(o,sh,0.16,0,-0.40);else if(i===0)P(o,sh,0.52,0,-0.02);else if(i===1)P(o,sh,0.50,0,-0.08);else if(i===2)P(o,shO,0.13,0,0.02);
+        else if(i===3)P(o,J.head,-0.07,side*0.07,0.05);else if(i===4)P(o,J.pel,0.14,-side*0.09,0.06);else P(o,J.pel,-0.15,side*0.10,0.02)};   // out front, palm up, opposite shoulder, behind the head, opposite hip, on the bum
+      pose(_b,Math.min(bl,5),1,J.shF,J.shB);pose(_a,Math.min(bt,5),-1,J.shB,J.shF)}
+    else if(v===10){const sh=A.shrug||0;P(_b,J.shF,0.24,0.22,-0.25+0.07*sh);P(_a,J.shB,0.24,-0.22,-0.25+0.07*sh)}   // ihhh, não sei: palms up out to the sides
+    else{const a=e*T*2.4;P(_b,J.head,0.07+0.05*Math.cos(a),0.25,-0.01+0.05*Math.sin(a));P(_a,J.shB,0.10+0.12*Math.sin(e*T*0.9),-0.06,-0.49)}   // tô doidão: a finger circling at the temple, the other arm hanging loose
+    J.hFt.lerp(_b,w);J.hBt.lerp(_a,w)}
   else if(cl>0.01){const v=(AT.claimV|0)%CLAIMS.length,L=CLAIMS[v][0],T=CLAIMS[v][1],w=Math.min(1,cl);   // the claim, one of several
     _b.set(L[0],0,L[2]).addScaledVector(WU,L[1]).normalize().multiplyScalar(L[3]).add(J.shF);if(v===2)_b.addScaledVector(WU,0.08*Math.sin(time*11));J.hFt.lerp(_b,w);
     _a.set(T[0],0,T[2]).addScaledVector(WU,T[1]).normalize().multiplyScalar(T[3]).add(J.shB);J.hBt.lerp(_a,w)}
@@ -1465,7 +1483,7 @@ function poseRider(time,dt){
   if(pr>0.001){const push=1-sstep(0.6,0.95,pr);
     paddlePt(AT.paddle,1,_a);_b.set(-0.05,0.08,0.22);_a.lerp(_b,push);J.hFt.lerp(_a,1-st);
     paddlePt(AT.paddle+PI,-1,_a);_b.set(-0.05,0.08,-0.22);_a.lerp(_b,push);J.hBt.lerp(_a,1-st)}
-  const stiff=pr>0.2,hf=stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:2.6),hz=stiff?1:0.70;
+  const stiff=pr>0.2,hf=stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:(cl>0.4&&AT.claimV>=8?11:2.6)),hz=stiff?1:0.70;
   J.haF.copy(A.hF.step(J.hFt,dt,hf,hz));J.haB.copy(A.hB.step(J.hBt,dt,AT.drag>0.5?5:hf,hz));
   J.shF.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haF,J.shF).normalize().dot(J.spine)));J.shB.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haB,J.shB).normalize().dot(J.spine)));
   ik(J.shF,J.haF,0.30,0.26,-0.25*st,-0.75*st+0.5*pr,0.6*st+pr,J.elF,J.tA);J.haF.copy(J.tA);
@@ -1661,13 +1679,13 @@ function updateAudio(){
 
 /* ───────────────────────── surfer state & physics ───────────────────────── */
 const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1,slip:0,slipHold:0,slipMax:0,s:13,p:2,V:6,th:0,om:0,rail:0,steer:0,lamG:0,mode:'ride',visible:false,lam:0,h:0,vh:0,spin:0,spinVis:0,airT:0,airDur:1,th0:0,vsAir:0,grabT:0,hMax:0,
-  tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,
+  tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
 function startWave(att){SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
-  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:24,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,exV:0,exT:0,exLand:false,straight:false});
+  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:24,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
@@ -1713,7 +1731,19 @@ const CLAIMS=[[[0.30,0.95,0.20,0.60],[-0.30,0.95,0.20,0.60]],   // both arms up
   [[1.00,0.30,0.05,0.62],[-1.00,0.30,0.05,0.62]],     // arms wide
   [[0.40,0.95,-0.30,0.62],[-0.40,-0.70,0.30,0.42]],   // pointing at the sky
   [[0.85,0.55,-0.25,0.60],[0.60,0.55,-0.45,0.55]]];   // both fists out over the nose
-function pickExit(){let v;do{v=1+Math.floor(Math.random()*3)}while(v===game.lastExit);game.lastExit=v;return v}   // 1 ollie, 2 varial, 3 kick the board up
+function pickExit(){let v;if(game.lastExit!==3&&Math.random()<0.18)v=3;else v=game.lastExit===1?2:1;game.lastExit=v;return v}   // 1 ollie, 2 varial (alternating), now and then 3: kick the board up
+// end-of-wave celebrations, a different one each wave, in turn (the turn carries over to the next visit)
+const CELEB=[{v:7,n:'Nota 10'},{v:8,n:'67'},{v:9,n:'Macarena'},{v:10,n:'Ihhh, não sei'},{v:11,n:'Tô doidão'},{v:6,n:'Hang Loose'}];
+function nextCeleb(){if(game.attract)return CELEB[Math.floor(Math.random()*CELEB.length)];
+  if(game.celebI===undefined){game.celebI=0;try{game.celebI=(parseInt(localStorage.getItem('playsurf_celeb')||'0',10)||0)%CELEB.length}catch(e){}}
+  const C=CELEB[game.celebI];game.celebI=(game.celebI+1)%CELEB.length;try{localStorage.setItem('playsurf_celeb',String(game.celebI))}catch(e){}return C}
+const _cd=new THREE.Vector3();
+function celebBody(v,e){_cd.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());   // chest and eyes turn to the camera on the beach
+  AT.tw=clamp(Math.atan2(_cd.x,-_cd.z),0.25,1.45);AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);AT.look=clamp(Math.atan2(-_cd.z,_cd.x),-0.6,1.3);const T=2*PI;
+  if(v===8){AT.crouch=0.40+0.04*Math.sin(e*T*2.3);AT.hroll=0.10*Math.sin(e*T*1.15)}   // 67
+  else if(v===9){const hip=e>2.7;AT.shiftX=(hip?0.06:0.03)*Math.sin(e*T*(hip?2.4:1.9));AT.crouch=0.38+(hip?0.08*Math.abs(Math.sin(e*T*1.2)):0);AT.hroll=0.06*Math.sin(e*T*0.95)}   // macarena: the hips keep time, then the wiggle
+  else if(v===10){const sh=sstep(0.1,0.35,e)*(1-sstep(1.1,1.4,e))+sstep(1.7,1.95,e)*(1-sstep(2.8,3.1,e));AT.shrug=sh;AT.hroll=0.42*sh*(e<1.5?1:-1);AT.crouch=0.34;AT.look+=0.12*Math.sin(e*T*0.8)}   // ihhh, não sei: two shrugs, head tilted one way then the other
+  else if(v===11){AT.shiftX=0.06*Math.sin(e*T*0.7);AT.crouch=0.44+0.12*Math.sin(e*T*1.1);AT.hroll=0.35*Math.sin(e*T*0.7+1);AT.look+=0.30*Math.sin(e*T*0.55);AT.lean=0.16*Math.sin(e*T*0.7+0.5)}}   // tô doidão: wobbling knees, rolling head, the whole body swaying
 const _qi=new THREE.Quaternion();
 function pickClaim(){let v;do{v=Math.floor(Math.random()*CLAIMS.length)}while(v===game.lastClaim);game.lastClaim=v;return v}
 function reqShot(name,pts,delay){if(game.attract)return;if(!game.shotReq||game.shotReq.pts<pts)game.shotReq={name,pts,delay}}
@@ -1908,7 +1938,7 @@ function stepRide(dt){
   // tube
   // under the roof of a throwing lip; a little hysteresis so camera, crouch and clock never flicker at the edge
   const under=S.aEnd>3.3&&sf.s>-0.6&&S.pos.z<S.tipZ-0.2&&game.state==='ride';
-  sf.cov=under?Math.min(sf.cov+dt,0.3):Math.max(sf.cov-dt,0);
+  sf.cov=under?Math.min(sf.cov+dt,0.65):Math.max(sf.cov-dt*(sf.s>4.5?3:1),0);   // deep in the pocket a moment low under the curtain does not count as out
   const covered=game.state==='ride'&&(game.inTube?sf.cov>0:sf.cov>=0.1);
   if(covered){sf.tube+=dt;sf.tubeMin=Math.min(sf.tubeMin,sf.s);game.inTube=true}
   else{if(sf.tube>0.6){const deep=sf.tubeMin<2.2,nm=sf.tube>3.5?'Huge Barrel':deep?'Deep Barrel':'Barrel',pt=(600+850*Math.min(sf.tube,7))*(deep?1.3:1);award(nm,pt);sfxNoise(0.8,3000,0.3);
@@ -1941,14 +1971,17 @@ function stepRide(dt){
 }
 function endSlide(){sf.tt=null;if(sf.slipMax>1.5&&game.state==='ride'){const pt=300+700*Math.min(sf.slipMax,1.8);award('Tail Slide',pt);reqShot('Tail Slide',pt,0)}sf.slipMax=0}
 function launchAir(vp,inp){sf.tt=null;sf.slip=0;sf.np=false;
-  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.707;   // airs 30% lower (height goes with the square of the launch speed)
+  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.78;sf.spinDir=0;   // a little more hang time, so a full rotation fits
   sf.airT=0;sf.airDur=2*sf.vh/GA;sf.spin=0;sf.flip=0;sf.th0=sf.th;
   sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42;sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
   sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);sfxNoise(0.4,3000,0.3)}
 function stepAir(dt){
   sf.airT+=dt;sf.vh-=GA*dt;sf.h+=sf.vh*dt;sf.hMax=Math.max(sf.hMax,sf.h);sf.s+=sf.vsAir*dt;
-  if(Math.abs(input.x)>0.3)sf.spin+=-input.x*6.4*dt;
-  else{const tg=Math.round(sf.spin/PI)*PI,dd=tg-sf.spin;sf.spin+=clamp(dd,-3.5*dt,3.5*dt)}
+  {const tL=(sf.vh+Math.sqrt(Math.max(0,sf.vh*sf.vh+2*GA*Math.max(sf.h,0))))/GA,held=Math.abs(input.x)>0.3;   // time left before the board touches down
+   if(held)sf.spinDir=-Math.sign(input.x);
+   if(held&&tL>0.26)sf.spin+=-input.x*8.2*dt;
+   else{const k=sf.spin/PI,d=sf.spinDir||Math.sign(sf.spin)||1,th_=held?0.02:0.3;let tg=(d>0?Math.ceil(k-th_):Math.floor(k+th_))*PI;if(Math.abs(tg-sf.spin)>18*Math.max(tL-0.04,0.06))tg-=d*PI;const dd=tg-sf.spin;   // still holding: carry on to the next half turn if there is time   // finish the turn the way it was going (or fall back if it barely started),
+     sf.spin+=Math.sign(dd)*Math.min(Math.abs(dd),clamp(Math.abs(dd)/Math.max(tL-0.04,0.06),3.5,18)*dt)}}   // timed to land square on the touchdown
   if(Math.abs(input.y)>0.3)sf.flip+=input.y*7.4*dt;else{const tg=Math.round(sf.flip/(2*PI))*2*PI;sf.flip+=clamp(tg-sf.flip,-4.5*dt,4.5*dt)}   // ↑ backflip, ↓ frontflip
   if(input.crouch)sf.grabT+=dt;
   if(Math.abs(sf.vh)<1.6)game.slowT=Math.max(game.slowT,0.06);
@@ -2058,6 +2091,7 @@ function placeSurfer(dt,time){
      AT.bsh=bsK;if(bsK>0.5){const fw=R2&&R2.ph===1?sstep(0.35,0.05,sf.pivot):0;AT.gz=lerp(-0.45,0,fw);AT.crouch=Math.max(AT.crouch,0.80);AT.tw=lerp(AT.tw,0.35,0.8*(1-fw));AT.look=lerp(0.55,0,fw)}}   // coming off the snap his eyes go back down the line   // backside hit: folded over the toes, eyes down the face   // the head leads the turn a little and never looks back against the spin
     AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);
     sf.claimT=Math.max(0,(sf.claimT||0)-dt);AT.claim=sf.claimT>0.05&&(sf.claimT<1.15||sf.endCl)&&ao<1.5&&!game.inTube&&!(sf.exV&&sf.exT<(sf.exV===1?0.56:0.68))?1:0;AT.claimV=sf.claimV||0;AT.clPh=sf.claimT>2.0?1:0;if(AT.claim){AT.crouch=Math.min(AT.crouch,0.36);AT.look=0.2}
+    AT.clE=sf.exV&&sf.exV!==3?Math.max(0,sf.exT-(sf.exV===1?0.56:0.68)):0;AT.hroll=0;AT.lean=0;AT.shrug=0;if(AT.claim&&sf.endCl)celebBody(AT.claimV,AT.clE);
     AT.rail=sf.lam/0.8;AT.lt=lt;AT.drag=Math.max(sstep(0.5,0.9,lt)*(game.inTube?1:sstep(0.35,0.6,cT)),input.stall&&lt>0.2?0.9:0,0.9*(A.tbk||0)*(input.x>0.3?0.4:1))*(1-A.prone)*(1-AT.claim);   // in the barrel his hand trails along the wall
     setShadow(S,bX,0.42,1);
   }else if(sf.mode==='air'){
@@ -2112,7 +2146,7 @@ function placeSurfer(dt,time){
     if(sf.exT<T){const hh=(sf.exV===1?0.32:0.42)*Math.sin(PI*u);   // a small pop, not a launchboardG.position.y+=hh;riderG.position.y+=hh;
       if(sf.exV===1)boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,0.30*Math.sin(PI*u)*(1-u)));else boardG.quaternion.multiply(qS.setFromAxisAngle(UPV,2*PI*sstep(0.1,0.88,u)));
       AT.crouch=u<0.12?0.85:u<0.8?0.7:0.55;AT.claim=0}
-    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35}}
+    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);sf.celebN=''}}}
   A.prone=proneT>A.prone?Math.min(proneT,A.prone+dt/0.3):Math.max(proneT,A.prone-dt/0.48);
   A.flail=damp(A.flail,0,8,dt);A.grab=damp(A.grab,grabT,12,dt);A.air=damp(A.air,airT,9,dt);A.claim=damp(A.claim,AT.claim,7,dt);
   if(dt>1e-4){A.aa=damp(A.aa,clamp((sf.om-A.omPrev)/dt,-30,30),10,dt);A.omPrev=sf.om}
@@ -2133,7 +2167,7 @@ function boardSpray(dt){
       rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0)}}
 
 /* ───────────────────────── camera ───────────────────────── */
-const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='';
+const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',camRP=3.2,camRL=7;const _oT1=new V3,_oT2=new V3;
 const REPLAY_SHOTS=['follow','tele'];   // replays and the start screen cut between chase and side only
 const SCam=mkS(),_bd=new V3();
 function shot(kind,p,tk,ak){
@@ -2152,7 +2186,9 @@ function shot(kind,p,tk,ak){
     const tz=Math.min(p.z*0.45+0.9,lerp(1e3,tipC-0.95,roofC),p.z+dB*(0.35+0.35*aK)+0.1);   // inside line, clear of the lip where there is one
     const la=4.8*aK,ox=lerp(-0.6,-3.9-0.7*sf.camDir,kd);
     cT1.set(lerp(Math.max(p.x+ox,8.5),tx,tk)-ak*1.2,lerp(p.y+lerp(1.8,1.40,kd),Math.max(1.05,p.y*0.3+0.85),tk)+ak*0.9,lerp(p.z+lerp(5.6,3.9,kd),tz,tk)+ak*2.2);
-    cT2.set(p.x+lerp(lerp(-1.5,la,kd),Math.min(la+1,0.9+dB*0.95*aK),tk),p.y+lerp(0.8,0.75,tk)-ak*sf.h*0.3,p.z+lerp(-1.0,0.2,tk));return lerp(50,lerp(72,62,sstep(1.5,2.5,dB)),tk)+ak*3}
+    cT2.set(p.x+lerp(lerp(lerp(-1.5,la,kd),Math.min(la+1,0.9+dB*0.95*aK),tk),0.5,Math.min(1,Math.max(0,8.5-(p.x+ox))/2)*(1-tk)),p.y+lerp(0.8,0.75,tk)-ak*sf.h*0.3,p.z+lerp(-1.0,0.2,tk));return lerp(50,lerp(72,62,sstep(1.5,2.5,dB)),tk)+ak*3}
+  if(kind==='barrel'){sampleSurf(sf.s+7,Math.max(sf.p,0.3),SCam);cT1.copy(SCam.pos).addScaledVector(SCam.n,1.5);cT1.y=Math.max(cT1.y+0.35,0.8);   // deep in the barrel: in the tube ahead of him, looking back at him with the curtain behind
+    cT1.z=lerp(cT1.z,Math.min(cT1.z,SCam.tipZ-0.3),sstep(2.9,3.4,SCam.aEnd));cT2.set(p.x+0.3,p.y+0.75,p.z);return 48}
   if(kind==='low'){cT1.set(p.x+6.5,0.55,p.z+8.5);cT2.set(p.x+0.6,p.y+0.8,p.z);return 38}
   if(kind==='tight'){cT1.set(p.x+20,2.8,36);cT2.set(p.x+0.6,p.y+0.85,p.z*0.8);return 8.5}
   cT1.set(p.x+13,1.2,p.z+4.5);cT2.set(p.x,p.y+0.7,p.z);return 24}
@@ -2162,7 +2198,8 @@ function updateCamera(dt,time){
   if(game.state==='menu'){const a=time*0.11;cT1.set(19+Math.sin(a)*5,1.5+Math.sin(a*1.7)*0.35,17+Math.cos(a)*2.5);cT2.set(3.5,1.75,0.4);fov=27}
   else{
     {const op=false,pk=game.inTube&&sf.tube>0.35?1:0;   // the close in-barrel view only once he has really been covered for a moment, never just because a lip is throwing nearby
-     sf.tubeK=damp(sf.tubeK,pk,pk>sf.tubeK?(op?7:3.6):3.2,dt)}sf.airK=damp(sf.airK,sf.mode==='air'?1:0,4,dt);
+     const w=pk>sf.tubeK?4.6:4.0;sf.tubeKv=(sf.tubeKv||0)+((pk-sf.tubeK)*w*w-2*w*(sf.tubeKv||0))*dt;sf.tubeK=clamp(sf.tubeK+sf.tubeKv*dt,0,1);if(sf.tubeK<=0||sf.tubeK>=1)sf.tubeKv=0}   // a critically damped spring: the barrel framing starts and settles from rest, never with a kick
+    {const at=sf.mode==='air'?1:0,w=5.5;sf.airKv=(sf.airKv||0)+((at-sf.airK)*w*w-2*w*(sf.airKv||0))*dt;sf.airK=clamp(sf.airK+sf.airKv*dt,0,1);if(sf.airK<=0||sf.airK>=1)sf.airKv=0}
     if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
     else if(game.replay)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
     else if(game.attract)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(clockT/5.5)%REPLAY_SHOTS.length];   // start screen: the replay director
@@ -2172,14 +2209,18 @@ function updateCamera(dt,time){
         if(game.marks.length!==(game.mkN||0)){if(game.marks.length>(game.mkN||0)&&(game.chN||0)<2&&now>14&&now-(game.chEnd||-99)>18){game.chEnd=now+2.4;game.chN=(game.chN||0)+1}game.mkN=game.marks.length}
         if(now<game.chEnd)kind='follow'}
       // whatever camera is selected, in the tube the view is from behind him inside the barrel; the other cameras cut in and back out
-      if(kind!=='follow'&&!sf.openCam&&kind!=='beach'){if((game.inTube&&sf.tube>0.35)||sf.tubeK>(lastShot==='follow'?0.35:0.6))kind='follow'}
-      if(kind!==lastShot&&(kind==='follow'||lastShot==='follow'))camBlend=1}   // side <-> chase: a quick glide between the two, not a jump cut
+      if(!sf.openCam&&kind!=='beach'){const fo=lastShot==='follow',bi=Math.floor(colIndex(sf.s-2.3)),open=colAEnd[bi]>(fo?3.0:3.4)&&sf.s>(fo?2.2:3.0);   // the chase sits behind him only where the barrel is still open behind; deeper than that it would be inside the closed-out curtain, so the side camera looks in from the channel
+        if(lastShot==='barrel'&&(game.inTube||sf.tubeK>0.2))kind='barrel';else if((game.inTube&&sf.tube>0.35)||sf.tubeK>(fo||lastShot==='barrel'?0.35:0.6))kind=lastShot==='barrel'||!open||(kind!=='follow'&&!fo)?'barrel':'follow'}   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
+      if(kind!==lastShot){const fb=(kind==='follow'&&lastShot==='barrel')||(kind==='barrel'&&lastShot==='follow');   // behind him <-> ahead of him: a clean cut (a glide would fly through him)
+        if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot}}}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
-    fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}}   // in the barrel the camera floats along with him
+    if(camBlend>0&&blendFrom&&blendFrom!==kind&&blendFrom!=='beach'){const of=shot(blendFrom,p,sf.tubeK,sf.airK);_oT1.copy(cT1);_oT2.copy(cT2);fov=shot(kind,p,sf.tubeK,sf.airK);   // a glide: both shots keep tracking him and the frame eases from one to the other
+      const e=1-camBlend,k=e*e*e*(e*(e*6-15)+10);cT1.lerpVectors(_oT1,cT1,k);cT2.lerpVectors(_oT2,cT2,k);fov=lerp(of,fov,k)}
+    else fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}else if(kind==='barrel'){rp=2.4;rl=5}}   // in the barrel the camera floats along with him
   if((game.replay||game.attract)&&kind!==lastShot)camInit=false;lastShot=kind;
   if(game.dbgCam){const q=game.dbgCam;cT1.set(sf.pos.x+q[0],sf.pos.y+q[1],sf.pos.z+q[2]);cT2.set(sf.pos.x+(q[5]||0),sf.pos.y+(q[4]||0.65),sf.pos.z+(q[6]||0));fov=q[3];camP.copy(cT1);camL.copy(cT2);camFov=fov}
-  if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true}
-  camBlend=Math.max(0,camBlend-dt/0.9);const bk=camBlend>0?lerp(1,0.55,camBlend):1;   // during a glide the camera eases across, then locks back on
+  if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true;camRP=rp;camRL=rl}
+  camBlend=Math.max(0,camBlend-dt/1.2);const bk=1;camRP=damp(camRP,rp,4,dt);camRL=damp(camRL,rl,4,dt);rp=camRP;rl=camRL;   // the follow rates ease too, so a change of shot never jolts the camera's speed   // during a glide the camera eases across, then locks back on
   camP.x=damp(camP.x,cT1.x,rp*1.5*bk,dt);camP.y=damp(camP.y,cT1.y,rp*0.8*bk,dt);camP.z=damp(camP.z,cT1.z,rp*0.8*bk,dt);
   camL.x=damp(camL.x,cT2.x,rl*Math.max(bk,0.8),dt);camL.y=damp(camL.y,cT2.y,rl*0.7*Math.max(bk,0.8),dt);camL.z=damp(camL.z,cT2.z,rl*0.7*Math.max(bk,0.8),dt);
   camFov=damp(camFov,fov,camBlend>0?2:3,dt);
@@ -2307,8 +2348,8 @@ function tick(dtR,draw){
       if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.tt=null}   // he turns to face the beach first
       if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
         if(sf.exV===3){sf.mode='kickout';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.7);sf.wVel.x+=sf.V*Math.cos(sf.th)-CP*0.6;sf.wVel.y=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}   // kicks the board up and steps off
-        else{sf.claimT=3.4;sf.claimV=sf.exV===2?6:7;sfxNoise(0.22,2600,0.15)}}   // ollie or varial, then points at the camera: hang loose
-      if(game.waveAge>game.waveDur){game.Hbase=1-0.8*sstep(0,3.6,game.waveAge-game.waveDur);if(game.waveAge>game.waveDur+2.8&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done')}}
+        else{const C=nextCeleb();sf.claimT=4.2;sf.claimV=C.v;sf.celebN=C.n;sfxNoise(0.22,2600,0.15)}}   // ollie or varial, then the celebration
+      if(game.waveAge>game.waveDur){game.Hbase=1-0.8*sstep(0,3.6,game.waveAge-game.waveDur);if(game.waveAge>game.waveDur+3.5&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done')}}
     else if(game.state==='end'){game.endT+=dtR;game.Hbase=damp(game.Hbase,1,0.5,dt)}
   }
   const P_=window.__prof;let pt_=P_?performance.now():0;const mk_=n=>{if(P_){const u=performance.now();P_[n]=(P_[n]||0)+u-pt_;pt_=u}};mk_('pre');
@@ -2356,7 +2397,7 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
     const cx=clamp((pv.x*.5+.5)*c.width,sw/2,c.width-sw/2),cy=clamp((1-(pv.y*.5+.5))*c.height,sh/2,c.height-sh/2);
     x.drawImage(c,cx-sw/2,cy-sh/2,sw,sh,(i%cols)*cw,Math.floor(i/cols)*ch,cw,ch);
     x.fillStyle='#fff';x.font='22px monospace';x.fillText(i+' '+sf.mode[0]+' th'+sf.th.toFixed(1)+' r'+sf.rail.toFixed(1)+' c'+A.crouch.x.toFixed(2),(i%cols)*cw+8,Math.floor(i/cols)*ch+26)}
-  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel}};
+  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP}};
 startAttract();
 requestAnimationFrame(frame);
 </script>
