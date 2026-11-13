@@ -383,7 +383,7 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
 // brand type comes from the web fonts; anything painted on a canvas is repainted once they have arrived
 const SCRIPT='Pacifico,"Brush Script MT",cursive',CONDF='"Barlow Condensed","Avenir Next Condensed","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('100px Pacifico'),document.fonts.load('800 40px "Barlow Condensed"')]).then(()=>fn(),()=>{})}catch(e){}}
-const ALT={value:0};let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
+const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0};let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
 const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=128;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;TXT.push(t);
   whenFonts(()=>{x.fillStyle='#0d2530';x.fillRect(0,0,1024,128);x.fillStyle='#12b5a6';x.fillRect(0,112,1024,16);x.textBaseline='middle';
     x.font=`76px ${SCRIPT}`;x.lineWidth=10;x.lineJoin='round';x.strokeStyle='#06162b';x.strokeText('PlaySurf',36,52);x.fillStyle='#f2fbff';x.fillText('PlaySurf',36,52);
@@ -1326,13 +1326,16 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
    si.needsUpdate=sw.needsUpdate=true;
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
    mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.vertexShader='varying float vMY;varying vec3 vMN;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;');
-     sh.fragmentShader='uniform float uAlt;varying float vMY;varying vec3 vMN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uAlt;varying float vMY;varying vec3 vMN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+     float material_eyeK=0.;float faceK=smoothstep(FSX*0.02,FSX*0.05,vMN.x)*smoothstep(0.85,0.875,vMY)*(1.-smoothstep(0.955,0.975,vMY));   // the face: texture softened so the blotches melt together
+     if(faceK>0.01){vec2 o=vec2(0.0024,0.);vec3 av=(texture2D(map,vMapUv+o).rgb+texture2D(map,vMapUv-o).rgb+texture2D(map,vMapUv+o.yx).rgb+texture2D(map,vMapUv-o.yx).rgb+diffuseColor.rgb*2.)/6.;
+       float la=dot(av,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,av,0.7*faceK);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.62,0.36,0.20)*(la/0.38),0.18*faceK*smoothstep(0.7,0.45,la));float lc=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb*=mix(1.,min(1.,0.3/max(lc,0.01)),faceK*smoothstep(0.28,0.42,lc));material_eyeK=faceK;}
      if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
        c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
-       float face=smoothstep(-0.015,-0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
-       float hy=mix(0.925,0.86,smoothstep(-0.01,0.02,vMN.x));   // down to the neck at the back, only the crown at the front
+       float face=smoothstep(FSX*0.015,FSX*0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
+       float hy=mix(0.925,0.86,smoothstep(-FSX*0.01,-FSX*0.02,vMN.x));   // down to the neck at the back, only the crown at the front
        c=mix(c,vec3(0.86,0.60,0.24)*(0.55+1.4*l),smoothstep(0.2,0.07,l)*smoothstep(hy,hy+0.025,vMY)*(1.-face));   // only the dark hair turns sun-bleached golden
-       diffuseColor.rgb=c;}`)};
+       diffuseColor.rgb=c;}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=1.-faceK;material.roughness=mix(material.roughness,0.75,faceK);')};   /* no wet shine on the face: it picked out every bump */
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
