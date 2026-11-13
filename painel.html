@@ -23,7 +23,7 @@ h1{font-size:24px;margin:0 0 4px}
 .kpi .n{color:var(--mute);font-size:13px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:20px}
 .card h2{font-size:17px;margin:0 0 12px}
-.row{display:grid;grid-template-columns:110px 1fr 90px;gap:10px;align-items:center;margin:8px 0;font-size:15px}
+.row{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;margin:8px 0;font-size:15px}
 .bar{height:22px;background:var(--line);border-radius:6px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--acc);border-radius:6px;min-width:2px}
 .row .p{text-align:right;font-variant-numeric:tabular-nums}
@@ -50,8 +50,13 @@ a{color:var(--acc)}
 <div id="rows"></div>
 <p class="note">Cada barra mostra a porcentagem das visitas que ficou pelo menos esse tempo com o jogo aberto e visível. O tempo só passou a ser medido a partir de 13/11/2026.</p>
 </div>
+<div class="card">
+<h2>Acessos por país</h2>
+<div id="countries"><p class="note">Carregando…</p></div>
+<p class="note">País estimado pelo fuso horário do aparelho de cada visitante. Contado a partir de 13/11/2026, então os primeiros dias mostram poucos dados.</p>
+</div>
 <p class="note" id="status"></p>
-<p class="note">Detalhes (países, origem, celular x computador): <a href="https://playsurf.goatcounter.com" target="_blank" rel="noopener">painel completo do GoatCounter</a>.</p>
+<p class="note">Mais detalhes (origem, celular x computador): <a href="https://playsurf.goatcounter.com" target="_blank" rel="noopener">painel completo do GoatCounter</a>.</p>
 </main>
 <script>
 var GC='https://playsurf.goatcounter.com/counter/';
@@ -59,11 +64,19 @@ var M=[['30s',30],['1min',60],['3min',180],['5min',300],['10min',600],['20min',1
 function num(s){return parseInt(String(s||'0').replace(/\D/g,''),10)||0}
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function get(path,qs){return fetch(GC+encodeURIComponent(path)+'.json'+qs).then(function(r){return r.json()}).then(function(j){return{c:num(j.count),u:num(j.count_unique)}}).catch(function(){return{c:0,u:0}})}
+var CC=["AE", "AO", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CN", "CO", "CR", "CU", "CV", "CZ", "DE", "DK", "DO", "EC", "EG", "ES", "FI", "FJ", "FR", "GB", "GR", "GT", "HK", "HR", "HU", "ID", "IE", "IL", "IN", "IT", "JP", "KE", "KR", "MA", "MX", "MY", "MZ", "NG", "NL", "NO", "NZ", "PA", "PE", "PF", "PH", "PK", "PL", "PR", "PT", "PY", "RO", "RS", "RU", "SA", "SE", "SG", "TH", "TR", "TW", "UA", "US", "UY", "VE", "VN", "XX", "ZA"];
+var DN=null;try{DN=new Intl.DisplayNames(['pt-BR'],{type:'region'})}catch(e){}
+function flag(c){return c==='XX'?'🌐':String.fromCodePoint.apply(null,c.split('').map(function(ch){return 127397+ch.charCodeAt(0)}))}
+function cname(c){if(c==='XX')return 'Não identificado';try{return DN?DN.of(c):c}catch(e){return c}}
+function loadCountries(qs){Promise.all(CC.map(function(c){return get('pais-'+c,qs).then(function(r){return{c:c,n:r.c}})})).then(function(list){
+  list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});var tot=list.reduce(function(a,b){return a+b.n},0),el=document.getElementById('countries');
+  if(!tot){el.innerHTML='<p class="note">Ainda sem acessos contados neste período.</p>';return}
+  el.innerHTML=list.slice(0,15).map(function(x){var f=x.n/tot;return '<div class="row"><span>'+flag(x.c)+' '+cname(x.c)+'</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+x.n+')</span></div>'}).join('')})}
 function fmt(sec){if(!sec)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);return m?(m+' min '+(s?s+' s':'')).trim():s+' s'}
 function load(d){
   var qs='';
   if(d!=='all'){var s=new Date();s.setDate(s.getDate()-(+d));qs='?start='+ymd(s)}
-  document.getElementById('status').textContent='Carregando…';
+  document.getElementById('status').textContent='Carregando…';loadCountries(qs);
   Promise.all([get('/',qs)].concat(M.map(function(m){return get('tempo-'+m[0],qs)}))).then(function(r){
     var v=r[0],ev=r.slice(1).map(function(x){return x.c});
     document.getElementById('uniq').textContent=v.u.toLocaleString('pt-BR');
