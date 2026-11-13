@@ -1347,7 +1347,7 @@ function poseRider(time,dt){
   const bh=(A.bsh=damp(A.bsh||0,AT.bsh||0,(AT.bsh||0)>(A.bsh||0)?8:4.5,dt))*st;   // backside hit off the foam
   const pu=(A.push=damp(A.push||0,AT.push||0,(AT.push||0)>(A.push||0)?16:5,dt))*st;   // shoving a drop-in off the wave
   J.pel.set(lerp(-0.52,-0.30+0.03*c+sx-0.10*(A.lay||0),st),lerp(0.15,lerp(0.95,0.50,c),st),lerp(0,0.04+0.24*c*Math.sqrt(c)-0.10*lamN*(1-0.4*c)+0.10*ss,st));
-  if(Math.abs(A.lay||0)>0.01){J.pel.y-=0.30*A.lay;J.pel.z+=0.32*A.lay}   // layback: hips drop all the way back to the water (negative = the bounce back up)
+  if(Math.abs(A.lay||0)>0.01){J.pel.y-=0.47*A.lay;J.pel.z+=0.46*A.lay;J.pel.x-=0.06*A.lay}   /* layback: seat, back and legs all down on the water */   // layback: hips drop all the way back to the water (negative = the bounce back up)
   if(bh>0.01){J.pel.x+=0.24*bh;J.pel.y+=0.06*bh;J.pel.z-=0.08*bh}   // backside hit: hips over the front foot, so the back leg straightens and kicks the tail
   {const hy=hp+0.45*sy;J.hax.set(st*Math.cos(hy),0,1-st+st*Math.sin(hy)).normalize()}
   J.hipF.copy(J.pel).addScaledVector(J.hax,0.088);J.hipF.y-=0.02;J.hipB.copy(J.pel).addScaledVector(J.hax,-0.088);J.hipB.y-=0.02;
@@ -1633,7 +1633,7 @@ function startWave(att){SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
   Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:24,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,exV:0,exT:0,exLand:false,straight:false});
-  buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.94*S.top;wake.length=0;
+  buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
   $('menu').classList.add('off');$('end').classList.add('off');$('hud').classList.add('on');$('wavebar').classList.add('on');$('camBtn').classList.add('on');$('keys').classList.add('on');
@@ -1762,8 +1762,8 @@ function stepRide(dt){
   const top=S.top,a=S.alpha,sinA=Math.sin(Math.min(a,1.45)),rel=clamp(sf.p/top,0,1);
   const mag=Math.hypot(inp.x,inp.y);let thT,rate,piv=false,sld=false;
   if(sf.introT>0){sf.introT-=dt;
-    if(sf.introT>0.5){sf.th=damp(sf.th,-0.3,4,dt);sf.V=damp(sf.V,CP+0.3,2,dt);sf.p=0.94*top;sf.om=0;sf.rail=0;sf.steer=0;return}
-    thT=-1.32;rate=4.4}   // a late, steep drop from the very top
+    if(sf.introT>0.5){sf.th=damp(sf.th,-0.9,4,dt);sf.V=damp(sf.V,CP+0.3,2,dt);sf.p=0.99*top;sf.om=0;sf.rail=0;sf.steer=0;return}
+    thT=-1.52;rate=4.4}   // a late drop from the very top, straight down the face toward the beach
   else if(sf.openT>0){sf.openT-=dt;   // the first bottom turn, built from the same moves as the rest of the wave: the glide off the foam, the round turn at the base, the climb to the lip
     if(sf.openT>1.65){thT=-0.95;rate=2.6}else if(sf.openT>1.0&&sf.p<0.3*top){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}else{sf.openT=Math.min(sf.openT,0.99);thT=1.38;rate=5.2*(0.55+0.45*clamp(sf.V/7,0,1.3));sf.openC=(sf.openC||0)+dt;sf.openT=sf.openC>2.2?0:Math.max(sf.openT,0.05)}
     if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
@@ -1903,13 +1903,13 @@ function stepRide(dt){
 }
 function endSlide(){sf.tt=null;if(sf.slipMax>1.5&&game.state==='ride'){const pt=300+700*Math.min(sf.slipMax,1.8);award('Tail Slide',pt);reqShot('Tail Slide',pt,0)}sf.slipMax=0}
 function launchAir(vp,inp){sf.tt=null;sf.slip=0;sf.np=false;
-  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.586;   // airs 30% lower (height goes with the square of the launch speed)
+  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.674;   // airs 30% lower (height goes with the square of the launch speed)
   sf.airT=0;sf.airDur=2*sf.vh/GA;sf.spin=0;sf.flip=0;sf.th0=sf.th;
   sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42;sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
   sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);sfxNoise(0.4,3000,0.3)}
 function stepAir(dt){
   sf.airT+=dt;sf.vh-=GA*dt;sf.h+=sf.vh*dt;sf.hMax=Math.max(sf.hMax,sf.h);sf.s+=sf.vsAir*dt;
-  if(Math.abs(input.x)>0.3)sf.spin+=-input.x*5.4*dt;
+  if(Math.abs(input.x)>0.3)sf.spin+=-input.x*6.4*dt;
   else{const tg=Math.round(sf.spin/PI)*PI,dd=tg-sf.spin;sf.spin+=clamp(dd,-3.5*dt,3.5*dt)}
   if(Math.abs(input.y)>0.3)sf.flip+=input.y*7.4*dt;else{const tg=Math.round(sf.flip/(2*PI))*2*PI;sf.flip+=clamp(tg-sf.flip,-4.5*dt,4.5*dt)}   // ↑ backflip, ↓ frontflip
   if(input.crouch)sf.grabT+=dt;
@@ -1917,8 +1917,8 @@ function stepAir(dt){
   if(sf.vh<0.6&&!sf.airShot&&!sf.wantAirShot)sf.wantAirShot=true;
   sampleSurf(sf.s,1e6,S);sf.p=S.top;
   if(sf.h<=0&&sf.vh<0){
-    const r=wrapPi(sf.spin),clean=Math.abs(r)<0.95,rev=Math.abs(Math.abs(r)-PI)<0.95,flips=Math.round(Math.abs(sf.flip)/(2*PI));
-    const rf=game.state==='ride'&&!game.attract&&game.waveAge>8&&Math.random()<0.07+0.08*flips+(Math.abs(sf.spin)>4.5?0.05:0)+(sf.hMax>2.4?0.04:0);   // even a clean landing is lost now and then
+    const r=wrapPi(sf.spin),clean=Math.abs(r)<1.2,rev=Math.abs(Math.abs(r)-PI)<1.2,flips=Math.round(Math.abs(sf.flip)/(2*PI));
+    const rf=game.state==='ride'&&!game.attract&&game.waveAge>8&&Math.random()<0.03+0.06*flips+(Math.abs(sf.spin)>4.5?0.02:0)+(sf.hMax>2.4?0.03:0);   // even a clean landing is lost now and then
     if(sf.s<0.2||(!clean&&!rev)||Math.abs(wrapPi(sf.flip))>0.95||rf){sampleSurf(sf.s,S.top-0.4,S);sf.pos.copy(S.pos);wipe();return}
     sf.mode='ride';sf.p=S.top-0.55;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=r;sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
     const rot=Math.round(Math.abs(sf.spin)/PI)*180;
@@ -2053,7 +2053,7 @@ function placeSurfer(dt,time){
   const pt=A.pitch.step(pitchT,dt,3,0.65);if(Math.abs(pt)>1e-3)bX.applyAxisAngle(bZ,pt);
   bX.normalize();bY.crossVectors(bZ,bX).normalize();
   mB.makeBasis(bX,bY,bZ);qT.setFromRotationMatrix(mB);
-  {const fzT=sf.mode==='float'?1:sf.mode==='ride'?clamp((S.foam-0.2)/0.5,0,1):0;A.fz=damp(A.fz||0,fzT,fzT>(A.fz||0)?5:2.5,dt)}   // on the white water the board rides over the lumps instead of copying each one
+  {const fzT=sf.mode==='float'?1:sf.mode==='ride'?Math.max(clamp((S.foam-0.2)/0.5,0,1),game.inTube?0.75:0):0;A.fz=damp(A.fz||0,fzT,fzT>(A.fz||0)?5:2.5,dt)}   // on the white water the board rides over the lumps instead of copying each one
   qBase.slerp(qT,1-Math.exp(-lerp(28,8,A.fz)*dt));boardG.quaternion.copy(qBase).multiply(qS.setFromAxisAngle(UPV,slip));
   if(sf.mode==='float')sf.blendT=0.4;else sf.blendT=Math.max(0,sf.blendT-dt);
   boardG.position.lerp(bP,sf.mode==='float'?1-Math.exp(-(sf.fFoam?7:12)*dt):sf.blendT>0?1-Math.exp(-lerp(40,9,sf.blendT/0.4)*dt):A.fz>0.03?1-Math.exp(-lerp(60,14,A.fz)*dt):1);
@@ -2137,7 +2137,7 @@ function updateCamera(dt,time){
       if(kind!=='follow'&&!sf.openCam&&kind!=='beach'){if((game.inTube&&sf.tube>0.35)||sf.tubeK>(lastShot==='follow'?0.35:0.6))kind='follow'}
       if(kind!==lastShot&&(kind==='follow'||lastShot==='follow'))camBlend=1}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
-    fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=5;rl=8.5}}
+    fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}}   // in the barrel the camera floats along with him
   if((game.replay||game.attract)&&kind!==lastShot)camInit=false;lastShot=kind;
   if(game.dbgCam){const q=game.dbgCam;cT1.set(sf.pos.x+q[0],sf.pos.y+q[1],sf.pos.z+q[2]);cT2.set(sf.pos.x+(q[5]||0),sf.pos.y+(q[4]||0.65),sf.pos.z+(q[6]||0));fov=q[3];camP.copy(cT1);camL.copy(cT2);camFov=fov}
   if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true}
@@ -2145,8 +2145,8 @@ function updateCamera(dt,time){
   camP.x=damp(camP.x,cT1.x,rp*1.5*bk,dt);camP.y=damp(camP.y,cT1.y,rp*0.8*bk,dt);camP.z=damp(camP.z,cT1.z,rp*0.8*bk,dt);
   camL.x=damp(camL.x,cT2.x,rl*Math.max(bk,0.8),dt);camL.y=damp(camL.y,cT2.y,rl*0.7*Math.max(bk,0.8),dt);camL.z=damp(camL.z,cT2.z,rl*0.7*Math.max(bk,0.8),dt);
   camFov=damp(camFov,fov,camBlend>0?2:3,dt);
-  const hx=Math.sin(time*0.83)*0.07+Math.sin(time*2.1)*0.02,hy=Math.sin(time*1.17+1)*0.06+Math.sin(time*0.6)*0.08;
-  const shk=game.shake||0;game.shake=damp(shk,0,7,dt);
+  const calm=1-0.8*(sf.tubeK||0),hx=(Math.sin(time*0.83)*0.07+Math.sin(time*2.1)*0.02)*calm,hy=(Math.sin(time*1.17+1)*0.06+Math.sin(time*0.6)*0.08)*calm;
+  const shk=(game.shake||0)*calm;game.shake=damp(game.shake||0,0,7,dt);
   camera.position.set(camP.x+hx+rnd(-1,1)*shk*0.09,Math.max(camP.y+hy+rnd(-1,1)*shk*0.09,0.45),camP.z);
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
   camera.lookAt(camL.x+hx*0.4,camL.y+hy*0.3,camL.z);
@@ -2322,7 +2322,6 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
 startAttract();
 requestAnimationFrame(frame);
 </script>
-
 <!--psAd--><style>#psAd{position:fixed;right:2vw;bottom:calc(5.5vh + 1.5vh);z-index:20;width:300px;display:none;pointer-events:auto}#psAd.on{display:block}#psAd:has(ins[data-ad-status=unfilled]){display:none!important}#psAd small{display:block;font:600 9px/1.6 sans-serif;letter-spacing:.25em;color:rgba(255,255,255,.55);text-align:right}#psAd ins{display:block;width:300px;height:250px}@media (max-width:900px),(max-height:640px){#psAd{width:320px}#psAd ins{width:320px;height:100px}}</style><div id="psAd" aria-label="Advertisement"><small>ADVERTISEMENT</small><ins class="adsbygoogle" data-ad-client="ca-pub-9543654204689824" data-ad-slot="5910127093"></ins></div><script>(function(){var P='ca-pub-9543654204689824',box=document.getElementById('psAd'),m=document.getElementById('menu'),e=document.getElementById('end'),it=document.getElementById('intro'),ready=false,loaded=false;function v(){var show=ready&&(!m.classList.contains('off')||!e.classList.contains('off'))&&(!it||it.classList.contains('off'));box.classList.toggle('on',show);if(show&&!loaded){loaded=true;var s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+P;document.head.appendChild(s);try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(x){}}}var o=new MutationObserver(v);[m,e,it].forEach(function(n){if(n)o.observe(n,{attributes:true,attributeFilter:['class']})});function go(){setTimeout(function(){ready=true;v()},2500)}if(document.readyState==='complete')go();else addEventListener('load',go)})();</script><!--/psAd-->
 </body>
 </html>
