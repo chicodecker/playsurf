@@ -1903,7 +1903,7 @@ function stepRide(dt){
 }
 function endSlide(){sf.tt=null;if(sf.slipMax>1.5&&game.state==='ride'){const pt=300+700*Math.min(sf.slipMax,1.8);award('Tail Slide',pt);reqShot('Tail Slide',pt,0)}sf.slipMax=0}
 function launchAir(vp,inp){sf.tt=null;sf.slip=0;sf.np=false;
-  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.674;   // airs 30% lower (height goes with the square of the launch speed)
+  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.707;   // airs 30% lower (height goes with the square of the launch speed)
   sf.airT=0;sf.airDur=2*sf.vh/GA;sf.spin=0;sf.flip=0;sf.th0=sf.th;
   sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42;sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
   sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);sfxNoise(0.4,3000,0.3)}
