@@ -2090,14 +2090,15 @@ function setLycra(c){if(!LYCS[c])c='red';LYC.c.value.set(LYCS[c][0],LYCS[c][1],L
 $('lycBtns').addEventListener('click',e=>{const b=e.target.closest('.lyc');if(!b)return;e.stopPropagation();b.blur();setLycra(b.dataset.c)});
 setLycra(PROG.lyc||'red');
 function progUI(){
-  const sb=$('spotBtns');if(sb)sb.innerHTML=SPOTS.map((o,ix)=>{const op=spotOpen(o);return `<button class="pbtn wv sm${o.id===SPOT.id?' sel':''}${op?'':' lock'}" data-spot="${o.id}">${ix+1} · ${o.name}<i${op?'':' class="req"'}>${o.soon?'SOON':op?o.sub:'&#128274; '+reqText(o.req)}</i></button>`}).join('');
+  const PK=game.pickSpot||SPOT.id;{const t=document.querySelector('.wzS[data-s="3"] .tod');if(t)t.style.display=PK===1?'':'none'}
+  const sb=$('spotBtns');if(sb)sb.innerHTML=SPOTS.map((o,ix)=>{const op=spotOpen(o);return `<button class="pbtn wv sm${o.id===PK?' sel':''}${op?'':' lock'}" data-spot="${o.id}">${ix+1} · ${o.name}<i${op?'':' class="req"'}>${o.soon?'SOON':op?o.sub:'&#128274; '+reqText(o.req)}</i></button>`}).join('');
   const op=boardOpen(BOARD);$('bdName').textContent=BOARD.name;$('bdInfo').innerHTML=BOARD.sub+'<br>'+BOARDS.filter(boardOpen).length+'/'+BOARDS.length+' BOARDS';
   const lv=lvlOf(PROG.xp);$('lvl').textContent='LEVEL '+lv;$('xpFill').style.width=(clamp((PROG.xp-lvlXP(lv))/(lvlXP(lv+1)-lvlXP(lv)),0,1)*100).toFixed(1)+'%';$('xpTxt').textContent=PROG.xp.toLocaleString('en-US')+' XP';
   const nT=TROPHIES.filter(t=>PROG.tro[t.id]).length;$('trBtn').textContent='TROPHIES '+nT+'/'+TROPHIES.length;
   $('trSub').textContent=nT+' OF '+TROPHIES.length+' · LEVEL '+lv+' · '+PROG.xp.toLocaleString('en-US')+' XP · '+PROG.waves+' WAVES';
   $('trGrid').innerHTML=TROPHIES.map(t=>`<div class="tr${PROG.tro[t.id]?' on':''}"><b>${t.n}</b><span>${t.d}</span></div>`).join('')+BOARDS.map(b=>`<div class="tr${boardOpen(b)?' on':''}"><b>BOARD · ${b.name}</b><span>${boardOpen(b)?b.sub:'&#128274; '+reqText(b.req)}</span></div>`).join('')}
 $('spotBtns').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();b.blur();const o=SPOTS.find(x=>x.id===+b.dataset.spot);
-  if(!o)return;if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}if(o.id!==SPOT.id){setSpot(o.id);if(game.attract)startAttract()}});
+  if(!o)return;if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}game.pickSpot=o.id;if(o.id!==SPOT.id){setSpot(o.id);if(game.attract)startAttract()}else progUI()});
 {const cyc=d=>{const i=BOARDS.indexOf(BOARD);for(let k=1;k<=BOARDS.length;k++){const b=BOARDS[(i+d*k+BOARDS.length*9)%BOARDS.length];if(boardOpen(b)){setBoard(b.id);return}}};
  $('bdPrev').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(-1)});$('bdNext').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(1)});
  $('bdName').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(1)})}
@@ -2124,7 +2125,7 @@ $('wpClose').addEventListener('click',e=>{e.stopPropagation();wpClose()});
 $('wavePick').addEventListener('click',e=>{if(e.target.id==='wavePick'){e.stopPropagation();wpClose()}});
 $('wpBtns').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();b.blur();const o=SPOTS.find(x=>x.id===+b.dataset.spot);if(!o)return;
   if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}
-  wpPaused=false;game.paused=false;$('pause').style.display='none';$('wavePick').classList.add('off');if(o.id!==SPOT.id)setSpot(o.id);startWave()});
+  wpPaused=false;game.paused=false;$('pause').style.display='none';$('wavePick').classList.add('off');game.pickSpot=o.id;if(o.id!==SPOT.id)setSpot(o.id);startWave()});
 /* the soundtrack on Spotify: offered once (at most every three days) when the pointer heads for the tab bar to close the game;
    on touch screens, where there is no pointer to watch, on the end card after the second wave */
 const SPOTIFY_URL='';   /* the playlist link goes here; with no link the pop-up never shows */
@@ -2189,7 +2190,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
   tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
-function startWave(att){game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;
+function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
@@ -2301,7 +2302,7 @@ function reefStep(h){const R=sf.reef;if(!R)return;const t=sf.wT;
   const L=0.13,om=Math.max(9,R.v*PI/(2*L)),ph0=R.ph;if(t>0.3)R.ph+=om*h;
   if(Math.floor(R.ph/PI)>Math.floor(ph0/PI)&&t>0.3){R.n++;const left=Math.floor(R.ph/PI)%2===0;   /* a foot comes down */
     _rP.copy(R.o).addScaledVector(R.W,R.d+0.12).addScaledVector(_rL.set(-R.W.z,0,R.W.x),left?0.09:-0.09);_rP.y=R.wy+0.03;if(!sfxPlay('steps',{vol:0.55,off:rnd(0,5.9),dur:0.3,rate:rnd(0.95,1.12),fo:0.08}))sfxNoise(0.10,2900,0.07);
-    if((R.n===1||Math.random()<0.4)&&t-R.lastHit>0.7){R.pain=1;R.lastHit=t;sfxOuch();splash(2,_rP,0.16)}}
+    if((R.n===1||Math.random()<0.4)&&t-R.lastHit>0.7){R.pain=1;R.lastHit=t;splash(2,_rP,0.16)}}   /* no voice: the body says it */
   R.pain=Math.max(0,R.pain-h*2.8)}
 /* ── wildlife: seagulls crossing the sky now and then, and on the ocean spots a pod of dolphins riding inside the wave ── */
 const FAUNA={birds:[],flock:null,birdT:rnd(8,14),dol:[],dolT:-1,dolOn:false};
@@ -2419,7 +2420,7 @@ function wipe(){
   if(sf.tube>0.5)award(sf.tubeMin<2?'Deep Barrel':'Barrel',Math.round((600+850*Math.min(sf.tube,7))*0.5));
   sf.tube=0;game.inTube=false}
 function endRide(kind){
-  if(game.attract){startAttract();return}   // the start-screen loop just paddles into the next one
+  if(game.attract){const ids=SPOTS.filter(spotOpen).map(o=>o.id),i=ids.indexOf(SPOT.id);if(ids.length>1){setSpot(ids[(i+1)%ids.length]);PROG.spot=game.pickSpot||PROG.spot;progSave()}startAttract();return}   /* the menu loop moves on to the next wave */
   if(game.state!=='ride')return;
   if(kind==='done'){award('Full Ride',500,true);sfxPlay('crowd',{vol:0.55,fi:0.3,fo:2})}
   game.state='end';game.endKind=kind;game.endT=0;
@@ -2908,7 +2909,7 @@ function updateCamera(dt,time){
     {const at=sf.mode==='air'?1:0,w=5.5;sf.airKv=(sf.airKv||0)+((at-sf.airK)*w*w-2*w*(sf.airKv||0))*dt;sf.airK=clamp(sf.airK+sf.airKv*dt,0,1);if(sf.airK<=0||sf.airK>=1)sf.airKv=0}
     if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
     else if(game.replay)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
-    else if(game.attract)kind=['wide','wide2'][Math.floor(clockT/8)%2];   // start screen: two wide shots from far off, the whole wave and the place around it
+    else if(game.attract)kind='follow';   /* behind the menu: the chase camera */   // start screen: two wide shots from far off, the whole wave and the place around it
     else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
       {let base=['follow','tele','front'][game.cam];const a=game.waveAge,D=game.waveDur||80;
        if(game.cam===1&&a>D-Math.max(8,D*0.3)&&a<D-4.5)base='front';   /* the side camera directs the end of the ride: square on from the beach for the last stretch, then back to the side for the arrival */
@@ -2983,7 +2984,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       gl_FragColor=vec4(col,1.);}`});
 composer.addPass(gradePass);
 game.nightPref=(()=>{try{return +(localStorage.getItem('surfpool_night')||0)}catch(e){return 0}})();setTOD(SPOT.id===1?game.nightPref:0,false);   /* night only at the pool */
-setBoard(PROG.board);setSpot(spotOpen(SPOTS.find(o=>o.id===PROG.spot)||SPOTS[0])?PROG.spot:1);
+setBoard(PROG.board);setSpot(spotOpen(SPOTS.find(o=>o.id===PROG.spot)||SPOTS[0])?PROG.spot:1);game.pickSpot=SPOT.id;
 function resize(){const w=Math.max(innerWidth,16),h=Math.max(innerHeight,16);renderer.setSize(w,h,false);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);
   camera.aspect=w/h;camera.updateProjectionMatrix();gradePass.uniforms.uAspect.value=w/h;
   document.documentElement.style.setProperty('--bar',clamp((h-w/2.2)/2,h*0.045,h*0.115).toFixed(0)+'px')}
@@ -3056,8 +3057,9 @@ function tick(dtR,draw){
   }else{
     game.secAge=game.state==='ride'?game.waveAge:-1;
     game.slowT=Math.max(0,game.slowT-dtR);
-    game.ts=damp(game.ts,game.attract?0.42:(game.slowT>0?0.38:1),game.slowT>0?14:5,dtR);
+    game.ts=damp(game.ts,game.attract?1:(game.slowT>0?0.38:1),game.slowT>0?14:5,dtR);   /* the menu scene runs at real speed */
     dt=dtR*game.ts;game.t+=dt;
+    if(game.state==='ride'&&game.attract&&game.waveAge>Math.min(game.waveDur-1,24))endRide('done');
     if(game.state==='ride'){game.waveAge+=dt;if(game.waveAge<=game.waveDur){let gr=0;for(const C of SEC)if(C.fol){const t=game.waveAge-C.t0;gr=Math.max(gr,sstep(-1,3,t)*(1-sstep(C.d,C.d+2.5,t)))}game.Hbase=1+0.32*(1-sstep(5,13,game.waveAge))+0.2*gr}   // the set stands up bigger for the drop, and swells as each barrel forms   // the set wave: it stands up bigger for the drop
       if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.tt=null}   // he turns to face the beach first
       if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
