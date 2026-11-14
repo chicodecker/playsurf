@@ -421,9 +421,11 @@ vec3 skyC(vec3 d){
   vec3 n=mix(vec3(0.045,0.065,0.125),vec3(0.008,0.014,0.045),smoothstep(0.0,0.55,y));
   n+=vec3(0.30,0.36,0.50)*(pow(sd,10.)*0.25+pow(sd,200.)*0.9);
   n+=vec3(0.10,0.08,0.05)*(1.-smoothstep(0.,0.10,y));
-  vec3 w=mix(vec3(1.0,0.60,0.40),vec3(0.70,0.58,0.74),smoothstep(0.0,0.20,y));   /* first light: peach on the horizon, lavender, then blue-violet overhead */
-  w=mix(w,vec3(0.22,0.32,0.62),smoothstep(0.16,0.85,y));
-  w+=vec3(1.0,0.55,0.25)*(pow(sd,4.)*0.38+pow(sd,40.)*0.9);
+  float sh=clamp(dot(normalize(vec2(d.x,d.z)+1e-5),normalize(vec2(uSun.x,uSun.z)+1e-5))*0.5+0.5,0.,1.);   /* toward the sun or away from it, round the horizon */
+  vec3 hz=mix(vec3(0.62,0.40,0.52),vec3(1.0,0.46,0.16),pow(sh,2.2));   /* the horizon: orange under the sun, mauve behind */
+  vec3 w=mix(hz,mix(vec3(0.66,0.38,0.50),vec3(1.0,0.56,0.34),pow(sh,2.5)),smoothstep(0.0,0.06,y));
+  w=mix(w,mix(vec3(0.36,0.30,0.56),vec3(0.62,0.40,0.52),pow(sh,3.)),smoothstep(0.04,0.20,y));w=mix(w,vec3(0.16,0.22,0.48),smoothstep(0.16,0.45,y));w=mix(w,vec3(0.05,0.10,0.30),smoothstep(0.40,0.95,y));   /* pink-gold band, rose-violet, then blue to deep blue overhead */   /* violet, then deep blue overhead */
+  w+=vec3(0.95,0.42,0.12)*pow(sd,9.)*0.34+vec3(1.0,0.62,0.24)*pow(sd,60.)*0.75+vec3(1.0,0.84,0.58)*pow(sd,700.)*2.6;   /* the glow round the sun, wide and orange, tight and gold */
   c=mix(c,w,uDawn);
   return mix(c,n,uNight);
 }`;
@@ -433,12 +435,12 @@ const skyMat=new THREE.ShaderMaterial({
   fragmentShader:`precision highp float;varying vec3 vD;uniform sampler2D uNoise;uniform float uTime;uniform float uEnv;${SKY_GLSL}
   void main(){vec3 d=normalize(vD);vec3 c=skyC(d);
     float sd=max(dot(d,uSun),0.);
-    c+=mix(mix(vec3(1.,0.96,0.86),vec3(1.,0.62,0.32),uDawn)*30.*smoothstep(0.99945,0.9997,sd),vec3(0.95,0.97,1.0)*3.4*smoothstep(0.9990,0.9993,sd),uNight);
+    c+=mix(mix(vec3(1.,0.96,0.86)*30.*smoothstep(0.99945,0.9997,sd),vec3(1.,0.80,0.50)*46.*smoothstep(0.99955,0.99978,sd)+vec3(1.,0.58,0.24)*4.*smoothstep(0.9985,0.9997,sd),uDawn),vec3(0.95,0.97,1.0)*3.4*smoothstep(0.9990,0.9993,sd),uNight);
     vec2 cu=d.xz/(max(d.y,0.)+0.16);
     float n=texture2D(uNoise,cu*0.045+vec2(uTime*0.0012,0.)).b*0.62+texture2D(uNoise,cu*0.13+vec2(0.,uTime*0.002)).b*0.38;
     float cl=smoothstep(0.50,0.76,n)*smoothstep(0.01,0.14,d.y);
     float n2=texture2D(uNoise,cu*0.045+vec2(uTime*0.0012,0.)+uSun.xz*0.012).b;
-    vec3 ccD=mix(vec3(0.62,0.68,0.78),vec3(1.12,1.10,1.06),clamp((n-n2)*5.+0.6,0.,1.))*(0.9+0.5*pow(sd,4.))*mix(vec3(1.),vec3(1.08,0.70,0.66),uDawn);   /* at first light the clouds catch pink and gold */
+    vec3 ccD=mix(vec3(0.62,0.68,0.78),vec3(1.12,1.10,1.06),clamp((n-n2)*5.+0.6,0.,1.))*(0.9+0.5*pow(sd,4.));ccD=mix(ccD,mix(vec3(0.30,0.24,0.36),vec3(1.30,0.72,0.40),clamp((n-n2)*5.+0.45,0.,1.))*(0.75+2.2*pow(sd,6.)),uDawn);   /* low sun: dark mauve undersides, gold-lit edges, blazing near the sun */
     vec3 ccN=mix(vec3(0.020,0.028,0.050),vec3(0.10,0.12,0.17),clamp((n-n2)*5.+0.4,0.,1.))*(1.+2.5*pow(sd,6.));
     if(uNight>0.01){vec3 q=d*190.,f=fract(q)-0.5;float h=fract(sin(dot(floor(q),vec3(12.9898,78.233,37.719)))*43758.5453);
       c+=vec3(0.9,0.95,1.0)*step(0.9968,h)*(0.4+0.6*fract(h*91.3))*smoothstep(0.34,0.06,length(f))*smoothstep(0.02,0.25,d.y)*(0.75+0.25*sin(uTime*3.+h*400.))*1.8*uNight;}
@@ -535,7 +537,7 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
 // brand type comes from the web fonts; anything painted on a canvas is repainted once they have arrived
 const SCRIPT='Pacifico,"Brush Script MT",cursive',CONDF='"Barlow Condensed","Avenir Next Condensed","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('100px Pacifico'),document.fonts.load('800 40px "Barlow Condensed"')]).then(()=>fn(),()=>{})}catch(e){}}
-const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.70,0.04,0.05)},k:{value:1},t:{value:new THREE.Vector3(0.93,0.93,0.92)},f:{value:0},tex:{value:null}};
+const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.60,0.10,0.09)},k:{value:1},t:{value:new THREE.Vector3(0.93,0.93,0.92)},f:{value:0},tex:{value:null}};
 LYC.tex.value=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';
   x.font='italic 900 44px "Arial Black",Impact,sans-serif';x.fillText('PLAYSURF',128,58,236);x.font='italic 900 150px "Arial Black",Impact,sans-serif';x.fillText('67',128,206,210);
   const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t})();   /* the print on the back of the jersey */
@@ -976,7 +978,7 @@ const waveDef={
       foamC*=mix(1.,0.42,occ);
       col=mix(col,foamC,fm);
       vec3 fogC=skyC(normalize(vec3(-V.x,0.03,-V.z)));
-      col=mix(col,fogC,1.-exp(-dist*0.0013));
+      col=mix(col,fogC,(1.-exp(-dist*0.0013))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
       if(any(isnan(col))||any(isinf(col)))col=fogC;
       gl_FragColor=vec4(col,1.);}`,
   side:THREE.DoubleSide};
@@ -1203,10 +1205,11 @@ function setTOD(n,save){n=n?1:0;TOD.value=n;game.night=n;if(save!==false)try{loc
     palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
   if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&(SPOT.id===2||SPOT.id===3));bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
-function dawnTint(on){DAWN.value=on?1:0;if(!on)return;const U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);   /* sunrise: the sun just off the horizon over the sea, backlighting the lip in gold */
-  SUN.set(0.78,0.13,-0.62).normalize();sunL.color.set(0xffa25e);sunL.intensity=2.6;hemiL.color.set(0xffc6a6);hemiL.groundColor.set(0x34507e);hemiL.intensity=0.6;fillL.color.set(0xb4c0ff);fillL.intensity=0.7;
-  scene.fog.color.setRGB(0.93,0.66,0.52);renderer.toneMappingExposure=0.98;bloom.strength=0.44;
-  S3(U.uSpecC,1.0,0.70,0.42);S3(U.uFoamA,0.76,0.66,0.68);S3(U.uFoamB,1.08,0.94,0.86);partMat.uniforms.uTint.value.set(1.06,0.90,0.82)}
+function dawnTint(on){DAWN.value=on?1:0;bloom.threshold=0.9;if(!on)return;const U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);   /* first light: the sun just off the horizon out to sea, behind the wave, so the lip glows and a gold road runs across the water */
+  SUN.set(0.50,0.25,-0.83).normalize();   /* low over the sea, off to the shoulder side so it shows above the wave */sunL.color.set(0xffa456);sunL.intensity=2.3;hemiL.color.set(0x8f7fb8);hemiL.groundColor.set(0x223654);hemiL.intensity=0.62;fillL.color.set(0x8aa0ff);fillL.intensity=0.55;fillL.position.set(-0.5,0.4,1);
+  scene.fog.color.setRGB(0.52,0.38,0.42);renderer.toneMappingExposure=1.0;bloom.strength=0.34;bloom.threshold=1.45;   /* only the sun and the glitter bloom: the bright sky round it must not turn into fog */
+  S3(U.uWA,0.0,0.016,0.040);S3(U.uWB,0.006,0.115,0.165);S3(U.uG1,0.02,0.22,0.26);S3(U.uG2,0.30,0.90,0.52);
+  S3(U.uSpecC,1.7,1.05,0.52);S3(U.uFoamA,0.56,0.56,0.64);S3(U.uFoamB,1.06,0.93,0.82);partMat.uniforms.uTint.value.set(1.06,0.86,0.78)}
 /* ───────────────────────── spots ───────────────────────── */
 // Teahupo'o: open ocean over a reef, the green peaks of Tahiti behind; the wave is bigger and keeps throwing: barrel after barrel with open wall between for airs
 const tahitiG=new THREE.Group();tahitiG.visible=false;scene.add(tahitiG);
@@ -2131,7 +2134,7 @@ $('tutDots').addEventListener('click',e=>{const d=e.target.closest('i');if(d){e.
 $('goPlay').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();beginPlay();if(document.body.classList.contains('touch')){$('tHint').classList.add('on');setTimeout(()=>$('tHint').classList.remove('on'),7000)}});
 wzGo(2);   // phone or computer is detected (touch screen, finger-sized pointer); tap step 1 to change it
    /* no stance to remember: the direction is the spot's */
-const LYCS={red:[0.70,0.04,0.05],blue:[0.03,0.14,0.62],yellow:[0.97,0.60,0.0],black:[0.025,0.025,0.03]};
+const LYCS={red:[0.60,0.10,0.09],blue:[0.03,0.14,0.62],yellow:[0.97,0.60,0.0],black:[0.025,0.025,0.03]};
 function setLycra(c){if(!LYCS[c])c='red';LYC.c.value.set(LYCS[c][0],LYCS[c][1],LYCS[c][2]);if(c==='yellow')LYC.t.value.set(0.03,0.07,0.22);else LYC.t.value.set(0.93,0.93,0.92);PROG.lyc=c;progSave();document.querySelectorAll('#lycBtns .lyc').forEach(b=>b.classList.toggle('sel',b.dataset.c===c))}
 $('lycBtns').addEventListener('click',e=>{const b=e.target.closest('.lyc');if(!b)return;e.stopPropagation();b.blur();setLycra(b.dataset.c)});
 setLycra(PROG.lyc||'red');
@@ -3112,10 +3115,10 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       col+=vec3(0.030,0.012,-0.022)*smoothstep(0.45,1.,l);        // golden highlights
       if(uSunK>0.001){vec2 dv=(fUv-uSun)*vec2(uAspect,1.);float dd=length(dv);
         float see=smoothstep(0.90,0.985,dot(texture2D(tDiffuse,uSun).rgb,vec3(0.3,0.59,0.11)));   // only when the sun itself is in view, not behind the wave
-        float fl=exp(-dd*dd*26.)*0.30+exp(-dd*6.)*0.10+pow(max(0.,cos(atan(dv.y,dv.x)*6.+0.4)),48.)*exp(-dd*3.5)*0.22;
+        float fl=exp(-dd*dd*26.)*0.30+exp(-dd*6.)*0.07+pow(max(0.,cos(atan(dv.y,dv.x)*6.+0.4)),48.)*exp(-dd*5.)*0.14;
         vec2 ax=vec2(0.5)-uSun;vec3 gh=vec3(0.);
         for(int i=1;i<5;i++){vec2 gp=uSun+ax*(0.42*float(i));float gd=length((fUv-gp)*vec2(uAspect,1.));float r=0.018+0.022*float(i);
-          gh+=vec3(1.,0.72,0.42)*smoothstep(r,r*0.55,gd)*0.05/float(i)+vec3(0.35,0.8,1.)*(smoothstep(r*1.7,r*1.4,gd)-smoothstep(r*1.4,r*1.1,gd))*0.035;}   // lens ghosts toward the centre
+          gh+=vec3(1.,0.72,0.42)*smoothstep(r,r*0.55,gd)*0.05/float(i)+vec3(0.85,0.75,0.6)*(smoothstep(r*1.7,r*1.4,gd)-smoothstep(r*1.4,r*1.1,gd))*0.025;}   // lens ghosts toward the centre
         col+=(vec3(1.,0.85,0.6)*fl+gh)*uSunK*see;}
       col=mix(col,col*col*(3.-2.*col),0.50);
       col=col*1.01+0.003;
@@ -3236,7 +3239,7 @@ function tick(dtR,draw){
   {const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
    U.uShdK.value=sf.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float')?(1-0.85*TOD.value)*clamp(1-sf.h*0.2,0.4,1):0}skyMat.uniforms.uTime.value=clockT;
   gradePass.uniforms.uTime.value=clockT;{_sunP.copy(SUN).multiplyScalar(900).add(camera.position).project(camera);const on=_sunP.z<1&&Math.abs(_sunP.x)<1.15&&Math.abs(_sunP.y)<1.15;   // lens flare follows the sun on screen
-    gradePass.uniforms.uSun.value.set(_sunP.x*0.5+0.5,_sunP.y*0.5+0.5);gradePass.uniforms.uSunK.value=on?(1-0.75*TOD.value)*(1-sstep(0.85,1.15,Math.max(Math.abs(_sunP.x),Math.abs(_sunP.y)))):0}bokeh.uniforms.focus.value=damp(bokeh.uniforms.focus.value,camFocus,8,dtR);
+    gradePass.uniforms.uSun.value.set(_sunP.x*0.5+0.5,_sunP.y*0.5+0.5);gradePass.uniforms.uSunK.value=on?(1-0.75*TOD.value)*(1-0.6*DAWN.value)*(1-sstep(0.85,1.15,Math.max(Math.abs(_sunP.x),Math.abs(_sunP.y)))):0}   /* a low sun flares soft and warm */bokeh.uniforms.focus.value=damp(bokeh.uniforms.focus.value,camFocus,8,dtR);
   partMat.uniforms.uScale.value=renderer.domElement.height/(2*Math.tan(camera.fov*DEG/2));
   hudAcc+=dtR;if(!draw)return;
   composer.render();mk_('render');
@@ -3260,7 +3263,7 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
     const cx=clamp((pv.x*.5+.5)*c.width,sw/2,c.width-sw/2),cy=clamp((1-(pv.y*.5+.5))*c.height,sh/2,c.height-sh/2);
     x.drawImage(c,cx-sw/2,cy-sh/2,sw,sh,(i%cols)*cw,Math.floor(i/cols)*ch,cw,ch);
     x.fillStyle='#fff';x.font='22px monospace';x.fillText(i+' '+sf.mode[0]+' th'+sf.th.toFixed(1)+' r'+sf.rail.toFixed(1)+' c'+A.crouch.x.toFixed(2),(i%cols)*cw+8,Math.floor(i/cols)*ch+26)}
-  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB,FAUNA,audio,sfxPlay,DRONE,endRide,CROWD,CNPC,ULU,BOTE,DROP,SHOUT,setNpcYaw:v=>{NPCYAW=v}};
+  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB,FAUNA,audio,sfxPlay,DRONE,endRide,CROWD,CNPC,ULU,BOTE,SUN,DAWN,sunL,hemiL,fillL,LYC,DROP,SHOUT,setNpcYaw:v=>{NPCYAW=v}};
 startAttract();
 requestAnimationFrame(frame);
 </script>
