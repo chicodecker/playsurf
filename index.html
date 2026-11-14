@@ -96,6 +96,7 @@ h1 em{display:block;font-size:.13em;letter-spacing:.62em;font-weight:600;font-st
 .howto .grid>*{opacity:.26;transition:opacity .6s,color .6s}.howto .grid>.on{opacity:1}.howto .grid>b.on{color:#ffd94a}   /* one move at a time, the rest dimmed */.howto summary{cursor:pointer;font-size:12px;letter-spacing:.32em;opacity:.75;list-style:none}.howto summary::before{content:'▸ '}.howto[open] summary::before{content:'▾ '}.howto .grid{margin-top:10px}
 body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,body.attract #keys,body.attract #pop,body.attract #rep{display:none!important}
 #music{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 1.2vh);transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.18);opacity:0;transition:opacity .6s,background .6s;pointer-events:none}
+body:has(#menu:not(.off)) #music{left:auto;right:max(3vw,env(safe-area-inset-right,0px));transform:none}   /* on the start screen it moves to the corner, clear of the buttons */
 #music.on{opacity:.62;pointer-events:auto}#music.on:hover,#music.flash{opacity:1;background:rgba(0,0,0,.55)}
 #music button{pointer-events:auto;cursor:pointer;background:none;border:0;color:#fff;font-size:15px;opacity:.85;padding:2px 6px}#music button:hover{opacity:1;color:#ffd94a}
 #music .mInfo{display:flex;flex-direction:column;align-items:center;min-width:180px;line-height:1.15}#music small{font-size:9px;letter-spacing:.3em;opacity:.65}#music b{font-size:13px;letter-spacing:.06em;font-style:italic}#music span{font-size:10px;letter-spacing:.18em;opacity:.75;text-transform:uppercase}
@@ -122,7 +123,8 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
 .pbtns.spots .pbtn{font-size:15px;padding:13px 20px}
 .wzGo{margin-top:18px}
 .wzS[data-s="4"]{text-align:center}.wzS[data-s="4"] .pbtns{justify-content:center}.wzS[data-s="4"] .tod{justify-content:center}
-.tutStage{display:flex;justify-content:center;min-height:clamp(150px,26vh,240px);align-items:center}
+.tutStage{display:flex;justify-content:center;min-height:clamp(112px,16vh,170px);align-items:center}
+.wzS[data-s="4"] .playRow{margin-top:8px}.wzS[data-s="4"] .wzGo{margin-top:14px}
 .tutCard{max-width:min(680px,86vw);background:rgba(2,12,18,.64);padding:24px 36px;border-radius:18px;border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);pointer-events:auto;cursor:pointer}
 .tutCard.go{animation:tutIn .55s cubic-bezier(.2,.9,.2,1)}
 @keyframes tutIn{from{opacity:0;transform:translateX(40px) scale(.97)}to{opacity:1;transform:none}}
@@ -131,6 +133,19 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
 .tutCard p{font-size:clamp(15px,1.6vw,19px);letter-spacing:.04em;line-height:1.5}
 .tutDots{display:flex;gap:8px;justify-content:center;margin:14px 0 4px;pointer-events:auto}
 .tutDots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer}.tutDots i.on{background:#ffd94a;transform:scale(1.25)}
+/* the soundtrack pop-up */
+#spPop{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:rgba(2,10,14,.72);pointer-events:auto;transition:opacity .35s}
+#spPop.off{opacity:0;pointer-events:none}
+.spBox{position:relative;width:min(420px,88vw);background:#0b1a22;border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:18px 18px 16px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.6);animation:spIn .45s cubic-bezier(.2,.9,.2,1)}
+#spPop.off .spBox{animation:none}
+@keyframes spIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.spBox img{display:block;width:100%;border-radius:12px;margin-bottom:14px}
+.spBox h3{font-size:clamp(26px,3.4vw,34px);font-style:italic;font-weight:800;line-height:1.05;margin-bottom:6px}
+.spBox p{font-size:15px;letter-spacing:.06em;opacity:.85;margin-bottom:16px}
+.spGo{display:inline-block;pointer-events:auto;background:#1DB954;color:#04140a;text-decoration:none;font-weight:800;font-size:16px;letter-spacing:.14em;padding:14px 26px;border-radius:999px;transition:transform .15s,background .15s}
+.spGo:hover,.spGo:focus-visible{transform:scale(1.04);background:#1ed760;outline:none}
+.spNo{display:block;margin:12px auto 0;background:none;border:0;color:#fff;opacity:.6;font:600 13px/1 inherit;font-family:inherit;letter-spacing:.14em;cursor:pointer;pointer-events:auto}.spNo:hover{opacity:1}
+#spX{position:absolute;top:8px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font-size:22px;line-height:34px;cursor:pointer;pointer-events:auto}
 /* touch: phones and tablets */
 #c{touch-action:none}
 html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
@@ -141,10 +156,12 @@ body.touch.riding #touch{display:block}
 #stick:before,#stick:after{content:'';position:absolute;left:50%;top:8%;bottom:8%;width:1px;background:rgba(255,255,255,.18)}#stick:after{top:50%;left:8%;right:8%;width:auto;height:1px;bottom:auto}
 .tb{position:absolute;pointer-events:auto;touch-action:none;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(0,0,0,.30);color:#fff;font:800 12px/1.15 inherit;font-family:inherit;letter-spacing:.12em;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;-webkit-user-select:none;user-select:none}
 .tb.on{background:rgba(255,217,74,.88);color:#0b1520;border-color:#ffd94a}
-#tAir{right:max(4vw,env(safe-area-inset-right,0px));bottom:calc(var(--bar,5.5vh) + 3vh);width:min(25vh,124px);height:min(25vh,124px);border-color:#ffd94a;font-size:15px}
-#tBrake{right:calc(max(4vw,env(safe-area-inset-right,0px)) + min(27vh,134px));bottom:calc(var(--bar,5.5vh) + 1.5vh);width:min(19vh,94px);height:min(19vh,94px)}
-#tNose{right:max(4vw,env(safe-area-inset-right,0px));bottom:calc(var(--bar,5.5vh) + 5vh + min(25vh,124px));width:min(15vh,74px);height:min(15vh,74px);font-size:10px}
-#tCarve{right:calc(max(4vw,env(safe-area-inset-right,0px)) + min(19vh,96px));bottom:calc(var(--bar,5.5vh) + 4vh + min(21vh,104px));width:min(15vh,74px);height:min(15vh,74px);font-size:10px}
+#touch{--R:min(15.5vh,80px);--s:min(12.5vh,62px);--g:min(1.8vh,9px);--m:max(3.2vw,env(safe-area-inset-right,0px));--b:calc(var(--bar,5.5vh) + 2vh)}
+#tSnap{right:var(--m);bottom:var(--b);width:calc(var(--R)*2);height:calc(var(--R)*2);flex-direction:column;gap:4px;border:3px solid #ffd94a;background:rgba(255,217,74,.16);color:#fff;font-size:min(4.6vh,22px);letter-spacing:.14em;box-shadow:0 6px 26px rgba(0,0,0,.35)}
+#tSnap small{font-size:min(1.7vh,9px);letter-spacing:.14em;opacity:.75;font-weight:700}
+#tSnap.on{background:rgba(255,217,74,.55);color:#111}
+.tb.sm{--rad:calc(var(--R) + var(--g)*var(--k) + var(--s)*(var(--k) - 0.5));width:var(--s);height:var(--s);font-size:min(1.75vh,9.5px);letter-spacing:.08em;line-height:1.1;
+  right:calc(var(--m) + var(--R) - var(--s)/2 - var(--dx)*var(--rad));bottom:calc(var(--b) + var(--R) - var(--s)/2 + var(--dy)*var(--rad))}
 #tTop{position:absolute;left:50%;top:calc(var(--bar,5.5vh) + 4.2vh);transform:translateX(-50%);display:flex;gap:10px;pointer-events:auto}
 #tTop .tb{position:static;border-radius:10px;height:34px;padding:0 12px;font-size:11px}
 #tHint{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 1vh);transform:translateX(-50%);font-size:11px;letter-spacing:.16em;text-align:center;opacity:0;transition:opacity 1s;text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap;pointer-events:none}
@@ -272,10 +289,9 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
       <div class="wzTop"><button id="wzBack" class="pbtn wv sm" aria-label="Back">&#9664; BACK</button>
         <div class="wzDots"><i data-s="1">1 · PLAY ON</i><i data-s="2">2 · SURFER</i><i data-s="3">3 · WAVE</i><i data-s="4">4 · TURNS</i></div></div>
       <section class="wzS" data-s="1"><h2 class="wzH">HOW DO YOU PLAY?</h2>
-        <div class="pbtns"><button id="goDesk" class="pbtn big">DESKTOP<i>KEYBOARD · GAMEPAD</i></button><button id="goMob" class="pbtn big wv">MOBILE<i>TOUCH SCREEN</i></button></div></section>
+        <div class="pbtns"><button id="goDesk" class="pbtn big">DESKTOP<i>KEYBOARD · GAMEPAD</i></button><button id="goMob" class="pbtn big wv">MOBILE<i>TOUCH SCREEN</i></button></div>
+        <p class="cred">3D surfer: made with Magnific (Tripo) · Music: original tracks made with Suno</p></section>
       <section class="wzS" data-s="2"><h2 class="wzH">YOUR SURFER</h2>
-        <div class="playRow"><span class="playLbl">COMPETITION LYCRA</span>
-          <div class="pbtns" id="lycBtns"><button class="lyc sel" data-c="red"><i style="background:#d6262a"></i>RED</button><button class="lyc" data-c="blue"><i style="background:#1f4fd6"></i>BLUE</button><button class="lyc" data-c="yellow"><i style="background:#f2c31b"></i>YELLOW</button><button class="lyc" data-c="black"><i style="background:#111316"></i>BLACK</button></div></div>
         <div class="playRow"><span class="playLbl">STANCE</span>
         <div class="pbtns"><button id="goRight" class="pbtn wv big">REGULAR<i>LEFT FOOT FORWARD · RIGHTS</i></button><button id="goLeft" class="pbtn wv big sel">GOOFY<i>RIGHT FOOT FORWARD · LEFTS</i></button></div></div>
         <p class="wzNote">You always surf facing the wave: regulars get a right, goofies a left.</p></section>
@@ -284,23 +300,30 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
         <div class="playRow"><span class="playLbl">YOUR BOARD</span>
           <div class="pbtns"><button id="bdPrev" class="pbtn wv sm" aria-label="Previous board">&#9664;</button><button id="bdName" class="pbtn wv sel sm">CLASSIC</button><button id="bdNext" class="pbtn wv sm" aria-label="Next board">&#9654;</button><span id="bdInfo" class="bdInfo"></span></div></div>
         <div class="prog"><span id="lvl">LEVEL 1</span><div class="xpbar"><i id="xpFill"></i></div><span id="xpTxt"></span><button id="trBtn" class="pbtn wv sm">TROPHIES 0/12</button></div>
+        <div class="tod"><button id="todD" class="on">☀ DAY</button><button id="todN">☾ NIGHT</button><span>N toggles</span></div>
         <div class="pbtns wzGo"><button id="wzNext3" class="pbtn">NEXT &#9654;</button></div></section>
       <section class="wzS" data-s="4"><h2 class="wzH">TURNS TUTORIAL</h2>
         <div class="tutStage"><div class="tutCard" id="tutCard"><small id="tutN"></small><b id="tutT"></b><p id="tutD"></p></div></div>
         <div class="tutDots" id="tutDots"></div>
+        <div class="playRow lycRow"><span class="playLbl">COMPETITION LYCRA</span>
+          <div class="pbtns" id="lycBtns"><button class="lyc sel" data-c="red"><i style="background:#d6262a"></i>RED</button><button class="lyc" data-c="blue"><i style="background:#1f4fd6"></i>BLUE</button><button class="lyc" data-c="yellow"><i style="background:#f2c31b"></i>YELLOW</button><button class="lyc" data-c="black"><i style="background:#111316"></i>BLACK</button></div></div>
         <div class="pbtns wzGo"><button id="goPlay" class="pbtn big">GO SURF &#9654;</button></div>
-        <div class="tod"><button id="todD" class="on">☀ DAY</button><button id="todN">☾ NIGHT</button><span>N toggles</span></div>
-        <p class="cred">3D surfer: made with Magnific (Tripo) · Music: original tracks made with Suno</p></section>
+</section>
       <div id="rdRow" style="display:none"><button id="rdN"></button><button id="rdC"></button></div>
     </div>
   </div>
   <div id="end" class="panel off"></div>
   <div id="trophies" class="off"><div class="trBox"><h3>TROPHIES</h3><p id="trSub"></p><div id="trGrid"></div><button id="trClose" class="pbtn sm">CLOSE</button></div></div>
   <div id="toast"></div>
+  <div id="spPop" class="off" role="dialog" aria-modal="true" aria-labelledby="spT"><div class="spBox"><button id="spX" aria-label="Close">&times;</button>
+    <img src="sign-logo.webp" alt="PlaySurf official soundtrack"><h3 id="spT">Liked the music?</h3><p>Follow our soundtrack on Spotify</p>
+    <a id="spGo" class="spGo" href="#" target="_blank" rel="noopener">&#9654;&nbsp; LISTEN ON SPOTIFY</a><button id="spNo" class="spNo">Not now</button></div></div>
   <div id="touch"><div id="stick"><i></i></div>
-    <button class="tb" id="tAir">AIR</button><button class="tb" id="tBrake">BRAKE</button><button class="tb" id="tNose">NOSE<br>PICK</button><button class="tb" id="tCarve">CARVE<br>360</button>
+    <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
+    <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:1">ROUND<br>HOUSE</button><button class="tb sm" id="tBottom" style="--dx:-1;--dy:0;--k:1">BOTTOM<br>TURN</button>
+    <button class="tb sm" id="tNose" style="--dx:0;--dy:1;--k:2">NOSE<br>PICK</button><button class="tb sm" id="tCarve" style="--dx:-.3827;--dy:.9239;--k:2">CARVE<br>360</button><button class="tb sm" id="tTail" style="--dx:-.7071;--dy:.7071;--k:2">TAIL<br>THROW</button><button class="tb sm" id="tLay" style="--dx:-.9239;--dy:.3827;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-1;--dy:0;--k:2">BRAKE</button>
     <div id="tTop"><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button></div>
-    <div id="tHint">STICK: STEER · AIR AT THE LIP · BRAKE FOR THE BARREL</div></div>
+    <div id="tHint">STICK: STEER · SNAP AT THE TOP · AIR AT THE LIP</div></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <div id="rep">REPLAY</div>
   <div id="music"><button id="mPrev" aria-label="Previous track">&#9198;</button><div class="mInfo"><small>&#9835; NOW PLAYING</small><b id="mTitle"></b><span id="mBand"></span></div><button id="mNext" aria-label="Next track">&#9197;</button></div>
@@ -496,7 +519,17 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
 // brand type comes from the web fonts; anything painted on a canvas is repainted once they have arrived
 const SCRIPT='Pacifico,"Brush Script MT",cursive',CONDF='"Barlow Condensed","Avenir Next Condensed","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('100px Pacifico'),document.fonts.load('800 40px "Barlow Condensed"')]).then(()=>fn(),()=>{})}catch(e){}}
-const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.70,0.04,0.05)},k:{value:1}};let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
+const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.70,0.04,0.05)},k:{value:1},t:{value:new THREE.Vector3(0.93,0.93,0.92)},f:{value:0},tex:{value:null}};
+LYC.tex.value=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';
+  x.font='italic 900 44px "Arial Black",Impact,sans-serif';x.fillText('PLAYSURF',128,58,236);x.font='italic 900 150px "Arial Black",Impact,sans-serif';x.fillText('67',128,206,210);
+  const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t})();   /* the print on the back of the jersey */
+/* the competition jersey, cut in the model's rest pose (height 0..1, arms out along z): a singlet with shoulder straps, deep armholes,
+   a scooped neckline (deeper at the front) and a hem that falls over the boardshorts' waistband. Returns the distance inside its edge. */
+const LYC_GLSL=`float lycD(vec3 p,out float edge){float az=abs(p.z),fx=p.x*FSX;
+  vec2 q=vec2((az-0.124)/0.052,(p.y-0.79)/0.068);float dArm=(length(q)-1.)*0.05;
+  float fr=smoothstep(-0.035,0.0,fx);float yTop=mix(0.866,mix(0.812,0.776,fr),1.-smoothstep(0.036,0.066,az));float dNeck=yTop-p.y;
+  float dHem=p.y-mix(0.546,0.552,fr);float dSide=0.114-az;edge=min(dArm,dNeck);return min(min(dArm,dNeck),min(dHem,dSide));}
+`;let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
 const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=128;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;TXT.push(t);
   whenFonts(()=>{x.fillStyle='#0d2530';x.fillRect(0,0,1024,128);x.fillStyle='#12b5a6';x.fillRect(0,112,1024,16);x.textBaseline='middle';
     x.font=`76px ${SCRIPT}`;x.lineWidth=10;x.lineJoin='round';x.strokeStyle='#06162b';x.strokeText('PlaySurf',36,52);x.fillStyle='#f2fbff';x.fillText('PlaySurf',36,52);
@@ -1554,21 +1587,26 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        c2.putImageData(id,0,0);const t=new THREE.CanvasTexture(cv);t.flipY=map.flipY;t.colorSpace=map.colorSpace;t.wrapS=map.wrapS;t.wrapT=map.wrapT;t.anisotropy=4;map=t;RIG.fix={hair:nh,grey:ng,skin:[sr|0,sg|0,sb|0]}}}catch(e){console.warn('surfista 3D textura:',e)}
    si.needsUpdate=sw.needsUpdate=true;
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
-   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.uniforms.uLyc=LYC.c;sh.uniforms.uLycK=LYC.k;sh.vertexShader='varying float vMY;varying vec3 vMN;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;');
-     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uAlt;uniform vec3 uLyc;uniform float uLycK;varying float vMY;varying vec3 vMN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.uniforms.uLyc=LYC.c;sh.uniforms.uLycK=LYC.k;sh.uniforms.uLycT=LYC.t;sh.uniforms.uLycF=LYC.f;sh.uniforms.uLycTex=LYC.tex;
+     sh.vertexShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uLycK;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;{float ed;float m=uLycK*smoothstep(0.,0.004,lycD(position,ed));transformed+=normal*m*(0.0026+0.0012*(1.-smoothstep(0.55,0.64,position.y)));}');
+     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uAlt;uniform vec3 uLyc;uniform float uLycK;uniform vec3 uLycT;uniform float uLycF;uniform sampler2D uLycTex;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
      float material_eyeK=0.;float neckK=smoothstep(0.8,0.83,vMY)*(1.-smoothstep(0.91,0.93,vMY));float faceK=smoothstep(FSX*0.02,FSX*0.05,vMN.x)*smoothstep(0.85,0.875,vMY)*(1.-smoothstep(0.955,0.975,vMY));   // the face: texture softened so the blotches melt together
      if(faceK>0.01){vec2 o=vec2(0.0024,0.);vec3 av=(texture2D(map,vMapUv+o).rgb+texture2D(map,vMapUv-o).rgb+texture2D(map,vMapUv+o.yx).rgb+texture2D(map,vMapUv-o.yx).rgb+diffuseColor.rgb*2.)/6.;
        float la=dot(av,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,av,0.7*faceK);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.62,0.36,0.20)*(la/0.38),0.18*faceK*smoothstep(0.7,0.45,la));float lc=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb*=mix(1.,min(1.,0.3/max(lc,0.01)),faceK*smoothstep(0.28,0.42,lc));material_eyeK=faceK;}
      {vec3 c0=diffuseColor.rgb;float cool0=max(c0.g,c0.b)-c0.r,neck=smoothstep(0.74,0.77,vMY)*(1.-smoothstep(0.915,0.93,vMY));   // a blue collar left in the model's texture at the base of the neck: painted over in skin
       float l0=dot(c0,vec3(.3,.59,.11));float tealK=smoothstep(0.0,0.035,c0.g-c0.r)*smoothstep(0.0,0.03,c0.b-c0.r*0.9);diffuseColor.rgb=mix(c0,vec3(0.62,0.36,0.20)*clamp(l0/0.3,0.7,1.4),neck*tealK);}
-     float lycK=uLycK*smoothstep(0.585,0.615,vMY)*(1.-smoothstep(0.775,0.80,vMY))*(1.-smoothstep(0.19,0.25,abs(vMN.z)));   /* the competition lycra over the torso */
-     {vec3 c1=diffuseColor.rgb;float lu=dot(c1,vec3(.3,.59,.11));diffuseColor.rgb=mix(c1,uLyc*clamp(0.55+1.3*lu,0.5,1.5),lycK);}
+     float lycE;float lycK=uLycK*smoothstep(0.0,0.0025,lycD(vMN,lycE));   /* the competition jersey */
      if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
        c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
        float face=smoothstep(FSX*0.015,FSX*0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
        float hy=mix(0.925,0.86,smoothstep(-FSX*0.01,-FSX*0.02,vMN.x));   // down to the neck at the back, only the crown at the front
        c=mix(c,vec3(0.86,0.60,0.24)*(0.55+1.4*l),smoothstep(0.2,0.07,l)*smoothstep(hy,hy+0.025,vMY)*(1.-face));   // only the dark hair turns sun-bleached golden
-       diffuseColor.rgb=c;}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-lycK);material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.62,lycK);')};   /* no wet shine on the face: it picked out every bump */
+       diffuseColor.rgb=c;}
+     if(lycK>0.001){float lu=dot(diffuseColor.rgb,vec3(.3,.59,.11));vec3 fab=uLyc*(0.9+0.2*smoothstep(0.08,0.5,lu));   /* flat dyed fabric: none of the skin drawing shows through */
+       float trim=1.-smoothstep(0.0055,0.0075,lycE);fab=mix(fab,uLycT,trim);   /* the binding round the neck and armholes */
+       float bk=1.-smoothstep(-0.04,-0.018,vMN.x*FSX);vec2 pu=vec2(0.5+mix(vMN.z,-vMN.z,uLycF)/0.15,(vMN.y-0.615)/0.15);
+       float pa=bk*step(0.,pu.x)*step(pu.x,1.)*step(0.,pu.y)*step(pu.y,1.)*texture2D(uLycTex,pu).a;fab=mix(fab,uLycT,pa*0.95);
+       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.7*lycK);material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.5,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(material.sheenColor,uLyc*0.6+0.08,lycK);\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
@@ -1855,8 +1893,9 @@ function setCam(i){game.cam=((i%3)+3)%3;$('camBtn').textContent='CAMERA: '+['CHA
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 $('goDesk').addEventListener('click',e=>{e.stopPropagation();setTouch(false);wzGo(2)});
-/* touch: a stick for the wall on the left, AIR / BRAKE / NOSE PICK / CARVE 360 on the right; they press the same keys the keyboard does */
-const TOUCH={on:false,x:0,y:0,id:null};
+/* touch: a stick for the wall on the left; on the right a big SNAP under the thumb and the other tricks on two arcs round it; they press what the keyboard does */
+const TOUCH={on:false,x:0,y:0,id:null};const TB={dn:0,up:0,bk:0,st:0};   /* trick buttons held right now */
+addEventListener('blur',()=>{TB.dn=TB.up=TB.bk=TB.st=0});
 const isTouchDev=(()=>{try{return matchMedia('(pointer:coarse)').matches&&!matchMedia('(pointer:fine)').matches||(navigator.maxTouchPoints>0&&matchMedia('(hover:none)').matches)}catch(e){return false}})();
 function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStorage.setItem('playsurf_touch',on?'1':'0')}catch(e){}
   $('goMob').classList.toggle('wv',!on);$('goDesk').classList.toggle('wv',!!on);{const d=document.querySelector('.wzDots i[data-s="1"]');if(d)d.textContent='1 · '+(on?'MOBILE':'DESKTOP')}if(TUT&&WZ&&WZ.s===4)tutUI()}
@@ -1869,9 +1908,11 @@ function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStor
  const end=e=>{if(e.pointerId!==TOUCH.id)return;TOUCH.id=null;TOUCH.on=false;TOUCH.x=TOUCH.y=0;kn.style.transform=''};
  st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end);st.addEventListener('lostpointercapture',end)}
 {const key=(code,dn)=>dispatchEvent(new KeyboardEvent(dn?'keydown':'keyup',{code}));
- [['tAir','Space'],['tBrake','ShiftLeft'],['tNose','KeyF'],['tCarve','KeyG']].forEach(([id,code])=>{const b=$(id);let pid=null;
-   b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();pid=e.pointerId;try{b.setPointerCapture(e.pointerId)}catch(_){}b.classList.add('on');initAudio();key(code,true)});
-   const up=e=>{if(e.pointerId!==pid)return;pid=null;b.classList.remove('on');key(code,false)};
+ /* SNAP is ↓ (tap = snap, hold = tail throw); the trick buttons hold their input for at least a beat so a quick tap still lands the move */
+ [['tSnap',{dn:1},0],['tAir','Space',0],['tRound',{bk:1},0.22],['tBottom',{up:1},0.35],['tNose','KeyF',0],['tCarve','KeyG',0],['tTail',{dn:1},0.95],['tLay',{dn:1,st:1},0.6],['tBrake',{st:1},0]].forEach(([id,act,minT])=>{const b=$(id);let pid=null,t0=0;
+   const press=on=>{if(typeof act==='string')key(act,on);else for(const k in act)TB[k]=Math.max(0,TB[k]+(on?1:-1))};
+   b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();if(pid!==null)return;pid=e.pointerId;t0=performance.now();try{b.setPointerCapture(e.pointerId)}catch(_){}b.classList.add('on');initAudio();press(true)});
+   const up=e=>{if(e.pointerId!==pid)return;pid=null;b.classList.remove('on');const left=minT*1000-(performance.now()-t0);if(left>0)setTimeout(()=>press(false),left);else press(false)};
    b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up)});
  $('tCam').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();setCam(game.cam+1);$('tCam').textContent=['CHASE','SIDE','FRONT'][game.cam]});
  $('tPause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();key('KeyP',true);key('KeyP',false)});
@@ -1879,7 +1920,7 @@ function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStor
 function goFull(){try{const d=document.documentElement;if(d.requestFullscreen&&!document.fullscreenElement)d.requestFullscreen({navigationUI:'hide'}).then(()=>{try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}}).catch(()=>{})}catch(_){}}   // full screen and landscape where the browser allows it
 $('goMob').addEventListener('click',e=>{e.stopPropagation();setTouch(true);goFull();wzGo(2)});
 try{const t=localStorage.getItem('playsurf_touch');setTouch(t===null?isTouchDev:t==='1')}catch(e){setTouch(isTouchDev)}
-function setMirror(m){MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else riderG.scale.set(1,1,1);   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
+function setMirror(m){MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else riderG.scale.set(1,1,1);   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});
 var WZ={s:1};
@@ -1887,12 +1928,12 @@ function wzGo(n){WZ.s=clamp(n,1,4);document.querySelectorAll('.wzS').forEach(e=>
   document.querySelectorAll('.wzDots i').forEach(e=>{const k=+e.dataset.s;e.classList.toggle('on',k===WZ.s);e.classList.toggle('done',k<WZ.s)});
   $('wzBack').style.visibility=WZ.s>1?'visible':'hidden';if(WZ.s===3)progUI();if(WZ.s===4)tutUI()}
 function tutUI(){const t=document.body.classList.contains('touch'),K=x=>`<span class="kk">${x}</span>`,M=(d,m)=>t?m:d;
-  const L=[['Bottom Turn',M(`drop down and point ${K('↑')} at the bottom — that's where the speed comes from`,`push the stick ${K('UP')} at the bottom — that's where the speed comes from`)],
-    ['Snap',M(`climb and tap ${K('↓')} at the top: he turns, throws the tail and comes back`,`climb and flick the stick ${K('DOWN')} at the top`)],
-    ['Tail Throw',M(`at the top, hold ${K('↓')}: the tail comes round and he rides it out`,`at the top, hold the stick ${K('DOWN')}`)],
+  const L=[['Bottom Turn',M(`drop down and point ${K('↑')} at the bottom — that's where the speed comes from`,`${K('BOTTOM TURN')} at the bottom — that's where the speed comes from`)],
+    ['Snap',M(`climb and tap ${K('↓')} at the top: he turns, throws the tail and comes back`,`climb and tap ${K('SNAP')} at the top`)],
+    ['Tail Throw',M(`at the top, hold ${K('↓')}: the tail comes round and he rides it out`,`at the top, hold ${K('SNAP')} or tap ${K('TAIL THROW')}`)],
     ['Off the Lip',`go straight up to the lip and let the board pivot`],
-    ['Layback',M(`hold ${K('SHIFT')} during a snap or a hit: he lays back on the water`,`hold ${K('BRAKE')} during a snap or a hit`)],
-    ['Roundhouse',M(`out on the shoulder, one tap of ${K('←')}: a long carve back to the foam`,`out on the shoulder, flick the stick ${K('BACK')}`)],
+    ['Layback',M(`hold ${K('SHIFT')} during a snap or a hit: he lays back on the water`,`${K('LAYBACK')} at the top: he snaps and lays back on the water`)],
+    ['Roundhouse',M(`out on the shoulder, one tap of ${K('←')}: a long carve back to the foam`,`out on the shoulder, tap ${K('ROUNDHOUSE')}`)],
     ['Carve 360',M(`${K('G')} on the open face: one full turn on the rail`,`${K('CARVE 360')} on the open face`)],
     ['Barrel',M(`when the lip throws, stay on the wall; ${K('SHIFT')} brakes to get deeper, ${K('→')} pumps for speed`,`when the lip throws, stay on the wall; ${K('BRAKE')} to get deeper`)],
     ['Floater',`come into a crumbling section sideways and ride across the top of the foam`],
@@ -1911,8 +1952,8 @@ $('tutDots').addEventListener('click',e=>{const d=e.target.closest('i');if(d){e.
 $('goPlay').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();beginPlay();if(document.body.classList.contains('touch')){$('tHint').classList.add('on');setTimeout(()=>$('tHint').classList.remove('on'),7000)}});
 wzGo(2);   // phone or computer is detected (touch screen, finger-sized pointer); tap step 1 to change it
 try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}
-const LYCS={red:[0.70,0.04,0.05],blue:[0.03,0.14,0.62],yellow:[0.92,0.66,0.02],black:[0.025,0.025,0.03]};
-function setLycra(c){if(!LYCS[c])c='red';LYC.c.value.set(LYCS[c][0],LYCS[c][1],LYCS[c][2]);PROG.lyc=c;progSave();document.querySelectorAll('#lycBtns .lyc').forEach(b=>b.classList.toggle('sel',b.dataset.c===c))}
+const LYCS={red:[0.70,0.04,0.05],blue:[0.03,0.14,0.62],yellow:[0.97,0.60,0.0],black:[0.025,0.025,0.03]};
+function setLycra(c){if(!LYCS[c])c='red';LYC.c.value.set(LYCS[c][0],LYCS[c][1],LYCS[c][2]);if(c==='yellow')LYC.t.value.set(0.03,0.07,0.22);else LYC.t.value.set(0.93,0.93,0.92);PROG.lyc=c;progSave();document.querySelectorAll('#lycBtns .lyc').forEach(b=>b.classList.toggle('sel',b.dataset.c===c))}
 $('lycBtns').addEventListener('click',e=>{const b=e.target.closest('.lyc');if(!b)return;e.stopPropagation();b.blur();setLycra(b.dataset.c)});
 setLycra(PROG.lyc||'red');
 function progUI(){
@@ -1938,7 +1979,18 @@ $('intro').addEventListener('click',()=>{if(!$('intro').classList.contains('snd'
 $('rdN').addEventListener('click',e=>{e.stopPropagation();setRider(1);e.target.blur()});$('rdC').addEventListener('click',e=>{e.stopPropagation();setRider(0);e.target.blur()});
 $('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);e.target.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();setTOD(1);e.target.blur()});
 $('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(b.id==='eMenu')toMenu();else{if(b.dataset.spot)setSpot(+b.dataset.spot);startWave()}return}if(game.state==='end'&&game.endT>1.2)startWave()});
-function toMenu(){startAttract();wzGo(3)}   // back to the start screen: pick a spot or a board you just opened
+function toMenu(){startAttract();wzGo(3)}   /* back to the start screen: pick a spot or a board you just opened */
+/* the soundtrack on Spotify: offered once (at most every three days) when the pointer heads for the tab bar to close the game;
+   on touch screens, where there is no pointer to watch, on the end card after the second wave */
+const SPOTIFY_URL='';   /* the playlist link goes here; with no link the pop-up never shows */
+document.body.appendChild($('spPop'));   /* above the HUD and the opening vignette */
+let spHeard=0;setInterval(()=>{if(!MUS.el.paused)spHeard++},1000);   /* seconds of music actually heard */
+function spShow(){if(!SPOTIFY_URL||spHeard<30)return;try{const t=+localStorage.getItem('ps_sp')||0;if(Date.now()-t<3*864e5)return;localStorage.setItem('ps_sp',String(Date.now()))}catch(e){}
+  $('spGo').href=SPOTIFY_URL;$('spPop').classList.remove('off');if(game.state==='ride'&&!game.attract&&!game.paused){game.paused=true;$('pause').style.display='flex'}}
+function spHide(){$('spPop').classList.add('off')}
+document.addEventListener('mouseout',e=>{if(!e.relatedTarget&&e.clientY<=6&&$('spPop').classList.contains('off'))spShow()});
+$('spX').addEventListener('click',e=>{e.stopPropagation();spHide()});$('spNo').addEventListener('click',e=>{e.stopPropagation();spHide()});
+$('spPop').addEventListener('click',e=>{if(e.target.id==='spPop')spHide()});$('spGo').addEventListener('click',e=>{e.stopPropagation();setTimeout(spHide,300)});
 addEventListener('pointerdown',()=>{if(game.state==='end'&&game.hl&&game.showCard)game.showCard()});
 function readInput(){
   let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
@@ -1946,7 +1998,8 @@ function readInput(){
   const gp=navigator.getGamepads?[...navigator.getGamepads()].find(g=>g):null;
   if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;
     if(gp.buttons[9]?.pressed&&(game.attract||game.state==='menu'||game.state==='end'&&game.endT>1.2))beginPlay()}
-  if(TOUCH.on){x=TOUCH.x*(MIRROR?-1:1);y=TOUCH.y}   // the on-screen stick, analog
+  if(TOUCH.on){x=TOUCH.x*(MIRROR?-1:1);y=TOUCH.y}   /* the on-screen stick, analog */
+  if(TB.dn)y=-1;else if(TB.up)y=1;if(TB.bk)x=-(MIRROR?-1:1);if(TB.st)stl=true;   /* the trick buttons win over the stick */
   input.x=x;input.y=y;input.crouch=cr;input.stall=stl}
 
 /* ───────────────────────── audio ───────────────────────── */
@@ -2107,7 +2160,7 @@ function endRide(kind){
       ${unl.length?`<div class="unl">${unl.map(u=>`<div>${u}</div>`).join('')}</div>`:''}${goal?`<div class="goal">${goal}</div>`:''}
       <div class="endBtns"><button class="pbtn sm" id="eNext">NEXT WAVE</button>${newSpot?`<button class="pbtn sm" data-spot="${newSpot.id}">RIDE ${newSpot.full}</button>`:''}<button class="pbtn wv sm" id="eMenu">MENU · SPOTS &amp; BOARDS</button></div>
       <p class="go">ENTER — NEXT WAVE · ESC — MENU</p>`;
-    $('end').classList.remove('off')};
+    $('end').classList.remove('off');if(document.body.classList.contains('touch')&&PROG.waves>=2)setTimeout(spShow,1800)};
   setTimeout(()=>{
     if(game.state!=='end'||game.waveId!==wave)return;
     $('pop').innerHTML='';$('hud').classList.remove('on');$('wavebar').classList.remove('on');$('camBtn').classList.remove('on');$('tube').classList.remove('on');$('keys').classList.remove('on');
@@ -2727,7 +2780,7 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
     const cx=clamp((pv.x*.5+.5)*c.width,sw/2,c.width-sw/2),cy=clamp((1-(pv.y*.5+.5))*c.height,sh/2,c.height-sh/2);
     x.drawImage(c,cx-sw/2,cy-sh/2,sw,sh,(i%cols)*cw,Math.floor(i/cols)*ch,cw,ch);
     x.fillStyle='#fff';x.font='22px monospace';x.fillText(i+' '+sf.mode[0]+' th'+sf.th.toFixed(1)+' r'+sf.rail.toFixed(1)+' c'+A.crouch.x.toFixed(2),(i%cols)*cw+8,Math.floor(i/cols)*ch+26)}
-  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI};
+  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB};
 startAttract();
 requestAnimationFrame(frame);
 </script>
