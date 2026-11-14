@@ -257,7 +257,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
       <b>Layback</b><span>hold <span class="kk">SHIFT</span> during a snap or a hit — he lays back on the water and the wave stands him up again</span>
       <b>Off the Lip</b><span>go straight up to the lip and let the board pivot</span>
       <b>Carve 360</b><span><span class="kk">G</span> on the open face: one full turn on the rail, round by the bottom and back on line</span>
-      <b>Nose Pick</b><span>at the lip, <span class="kk">F</span>: a little air, his front foot kicks the nose and the board turns over forward under him</span>
+      <b>Nose Pick</b><span>at the lip, <span class="kk">F</span>: an air revo — the nose comes up to the sky, he turns 180 in the air, lands tail first and swings back round on the water</span>
       <b>Roundhouse</b><span>out on the shoulder, one tap of <span class="kk">←</span>: a long carve back to where the foam begins and a backside snap off it (<span class="kk">→</span> cancels)</span>
       <b>Barrel</b><span>after the drop and the first open wall the first section throws the lip; near the end a small one comes back: stay on the wall and it covers you; <span class="kk">SHIFT</span> brakes to get deeper, <span class="kk">→</span> pumps for speed; his hand trails on the wall</span>
       <b>Foam</b><span>later sections crumble: go straight up for a <em>foam hit</em>, or come in sideways for a <em>floater</em> across the top</span>
@@ -1541,7 +1541,7 @@ function poseRider(time,dt){
   if(bh>0.01){J.pel.x+=0.24*bh;J.pel.y+=0.06*bh;J.pel.z-=0.08*bh}   // backside hit: hips over the front foot, so the back leg straightens and kicks the tail
   {const hy=hp+0.45*sy;J.hax.set(st*Math.cos(hy),0,1-st+st*Math.sin(hy)).normalize()}
   J.hipF.copy(J.pel).addScaledVector(J.hax,0.088);J.hipF.y-=0.02;J.hipB.copy(J.pel).addScaledVector(J.hax,-0.088);J.hipB.y-=0.02;
-  J.ftF.set(lerp(-1.39,-0.06*cs+0.05*ss,st),lerp(0.12,0.11,st),lerp(0.10,0.06*ss+0.05*cs,st));{const yb=sy*(1-0.40*(A.lay||0)),cb=Math.cos(yb),sb=Math.sin(yb);J.ftB.set(lerp(-1.39,-(0.54+0.06*bh)*cb+0.05*sb,st),lerp(0.12,0.11,st),lerp(-0.10,0.54*sb+0.05*cb,st))}   // the back foot lags the kicked tail, out toward the rail
+  J.ftF.set(lerp(-1.39,-0.06*cs+0.05*ss,st),lerp(0.12,0.11,st),lerp(0.10,0.06*ss+0.05*cs,st));if((AT.npTh||0)>0.005){const t=AT.npTh;J.ftF.x=-0.54+0.48*Math.cos(t);J.ftF.y=0.11+0.48*Math.sin(t)}   // nose pick: the front foot stays on the board as the nose comes up{const yb=sy*(1-0.40*(A.lay||0)),cb=Math.cos(yb),sb=Math.sin(yb);J.ftB.set(lerp(-1.39,-(0.54+0.06*bh)*cb+0.05*sb,st),lerp(0.12,0.11,st),lerp(-0.10,0.54*sb+0.05*cb,st))}   // the back foot lags the kicked tail, out toward the rail
   ik(J.hipF,J.ftF,0.44,0.43,(0.30*cs-0.78*ss)*st,0.8*st-0.95*pr,(-0.30*ss-0.78*cs)*st,J.knF,J.tA);J.ftF.copy(J.tA);
   ik(J.hipB,J.ftB,0.44,0.43,(0.10*cs-0.85*ss)*st,0.75*st-0.95*pr,(-0.10*ss-0.85*cs)*st,J.knB,J.tA);J.ftB.copy(J.tA);
   fillLimb(legF,J.hipF,J.knF,J.ftF,0.506,0.08);legF.update();fillLimb(legB,J.hipB,J.knB,J.ftB,0.506,0.08);legB.update();
@@ -1631,7 +1631,7 @@ function poseRider(time,dt){
     _b.subVectors(DROP.hand,J.shB);const lb=_b.length();if(lb>0.62)_b.multiplyScalar(0.62/lb);_b.add(J.shB);J.hBt.lerp(_b,pu)}   // both hands on the board   // trail arm back: the shove comes from the shoulders
   if(AT.drag>0.01){const z=-0.62,y=Math.min(-z*Math.tan(clamp(AT.lt,0,1.1))+0.02,J.shB.y+0.10);_a.set(J.pel.x-0.20,y,z);J.hBt.lerp(_a,AT.drag)}
   {const ia=clamp(A.aa*0.012,-0.18,0.18)*st;J.hFt.z+=ia;J.hBt.z-=ia;J.hFt.y+=Math.abs(ia)*0.3;J.hBt.y+=Math.abs(ia)*0.3}
-  if(air>0.01){_a.set(J.shF.x+0.28,J.shF.y-0.12,J.shF.z-0.24);J.hFt.lerp(_a,air);_a.set(J.shB.x-0.28,J.shB.y-0.08,J.shB.z-0.08);J.hBt.lerp(_a,air)}
+  if(air>0.01){const nk=sstep(0,0.3,AT.npTh||0);_a.set(J.shF.x+lerp(0.28,0.32,nk),J.shF.y+lerp(-0.12,0.06,nk),J.shF.z+lerp(-0.24,-0.30,nk));J.hFt.lerp(_a,air);_a.set(J.shB.x+lerp(-0.28,-0.34,nk),J.shB.y+lerp(-0.08,0.14,nk),J.shB.z+lerp(-0.08,0.16,nk));J.hBt.lerp(_a,air)}   // nose pick: both arms up and out for balance
   if(gr>0.01){_a.set(-0.31,0.075,-0.255);J.hBt.lerp(_a,gr);_a.set(J.knF.x+0.10,J.knF.y-0.10,J.knF.z-0.16);J.hFt.lerp(_a,gr*0.85)}
   if(fl>0.01){_a.set(J.shF.x+0.3*Math.sin(time*11),J.shF.y+0.45,J.shF.z+0.3*Math.cos(time*9));J.hFt.lerp(_a,fl);_a.set(J.shB.x-0.3*Math.cos(time*10),J.shB.y+0.4,J.shB.z+0.3*Math.sin(time*12));J.hBt.lerp(_a,fl)}
   if(pr>0.001){const push=1-sstep(0.6,0.95,pr);
@@ -2018,7 +2018,7 @@ function endRide(kind){
     game.showCard()},kind==='wipe'?900:500)}
 
 function stepRide(dt){
-  if(game.npReq&&sf.mode==='ride'&&game.state==='ride'){const rl=sf.p/Math.max(S.top,0.5),vu=sf.V*Math.sin(sf.th);if(game.waveAge-game.npReq>0.6)game.npReq=0;else if(rl>0.5&&vu>1.0&&!sf.rh){game.npReq=0;sampleSurf(sf.s,sf.p,S);launchAir(Math.max(vu,4.5),input);sf.np=true;return}}   // nose pick: a little air off the lip, kicking the nose round
+  if(game.npReq&&sf.mode==='ride'&&game.state==='ride'){const rl=sf.p/Math.max(S.top,0.5),vu=sf.V*Math.sin(sf.th);if(game.waveAge-game.npReq>0.6)game.npReq=0;else if(rl>0.5&&vu>1.0&&!sf.rh){game.npReq=0;sampleSurf(sf.s,sf.p,S);launchAir(Math.max(vu,4.5),input);sf.np=true;sf.npDir=-1;splash(38,S.pos,1.35);return}}   // nose pick air revo: off the lip nose first, the tail kicked out in a fan of spray
   if(game.state==='ride')for(const C of SEC)if(C.fol&&!C.set&&game.waveAge>=C.t0-0.05){C.c0=clamp(sf.s+2.4,10,62);C.set=true}
   let inp=game.state==='ride'&&!sf.exV&&!sf.straight?input:{x:0,y:0,crouch:false,stall:false};const now=game.waveAge;
   if(sf.fallAt&&now>=sf.fallAt){sf.fallAt=0;if(game.state==='ride'&&!game.attract){sampleSurf(sf.s,sf.p,S);wipe();return}}   // he catches a rail
@@ -2184,12 +2184,13 @@ function launchAir(vp,inp){sf.tt=null;sf.slip=0;sf.np=false;
   sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);sfxNoise(0.4,3000,0.3)}
 function stepAir(dt){
   sf.airT+=dt;sf.vh-=GA*dt;sf.h+=sf.vh*dt;sf.hMax=Math.max(sf.hMax,sf.h);sf.s+=sf.vsAir*dt;
-  {const tL=(sf.vh+Math.sqrt(Math.max(0,sf.vh*sf.vh+2*GA*Math.max(sf.h,0))))/GA,held=Math.abs(input.x)>0.3;   // time left before the board touches down
+  if(sf.np){const u=clamp(sf.airT/sf.airDur,0,1);sf.spin=sf.npDir*PI*sstep(0.16,0.86,u);sf.flip=0}   // the nose pick turns a reverse: 180 in the air, landing tail first
+  else{const tL=(sf.vh+Math.sqrt(Math.max(0,sf.vh*sf.vh+2*GA*Math.max(sf.h,0))))/GA,held=Math.abs(input.x)>0.3;   // time left before the board touches down
    if(held)sf.spinDir=-Math.sign(input.x);
    if(held&&tL>0.26)sf.spin+=-input.x*8.2*dt;
    else{const k=sf.spin/PI,d=sf.spinDir||Math.sign(sf.spin)||1,th_=held?0.02:0.3;let tg=(d>0?Math.ceil(k-th_):Math.floor(k+th_))*PI;if(Math.abs(tg-sf.spin)>18*Math.max(tL-0.04,0.06))tg-=d*PI;const dd=tg-sf.spin;   // still holding: carry on to the next half turn if there is time   // finish the turn the way it was going (or fall back if it barely started),
      sf.spin+=Math.sign(dd)*Math.min(Math.abs(dd),clamp(Math.abs(dd)/Math.max(tL-0.04,0.06),3.5,18)*dt)}}   // timed to land square on the touchdown
-  if(Math.abs(input.y)>0.3)sf.flip+=input.y*7.4*dt;else{const tg=Math.round(sf.flip/(2*PI))*2*PI;sf.flip+=clamp(tg-sf.flip,-4.5*dt,4.5*dt)}   // ↑ backflip, ↓ frontflip
+  if(sf.np){}else if(Math.abs(input.y)>0.3)sf.flip+=input.y*7.4*dt;else{const tg=Math.round(sf.flip/(2*PI))*2*PI;sf.flip+=clamp(tg-sf.flip,-4.5*dt,4.5*dt)}   // ↑ backflip, ↓ frontflip
   if(input.crouch)sf.grabT+=dt;
   if(Math.abs(sf.vh)<1.6)game.slowT=Math.max(game.slowT,0.06);
   if(sf.vh<0.6&&!sf.airShot&&!sf.wantAirShot)sf.wantAirShot=true;
@@ -2200,7 +2201,7 @@ function stepAir(dt){
     if(sf.s<0.2||(!clean&&!rev)||Math.abs(wrapPi(sf.flip))>0.95||rf){sampleSurf(sf.s,S.top-0.4,S);sf.pos.copy(S.pos);wipe();return}
     sf.mode='ride';sf.p=S.top-0.55;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=r;sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
     const rot=Math.round(Math.abs(sf.spin)/PI)*180;
-    let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm='Nose Pick'+(rot?' '+rot:'');
+    let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm=rot===180?'Nose Pick Air Revo':'Nose Pick'+(rot?' '+rot:'');if(sf.np)sf.revSlow=0.9;
     const pt=1300+700*sf.hMax+rot*9+(sf.grabT>0.25?400:0)+flips*1900+(sf.np?1200:0);sf.np=false;sf.flip=0;
     award(nm,pt);if(sf.airShot)addPhoto(nm,pt,sf.airShot);
     sampleSurf(sf.s,sf.p,S);splash(50,S.pos,1.1);sfxNoise(0.6,1800,0.4);sf.burst=1;A.impact=1;game.shake=0.6;sf.rail=0;spawnDrops(2)}}
@@ -2268,7 +2269,7 @@ function placeSurfer(dt,time){
     {const hk=0.75*sf.hit*sstep(0.35,0.85,1-Math.abs(S.n.y));_b.copy(S.n);if(hk>0.01){_b.lerp(_c.set(0,0.85,0.5),hk).normalize();tL.crossVectors(_b,bX).normalize()}
      bY.copy(_b).multiplyScalar(Math.cos(lt)).addScaledVector(tL,Math.sin(lt)).normalize()}
     bP.copy(S.pos).addScaledVector(S.n,0.055);
-    sf.spinVis=damp(sf.spinVis,0,7,dt);spin=sf.spinVis;
+    sf.spinVis=damp(sf.spinVis,0,(sf.revSlow>0?(sf.revSlow-=dt,3.4):7),dt);spin=sf.spinVis;   // after a nose pick the revert is a slower slide round on the water
     const rel=clamp(sf.p/S.top,0,1),ao=Math.abs(sf.om),load=clamp(ao*sf.V/24,0,1),intro=sf.introT>0.5;
     sf.hit=damp(sf.hit,sf.pivot>0?1:0,sf.pivot>0?14:6,dt);
     {const stK=sstep(0.35,0.85,1-Math.abs(S.n.y)),tpK=sstep(0.35,0.7,rel),sl=Math.abs(Math.sin(sf.slip))*(Math.abs(sf.slip)<2.2?1:0.3);projT=clamp(Math.max(sf.hit,sl),0,1)*stK*tpK*(1-A.prone)}
@@ -2312,7 +2313,8 @@ function placeSurfer(dt,time){
     if(sf.flip){tL.crossVectors(bX,bY).normalize();bP.addScaledVector(bY,0.6);bX.applyAxisAngle(tL,sf.flip);bY.applyAxisAngle(tL,sf.flip);bP.addScaledVector(bY,-0.6)}   // rotate about the body, not the board
     spin=sf.spin;sf.lam=damp(sf.lam,0,8,dt);
     bY.applyAxisAngle(bX,0.40*A.grab*Math.sin(PI*u));
-    AT.crouch=lerp(0.72,0.45,sstep(0.62,1,u));AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.speed=sf.V;AT.tw=0.75-input.x*0.1;AT.look=0.3-input.x*0.08;AT.shiftX=0;AT.rail=0;AT.lt=0;AT.drag=0;AT.hip=-input.x*0.1;   // airs and alley-oops: relaxed, not wrung outAT.claim=0;
+    AT.crouch=lerp(0.72,0.45,sstep(0.62,1,u));AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.speed=sf.V;AT.tw=0.75-input.x*0.1;AT.look=0.3-input.x*0.08;AT.shiftX=0;AT.rail=0;AT.lt=0;AT.drag=0;AT.hip=-input.x*0.1;
+    if(sf.np){AT.crouch=0.97-0.22*sstep(0.78,1,u);AT.tw=0.75+0.55*sstep(0.04,0.42,u);AT.look=0.55;AT.hip=0.3;AT.shiftX=-0.04}   // nose pick: knees right up, shoulders opened into the turn, eyes back over the lead shoulder   // airs and alley-oops: relaxed, not wrung outAT.claim=0;
     airT=1;grabT=input.crouch?1:0;
     sampleSurf(sf.s,S.top-0.5,S2);setShadow(S2,S2.ts,0.30/(1+sf.h*0.6),1+sf.h*0.25);
   }else if(sf.mode==='float'){
@@ -2348,7 +2350,9 @@ function placeSurfer(dt,time){
   riderG.quaternion.copy(boardG.quaternion).multiply(qS.setFromAxisAngle(UPV,rootYaw-slip));
   sf.pos.copy(boardG.position);sf.f.set(1,0,0).applyQuaternion(boardG.quaternion);sf.up.set(0,1,0).applyQuaternion(boardG.quaternion);sf.right.set(0,0,1).applyQuaternion(boardG.quaternion);
   riderG.position.copy(boardG.position);riderG.visible=boardG.visible=true;A.throw=Math.max(0,A.throw-dt/0.30);
-  if(sf.mode==='air'&&sf.np){const u=clamp(sf.airT/sf.airDur,0,1);boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,-2*PI*sstep(0.1,0.85,u)));boardG.position.y+=0.15*Math.sin(PI*u);AT.crouch=0.9}   // nose pick: his front foot kicks the nose and the board turns over forward under him
+  if(sf.mode==='air'&&sf.np){const u=clamp(sf.airT/sf.airDur,0,1),th=1.0*sstep(0.04,0.34,u)*(1-sstep(0.60,0.94,u));AT.npTh=th;   // nose pick: the nose comes up to the sky around the back foot, held while it turns, then down for the landing
+    _a.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,th));_b.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.position.add(_a).sub(_b)}
+  else AT.npTh=0;
   if(sf.mode==='ride'&&(sf.exV===1||sf.exV===2)){const T=sf.exV===1?0.5:0.62,u=clamp(sf.exT/T,0,1);
     if(sf.exT<T){const hh=(sf.exV===1?0.32:0.42)*Math.sin(PI*u);   // a small pop, not a launchboardG.position.y+=hh;riderG.position.y+=hh;
       if(sf.exV===1)boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,0.30*Math.sin(PI*u)*(1-u)));else boardG.quaternion.multiply(qS.setFromAxisAngle(UPV,2*PI*sstep(0.1,0.88,u)));
