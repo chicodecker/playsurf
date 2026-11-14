@@ -2260,7 +2260,7 @@ function stepAir(dt){
     const r=wrapPi(sf.spin),clean=Math.abs(r)<1.2,rev=Math.abs(Math.abs(r)-PI)<1.2,flips=Math.round(Math.abs(sf.flip)/(2*PI));
     const rf=game.state==='ride'&&!game.attract&&game.waveAge>8&&Math.random()<0.03+0.06*flips+(Math.abs(sf.spin)>4.5?0.02:0)+(sf.hMax>2.4?0.03:0);   // even a clean landing is lost now and then
     if(sf.s<0.2||(!clean&&!rev)||Math.abs(wrapPi(sf.flip))>0.95||rf){sampleSurf(sf.s,S.top-0.4,S);sf.pos.copy(S.pos);wipe();return}
-    sf.mode='ride';sf.p=S.top-0.55;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=r;sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
+    sf.mode='ride';sf.p=S.top-0.18;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=Math.abs(r)>PI/2&&sf.spinDir?-Math.sign(sf.spinDir)*Math.abs(r):r;sf.landT=0.45;sf.blendT=0.4;   // touchdown: the board settles onto the face over a moment (no jump), and a reverse keeps turning the same way to come roundsf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
     const rot=Math.round(Math.abs(sf.spin)/PI)*180;
     let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm=rot===180?'Nose Pick Air Revo':'Nose Pick'+(rot?' '+rot:'');if(sf.np)sf.revSlow=0.9;
     const pt=1300+700*sf.hMax+rot*9+(sf.grabT>0.25?400:0)+flips*1900+(sf.np?1200:0);sf.np=false;sf.flip=0;
@@ -2330,7 +2330,7 @@ function placeSurfer(dt,time){
     {const hk=0.75*sf.hit*sstep(0.35,0.85,1-Math.abs(S.n.y));_b.copy(S.n);if(hk>0.01){_b.lerp(_c.set(0,0.85,0.5),hk).normalize();tL.crossVectors(_b,bX).normalize()}
      bY.copy(_b).multiplyScalar(Math.cos(lt)).addScaledVector(tL,Math.sin(lt)).normalize()}
     bP.copy(S.pos).addScaledVector(S.n,0.055);
-    sf.spinVis=damp(sf.spinVis,0,(sf.revSlow>0?(sf.revSlow-=dt,3.4):7),dt);spin=sf.spinVis;   // after a nose pick the revert is a slower slide round on the water
+    sf.spinVis=damp(sf.spinVis,0,(sf.revSlow>0?(sf.revSlow-=dt,3.4):4.6),dt);spin=sf.spinVis;   // after a nose pick the revert is a slower slide round on the water
     const rel=clamp(sf.p/S.top,0,1),ao=Math.abs(sf.om),load=clamp(ao*sf.V/24,0,1),intro=sf.introT>0.5;
     sf.hit=damp(sf.hit,sf.pivot>0?1:0,sf.pivot>0?14:6,dt);
     {const stK=sstep(0.35,0.85,1-Math.abs(S.n.y)),tpK=sstep(0.35,0.7,rel),sl=Math.abs(Math.sin(sf.slip))*(Math.abs(sf.slip)<2.2?1:0.3);projT=clamp(Math.max(sf.hit,sl),0,1)*stK*tpK*(1-A.prone)}
@@ -2396,7 +2396,7 @@ function placeSurfer(dt,time){
   bX.normalize();bY.crossVectors(bZ,bX).normalize();
   mB.makeBasis(bX,bY,bZ);qT.setFromRotationMatrix(mB);
   {const fzT=sf.mode==='float'?1:sf.mode==='ride'?Math.max(clamp((S.foam-0.2)/0.5,0,1),game.inTube?0.75:0):0;A.fz=damp(A.fz||0,fzT,fzT>(A.fz||0)?5:2.5,dt)}   // on the white water the board rides over the lumps instead of copying each one
-  qBase.slerp(qT,1-Math.exp(-lerp(28,8,A.fz)*dt));boardG.quaternion.copy(qBase).multiply(qS.setFromAxisAngle(UPV,slip));
+  sf.landT=Math.max(0,(sf.landT||0)-dt);qBase.slerp(qT,1-Math.exp(-lerp(28,6,Math.max(A.fz,sstep(0,0.45,sf.landT)))*dt));boardG.quaternion.copy(qBase).multiply(qS.setFromAxisAngle(UPV,slip));
   if(sf.mode==='float')sf.blendT=0.4;else sf.blendT=Math.max(0,sf.blendT-dt);
   boardG.position.lerp(bP,sf.mode==='float'?1-Math.exp(-(sf.fFoam?7:12)*dt):sf.blendT>0?1-Math.exp(-lerp(40,9,sf.blendT/0.4)*dt):A.fz>0.03?1-Math.exp(-lerp(60,14,A.fz)*dt):1);
   {const pj=A.proj=damp(A.proj||0,projT,projT>(A.proj||0)?16:6.5,dt);
@@ -2439,9 +2439,9 @@ function boardSpray(dt){
       rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0)}}
 
 /* ───────────────────────── camera ───────────────────────── */
-const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',blendDur=1.2,camRP=3.2,camRL=7;const _oT1=new V3,_oT2=new V3;
+const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',blendDur=1.2,camRP=3.2,camRL=7,camGP=0;const _oT1=new V3,_oT2=new V3;
 const REPLAY_SHOTS=['follow','tele'];   // replays and the start screen cut between chase and side only
-const SCam=mkS(),_bd=new V3();
+const SCam=mkS(),_bd=new V3(),_gf=new V3(),_gu=new V3();
 function shot(kind,p,tk,ak){
   if(kind==='tele'){cT1.set(p.x+lerp(15,6.5,tk)+ak*2,lerp(3.0+p.y*0.10,0.9,tk)-ak*0.3,lerp(25,S.z0+3.8,tk)+ak*2);
     cT2.set(p.x+lerp(1.6,0.4,tk),p.y+lerp(1.25,0.7,tk)-ak*sf.h*0.45,p.z*0.8);return lerp(18.5,48,tk)+ak*2.5}
@@ -2459,6 +2459,8 @@ function shot(kind,p,tk,ak){
     const la=4.8*aK,ox=lerp(-0.6,-3.9-0.7*sf.camDir,kd);
     cT1.set(lerp(Math.max(p.x+ox,8.5),tx,tk)-ak*1.2,lerp(p.y+lerp(1.8,1.40,kd),Math.max(1.05,p.y*0.3+0.85),tk)+ak*0.9,lerp(p.z+lerp(5.6,3.9,kd),tz,tk)+ak*2.2);
     cT2.set(p.x+lerp(lerp(lerp(-1.5,la,kd),Math.min(la+1,0.9+dB*0.95*aK),tk),0.5,Math.min(1,Math.max(0,8.5-(p.x+ox))/2)*(1-tk)),p.y+lerp(0.8,0.75,tk)-ak*sf.h*0.3,p.z+lerp(-1.0,0.2,tk));return lerp(50,lerp(72,62,sstep(1.5,2.5,dB)),tk)+ak*3}
+  if(kind==='gopro'){_gf.set(sf.f.x,0,sf.f.z);if(_gf.lengthSq()<1e-4)_gf.set(1,0,0);_gf.normalize().multiplyScalar(0.32);_gf.x+=0.68;_gf.normalize();   // aimed down the tube, following the board only loosely
+    _gu.copy(UPV).lerp(sf.up,0.35).normalize();cT1.copy(p).addScaledVector(_gf,-1.6).addScaledVector(_gu,0.95);cT2.copy(p).addScaledVector(_gf,3.6).addScaledVector(_gu,0.62);return 98}   // in the barrel: a GoPro on a pole off the tail, low behind him, fisheye, looking out down the tube
   if(kind==='barrel'){sampleSurf(sf.s+7,Math.max(sf.p,0.3),SCam);cT1.copy(SCam.pos).addScaledVector(SCam.n,1.5);cT1.y=Math.max(cT1.y+0.35,0.8);   // deep in the barrel: in the tube ahead of him, looking back at him with the curtain behind
     cT1.z=lerp(cT1.z,Math.min(cT1.z,SCam.tipZ-0.3),sstep(2.9,3.4,SCam.aEnd));cT2.set(p.x+0.3,p.y+0.75,p.z);return 48}
   if(kind==='low'){cT1.set(p.x+6.5,0.55,p.z+8.5);cT2.set(p.x+0.6,p.y+0.8,p.z);return 38}
@@ -2482,15 +2484,15 @@ function updateCamera(dt,time){
         if(now<game.chEnd)kind='follow'}
       // whatever camera is selected, in the tube the view is from behind him inside the barrel; the other cameras cut in and back out
       if(!sf.openCam&&kind!=='beach'){const fo=lastShot==='follow',bi=Math.floor(colIndex(sf.s-2.3)),open=colAEnd[bi]>(fo?3.0:3.4)&&sf.s>(fo?2.2:3.0);   // the chase sits behind him only where the barrel is still open behind; deeper than that it would be inside the closed-out curtain, so the side camera looks in from the channel
-        if(lastShot==='barrel'&&(game.inTube||sf.tubeK>0.2))kind='barrel';else if((game.inTube&&sf.tube>(open&&fo?0.35:0.04))||sf.tubeK>(fo||lastShot==='barrel'?0.35:0.6))kind=lastShot==='barrel'||!open||(kind!=='follow'&&!fo)?'barrel':'follow'}   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
+        if(sf.mode==='wipe'){}else if(lastShot==='gopro'&&(game.inTube||sf.tubeK>0.2))kind='gopro';else if((game.inTube&&sf.tube>0.04)||sf.tubeK>(lastShot==='gopro'?0.35:0.6))kind='gopro'}   // in the barrel the view is the GoPro behind him, from the moment he is covered until he is out   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
       if(kind!==lastShot){const fb=(kind==='follow'&&lastShot==='barrel')||(kind==='barrel'&&lastShot==='follow');   // behind him <-> ahead of him: a clean cut (a glide would fly through him)
-        if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot;blendDur=kind==='barrel'||lastShot==='barrel'?0.9:1.2}}}   // side <-> chase: a quick glide between the two, not a jump cut
+        if(kind==='gopro'){camInit=false;camBlend=0;camGP=1}else if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'||lastShot==='gopro'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot;blendDur=kind==='barrel'||lastShot==='barrel'||lastShot==='gopro'?0.9:1.2}}}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
     if(camBlend>0&&blendFrom&&blendFrom!==kind&&blendFrom!=='beach'){const of=shot(blendFrom,p,sf.tubeK,sf.airK);_oT1.copy(cT1);_oT2.copy(cT2);fov=shot(kind,p,sf.tubeK,sf.airK);   // a glide: both shots keep tracking him and the frame eases from one to the other
       const e=1-camBlend,sm=u=>{u=clamp(u,0,1);return u*u*u*(u*(u*6-15)+10)},k=sm(e);let kx=k,kz=k;
-      if(kind==='barrel'){kx=sm(e*1.7);kz=sm((e-0.2)/0.8)}else if(blendFrom==='barrel'){kz=sm(e*1.6);kx=sm((e-0.35)/0.65)}   // into the barrel: along the wave first, then in through the mouth under the lip (never through the curtain)
+      if(kind==='barrel'){kx=sm(e*1.7);kz=sm((e-0.2)/0.8)}else if(blendFrom==='barrel'||blendFrom==='gopro'){kz=sm(e*1.6);kx=sm((e-0.35)/0.65)}   // into the barrel: along the wave first, then in through the mouth under the lip (never through the curtain)
       cT1.set(lerp(_oT1.x,cT1.x,kx),lerp(_oT1.y,cT1.y,kz),lerp(_oT1.z,cT1.z,kz));cT2.lerpVectors(_oT2,cT2,k);fov=lerp(of,fov,k)}
-    else fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}else if(kind==='barrel'){rp=2.4;rl=5}}   // in the barrel the camera floats along with him
+    else fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}else if(kind==='barrel'){rp=2.4;rl=5}else if(kind==='gopro'){rp=10;rl=12}}   // in the barrel the camera floats along with him
   if((game.replay||game.attract)&&kind!==lastShot)camInit=false;lastShot=kind;
   if(game.dbgCam){const q=game.dbgCam;cT1.set(sf.pos.x+q[0],sf.pos.y+q[1],sf.pos.z+q[2]);cT2.set(sf.pos.x+(q[5]||0),sf.pos.y+(q[4]||0.65),sf.pos.z+(q[6]||0));fov=q[3];camP.copy(cT1);camL.copy(cT2);camFov=fov}
   if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true;camRP=rp;camRL=rl}
@@ -2502,6 +2504,7 @@ function updateCamera(dt,time){
   const shk=(game.shake||0)*calm;game.shake=damp(game.shake||0,0,7,dt);
   camera.position.set(camP.x+hx+rnd(-1,1)*shk*0.09,Math.max(camP.y+hy+rnd(-1,1)*shk*0.09,0.45),camP.z);
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
+  camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(sf.up,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
   camera.lookAt(camL.x+hx*0.4,camL.y+hy*0.3,camL.z);
   if(Math.abs(camera.fov-camFov)>0.01){camera.fov=camFov;camera.updateProjectionMatrix()}
   camFocus=camera.position.distanceTo(game.state==='menu'?cT2:p);partMat.uniforms.uRZ.value=game.state==='menu'||!sf.visible?1e3:camFocus;
@@ -2517,13 +2520,14 @@ composer.addPass(new OutputPass());
 const drops=[];for(let i=0;i<6;i++)drops.push(new THREE.Vector4(0.5,0.5,0.05,0));
 function spawnDrops(n){for(const d of drops){if(n<=0)break;if(d.w<0.05){const ex=Math.random()<0.5?rnd(0.04,0.26):rnd(0.74,0.96);d.set(ex,rnd(0.2,0.85),rnd(0.015,0.04),1);n--}}}
 function updateDrops(dt){for(const d of drops)if(d.w>0){d.w=Math.max(0,d.w-dt*0.26);d.y-=dt*0.012*(1+d.z*30)}}
-const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0}},
+const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0}},
   vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uSunK;uniform float uFlip;varying vec2 vUv;
+  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uSunK;uniform float uFlip;uniform float uFish;varying vec2 vUv;
     void main(){vec2 fUv=vec2(mix(vUv.x,1.-vUv.x,uFlip),vUv.y);vec2 uv=fUv;float rim=0.;
       for(int i=0;i<6;i++){vec4 d=uDrops[i];vec2 q=(fUv-d.xy)*vec2(uAspect,1.);float r=length(q)/d.z;
         if(d.w>0.002&&r<1.){float k=sqrt(1.-r*r)*min(d.w*3.,1.);uv-=(fUv-d.xy)*k*k*0.7;}}
-      vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*0.014;
+      if(uFish>0.001){vec2 fc=uv-.5,fa=fc*vec2(uAspect,1.);float fr=dot(fa,fa);uv=.5+fc*(1.+uFish*fr)/(1.+uFish*0.62);}   // fisheye: the middle swells, the edges bend
+      vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*(0.014+0.03*uFish);
       vec3 col=vec3(texture2D(tDiffuse,uv+o).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-o).b);
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.16);
@@ -2538,7 +2542,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
         col+=(vec3(1.,0.85,0.6)*fl+gh)*uSunK*see;}
       col=mix(col,col*col*(3.-2.*col),0.50);
       col=col*1.01+0.003;
-      vec2 cv=fUv-.5;col*=1.-dot(cv,cv)*0.9;
+      vec2 cv=fUv-.5;col*=1.-dot(cv,cv)*(0.9+1.4*uFish);
       float g=fract(sin(dot(gl_FragCoord.xy+fract(uTime)*91.7,vec2(12.9898,78.233)))*43758.5453);
       col+=(g-.5)*0.032;
       gl_FragColor=vec4(col,1.);}`});
