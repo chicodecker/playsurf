@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>PlaySurf | Free Online Surf Game · The Ultimate Surfing Game</title>
 <meta name="description" content="PlaySurf, The Ultimate Surfing Game: surf a perfect left in a wave pool, by day or under the floodlights. Bottom turns, snaps, barrels, floaters and airs. Free 3D surf game in your browser, by Decker Games.">
 <meta property="og:title" content="PlaySurf | Free Online Surf Game · The Ultimate Surfing Game">
@@ -104,6 +104,34 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
 .tod button{pointer-events:auto;cursor:pointer;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:4px;padding:6px 14px;font:700 13px/1.2 inherit;font-family:inherit;letter-spacing:.18em;opacity:.75}
 .tod button.on{background:#ffd94a;color:#111;border-color:#ffd94a;opacity:1}
 @media (max-width:1000px),(max-height:720px){h1{font-size:clamp(48px,min(11vw,13vh),120px)}.logoH .psLogo{width:min(56vw,460px)}.sub{font-size:13px;margin:10px 0 10px 4px;line-height:1.35}.grid{font-size:12px;gap:2px 14px}.go{margin-top:12px;font-size:16px}.cred{margin-top:6px}}
+/* touch: phones and tablets */
+#c{touch-action:none}
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+#touch{position:absolute;inset:0;pointer-events:none;display:none;z-index:30;-webkit-user-select:none;user-select:none}
+body.touch.riding #touch{display:block}
+#stick{position:absolute;left:max(4vw,env(safe-area-inset-left,0px));bottom:calc(var(--bar,5.5vh) + 2vh);width:min(40vh,200px);height:min(40vh,200px);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.10),rgba(255,255,255,.04));border:2px solid rgba(255,255,255,.38);pointer-events:auto;touch-action:none}
+#stick i{position:absolute;left:29%;top:29%;width:42%;height:42%;border-radius:50%;background:rgba(255,255,255,.62);box-shadow:0 4px 18px rgba(0,0,0,.35);pointer-events:none}
+#stick:before,#stick:after{content:'';position:absolute;left:50%;top:8%;bottom:8%;width:1px;background:rgba(255,255,255,.18)}#stick:after{top:50%;left:8%;right:8%;width:auto;height:1px;bottom:auto}
+.tb{position:absolute;pointer-events:auto;touch-action:none;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(0,0,0,.30);color:#fff;font:800 12px/1.15 inherit;font-family:inherit;letter-spacing:.12em;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;-webkit-user-select:none;user-select:none}
+.tb.on{background:rgba(255,217,74,.88);color:#0b1520;border-color:#ffd94a}
+#tAir{right:max(4vw,env(safe-area-inset-right,0px));bottom:calc(var(--bar,5.5vh) + 3vh);width:min(25vh,124px);height:min(25vh,124px);border-color:#ffd94a;font-size:15px}
+#tBrake{right:calc(max(4vw,env(safe-area-inset-right,0px)) + min(27vh,134px));bottom:calc(var(--bar,5.5vh) + 1.5vh);width:min(19vh,94px);height:min(19vh,94px)}
+#tNose{right:max(4vw,env(safe-area-inset-right,0px));bottom:calc(var(--bar,5.5vh) + 5vh + min(25vh,124px));width:min(15vh,74px);height:min(15vh,74px);font-size:10px}
+#tCarve{right:calc(max(4vw,env(safe-area-inset-right,0px)) + min(19vh,96px));bottom:calc(var(--bar,5.5vh) + 4vh + min(21vh,104px));width:min(15vh,74px);height:min(15vh,74px);font-size:10px}
+#tTop{position:absolute;left:50%;top:calc(var(--bar,5.5vh) + 4.2vh);transform:translateX(-50%);display:flex;gap:10px;pointer-events:auto}
+#tTop .tb{position:static;border-radius:10px;height:34px;padding:0 12px;font-size:11px}
+#tHint{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 1vh);transform:translateX(-50%);font-size:11px;letter-spacing:.16em;text-align:center;opacity:0;transition:opacity 1s;text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap;pointer-events:none}
+#tHint.on{opacity:.9}
+body.touch #keys,body.touch #camBtn{display:none}
+body.touch #music{display:none}
+body.touch #pop{bottom:auto;top:calc(var(--bar,5.5vh) + 11vh)}
+body.touch #tube{bottom:auto;top:calc(var(--bar,5.5vh) + 10vh)}
+.thelp{display:none;margin:10px 0 0 4px;font-size:12px;letter-spacing:.14em;line-height:1.6;opacity:.85;max-width:620px}
+body.touch .thelp{display:block}
+#rotate{position:absolute;inset:0;z-index:70;display:none;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:#0c3e52;color:#fff;font-size:15px;letter-spacing:.3em;font-weight:700;text-align:center;padding:24px;line-height:1.6}
+#rotate b{font-size:64px;display:block;animation:rot 2.4s ease-in-out infinite}
+@keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait){body.touch #rotate{display:flex}}
 /* progression: spots, boards, trophies */
 .pbtn.sm{font-size:14px;padding:11px 18px;letter-spacing:.14em}
 .pbtn.wv.lock{opacity:.5;border-style:dashed}
@@ -149,6 +177,25 @@ body.attract #hud,body.attract #tube,body.attract #wavebar,body.attract #camBtn,
 #camBtn.on{opacity:.9}#camBtn:hover{background:rgba(0,0,0,.6)}
 #pause{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:60px;font-style:italic;font-weight:800;letter-spacing:.2em;background:rgba(0,0,0,.4)}
 #err{position:absolute;left:20px;bottom:20px;color:#f88;font:12px monospace;white-space:pre-wrap;max-width:80vw}
+/* phones in landscape: compact menu, card and HUD (last, so it wins over the rules above) */
+@media (max-height:540px){
+  .panel{padding-left:max(5vw,env(safe-area-inset-left,0px));padding-right:max(5vw,env(safe-area-inset-right,0px))}
+  .playRow{margin:5px 0 0 2px}.playLbl{font-size:10px;margin:0 0 5px 3px;letter-spacing:.3em}
+  .pbtns{gap:8px}.pbtn{font-size:14px;padding:10px 18px}.pbtn.sm{font-size:11px;padding:7px 12px}.pbtn.wv i{display:none}
+  .bdInfo{font-size:10px;max-width:220px}.prog{margin-top:8px;font-size:10px;gap:8px}.xpbar{width:110px}
+  .tod,.cred,#howto{display:none}.thelp{font-size:10px;margin-top:6px}
+  #end h2{font-size:11px;letter-spacing:.3em}#end .nota{font-size:64px}#end .judges{margin:2px 0 6px 4px}#end .judges i{font-size:11px;padding:2px 6px}
+  #end .list{font-size:11px;line-height:1.45;max-width:70vw}#end .photos{display:none}#end .heat{margin-top:8px;font-size:11px}#end .heat b{font-size:14px}
+  #end .prg{margin-top:6px;font-size:11px}#end .prg .xpbar{width:120px}#end .unl{margin-top:4px;gap:2px}#end .unl div{font-size:11px}#end .goal{font-size:10px;margin-top:4px}#end .endBtns{margin-top:8px;gap:8px}#end .go{display:none}
+  #trGrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.tr{padding:8px 10px}.tr b{font-size:11px}.tr span{font-size:10px}
+  #score b,#speed b{font-size:34px}
+}
+@media (max-height:430px){
+  .playRow{margin:2px 0 0 2px}.playLbl{font-size:9px;margin:0 0 3px 3px}
+  .pbtns{gap:6px}.pbtn{font-size:12px;padding:7px 14px;box-shadow:none}.pbtn.sm{font-size:10px;padding:5px 10px}
+  .bdInfo{font-size:9px;line-height:1.3}.thelp{font-size:9px;line-height:1.4;margin-top:3px;max-width:88vw}.prog{margin-top:4px}
+  #menu.panel{padding-block:calc(var(--bar,5.5vh) + 4px)}
+}
 .srh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 <script type="importmap">
@@ -200,7 +247,8 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <div class="playRow"><span class="playLbl">3 · YOUR BOARD</span>
       <div class="pbtns"><button id="bdPrev" class="pbtn wv sm" aria-label="Previous board">&#9664;</button><button id="bdName" class="pbtn wv sel sm">CLASSIC</button><button id="bdNext" class="pbtn wv sm" aria-label="Next board">&#9654;</button><span id="bdInfo" class="bdInfo"></span></div></div>
     <div class="playRow"><span class="playLbl">4 · PLAY NOW</span>
-      <div class="pbtns"><button id="goDesk" class="pbtn">DESKTOP</button><button id="goMob" class="pbtn soon" disabled aria-disabled="true" tabindex="-1">MOBILE <i>SOON</i></button></div></div>
+      <div class="pbtns"><button id="goDesk" class="pbtn">DESKTOP</button><button id="goMob" class="pbtn wv">MOBILE <i>TOUCH</i></button></div>
+      <div class="thelp">LEFT STICK: STEER ON THE WALL (DOWN AT THE TOP = SNAP, HOLD = TAIL THROW) · AIR: CROUCH, AIR AT THE LIP, GRAB · BRAKE: WAIT FOR THE BARREL, LAYBACK · NOSE / 360: TRICKS</div></div>
     <details class="howto" id="howto" open><summary>HOW TO PLAY</summary>
     <div class="grid">
       <b>Bottom Turn</b><span>drop down and point <span class="kk">↑</span> at the bottom — that's where the speed comes from</span>
@@ -223,6 +271,11 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   <div id="end" class="panel off"></div>
   <div id="trophies" class="off"><div class="trBox"><h3>TROPHIES</h3><p id="trSub"></p><div id="trGrid"></div><button id="trClose" class="pbtn sm">CLOSE</button></div></div>
   <div id="toast"></div>
+  <div id="touch"><div id="stick"><i></i></div>
+    <button class="tb" id="tAir">AIR</button><button class="tb" id="tBrake">BRAKE</button><button class="tb" id="tNose">NOSE<br>PICK</button><button class="tb" id="tCarve">CARVE<br>360</button>
+    <div id="tTop"><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button></div>
+    <div id="tHint">STICK: STEER · AIR AT THE LIP · BRAKE FOR THE BARREL</div></div>
+  <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <div id="rep">REPLAY</div>
   <div id="music"><button id="mPrev" aria-label="Previous track">&#9198;</button><div class="mInfo"><small>&#9835; NOW PLAYING</small><b id="mTitle"></b><span id="mBand"></span></div><button id="mNext" aria-label="Next track">&#9197;</button></div>
   <div id="pause">PAUSED</div>
@@ -1727,7 +1780,32 @@ addEventListener('keyup',e=>{keys[e.code]=false});
 function setCam(i){game.cam=((i%3)+3)%3;$('camBtn').textContent='CAMERA: '+['CHASE','SIDE','FRONT'][game.cam]+' (C)'}
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
-$('goDesk').addEventListener('click',e=>{e.stopPropagation();beginPlay()});
+$('goDesk').addEventListener('click',e=>{e.stopPropagation();setTouch(false);beginPlay()});
+/* touch: a stick for the wall on the left, AIR / BRAKE / NOSE PICK / CARVE 360 on the right; they press the same keys the keyboard does */
+const TOUCH={on:false,x:0,y:0,id:null};
+const isTouchDev=(()=>{try{return matchMedia('(pointer:coarse)').matches&&!matchMedia('(pointer:fine)').matches||(navigator.maxTouchPoints>0&&matchMedia('(hover:none)').matches)}catch(e){return false}})();
+function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStorage.setItem('playsurf_touch',on?'1':'0')}catch(e){}
+  $('goMob').className=on?'pbtn':'pbtn wv';$('goDesk').className=on?'pbtn wv':'pbtn'}
+{const st=$('stick'),kn=st.querySelector('i');
+ const upd=e=>{const r=st.getBoundingClientRect(),R=r.width/2;let dx=(e.clientX-r.left-R)/R,dy=(e.clientY-r.top-R)/R;const l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l}
+   kn.style.transform=`translate(${(dx*R*0.62).toFixed(1)}px,${(dy*R*0.62).toFixed(1)}px)`;const dz=0.2,f=v=>Math.abs(v)<dz?0:Math.sign(v)*(Math.abs(v)-dz)/(1-dz);
+   TOUCH.x=clamp(f(dx)*1.2,-1,1);TOUCH.y=clamp(-f(dy)*1.2,-1,1);TOUCH.on=true};
+ st.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();TOUCH.id=e.pointerId;try{st.setPointerCapture(e.pointerId)}catch(_){}initAudio();upd(e)});
+ st.addEventListener('pointermove',e=>{if(e.pointerId===TOUCH.id)upd(e)});
+ const end=e=>{if(e.pointerId!==TOUCH.id)return;TOUCH.id=null;TOUCH.on=false;TOUCH.x=TOUCH.y=0;kn.style.transform=''};
+ st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end);st.addEventListener('lostpointercapture',end)}
+{const key=(code,dn)=>dispatchEvent(new KeyboardEvent(dn?'keydown':'keyup',{code}));
+ [['tAir','Space'],['tBrake','ShiftLeft'],['tNose','KeyF'],['tCarve','KeyG']].forEach(([id,code])=>{const b=$(id);let pid=null;
+   b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();pid=e.pointerId;try{b.setPointerCapture(e.pointerId)}catch(_){}b.classList.add('on');initAudio();key(code,true)});
+   const up=e=>{if(e.pointerId!==pid)return;pid=null;b.classList.remove('on');key(code,false)};
+   b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up)});
+ $('tCam').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();setCam(game.cam+1);$('tCam').textContent=['CHASE','SIDE','FRONT'][game.cam]});
+ $('tPause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();key('KeyP',true);key('KeyP',false)});
+ $('touch').addEventListener('contextmenu',e=>e.preventDefault())}
+$('goMob').addEventListener('click',e=>{e.stopPropagation();setTouch(true);
+  try{const d=document.documentElement;if(d.requestFullscreen&&!document.fullscreenElement)d.requestFullscreen({navigationUI:'hide'}).then(()=>{try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}}).catch(()=>{})}catch(_){}   // full screen and landscape where the browser allows it
+  beginPlay();$('tHint').classList.add('on');setTimeout(()=>$('tHint').classList.remove('on'),7000)});
+try{const t=localStorage.getItem('playsurf_touch');setTouch(t===null?isTouchDev:t==='1')}catch(e){setTouch(isTouchDev)}
 function setMirror(m){MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else riderG.scale.set(1,1,1);   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.target.blur()});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.target.blur()});
@@ -1764,6 +1842,7 @@ function readInput(){
   const gp=navigator.getGamepads?[...navigator.getGamepads()].find(g=>g):null;
   if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;
     if(gp.buttons[9]?.pressed&&(game.attract||game.state==='menu'||game.state==='end'&&game.endT>1.2))beginPlay()}
+  if(TOUCH.on){x=TOUCH.x*(MIRROR?-1:1);y=TOUCH.y}   // the on-screen stick, analog
   input.x=x;input.y=y;input.crouch=cr;input.stall=stl}
 
 /* ───────────────────────── audio ───────────────────────── */
@@ -2412,7 +2491,7 @@ const QL=[[2.0,true,4],[2.0,false,4],[1.75,false,4],[1.5,false,4],[1.5,false,0],
 function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=rt.samples;qLevel=l;const r=Math.min(devicePixelRatio,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0)for(const t of [composer.renderTarget1,composer.renderTarget2]){t.samples=sm;t.dispose()}
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
-setQuality(3);
+setQuality((()=>{try{return matchMedia('(pointer:coarse)').matches?5:3}catch(e){return 3}})());
 // one step down that really changes something (on a 1x screen several levels share the same resolution)
 function qStepDown(){const l0=qLevel;for(let l=l0+1;l<=qFloor;l++)if(setQuality(l))return true;setQuality(l0);return false}
 function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.visibilityState!=='visible'){qBuf.length=0;qWin=0;return}
@@ -2511,7 +2590,7 @@ function tick(dtR,draw){
   if(sf.wantAirShot){sf.wantAirShot=false;sf.airShot=grab()}
   if(game.shotReq){game.shotReq.delay-=dtR;if(game.shotReq.delay<=0){addPhoto(game.shotReq.name,game.shotReq.pts,grab());game.shotReq=null}}
   updateAudio();
-  if(hudAcc>0.08){hudAcc=0;
+  if(hudAcc>0.08){hudAcc=0;document.body.classList.toggle('riding',game.state==='ride'&&!game.attract&&!game.replay);
     elScore.textContent=game.pts.toLocaleString('en-US');elSpeed.textContent=Math.round(sf.V*3.6);
     elCombo.textContent=game.combo>1&&game.waveAge-game.comboT<5.5?'COMBO ×'+(1+0.25*Math.min(game.combo-1,6)):'';
     $('rep').classList.toggle('on',!!game.replay&&!game.attract);
