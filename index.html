@@ -219,6 +219,11 @@ body.touch .thelp{display:block}
 #rep{position:absolute;right:3vw;top:calc(var(--bar,5.5vh) + 2vh);font-size:24px;letter-spacing:.42em;text-shadow:0 2px 12px rgba(0,0,0,.5);font-weight:700;opacity:0;transition:opacity .5s}#rep.on{opacity:.9}#rep:before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff3b30;margin-right:10px;animation:bl 1.2s infinite}
 #camBtn{position:absolute;left:3vw;bottom:calc(var(--bar,5.5vh) + 1.5vh);white-space:nowrap;pointer-events:auto;cursor:pointer;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:4px;padding:4px 10px;font:700 11px/1.2 inherit;font-family:inherit;letter-spacing:.16em;opacity:0;transition:opacity .6s}
 #camBtn.on{opacity:.9}#camBtn:hover{background:rgba(0,0,0,.6)}
+#waveBtn{position:absolute;left:3vw;bottom:calc(var(--bar,5.5vh) + 1.5vh + 30px);white-space:nowrap;pointer-events:none;cursor:pointer;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,217,74,.8);border-radius:4px;padding:4px 10px;font:700 11px/1.2 inherit;font-family:inherit;letter-spacing:.16em;opacity:0;transition:opacity .6s}
+#waveBtn.on{opacity:.9;pointer-events:auto}#waveBtn:hover{background:rgba(0,0,0,.6);opacity:1}body.touch #waveBtn{display:none}
+#wavePick{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,10,14,.82);pointer-events:auto;z-index:45;transition:opacity .3s}
+#wavePick.off{opacity:0;pointer-events:none}.wpBox{max-width:760px;text-align:center}.wpBox h3{font-size:clamp(24px,3.4vw,36px);font-style:italic;margin-bottom:4px}
+.wpSub{font-size:12px;letter-spacing:.14em;opacity:.7;margin-bottom:16px}#wpBtns{justify-content:center;margin-bottom:18px}
 #pause{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:60px;font-style:italic;font-weight:800;letter-spacing:.2em;background:rgba(0,0,0,.4)}
 #err{position:absolute;left:20px;bottom:20px;color:#f88;font:12px monospace;white-space:pre-wrap;max-width:80vw}
 /* phones in landscape: compact menu, card and HUD (last, so it wins over the rules above) */
@@ -271,7 +276,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <div id="speed"><small>SPEED</small><b>0</b><small>KM/H</small></div>
   </div>
   <div id="wavebar"><i></i></div>
-  <button id="camBtn">CAMERA: SIDE (C)</button>
+  <button id="camBtn">CAMERA: SIDE (C)</button><button id="waveBtn">&#127754; CHANGE WAVE</button>
   <div id="pop"></div>
   <div id="tube">BARREL<b>0.0s</b></div>
   <div id="keys">
@@ -312,6 +317,8 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   </div>
   <div id="end" class="panel off"></div>
   <div id="trophies" class="off"><div class="trBox"><h3>TROPHIES</h3><p id="trSub"></p><div id="trGrid"></div><button id="trClose" class="pbtn sm">CLOSE</button></div></div>
+  <div id="wavePick" class="off" role="dialog" aria-modal="true" aria-labelledby="wpT"><div class="trBox wpBox"><h3 id="wpT">CHANGE WAVE</h3><p class="wpSub">Pick a spot: a new wave starts there right away</p>
+    <div class="pbtns spots" id="wpBtns"></div><button id="wpClose" class="pbtn sm">&#9664; BACK TO THE WAVE</button></div></div>
   <div id="toast"></div>
   <div id="spPop" class="off" role="dialog" aria-modal="true" aria-labelledby="spT"><div class="spBox"><button id="spX" aria-label="Close">&times;</button>
     <img src="sign-logo.webp" alt="PlaySurf official soundtrack"><h3 id="spT">Liked the music?</h3><p>Follow our soundtrack on Spotify</p>
@@ -320,7 +327,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
     <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:1">ROUND<br>HOUSE</button><button class="tb sm" id="tBottom" style="--dx:-1;--dy:0;--k:1">BOTTOM<br>TURN</button>
     <button class="tb sm" id="tNose" style="--dx:0;--dy:1;--k:2">NOSE<br>PICK</button><button class="tb sm" id="tCarve" style="--dx:-.3827;--dy:.9239;--k:2">CARVE<br>360</button><button class="tb sm" id="tTail" style="--dx:-.7071;--dy:.7071;--k:2">TAIL<br>THROW</button><button class="tb sm" id="tLay" style="--dx:-.9239;--dy:.3827;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-1;--dy:0;--k:2">BRAKE</button>
-    <div id="tTop"><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button></div>
+    <div id="tTop"><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button></div>
     <div id="tHint">STICK: STEER · SNAP AT THE TOP · AIR AT THE LIP</div></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <div id="rep">REPLAY</div>
@@ -521,12 +528,13 @@ const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')=
 LYC.tex.value=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';
   x.font='italic 900 44px "Arial Black",Impact,sans-serif';x.fillText('PLAYSURF',128,58,236);x.font='italic 900 150px "Arial Black",Impact,sans-serif';x.fillText('67',128,206,210);
   const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t})();   /* the print on the back of the jersey */
-/* the competition jersey, cut in the model's rest pose (height 0..1, arms out along z): a singlet with shoulder straps, deep armholes,
-   a scooped neckline (deeper at the front) and a hem that falls over the boardshorts' waistband. Returns the distance inside its edge. */
+/* the competition jersey, cut in the model's rest pose (height 0..1, arms out along z): a short-sleeved lycra, the sleeves over the
+   shoulder to mid-bicep (cut square to the arm), a round neckline a little lower at the front, and a hem over the boardshorts' waistband.
+   Returns the distance inside its edge; edge = distance to the neck and sleeve hems (where the binding goes). */
 const LYC_GLSL=`float lycD(vec3 p,out float edge){float az=abs(p.z),fx=p.x*FSX;
-  vec2 q=vec2((az-0.124)/0.052,(p.y-0.79)/0.068);float dArm=(length(q)-1.)*0.05;
-  float fr=smoothstep(-0.035,0.0,fx);float yTop=mix(0.866,mix(0.812,0.776,fr),1.-smoothstep(0.036,0.066,az));float dNeck=yTop-p.y;
-  float dHem=p.y-mix(0.546,0.552,fr);float dSide=0.114-az;edge=min(dArm,dNeck);return min(min(dArm,dNeck),min(dHem,dSide));}
+  float dSleeve=0.200-az;
+  float fr=smoothstep(-0.035,0.0,fx);float yTop=mix(0.866,mix(0.828,0.806,fr),1.-smoothstep(0.034,0.060,az));float dNeck=yTop-p.y;
+  float dHem=p.y-mix(0.546,0.552,fr);edge=min(dSleeve,dNeck);return min(min(dSleeve,dNeck),dHem);}
 `;let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
 const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=128;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;TXT.push(t);
   whenFonts(()=>{x.fillStyle='#0d2530';x.fillRect(0,0,1024,128);x.fillStyle='#12b5a6';x.fillRect(0,112,1024,16);x.textBaseline='middle';
@@ -799,7 +807,7 @@ const game={hl:false,showCard:null,waveId:0,cardAt:0,night:0,inTube:false,secAge
 
 // spots: each one its own wave and scenery; the next one opens when the score at the one before is good enough (more can be added to the list)
 const SPOTS=[{id:1,name:'SURFPOOL',full:'SURFPOOL',sub:'WAVE POOL · ALL ROUND',hK:1,eL:1},
-  {id:4,name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · HOLLOW REEF',hK:1.08,eL:1.35,req:{spot:1,nota:6}},
+  {id:4,name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.2,req:{spot:1,nota:6}},
   {id:2,name:'ULUWATU',full:'ULUWATU',sub:'BALI · CLIFFS & BARRELS',hK:1.25,eL:1.75,req:{spot:1,nota:7}},
   {id:3,name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · BIG BARRELS',hK:1.35,eL:2.0,req:{spot:2,nota:7}},
   {id:5,name:'TRESTLES',full:'TRESTLES',sub:'CALIFORNIA · TURNS & AIRS',hK:0.92,eL:0.75,req:{spot:3,nota:7.5}}];
@@ -926,7 +934,7 @@ const waveDef={
        float cau=smoothstep(0.45,0.95,texture2D(uNoise,fu*0.21+w1*0.35).a)*0.6+smoothstep(0.62,0.90,texture2D(uNoise,fu*0.47-w2*0.5).a)*0.45;   // two layers of sunlight ripples on the bottom
        float tile=max(1.-smoothstep(0.015,0.05,abs(fract(fu.x/2.5)-0.5)*2.5),1.-smoothstep(0.015,0.05,abs(fract(fu.y/2.5)-0.5)*2.5));
        lane*=1.-uReef;cross*=1.-uReef;tile*=1.-uReef;vec3 floorC=uFl*(0.86+0.46*cau)*(1.-0.16*tile);floorC=mix(floorC,uFlL,max(lane,cross*0.6)*0.45);
-       if(uReef>0.5){float rr=texture2D(uNoise,fu*0.031+vec2(0.37,0.11)).a*0.65+texture2D(uNoise,fu*0.11).b*0.35;floorC=mix(uFlL,uFl,smoothstep(0.32,0.68,rr))*(0.82+0.5*cau);}   // a coral reef under the water
+       if(uReef>0.5){float rr=texture2D(uNoise,fu*0.031+vec2(0.37,0.11)).a*0.65+texture2D(uNoise,fu*0.11).b*0.35;floorC=mix(floorC,mix(uFlL,uFl,smoothstep(0.32,0.68,rr))*(0.82+0.5*cau),0.38);}   /* a coral reef under the water, kept soft so the face reads as clean as the first wave's */
        if(uShdK>0.001){vec2 fq=vP.xz+sl*2.4-uShd.xy,lq=vec2(dot(fq,uShd.zw),dot(fq,vec2(-uShd.w,uShd.z)));   // his shadow on the bottom, cast along the sun through clear water
          float bd=smoothstep(1.0,0.55,length(lq/vec2(1.05,0.30))),bo=smoothstep(1.0,0.4,length((lq-vec2(-0.25,0.))/vec2(0.48,0.38)));floorC*=1.-uShdK*0.62*max(bd,bo);}
        float vis=(1.-fres)*smoothstep(0.06,0.55,ndv)*pow(1.-steep,1.6)*(1.-clamp(foamA,0.,1.))*(1.-occ)*0.72;
@@ -1186,39 +1194,88 @@ const tahitiG=new THREE.Group();tahitiG.visible=false;scene.add(tahitiG);
    g.computeVertexNormals();const m=new THREE.Mesh(g,mat);const th=a*DEG;m.position.set(26+R*Math.cos(th),h*0.5-4,5+R*Math.sin(th));m.rotation.y=i*1.3;m.scale.set(1.3,1,1.1);tahitiG.add(m)})}
 // Uluwatu: pale limestone cliffs along the shore and a headland running out to sea behind the break; warungs and bars on top, people at the edge watching
 const uluG=new THREE.Group(),_UP=new V3(0,1,0);uluG.visible=false;scene.add(uluG);const ULU={};
-{const path=[[900,115],[520,104],[220,112],[40,107],[-120,100],[-205,70],[-232,-40],[-236,-150],[-224,-260],[-200,-360],[-196,-420],[-226,-452],[-280,-458]];
- const P=[];for(let i=0;i<path.length-1;i++){const [x0,z0]=path[i],[x1,z1]=path[i+1],n=Math.max(1,Math.ceil(Math.hypot(x1-x0,z1-z0)/7));for(let k=0;k<n;k++)P.push([x0+(x1-x0)*k/n,z0+(z1-z0)*k/n])}P.push(path[path.length-1]);
- const rows=10,RN=rows+3,pos=[],col=[],idx=[],H=[],N=[];const cS=new THREE.Color(0xdccba6),cD=new THREE.Color(0xa8936e),cW=new THREE.Color(0x4f4a40),cG=new THREE.Color(0x587a37),cGd=new THREE.Color(0x3a5527),c=new THREE.Color();
- for(let i=0;i<P.length;i++){const [x,z]=P[i],ip=Math.min(i+1,P.length-1),im=Math.max(i-1,0);let tx=P[ip][0]-P[im][0],tz=P[ip][1]-P[im][1];const tl=Math.hypot(tx,tz)||1;tx/=tl;tz/=tl;const nx=-tz,nz=tx;   // nx,nz: toward the sea
-   const head=z<20?1.15:1,h=44*head*(0.86+0.12*Math.sin(i*0.31+1.3)+0.07*Math.sin(i*1.17+0.4));H.push(h);N.push([nx,nz]);
-   for(let r=0;r<=rows;r++){const u=r/rows,y=-3+u*(h+3),led=1.1*Math.sin(r*2.3+i*0.73)+0.7*Math.sin(r*5.1+i*1.9)+(u<0.16?3.2*(0.16-u)/0.16:0)-(u>0.9?1.2:0);   // strata ledges, a notch cut at the waterline
-     pos.push(x+nx*led,y,z+nz*led);c.copy(cS).lerp(cD,0.3+0.35*Math.sin(y*0.8+i*0.05)*Math.sin(y*0.23)+0.15*Math.sin(i*2.7+r));if(u<0.14)c.lerp(cW,0.75*(1-u/0.14));if(u>0.92)c.lerp(cG,0.55);col.push(c.r,c.g,c.b)}
-   pos.push(x-nx*3,h+0.8,z-nz*3);col.push(cG.r,cG.g,cG.b);pos.push(x-nx*60,h+4,z-nz*60);col.push(cGd.r,cGd.g,cGd.b)}   // the green top running back inland
- for(let i=0;i<P.length-1;i++)for(let r=0;r<RN-1;r++){const a=i*RN+r,b=a+1,d=a+RN,e=d+1;idx.push(a,d,b,b,d,e)}
- const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));g.setIndex(idx);g.computeVertexNormals();
- uluG.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.95,flatShading:true,side:THREE.DoubleSide})));
- // bars: a deck at the edge, a thatched roof on posts, umbrellas, warm lights; the crowd stands along the rail
- const deckM=new THREE.MeshStandardMaterial({color:0x7a5a3a,roughness:0.9}),roofM=new THREE.MeshStandardMaterial({color:0x9c7a45,roughness:1}),postM=new THREE.MeshStandardMaterial({color:0x4a3626,roughness:0.9});
+{/* Uluwatu: a bay ringed by limestone cliffs, the far side of it standing behind the wave. Strata and erosion grooves, the wave-cut notch and caves
+   at the waterline, iron stains and grey streaks, jungle and leaning palms on top, warungs stepping down the cliff, a temple on the far headland. */
+ const LIME=new THREE.Color(0xcdbf9c),OCH=new THREE.Color(0xa9733f),GRY=new THREE.Color(0x77726a),DRK=new THREE.Color(0x4e4a43),WET=new THREE.Color(0x46413a),CAV=new THREE.Color(0x1c1a17),MOS=new THREE.Color(0x5d7a38),TOPG=new THREE.Color(0x4f7a2e),INL=new THREE.Color(0x2f5222);
+ const nz1=x=>Math.sin(x*1.13+1.7)*0.5+Math.sin(x*2.71+0.3)*0.3+Math.sin(x*5.37+2.1)*0.2;
+ function cliff(path,o){const step=o.step||4,rows=o.rows||24,P=[],N=[],H=[];
+   for(let i=0;i<path.length-1;i++){const [x0,z0]=path[i],[x1,z1]=path[i+1],n=Math.max(1,Math.ceil(Math.hypot(x1-x0,z1-z0)/step));for(let k=0;k<n;k++)P.push([x0+(x1-x0)*k/n,z0+(z1-z0)*k/n])}P.push(path[path.length-1]);
+   const RN=rows+3,pos=[],col=[],idx=[],c=new THREE.Color();
+   for(let i=0;i<P.length;i++){const [x,z]=P[i],ip=Math.min(i+1,P.length-1),im=Math.max(i-1,0);let tx=P[ip][0]-P[im][0],tz=P[ip][1]-P[im][1];const tl=Math.hypot(tx,tz)||1;tx/=tl;tz/=tl;const nx=-tz,nzz=tx;   /* nx,nzz: toward the sea */
+     const d=i*step,h=o.h*(0.78+0.2*nz1(d*0.008)+0.10*nz1(d*0.031+3)+0.05*nz1(d*0.11))*(1+0.28*sstep(-120,-260,z));H.push(h);N.push([nx,nzz]);   /* a ragged skyline, the far side of the bay standing taller */
+     const groove=Math.pow(Math.abs(nz1(d*0.21+o.seed)),3)*4.6+Math.pow(Math.abs(nz1(d*0.57+o.seed*1.7)),4)*2.0,butt=2.6*nz1(d*0.06+o.seed),streak=0.5+0.5*nz1(d*0.33+o.seed*2),dark=Math.pow(Math.max(0,nz1(d*0.83+o.seed*5)),3),ochre=Math.max(0,nz1(d*0.09+o.seed*3)),cave=o.caves&&Math.abs(nz1(d*0.037+o.seed))>0.9?1:0;
+     for(let r=0;r<=rows;r++){const u=r/rows,y=-4+u*(h+4),fb=(u*9)%1,band=sstep(0,0.06,fb)*(1-sstep(0.06,0.22,fb));
+       let led=butt+0.55*Math.sin(r*1.9+d*0.02)+1.1*band-groove*(0.4+0.6*Math.sin(PI*u));   /* strata ledges, vertical erosion grooves */
+       if(u<0.13)led-=2.6*(1-u/0.13);if(cave&&u<0.3)led-=6*sstep(0.3,0.05,u);if(u>0.86)led+=1.4*sstep(0.86,0.95,u);if(u>0.97)led-=1.6;   /* wave-cut notch, caves, the cap rock overhanging */
+       pos.push(x+nx*led,y,z+nzz*led);
+       c.copy(LIME).lerp(OCH,0.75*ochre*(0.5+0.5*Math.sin(y*0.31+d*0.01)));c.lerp(GRY,0.6*streak*sstep(0.12,0.8,u)*(0.6+0.4*Math.sin(y*1.7)));c.lerp(DRK,0.55*dark*sstep(0.1,0.6,u));c.multiplyScalar((0.80+0.22*band)*(1-0.10*groove/6.6));if(band>0.4&&u>0.5)c.lerp(MOS,0.35);
+       if(u<0.16)c.lerp(WET,0.85*(1-u/0.16));if(cave&&u<0.3)c.lerp(CAV,0.8*sstep(0.3,0.08,u));if(u>0.95)c.lerp(TOPG,0.6);col.push(c.r,c.g,c.b)}
+     pos.push(x-nx*2,h+0.7,z-nzz*2);col.push(TOPG.r,TOPG.g,TOPG.b);pos.push(x-nx*80,h+5,z-nzz*80);col.push(INL.r,INL.g,INL.b)}
+   for(let i=0;i<P.length-1;i++)for(let r=0;r<RN-1;r++){const a=i*RN+r,b=a+1,dd=a+RN,e=dd+1;idx.push(a,dd,b,b,dd,e)}
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));g.setIndex(idx);g.computeVertexNormals();
+   uluG.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.93,side:THREE.DoubleSide})));return {P,N,H}}
+ const A=cliff([[760,122],[420,114],[160,110],[-40,114],[-120,118],[-170,104],[-192,60],[-200,-10],[-205,-90],[-200,-170],[-170,-245],[-110,-300],[-20,-335],[90,-352],[210,-360],[340,-350],[460,-325]],{h:52,rows:26,step:4,seed:1.3,caves:true});
+ const P=A.P,N=A.N,H=A.H,_m=new THREE.Matrix4(),_q=new THREE.Quaternion(),_s=new V3(),_p=new V3(),_c=new THREE.Color();
+ /* jungle on top: lumpy bushes, a few hanging over the edge */
+ {const bg=new THREE.IcosahedronGeometry(1,1),bp=bg.attributes.position;for(let i=0;i<bp.count;i++){const x=bp.getX(i),y=bp.getY(i),z=bp.getZ(i),k=1+0.18*Math.sin(x*4.1+z*3.3)+0.12*Math.sin(y*6.1);bp.setXYZ(i,x*k,y*k*0.8,z*k)}bg.computeVertexNormals();
+  const list=[];for(let i=0;i<P.length;i+=1){const [x,z]=P[i],[nx,nzz]=N[i],h=H[i];const n=1+(i%3===0?1:0);for(let k=0;k<n;k++){const back=k===0?rnd(-0.5,3):rnd(4,26);list.push([x-nx*back,h+rnd(0.2,1.8),z-nzz*back,rnd(2,4.6)])}}
+  const bi=new THREE.InstancedMesh(bg,new THREE.MeshStandardMaterial({roughness:0.95}),list.length),gc=[0x3f6b2a,0x4f7d31,0x35592a,0x5c8a3a,0x2f4f22];
+  list.forEach((b,k)=>{_q.setFromAxisAngle(_UP,rnd(0,6.3));_m.compose(_p.set(b[0],b[1],b[2]),_q,_s.set(b[3],b[3]*rnd(0.7,1.1),b[3]));bi.setMatrixAt(k,_m);bi.setColorAt(k,_c.set(gc[k%gc.length]).multiplyScalar(rnd(0.85,1.15)))});uluG.add(bi)}
+ /* coconut palms leaning out over the edge */
+ {const tg=new THREE.CylinderGeometry(0.2,0.32,1,7,4);tg.translate(0,0.5,0);const cg=new THREE.BufferGeometry(),cp=[],ci=[];let vb=0;
+  for(let f=0;f<9;f++){const a=f/9*PI*2+0.2*Math.sin(f*3.1),ca=Math.cos(a),sa=Math.sin(a),px=-sa,pz=ca;for(let t=0;t<=5;t++){const u=t/5,dd=u*4.6,hy=0.7*u-2.1*u*u,w=0.85*(1-0.8*u)*Math.sin(PI*Math.min(1,u*1.6+0.08));cp.push(ca*dd+px*w*0.5,hy,sa*dd+pz*w*0.5,ca*dd-px*w*0.5,hy,sa*dd-pz*w*0.5);if(t<5){ci.push(vb,vb+1,vb+2,vb+1,vb+3,vb+2)}vb+=2}}
+  cg.setAttribute('position',new THREE.Float32BufferAttribute(cp,3));cg.setIndex(ci);cg.computeVertexNormals();
+  const palms=[];for(let i=2;i<P.length;i+=5){const [x,z]=P[i],[nx,nzz]=N[i],h=H[i];if(Math.random()<0.25)continue;const back=rnd(0.5,9);palms.push({x:x-nx*back,z:z-nzz*back,y:h+0.5,ht:rnd(11,17),lean:rnd(0.08,0.32)*(back<3?1.4:1),nx,nzz})}
+  const ti=new THREE.InstancedMesh(tg,new THREE.MeshStandardMaterial({color:0x6e6252,roughness:0.95}),palms.length),cri=new THREE.InstancedMesh(cg,new THREE.MeshStandardMaterial({color:0x4a7f2c,roughness:0.85,side:THREE.DoubleSide}),palms.length);
+  palms.forEach((p,k)=>{const ax=new V3(p.nzz,0,-p.nx).normalize();_q.setFromAxisAngle(ax,p.lean);_m.compose(_p.set(p.x,p.y,p.z),_q,_s.set(1,p.ht,1));ti.setMatrixAt(k,_m);
+    const top=new V3(0,p.ht,0).applyQuaternion(_q).add(_p);const q2=new THREE.Quaternion().setFromAxisAngle(_UP,rnd(0,6.3));_m.compose(top,q2,_s.set(1,1,1).multiplyScalar(rnd(1.5,2.0)));cri.setMatrixAt(k,_m);cri.setColorAt(k,_c.set(0x4a7f2c).multiplyScalar(rnd(0.8,1.15)))});
+  uluG.add(ti,cri)}
+ /* wet rocks along the foot of the cliff, and a band of froth working against them */
+ {const rg=new THREE.IcosahedronGeometry(1,1),rp=rg.attributes.position;for(let i=0;i<rp.count;i++){const x=rp.getX(i),y=rp.getY(i),z=rp.getZ(i),k=1+0.25*Math.sin(x*3.7+y*2.9)+0.15*Math.sin(z*5.3);rp.setXYZ(i,x*k,y*k*0.7,z*k)}rg.computeVertexNormals();
+  const rl=[];for(let i=0;i<P.length;i+=2){const [x,z]=P[i],[nx,nzz]=N[i];if(Math.random()<0.4)continue;const out=rnd(-1,7);rl.push([x+nx*out,rnd(-0.8,0.2),z+nzz*out,rnd(1.2,4.2)])}
+  const ri=new THREE.InstancedMesh(rg,new THREE.MeshStandardMaterial({color:0x4a463e,roughness:0.8}),rl.length);rl.forEach((r,k)=>{_q.setFromAxisAngle(_UP,rnd(0,6.3));_m.compose(_p.set(r[0],r[1],r[2]),_q,_s.set(r[3],r[3]*rnd(0.6,1),r[3]*rnd(0.8,1.2)));ri.setMatrixAt(k,_m)});uluG.add(ri);
+  const cv=document.createElement('canvas');cv.width=256;cv.height=64;const x=cv.getContext('2d');x.fillStyle='rgba(255,255,255,0)';x.fillRect(0,0,256,64);
+  for(let i=0;i<900;i++){const yy=Math.pow(Math.random(),1.6)*64,a=0.25+0.6*(1-yy/64);x.beginPath();x.arc(Math.random()*256,yy,1+Math.random()*4*(1-yy/64)+0.5,0,PI*2);x.fillStyle='rgba(255,255,255,'+a.toFixed(2)+')';x.fill()}
+  const ft=new THREE.CanvasTexture(cv);ft.wrapS=THREE.RepeatWrapping;ULU.foamT=ft;const fp=[],fu=[],fi=[];
+  for(let i=0;i<P.length;i++){const [x,z]=P[i],[nx,nzz]=N[i];fp.push(x-nx*2.0,0.07,z-nzz*2.0,x+nx*4.5,0.07,z+nzz*4.5);fu.push(i*4/22,0,i*4/22,1);if(i<P.length-1){const a=i*2;fi.push(a,a+1,a+2,a+1,a+3,a+2)}}
+  const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute(fp,3));fg.setAttribute('uv',new THREE.Float32BufferAttribute(fu,2));fg.setIndex(fi);
+  uluG.add(new THREE.Mesh(fg,new THREE.MeshBasicMaterial({map:ft,transparent:true,opacity:0.62,depthWrite:false,side:THREE.DoubleSide})))}
+ /* warungs: two or three decks stepping down the cliff face on stilts, alang-alang roofs, zigzag stairs, umbrellas, lights, people at the rails */
+ const deckM=new THREE.MeshStandardMaterial({color:0x7a5a3a,roughness:0.9}),roofM=new THREE.MeshStandardMaterial({color:0x8a6a3c,roughness:1}),roofD=new THREE.MeshStandardMaterial({color:0x5e4628,roughness:1}),postM=new THREE.MeshStandardMaterial({color:0x4a3626,roughness:0.9}),railM=new THREE.MeshStandardMaterial({color:0x3a2a1c,roughness:0.9});
  ULU.lights=new THREE.MeshStandardMaterial({color:0x9a8f80,emissive:0xffb85c,emissiveIntensity:0.25,roughness:0.5});
- const spots=[];P.forEach((q,i)=>{const near=(x,z)=>Math.hypot(q[0]-x,q[1]-z)<4;if(near(-232,-40)||near(-235,-110)||near(-228,-190)||near(20,107)||near(110,110)||near(-90,101))spots.push(i)});
- const people=[];const bodyG=new THREE.CapsuleGeometry(0.24,0.9,3,6),headG=new THREE.SphereGeometry(0.17,8,6),umbG=new THREE.ConeGeometry(1.8,0.9,10,1,true),bulbG=new THREE.SphereGeometry(0.16,6,4);
- const umbC=[0xe64a3c,0xf2c230,0x2a8fd6,0xffffff,0x3fbf7f],shirtC=[0xffffff,0xe25a4c,0x2f6fd6,0xf2c230,0x1b1f24,0x3fbf9a,0xf28ac0,0x9a6a40];const umbs=[],bulbs=[];
- spots.forEach((i,bi)=>{const [x,z]=P[i],[nx,nz]=N[i],h=H[i],ex=x-nx*6,ez=z-nz*6,ang=Math.atan2(nx,nz),bar=new THREE.Group();bar.position.set(ex,h+0.8,ez);bar.rotation.y=ang;uluG.add(bar);
-   const deck=new THREE.Mesh(new THREE.BoxGeometry(16,0.6,9),deckM);deck.position.set(0,0.3,1.5);bar.add(deck);
-   for(const px of [-7,7])for(const pz of [-2,5]){const po=new THREE.Mesh(new THREE.BoxGeometry(0.35,4.2,0.35),postM);po.position.set(px,2.6,pz);bar.add(po)}
-   const roof=new THREE.Mesh(new THREE.ConeGeometry(10.5,3.2,4),roofM);roof.rotation.y=PI/4;roof.scale.set(1,1,0.62);roof.position.set(0,6.1,1.5);bar.add(roof);
-   for(let k=0;k<3;k++)umbs.push({p:new V3(-5+k*5,0,-4.6).applyAxisAngle(_UP,ang).add(bar.position),c:umbC[(bi+k)%umbC.length]});
-   for(let k=0;k<14;k++)bulbs.push(new V3(-7+k*1.08,4.4-0.5*Math.sin(PI*k/13),-2.2).applyAxisAngle(_UP,ang).add(bar.position));   // a string of lights under the eave
-   const n=10+((bi*7)%6);for(let k=0;k<n;k++){const lx=-7.4+14.8*(k+0.5)/n+Math.sin(k*3.1+bi)*0.3,lz=-3.2-Math.abs(Math.sin(k*1.7+bi))*1.2;people.push({p:new V3(lx,1.45,lz).applyAxisAngle(_UP,ang).add(bar.position),c:shirtC[(k*5+bi)%shirtC.length]})}});
+ const want=[[-194,52],[-199,4],[-202,-52],[-203,-112],[-60,115],[60,111],[200,111]],spots=[];want.forEach(([wx,wz])=>{let bi=0,bd=1e9;P.forEach((q,i)=>{const d=Math.hypot(q[0]-wx,q[1]-wz);if(d<bd){bd=d;bi=i}});spots.push(bi)});
+ const people=[],umbs=[],bulbs=[];const bodyG=new THREE.CapsuleGeometry(0.24,0.9,3,6),headG=new THREE.SphereGeometry(0.17,8,6),umbG=new THREE.ConeGeometry(1.8,0.9,10,1,true),bulbG=new THREE.SphereGeometry(0.16,6,4);
+ const umbC=[0xe64a3c,0xf2c230,0x2a8fd6,0xffffff,0x3fbf7f],shirtC=[0xffffff,0xe25a4c,0x2f6fd6,0xf2c230,0x1b1f24,0x3fbf9a,0xf28ac0,0x9a6a40];
+ const roof=(w,d,h,y,z,grp)=>{const r=new THREE.Mesh(new THREE.ConeGeometry(1,1,4,1,true),roofM);r.rotation.y=PI/4;r.scale.set(w*0.72,h,d*0.72);r.position.set(0,y+h/2,z);grp.add(r);const f=new THREE.Mesh(new THREE.ConeGeometry(1,1,4,1,true),roofD);f.rotation.y=PI/4;f.scale.set(w*0.78,h*0.22,d*0.78);f.position.set(0,y+h*0.1,z);grp.add(f)};   /* thatch, with a darker fringe at the eave */
+ spots.forEach((i,bi)=>{const [x,z]=P[i],[nx,nzz]=N[i],h=H[i],ang=Math.atan2(nx,nzz),grp=new THREE.Group();grp.position.set(x-nx*3,h,z-nzz*3);grp.rotation.y=ang;uluG.add(grp);
+   const lv=bi<4?3:2;const toW=v=>v.clone().applyAxisAngle(_UP,ang).add(grp.position);
+   for(let L=0;L<lv;L++){const y=L===0?0.6:-6.5*L,zc=L===0?2.5:6.2,w=L===0?14:11,dd=L===0?8:5.5;
+     const deck=new THREE.Mesh(new THREE.BoxGeometry(w,0.5,dd),deckM);deck.position.set(0,y,zc);grp.add(deck);
+     for(const px of [-w/2+0.4,w/2-0.4])for(const pz of [zc-dd/2+0.4,zc+dd/2-0.4]){const ph=L===0?3.4:3.2;const po=new THREE.Mesh(new THREE.BoxGeometry(0.28,ph,0.28),postM);po.position.set(px,y+ph/2+0.25,pz);grp.add(po);
+       if(L>0){const st=new THREE.Mesh(new THREE.BoxGeometry(0.24,6.2,0.24),postM);st.position.set(px,y-3.2,pz-0.6);st.rotation.x=-0.12;grp.add(st)}}   /* stilts down onto the rock */
+     const rl=new THREE.Mesh(new THREE.BoxGeometry(w,0.08,0.08),railM);rl.position.set(0,y+1.25,zc+dd/2-0.1);grp.add(rl);const rl2=rl.clone();rl2.position.y=y+0.75;grp.add(rl2);
+     roof(w+1.6,dd+1.6,L===0?3.6:2.8,y+(L===0?3.65:3.45),zc,grp);
+     for(let k=0;k<12;k++)bulbs.push(toW(new V3(-w/2+0.6+k*(w-1.2)/11,y+(L===0?3.3:3.1)-0.35*Math.sin(PI*k/11),zc+dd/2-0.3)));
+     const n=L===0?9+((bi*7)%5):5+((bi*3)%3);for(let k=0;k<n;k++){const lx=-w/2+0.8+(w-1.6)*(k+0.5)/n+Math.sin(k*3.1+bi+L)*0.25,lz=zc+dd/2-0.9-Math.abs(Math.sin(k*1.7+bi))*1.1;people.push({p:toW(new V3(lx,y+1.45,lz)),c:shirtC[(k*5+bi+L)%shirtC.length]})}
+     if(L===0)for(let k=0;k<3;k++)umbs.push({p:toW(new V3(-4.5+k*4.5,y,zc+dd/2+1.6)),c:umbC[(bi+k)%umbC.length]});
+     if(L<lv-1){for(let s=0;s<8;s++){const sp=new THREE.Mesh(new THREE.BoxGeometry(1.1,0.18,0.5),deckM);const t=s/7;sp.position.set(w/2+0.8,y-t*6.5,zc+(s%2?0.3:-0.3)+1.2);grp.add(sp)}}}   /* the stairs down to the next deck */
+   const pj=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.07,8,5),postM);pj.position.set(-7.6,4.2,2.8);pj.rotation.z=0.18;grp.add(pj);const pt=new THREE.Mesh(new THREE.TorusGeometry(0.9,0.06,4,10,PI),roofM);pt.position.set(-6.9,8.1,2.8);pt.rotation.z=-0.6;grp.add(pt)});   /* a penjor: the tall curved bamboo offering pole */
  const bodies=new THREE.InstancedMesh(bodyG,new THREE.MeshStandardMaterial({roughness:0.85}),people.length),heads=new THREE.InstancedMesh(headG,new THREE.MeshStandardMaterial({color:0xc8956a,roughness:0.7}),people.length);
- const _m=new THREE.Matrix4(),_c=new THREE.Color();people.forEach((o,k)=>{_m.makeTranslation(o.p.x,o.p.y,o.p.z);bodies.setMatrixAt(k,_m);bodies.setColorAt(k,_c.set(o.c));_m.makeTranslation(o.p.x,o.p.y+0.92,o.p.z);heads.setMatrixAt(k,_m)});
- uluG.add(bodies,heads);
+ people.forEach((o,k)=>{_m.makeTranslation(o.p.x,o.p.y,o.p.z);bodies.setMatrixAt(k,_m);bodies.setColorAt(k,_c.set(o.c));_m.makeTranslation(o.p.x,o.p.y+0.92,o.p.z);heads.setMatrixAt(k,_m)});uluG.add(bodies,heads);
  const umbI=new THREE.InstancedMesh(umbG,new THREE.MeshStandardMaterial({roughness:0.8,side:THREE.DoubleSide}),umbs.length);umbs.forEach((o,k)=>{_m.makeTranslation(o.p.x,o.p.y+3.2,o.p.z);umbI.setMatrixAt(k,_m);umbI.setColorAt(k,_c.set(o.c))});uluG.add(umbI);
- const bulbI=new THREE.InstancedMesh(bulbG,ULU.lights,bulbs.length);bulbs.forEach((b,k)=>{_m.makeTranslation(b.x,b.y,b.z);bulbI.setMatrixAt(k,_m)});uluG.add(bulbI)}
+ const bulbI=new THREE.InstancedMesh(bulbG,ULU.lights,bulbs.length);bulbs.forEach((b,k)=>{_m.makeTranslation(b.x,b.y,b.z);bulbI.setMatrixAt(k,_m)});uluG.add(bulbI);
+ /* Pura Luhur Uluwatu on the far headland: a tiered meru shrine and a split gate */
+ {let bi=0,bd=1e9;P.forEach((q,i)=>{const d=Math.hypot(q[0]+100,q[1]+303);if(d<bd){bd=d;bi=i}});const [x,z]=P[bi],[nx,nzz]=N[bi],h=H[bi],grp=new THREE.Group();grp.position.set(x-nx*9,h+0.4,z-nzz*9);grp.rotation.y=Math.atan2(nx,nzz);uluG.add(grp);
+  const stone=new THREE.MeshStandardMaterial({color:0x6f675c,roughness:0.95}),brick=new THREE.MeshStandardMaterial({color:0x8a5a44,roughness:0.95}),thatch=new THREE.MeshStandardMaterial({color:0x2b2620,roughness:1});
+  const base=new THREE.Mesh(new THREE.BoxGeometry(6,3,6),stone);base.position.y=1.5;grp.add(base);
+  for(let k=0;k<9;k++){const r=4.6*(1-k*0.085),t=new THREE.Mesh(new THREE.ConeGeometry(r,1.25,4),thatch);t.rotation.y=PI/4;t.position.y=3.6+k*1.55;grp.add(t)}
+  const core=new THREE.Mesh(new THREE.BoxGeometry(1.2,14,1.2),stone);core.position.y=9.5;grp.add(core);
+  for(const sx of [-1,1]){for(let k=0;k<6;k++){const w=3.2-k*0.42,b=new THREE.Mesh(new THREE.BoxGeometry(w,1.6,w*0.7),k%2?brick:stone);b.position.set(sx*(1.4+w/2)+9,0.8+k*1.6,3);grp.add(b)}}}   /* the candi bentar: one tower split in two, a gap to walk through */
+}
 const SEC_BY={1:SEC.map(C=>({...C})),
   2:[{t0:7,c0:46,v:2.0,h:10.5,k:0,d:10,fol:1},{t0:24,c0:44,v:2.2,h:10,k:0,d:9,fol:1},{t0:41,c0:44,v:2.0,h:10,k:0,d:9,fol:1},{t0:57,c0:42,v:2.2,h:9.5,k:0,d:8.5,fol:1},{t0:67,c0:46,v:2.6,h:7.5,k:2}],
   3:[{t0:6,c0:46,v:2.0,h:11,k:0,d:11,fol:1},{t0:25,c0:44,v:2.1,h:10.5,k:0,d:10,fol:1},{t0:44,c0:44,v:2.0,h:10,k:0,d:10,fol:1},{t0:62,c0:46,v:2.6,h:8,k:2}],   // Pipeline: one long barrel after another
-  4:[{t0:8,c0:46,v:2.0,h:9,k:0,d:9,fol:1},{t0:28,c0:60,v:4.4,h:7,k:1},{t0:34,c0:44,v:2.1,h:9,k:0,d:8.5,fol:1},{t0:50,c0:42,v:2.0,h:8.5,k:0,d:8,fol:1},{t0:63,c0:46,v:2.6,h:7,k:2}],   // Cloud 9: barrels with a section to hit between
+  4:[{t0:7,c0:46,v:2.0,h:9,k:0,d:10,fol:1},{t0:21,c0:62,v:4.8,h:8.5,k:1},{t0:33,c0:60,v:4.4,h:7,k:1},{t0:42,c0:58,v:4.2,h:6.8,k:1},{t0:51,c0:58,v:4.2,h:6.8,k:1},{t0:61,c0:46,v:2.6,h:7.5,k:2}],   /* Cloud 9: the barrel off the drop, then a ramp that stands up for an air, three sections to turn on, and the junction to finish */
   5:[{t0:10,c0:60,v:4.6,h:7,k:1},{t0:22,c0:56,v:4.2,h:7,k:1},{t0:34,c0:62,v:4.6,h:6.5,k:1},{t0:46,c0:58,v:4.4,h:6.5,k:1},{t0:57,c0:60,v:4.4,h:6.5,k:1},{t0:66,c0:46,v:2.6,h:7,k:2}]};   // Trestles: no barrels, sections to hit and float, open face for airs
 function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
   PROG.spot=SPOT.id;progSave();setTOD(game.night);if(typeof progUI==='function')progUI()}
@@ -1232,8 +1289,11 @@ function spotTint(n){const on=SPOT.id!==1,U=waveMat.uniforms,S3=(u,v,k)=>u.value
   if(!on)return;
   const L=SPOT_LOOK[SPOT.id]||SPOT_LOOK[2];tahitiG.visible=!L.cliffs;uluG.visible=!!L.cliffs;ULU.lights.emissiveIntensity=n?2.4:0.25;ULU.lights.color.set(n?0xffd9a0:0x9a8f80);
   tahitiG.children.forEach(m=>m.material.color.set(L.hill));tahitiG.scale.set(1,L.hy,1);tahitiG.rotation.y=L.rot;
-  if(n){S3(U.uWA,L.wa,0.5);S3(U.uWB,L.wb,0.6);S3(U.uFl,L.fl,0.35);S3(U.uFlL,L.fll,0.4);U.uFlK.value=0.55}
-  else{S3(U.uWA,L.wa,1);S3(U.uWB,L.wb,1);S3(U.uG1,L.g1,1);S3(U.uG2,L.g2,1);S3(U.uFl,L.fl,1);S3(U.uFlL,L.fll,1);U.uFlK.value=L.flk;scene.fog.color.setRGB(L.fog[0],L.fog[1],L.fog[2])}}
+  /* every wave keeps the finish of the first one (the pool's emerald water, glow and foam, just set by setTOD): the spot only tints it a little, and the reef floor a bit more */
+  const M3=(u,v,sc,k)=>u.value.lerp(_tintV.set(v[0]*sc,v[1]*sc,v[2]*sc),k);
+  if(n){M3(U.uWA,L.wa,0.5,0.25);M3(U.uWB,L.wb,0.6,0.25);M3(U.uFl,L.fl,0.35,0.55);M3(U.uFlL,L.fll,0.4,0.55);U.uFlK.value=lerp(U.uFlK.value,0.55,0.3)}
+  else{M3(U.uWA,L.wa,1,0.25);M3(U.uWB,L.wb,1,0.25);M3(U.uG1,L.g1,1,0.25);M3(U.uG2,L.g2,1,0.25);M3(U.uFl,L.fl,1,0.55);M3(U.uFlL,L.fll,1,0.55);U.uFlK.value=lerp(U.uFlK.value,L.flk,0.3);scene.fog.color.setRGB(L.fog[0],L.fog[1],L.fog[2])}}
+const _tintV=new THREE.Vector3();
 
 /* ───────────────────────── progression ───────────────────────── */
 // XP from every wave, the best score at each spot, trophies, boards; all kept in this browser
@@ -1648,9 +1708,13 @@ function poseRider(time,dt){
   J.pel.set(lerp(-0.52,-0.30+0.03*c+sx-0.10*(A.lay||0),st),lerp(0.15,lerp(0.95,0.50,c),st),lerp(0,0.04+0.24*c*Math.sqrt(c)-0.10*lamN*(1-0.4*c)+0.10*ss,st));
   if(Math.abs(A.lay||0)>0.01){J.pel.y-=0.47*A.lay;J.pel.z+=0.46*A.lay;J.pel.x-=0.06*A.lay}   /* layback: seat, back and legs all down on the water */   // layback: hips drop all the way back to the water (negative = the bounce back up)
   if(bh>0.01){J.pel.x+=0.24*bh;J.pel.y+=0.06*bh;J.pel.z-=0.08*bh}   // backside hit: hips over the front foot, so the back leg straightens and kicks the tail
+  const wk=A.walk=damp(A.walk||0,AT.walk||0,6,dt),wph=AT.wph||0,wpn=A.wpn=damp(A.wpn||0,AT.wpain||0,16,dt);
+  if(wk>0.001){_a.set(-0.30+0.022*Math.sin(wph),0.86+0.03*Math.abs(Math.sin(wph))+0.05*wpn,-0.02);J.pel.lerp(_a,wk)}   /* walking: hips centred over the feet, bobbing with each step, jerking up when a foot finds coral */
   {const hy=hp+0.45*sy;J.hax.set(st*Math.cos(hy),0,1-st+st*Math.sin(hy)).normalize()}
   J.hipF.copy(J.pel).addScaledVector(J.hax,0.088);J.hipF.y-=0.02;J.hipB.copy(J.pel).addScaledVector(J.hax,-0.088);J.hipB.y-=0.02;
   J.ftF.set(lerp(-1.39,-0.06*cs+0.05*ss,st),lerp(0.12,0.11,st),lerp(0.10,0.06*ss+0.05*cs,st));if((AT.npTh||0)>0.005){const t=AT.npTh;J.ftF.x=-0.54+0.48*Math.cos(t);J.ftF.y=0.11+0.48*Math.sin(t)}   /* nose pick: the front foot stays on the board as the nose comes up */{const yb=sy*(1-0.40*(A.lay||0)),cb=Math.cos(yb),sb=Math.sin(yb);J.ftB.set(lerp(-1.39,-(0.54+0.06*bh)*cb+0.05*sb,st),lerp(0.12,0.11,st),lerp(-0.10,0.54*sb+0.05*cb,st))}   // the back foot lags the kicked tail, out toward the rail
+  if(wk>0.001){const L=0.13,lift=0.12+0.09*wpn,ft=(q,x,o)=>{q=((q%(2*PI))+2*PI)%(2*PI);if(q<PI){const u=q/PI;o.set(x,0.11,J.pel.z-L+2*L*u)}else{const u=(q-PI)/PI,e=u*u*(3-2*u);o.set(x,0.11+lift*Math.sin(PI*u),J.pel.z+L-2*L*e)}return o};
+    J.ftF.lerp(ft(wph,-0.21,_b),wk);J.ftB.lerp(ft(wph+PI,-0.39,_c),wk)}   /* stance foot slides back under him, swing foot comes through lifted */
   ik(J.hipF,J.ftF,0.44,0.43,(0.30*cs-0.78*ss)*st,0.8*st-0.95*pr,(-0.30*ss-0.78*cs)*st,J.knF,J.tA);J.ftF.copy(J.tA);
   ik(J.hipB,J.ftB,0.44,0.43,(0.10*cs-0.85*ss)*st,0.75*st-0.95*pr,(-0.10*ss-0.85*cs)*st,J.knB,J.tA);J.ftB.copy(J.tA);
   fillLimb(legF,J.hipF,J.knF,J.ftF,0.506,0.08);legF.update();fillLimb(legB,J.hipB,J.knB,J.ftB,0.506,0.08);legB.update();
@@ -1659,7 +1723,7 @@ function poseRider(time,dt){
     for(let i=0;i<R;i++){const u=i/(R-1),P=sho.C[i].copy(leg.C[i]);_d.subVectors(leg.C[i+1],leg.C[i>0?i-1:0]).normalize();_x.copy(WU).addScaledVector(_d,-WU.dot(_d));
       P.addScaledVector(_x,-(0.004+0.011*u)*st);if(i>R-4){const fl=(i-R+4)/3*0.0035*live;P.x+=fl*Math.sin(time*23+n*2+i);P.z+=fl*Math.cos(time*19+n+i*1.7)}}}
   shoF.refA.copy(legF.refA);shoF.refB.copy(legF.refA);shoB.refA.copy(legB.refA);shoB.refB.copy(legB.refA);shoF.update();shoB.update();
-  placeFoot(RP.ftF,J.ftF,lerp(-0.9,0.6*cs-0.8*ss,st),-0.4*pr,(-0.6*ss-0.8*cs)*st);placeFoot(RP.ftB,J.ftB,lerp(-0.9,0.10*cs-0.995*ss,st),-0.4*pr,(-0.10*ss-0.995*cs)*st);
+  placeFoot(RP.ftF,J.ftF,lerp(lerp(-0.9,0.6*cs-0.8*ss,st),0.08,wk),lerp(-0.4*pr,-0.30,wk),lerp((-0.6*ss-0.8*cs)*st,-0.95,wk));placeFoot(RP.ftB,J.ftB,lerp(lerp(-0.9,0.10*cs-0.995*ss,st),0.08,wk),lerp(-0.4*pr,-0.30,wk),lerp((-0.10*ss-0.995*cs)*st,-0.95,wk));
   setLimb(RP.cuff,legB.C[legB.R-4],legB.C[legB.R-2]);
   // torso: folds forward the way the chest faces (opened toward the nose); stays upright in the world as the board goes vertical at the lip
   A.layV=(A.layV||0)+(((AT.lay||0)-(A.lay||0))*110-(A.layV||0)*13)*dt;A.lay=clamp((A.lay||0)+A.layV*dt,-0.2,1.12);const lay=A.lay;   // a spring: the throw overshoots a little, and the water pushes him back up past upright
@@ -1725,7 +1789,7 @@ function poseRider(time,dt){
       const pose=(o,i,side,sh,shO)=>{if(i<0)P(o,sh,0.16,0,-0.40);else if(i===0)P(o,sh,0.52,0,-0.02);else if(i===1)P(o,sh,0.50,0,-0.08);else if(i===2)P(o,shO,0.13,0,0.02);
         else if(i===3)P(o,J.head,-0.07,side*0.07,0.05);else if(i===4)P(o,J.pel,0.14,-side*0.09,0.06);else P(o,J.pel,-0.15,side*0.10,0.02)};   // out front, palm up, opposite shoulder, behind the head, opposite hip, on the bum
       pose(_b,Math.min(bl,5),1,J.shF,J.shB);pose(_a,Math.min(bt,5),-1,J.shB,J.shF)}
-    else if(v===10){const sh=A.shrug||0;P(_b,J.shF,0.24,0.22,-0.25+0.07*sh);P(_a,J.shB,0.24,-0.22,-0.25+0.07*sh)}   // ihhh, não sei: palms up out to the sides
+    else if(v===10){const sh=A.shrug||0;P(_b,J.shF,0.31,0.23+0.05*sh,-0.27+0.09*sh);P(_a,J.shB,0.31,-0.23-0.05*sh,-0.27+0.09*sh)}   /* elbows in at his sides, forearms out, hands at the waist, lifting with each shrug */   // ihhh, não sei: palms up out to the sides
     else{const a=e*T*2.4;P(_b,J.head,0.07+0.05*Math.cos(a),0.25,-0.01+0.05*Math.sin(a));P(_a,J.shB,0.10+0.12*Math.sin(e*T*0.9),-0.06,-0.49)}   // tô doidão: a finger circling at the temple, the other arm hanging loose
     J.hFt.lerp(_b,w);J.hBt.lerp(_a,w)}
   else if(cl>0.01){const v=(AT.claimV|0)%CLAIMS.length,L=CLAIMS[v][0],T=CLAIMS[v][1],w=Math.min(1,cl);   // the claim, one of several
@@ -1746,7 +1810,9 @@ function poseRider(time,dt){
   if(pr>0.001){const push=1-sstep(0.6,0.95,pr);
     paddlePt(AT.paddle,1,_a);_b.set(-0.05,0.08,0.22);_a.lerp(_b,push);J.hFt.lerp(_a,1-st);
     paddlePt(AT.paddle+PI,-1,_a);_b.set(-0.05,0.08,-0.22);_a.lerp(_b,push);J.hBt.lerp(_a,1-st)}
-  const stiff=pr>0.2,hf=stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:(cl>0.4&&AT.claimV>=8?11:2.6)),hz=stiff?1:0.70;
+  if(wk>0.001){_a.copy(J.shB);_a.x-=0.10;_a.y-=0.50;_a.z-=0.06;J.hBt.lerp(_a,wk);   /* back hand round the board's lower rail */
+    _b.copy(J.shF);_b.x+=0.30;_b.y+=-0.34+0.07*Math.sin(wph*2)+0.36*wpn;_b.z+=-0.10+0.06*Math.cos(wph);J.hFt.lerp(_b,wk)}   /* the free arm out for balance, flung up on a sharp step */
+  const stiff=pr>0.2,hf=wk>0.3?10:stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:(cl>0.4&&AT.claimV>=8?11:2.6)),hz=stiff?1:0.70;
   J.haF.copy(A.hF.step(J.hFt,dt,hf,hz));J.haB.copy(A.hB.step(J.hBt,dt,AT.drag>0.5?5:hf,hz));
   J.shF.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haF,J.shF).normalize().dot(J.spine)));J.shB.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haB,J.shB).normalize().dot(J.spine)));
   ik(J.shF,J.haF,0.30,0.26,-0.25*st,-0.75*st+0.5*pr,0.6*st+pr,J.elF,J.tA);J.haF.copy(J.tA);
@@ -1758,9 +1824,11 @@ function poseRider(time,dt){
   for(let n=0;n<2;n++){const m=n?RP.dB:RP.dF,arm=n?armB:armF,sh=n?J.shB:J.shF,el=n?J.elB:J.elF;_d.subVectors(el,sh).normalize();
     _y.copy(_d);_x.copy(arm.refA).addScaledVector(_y,-arm.refA.dot(_y)).normalize();_z.crossVectors(_x,_y);_m.makeBasis(_x,_y,_z);m.quaternion.setFromRotationMatrix(_m);
     m.position.copy(sh).addScaledVector(_d,0.004);m.scale.set(0.0672,0.070,0.0672*0.93)}
-  {_d.subVectors(J.haF,J.elF).normalize();_b.crossVectors(_d,WU);if(_b.lengthSq()<1e-4)_b.set(0,0,1);_b.normalize();const ang=PI*tray*0.7;_c.copy(WU).multiplyScalar(Math.cos(ang)).addScaledVector(_b,Math.sin(ang));
+  const pu_=cl>0.01&&AT.claimV===10?Math.min(1,cl):0;   /* "ihhh, não sei": both palms turned up, like "well, nothing I can do" */
+  {_d.subVectors(J.haF,J.elF).normalize();_b.crossVectors(_d,WU);if(_b.lengthSq()<1e-4)_b.set(0,0,1);_b.normalize();const ang=PI*Math.max(tray*0.7,pu_*0.93);_c.copy(WU).multiplyScalar(Math.cos(ang)).addScaledVector(_b,Math.sin(ang));
    placeHand(RP.haF,J.elF,J.haF,_c)}
-  placeHand(RP.haB,J.elB,J.haB,WU);
+  if(pu_>0.001){_d.subVectors(J.haB,J.elB).normalize();_b.crossVectors(_d,WU);if(_b.lengthSq()<1e-4)_b.set(0,0,1);_b.normalize();const ang=-PI*pu_*0.93;_c.copy(WU).multiplyScalar(Math.cos(ang)).addScaledVector(_b,Math.sin(ang));placeHand(RP.haB,J.elB,J.haB,_c)}
+  else placeHand(RP.haB,J.elB,J.haB,WU);
   const lp=RP.leash.geometry.attributes.position,lc=legB.C[legB.R-3];
   for(let i=0;i<14;i++){const u=i/13,sag=Math.sin(PI*u)*0.13;lp.setXYZ(i,lerp(lc.x-0.045,-0.88*cs,u),lerp(lc.y,0.045,u)-sag*0.45+0.02*(1-u),lerp(lc.z+0.03,0.88*ss,u)+sag)}
   lp.needsUpdate=true;if(RIG.on)RIG.pose()}
@@ -1875,6 +1943,7 @@ addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.repeat)return;keys[e.code]=true;initAudio();
   if((e.code==='Enter'||e.code==='NumpadEnter')&&game.attract){if(WZ.s<4)wzGo(WZ.s+1);else $('goPlay').click();return}
+  if(!$('wavePick').classList.contains('off')){if(e.code==='Escape'||e.code==='KeyP')wpClose();return}   /* the wave picker is open: Esc closes it */
   if((e.code==='Escape'||e.code==='Backspace')&&game.attract&&WZ.s>1){wzGo(WZ.s-1);return}
   if(e.code==='Enter'||e.code==='NumpadEnter'){if(game.state==='end'&&game.hl){if(game.showCard)game.showCard()}else if(game.state==='menu'||(game.state==='end'&&performance.now()-(game.cardAt||0)>500))startWave()}
   if(e.code==='KeyC')setCam(game.cam+1);
@@ -1978,6 +2047,18 @@ $('rdN').addEventListener('click',e=>{e.stopPropagation();setRider(1);e.target.b
 $('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);e.target.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();setTOD(1);e.target.blur()});
 $('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(b.id==='eMenu')toMenu();else{if(b.dataset.spot)setSpot(+b.dataset.spot);startWave()}return}if(game.state==='end'&&game.endT>1.2)startWave()});
 function toMenu(){startAttract();wzGo(3)}   /* back to the start screen: pick a spot or a board you just opened */
+/* change wave in the middle of a ride: the wave pauses, pick a spot, a new wave starts there */
+let wpPaused=false;
+function wpOpen(){if(game.attract||game.state==='menu')return;$('wpBtns').innerHTML=SPOTS.map((o,ix)=>{const op=spotOpen(o);return `<button class="pbtn wv sm${o.id===SPOT.id?' sel':''}${op?'':' lock'}" data-spot="${o.id}">${ix+1} · ${o.name}<i${op?'':' class="req"'}>${o.soon?'SOON':op?o.sub:'&#128274; '+reqText(o.req)}</i></button>`}).join('');
+  $('wavePick').classList.remove('off');if(game.state==='ride'&&!game.paused){game.paused=true;wpPaused=true}}
+function wpClose(){$('wavePick').classList.add('off');if(wpPaused){wpPaused=false;game.paused=false;$('pause').style.display='none'}}
+$('waveBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();wpOpen()});
+$('tWave').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();wpOpen()});
+$('wpClose').addEventListener('click',e=>{e.stopPropagation();wpClose()});
+$('wavePick').addEventListener('click',e=>{if(e.target.id==='wavePick'){e.stopPropagation();wpClose()}});
+$('wpBtns').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();b.blur();const o=SPOTS.find(x=>x.id===+b.dataset.spot);if(!o)return;
+  if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}
+  wpPaused=false;game.paused=false;$('pause').style.display='none';$('wavePick').classList.add('off');if(o.id!==SPOT.id)setSpot(o.id);startWave()});
 /* the soundtrack on Spotify: offered once (at most every three days) when the pointer heads for the tab bar to close the game;
    on touch screens, where there is no pointer to watch, on the end card after the second wave */
 const SPOTIFY_URL='';   /* the playlist link goes here; with no link the pop-up never shows */
@@ -2034,7 +2115,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
   tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
-function startWave(att){SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;
+function startWave(att){sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
@@ -2042,7 +2123,7 @@ function startWave(att){SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
-  $('menu').classList.add('off');$('end').classList.add('off');$('hud').classList.add('on');$('wavebar').classList.add('on');$('camBtn').classList.add('on');$('keys').classList.add('on');
+  $('menu').classList.add('off');$('end').classList.add('off');$('hud').classList.add('on');$('wavebar').classList.add('on');$('camBtn').classList.add('on');$('waveBtn').classList.add('on');$('keys').classList.add('on');
   setTimeout(()=>$('keys').classList.remove('on'),9000);$('pop').innerHTML='';
   if(game.attract){$('menu').classList.remove('off');progUI();return}   // behind the start screen
   sfxNoise(1.2,900,0.25)}
@@ -2099,9 +2180,53 @@ function celebBody(v,e){_cd.copy(camera.position).sub(riderG.position).applyQuat
   AT.tw=clamp(Math.atan2(_cd.x,-_cd.z),0.25,1.45);AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);AT.look=clamp(Math.atan2(-_cd.z,_cd.x),-0.6,1.3);const T=2*PI;
   if(v===8){AT.crouch=0.40+0.04*Math.sin(e*T*2.3);AT.hroll=0.10*Math.sin(e*T*1.15)}   // 67
   else if(v===9){const hip=e>2.7;AT.shiftX=(hip?0.06:0.03)*Math.sin(e*T*(hip?2.4:1.9));AT.crouch=0.38+(hip?0.08*Math.abs(Math.sin(e*T*1.2)):0);AT.hroll=0.06*Math.sin(e*T*0.95)}   // macarena: the hips keep time, then the wiggle
-  else if(v===10){const sh=sstep(0.1,0.35,e)*(1-sstep(1.1,1.4,e))+sstep(1.7,1.95,e)*(1-sstep(2.8,3.1,e));AT.shrug=sh;AT.hroll=0.42*sh*(e<1.5?1:-1);AT.crouch=0.34;AT.look+=0.12*Math.sin(e*T*0.8)}   // ihhh, não sei: two shrugs, head tilted one way then the other
+  else if(v===10){const sh=sstep(0.1,0.35,e)*(1-sstep(1.1,1.4,e))+sstep(1.7,1.95,e)*(1-sstep(2.8,3.1,e));AT.shrug=sh;AT.hroll=0.42*sh*(e<1.5?1:-1);AT.crouch=0.36;AT.gz=0.10*sh;AT.look+=0.12*Math.sin(e*T*0.8)}   // ihhh, não sei: two shrugs, head tilted one way then the other
   else if(v===11){AT.shiftX=0.06*Math.sin(e*T*0.7);AT.crouch=0.44+0.12*Math.sin(e*T*1.1);AT.hroll=0.35*Math.sin(e*T*0.7+1);AT.look+=0.30*Math.sin(e*T*0.55);AT.lean=0.16*Math.sin(e*T*0.7+0.5)}}   // tô doidão: wobbling knees, rolling head, the whole body swaying
 const _qi=new THREE.Quaternion();
+/* ── the shallow-reef walk out: board under the arm, quick tiptoe steps, a yelp now and then as a foot finds coral ── */
+let reefG=null;
+function reefMake(){const g=new THREE.IcosahedronGeometry(1,2),P=g.attributes.position;
+  for(let i=0;i<P.count;i++){const x=P.getX(i),y=P.getY(i),z=P.getZ(i),k=1+0.22*Math.sin(x*5.1+y*3.7)+0.16*Math.sin(z*6.3-x*2.2)+0.10*Math.sin(y*9.7+z*4.1);P.setXYZ(i,x*k,Math.max(y*k,-0.35),z*k)}
+  {const Nn=g.attributes.normal;for(let i=0;i<P.count;i++){_rP.set(P.getX(i),P.getY(i)*1.6,P.getZ(i)).normalize();Nn.setXYZ(i,_rP.x,_rP.y,_rP.z)}Nn.needsUpdate=true}   /* rounded shading: a coral head, not a crystal */
+  const cm=new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.97,metalness:0});cm.onBeforeCompile=sh=>{sh.vertexShader='varying vec3 vRP;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vRP=position;');
+    sh.fragmentShader='varying vec3 vRP;\n'+sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n {float h=smoothstep(-0.3,1.0,vRP.y),kn=0.5+0.5*sin(vRP.x*7.3+sin(vRP.z*5.1)*2.)*sin(vRP.z*6.7+sin(vRP.y*4.3)*2.);diffuseColor.rgb*=(0.62+0.5*h)*(0.88+0.24*kn);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.16,0.20,0.09),0.35*smoothstep(0.55,0.95,vRP.y)*kn);}')};   /* knobbly polyp texture */
+  const N=46,im=new THREE.InstancedMesh(g,cm,N);im.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  const ft=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=128;const x=cv.getContext('2d'),gd=x.createRadialGradient(64,64,22,64,64,62);gd.addColorStop(0,'rgba(255,255,255,0)');gd.addColorStop(0.45,'rgba(255,255,255,0.85)');gd.addColorStop(0.7,'rgba(255,255,255,0.35)');gd.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gd;x.fillRect(0,0,128,128);
+    x.globalCompositeOperation='destination-out';for(let i=0;i<70;i++){x.beginPath();x.arc(Math.random()*128,Math.random()*128,2+Math.random()*7,0,PI*2);x.fillStyle='rgba(0,0,0,'+(0.3+Math.random()*0.6)+')';x.fill()}const t=new THREE.CanvasTexture(cv);return t})();   /* froth: soft at both edges, full of holes */
+  const rg=new THREE.PlaneGeometry(2.6,2.6);rg.rotateX(-Math.PI/2);const ring=new THREE.InstancedMesh(rg,new THREE.MeshBasicMaterial({map:ft,color:0xf2fbff,transparent:true,opacity:0.55,depthWrite:false}),N);ring.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  const grp=new THREE.Group();grp.add(im,ring);grp.visible=false;scene.add(grp);reefG={g:grp,im,ring,N,items:[]};
+  const pal=[[0.34,0.22,0.17],[0.30,0.25,0.14],[0.26,0.17,0.22],[0.20,0.24,0.13],[0.42,0.34,0.26],[0.33,0.15,0.13],[0.24,0.21,0.17]],c=new THREE.Color();   /* wet coral: brown, ochre, dark purple, algae green, bleached tan, red-brown */
+  for(let i=0;i<N;i++){const q=pal[i%pal.length],v=rnd(0.85,1.15);c.setRGB(q[0]*v,q[1]*v,q[2]*v);im.setColorAt(i,c)}im.instanceColor.needsUpdate=true}
+const _rM=new THREE.Matrix4(),_rQ=new THREE.Quaternion(),_rS=new V3(),_rP=new V3(),_rL=new V3();
+function reefSpawn(o,W,wy){if(!reefG)reefMake();const R=reefG;R.items.length=0;_rL.set(-W.z,0,W.x);
+  for(let i=0;i<R.N;i++){const near=i<12,al=near?rnd(0.6,9):rnd(-3,13);let la=near?rnd(0.32,0.85):rnd(0.6,5.5);if(Math.random()<0.5)la=-la;
+    const sx=near?rnd(0.16,0.36):rnd(0.22,0.6),sy=sx*rnd(0.55,0.95),top=wy+(Math.random()<0.3?rnd(-0.05,0.02):rnd(0.04,0.2));
+    R.items.push({x:o.x+W.x*al+_rL.x*la,z:o.z+W.z*al+_rL.z*la,sx,sy,sz:sx*rnd(0.7,1.3),yaw:rnd(0,PI*2),top,dl:rnd(0,0.6),wy})}
+  R.g.visible=true}
+function reefDraw(t){const R=reefG;if(!R||!R.g.visible)return;
+  for(let i=0;i<R.N;i++){const it=R.items[i];if(!it)continue;const k=sstep(it.dl,it.dl+1.3,t),y=it.top-it.sy+(k-1)*0.45;   /* the water drains off the reef and the heads come up */
+    _rQ.setFromAxisAngle(UPV,it.yaw);_rM.compose(_rP.set(it.x,y,it.z),_rQ,_rS.set(it.sx,it.sy,it.sz));R.im.setMatrixAt(i,_rM);
+    const wet=y+it.sy>it.wy-0.02,rr=it.sx*(0.95+0.07*Math.sin(t*3.1+i))*(wet?1:0.001);_rQ.setFromAxisAngle(UPV,it.yaw+t*0.15);_rM.compose(_rP.set(it.x,it.wy+0.012,it.z),_rQ,_rS.set(rr,1,rr));R.ring.setMatrixAt(i,_rM)}
+  R.im.instanceMatrix.needsUpdate=true;R.ring.instanceMatrix.needsUpdate=true;R.ring.material.opacity=0.48+0.08*Math.sin(t*2.3)}
+function reefStart(){sampleSurf(sf.s,Math.max(sf.p,0.3),S);const W=new V3(-S.tp.x,0,-S.tp.z);if(W.lengthSq()<1e-4)W.set(0,0,1);W.normalize();
+  sampleSurf(sf.s,0,S2);const wy=Math.min(S2.pos.y,0.05);
+  sf.reef={o:boardG.position.clone().setY(wy),W,wy,d:0,v:0,ph:0,pain:0,lastHit:-9,n:0,bp0:boardG.position.clone(),bq0:boardG.quaternion.clone(),rp0:riderG.position.clone(),rq0:riderG.quaternion.clone(),yaw:Math.atan2(-W.x,-W.z)};
+  sf.mode='reef';sf.wT=0;reefSpawn(sf.reef.o,W,wy);splash(16,sf.pos,0.6);sfxNoise(0.35,1800,0.22)}
+function reefStep(h){const R=sf.reef;if(!R)return;const t=sf.wT;
+  R.v=damp(R.v,t<0.35?0:(R.pain>0.5?1.0:1.55),4,h);R.d+=R.v*h;
+  const L=0.13,om=Math.max(9,R.v*PI/(2*L)),ph0=R.ph;if(t>0.3)R.ph+=om*h;
+  if(Math.floor(R.ph/PI)>Math.floor(ph0/PI)&&t>0.3){R.n++;const left=Math.floor(R.ph/PI)%2===0;   /* a foot comes down */
+    _rP.copy(R.o).addScaledVector(R.W,R.d+0.12).addScaledVector(_rL.set(-R.W.z,0,R.W.x),left?0.09:-0.09);_rP.y=R.wy+0.03;sfxNoise(0.10,2900,0.07);
+    if((R.n===1||Math.random()<0.4)&&t-R.lastHit>0.7){R.pain=1;R.lastHit=t;sfxOuch();splash(2,_rP,0.16)}}
+  R.pain=Math.max(0,R.pain-h*2.8)}
+function sfxOuch(){if(!audio.ctx||game.attract)return;const C=audio.ctx,t=C.currentTime,d=0.30+Math.random()*0.12,f0=165+Math.random()*45;   /* a short "ai!": a voiced buzz through three formants gliding from "a" to "i" */
+  const o=C.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(f0*1.2,t);o.frequency.linearRampToValueAtTime(f0*1.75,t+0.07);o.frequency.exponentialRampToValueAtTime(f0*1.02,t+d);
+  const vb=C.createOscillator(),vg=C.createGain();vb.frequency.value=6.5;vg.gain.value=7;vb.connect(vg);vg.connect(o.frequency);
+  const g=C.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.17,t+0.025);g.gain.setValueAtTime(0.17,t+d*0.5);g.gain.exponentialRampToValueAtTime(0.001,t+d);
+  [[820,300,1.0],[1250,2250,0.55],[2600,3050,0.22]].forEach(([a,b,k])=>{const bp=C.createBiquadFilter();bp.type='bandpass';bp.Q.value=8;bp.frequency.setValueAtTime(a,t);bp.frequency.setValueAtTime(a,t+d*0.3);bp.frequency.exponentialRampToValueAtTime(b,t+d*0.72);
+    const gk=C.createGain();gk.gain.value=k*2.4;o.connect(bp);bp.connect(gk);gk.connect(g)});
+  const nz=C.createBufferSource();nz.buffer=audio.buf;const nf=C.createBiquadFilter();nf.type='bandpass';nf.frequency.value=2400;nf.Q.value=1.2;const ng=C.createGain();ng.gain.setValueAtTime(0.05,t);ng.gain.exponentialRampToValueAtTime(0.001,t+0.12);nz.connect(nf);nf.connect(ng);ng.connect(audio.master);nz.start(t,Math.random()*2);nz.stop(t+0.15);
+  g.connect(audio.master);o.start(t);vb.start(t);o.stop(t+d+0.05);vb.stop(t+d+0.05)}
 function pickClaim(){let v;do{v=Math.floor(Math.random()*CLAIMS.length)}while(v===game.lastClaim);game.lastClaim=v;return v}
 function reqShot(name,pts,delay){if(game.attract)return;if(!game.shotReq||game.shotReq.pts<pts)game.shotReq={name,pts,delay}}
 function addPhoto(name,pts,cv){game.photos.push({name,pts,cv});game.photos.sort((a,b)=>b.pts-a.pts);if(game.photos.length>4)game.photos.length=4}
@@ -2161,7 +2286,7 @@ function endRide(kind){
     $('end').classList.remove('off');if(document.body.classList.contains('touch')&&PROG.waves>=2)setTimeout(spShow,1800)};
   setTimeout(()=>{
     if(game.state!=='end'||game.waveId!==wave)return;
-    $('pop').innerHTML='';$('hud').classList.remove('on');$('wavebar').classList.remove('on');$('camBtn').classList.remove('on');$('tube').classList.remove('on');$('keys').classList.remove('on');
+    $('pop').innerHTML='';$('hud').classList.remove('on');$('wavebar').classList.remove('on');$('camBtn').classList.remove('on');$('waveBtn').classList.remove('on');$('tube').classList.remove('on');$('keys').classList.remove('on');
     const R=game.rec;
     if(R.length>90){const best=[],a0=R[0].age,a1=R[R.length-1].age;
       const isT=m=>/Barrel/.test(m.name),isH=m=>/Snap|Hit|Lip|Roundhouse|Carve|Cutback|Layback|Tail|Drop-in/.test(m.name),wt=m=>m.pts*(isT(m)?2.6:isH(m)?1.9:1);
@@ -2358,7 +2483,7 @@ function stepAir(dt){
     const r=wrapPi(sf.spin),clean=Math.abs(r)<1.2,rev=Math.abs(Math.abs(r)-PI)<1.2,flips=Math.round(Math.abs(sf.flip)/(2*PI));
     const rf=game.state==='ride'&&!game.attract&&game.waveAge>8&&Math.random()<0.03+0.06*flips+(Math.abs(sf.spin)>4.5?0.02:0)+(sf.hMax>2.4?0.03:0);   // even a clean landing is lost now and then
     if(sf.s<0.2||(!clean&&!rev)||Math.abs(wrapPi(sf.flip))>0.95||rf){sampleSurf(sf.s,S.top-0.4,S);sf.pos.copy(S.pos);wipe();return}
-    sf.mode='ride';sf.p=S.top-0.18;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=Math.abs(r)>PI/2&&sf.spinDir?-Math.sign(sf.spinDir)*Math.abs(r):r;sf.landT=0.45;sf.blendT=0.4;   // touchdown: the board settles onto the face over a moment (no jump), and a reverse keeps turning the same way to come roundsf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
+    sf.mode='ride';sf.p=S.top-0.18;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=Math.abs(r)>PI/2&&sf.spinDir?-Math.sign(sf.spinDir)*Math.abs(r):r;sf.landT=0.45;sf.blendT=0.4;   /* touchdown: the board settles onto the face over a moment (no jump), and a reverse keeps turning the same way to come round */sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
     const rot=Math.round(Math.abs(sf.spin)/PI)*180;
     let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm=rot===180?'Nose Pick Air Revo':'Nose Pick'+(rot?' '+rot:'');if(sf.np)sf.revSlow=0.9;
     const pt=1300+700*sf.hMax+rot*9+(sf.grabT>0.25?400:0)+flips*1900+(sf.np?1200:0);sf.np=false;sf.flip=0;
@@ -2392,9 +2517,15 @@ function stepFloat(dt){
 /* ───────────────────────── board/rider placement ───────────────────────── */
 const bX=new V3,bY=new V3,bZ=new V3,bP=new V3,tL=new V3,qT=new THREE.Quaternion,mB=new THREE.Matrix4,qS=new THREE.Quaternion,qBase=new THREE.Quaternion;let accHand=0;
 const HULL=[[0.86,-0.02,0],[-0.88,-0.02,0],[0.35,-0.02,0.23],[0.35,-0.02,-0.23],[-0.40,-0.02,0.24],[-0.40,-0.02,-0.24],[0,-0.02,0.245],[0,-0.02,-0.245]].map(a=>new V3(...a)),hP=new V3,hO=new V3,S3=mkS();
+const _tbQ=new THREE.Quaternion(),_tbQ2=new THREE.Quaternion(),_tbA=new V3();
+function angVel(q0,q1,dt,out){_tbQ.copy(q1).multiply(_tbQ2.copy(q0).invert());if(_tbQ.w<0){_tbQ.x=-_tbQ.x;_tbQ.y=-_tbQ.y;_tbQ.z=-_tbQ.z;_tbQ.w=-_tbQ.w}
+  const sn=Math.sqrt(Math.max(1e-12,1-_tbQ.w*_tbQ.w)),an=2*Math.acos(clamp(_tbQ.w,-1,1));return out.set(_tbQ.x/sn,_tbQ.y/sn,_tbQ.z/sn).multiplyScalar(dt>1e-4&&an>1e-6?an/dt:0)}
+function extrapQ(q,w,te,out){const a=w.length()*te;if(a<1e-6)return out.copy(q);return out.setFromAxisAngle(_tbA.copy(w).normalize(),a).multiply(q)}   /* q carried on at angular velocity w for an effective time te */
 function placeSurfer(dt,time){
   shadowM.visible=false;
   if(!sf.visible){riderG.visible=boardG.visible=false;return}
+  {const m=sf.mode,m0=A.lastMode;A.lastMode=m;   /* onto or off a floater: the board and rider ease from the motion they already had into the new pose */
+   if(m0&&m0!==m&&(m0==='float'||m==='float')&&(m==='ride'||m==='float')&&A.bpPrev)A.tb={t:0,T:0.38,bp:A.bpPrev.clone(),bv:A.bvel.clone(),bq:A.bqPrev.clone(),bw:A.bw.clone(),rq:A.rqPrev.clone(),rw:A.rw.clone()}}
   A.impact=Math.max(0,A.impact-dt*3.2);
   let spin=0,slip=0,rootYaw=0,pitchT=0,proneT=0,airT=0,grabT=0,projT=0;AT.bsh=0;
   if(sf.mode==='wipe'){
@@ -2415,6 +2546,19 @@ function placeSurfer(dt,time){
     if(t>0.7&&boardG.position.y<wy&&!sf.bSplash){sf.bSplash=true;splash(28,boardG.position.clone().setY(0.2),0.9);sfxNoise(0.3,1800,0.2);boardG.visible=false}
     A.flail=damp(A.flail,0,8,dt);A.prone=0;AT.crouch=t<0.16?0.92:0.3;AT.rail=0;AT.lt=0;AT.drag=0;AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.rev=0;AT.speed=0;AT.slipYaw=0;AT.lay=0;AT.gz=0;AT.tw=0.75;AT.look=0.3;AT.shiftX=0;AT.hip=0.2;
     A.grab=0;A.air=0;AT.claim=t>0.12?1:0;AT.claimV=0;A.claim=damp(A.claim,AT.claim,7,dt);A.aa=0;poseRider(time,dt);return}
+  if(sf.mode==='reef'&&sf.reef){const R=sf.reef,t=sf.wT,u=sstep(0,0.55,t),gy=R.wy-0.30-0.11;   /* feet on the reef, shin-deep */
+    _rP.copy(R.o).addScaledVector(R.W,game.replay?Math.max(0,t-0.4)*1.4:R.d);_rP.y=lerp(R.rp0.y,gy,u)+0.28*Math.sin(PI*clamp(t/0.55,0,1))+0.035*R.pain*Math.sin(PI*clamp((t-R.lastHit)/0.3,0,1));
+    _rP.x=lerp(R.rp0.x,_rP.x,u);_rP.z=lerp(R.rp0.z,_rP.z,u);riderG.position.copy(_rP);
+    _rQ.setFromAxisAngle(UPV,R.yaw+0.07*Math.sin(R.ph)*(t>0.3?1:0));riderG.quaternion.copy(R.rq0).slerp(_rQ,u);riderG.visible=boardG.visible=true;
+    sf.pos.copy(riderG.position);
+    AT.walk=sstep(0.15,0.55,t);AT.wph=R.ph;AT.wpain=R.pain;AT.crouch=0.14+0.16*R.pain;AT.tw=0;AT.hip=0;AT.look=PI/2;AT.gz=-0.30+0.30*R.pain;AT.shiftX=0;AT.lean=0.07*Math.sin(R.ph);AT.hroll=0.05*Math.sin(R.ph+0.6);AT.shrug=R.pain;
+    AT.rail=0;AT.lt=0;AT.drag=0;AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.rev=0;AT.speed=1.2;AT.slipYaw=0;AT.lay=0;AT.claim=0;AT.npTh=0;AT.bsh=0;AT.push=0;
+    A.flail=damp(A.flail,0,8,dt);A.prone=0;A.grab=0;A.air=0;A.claim=damp(A.claim,0,8,dt);A.aa=0;A.impact=0;poseRider(time,dt);
+    /* the board, from where he left it into the carry under his back arm: deck against his side, nose ahead */
+    _a.copy(J.shB);_a.x-=0.05;_a.y-=0.31;_a.z-=0.05;_a.applyQuaternion(riderG.quaternion).add(riderG.position);
+    bX.set(0,0,-1).applyQuaternion(riderG.quaternion);bY.set(1,0,0).applyQuaternion(riderG.quaternion);bZ.crossVectors(bX,bY);mB.makeBasis(bX,bY,bZ);qT.setFromRotationMatrix(mB).multiply(qS.setFromAxisAngle(ZV,0.06));
+    const ub=sstep(0.1,0.6,t);boardG.position.copy(R.bp0).lerp(_a,ub);boardG.position.y+=0.18*Math.sin(PI*ub)*(1-ub);boardG.quaternion.copy(R.bq0).slerp(qT,ub);
+    reefDraw(t);return}
   if(sf.mode==='ride'){
     sampleSurf(sf.s,sf.p,S);
     const c=Math.cos(sf.th),sn=Math.sin(sf.th);
@@ -2473,7 +2617,7 @@ function placeSurfer(dt,time){
     spin=sf.spin;sf.lam=damp(sf.lam,0,8,dt);
     bY.applyAxisAngle(bX,0.40*A.grab*Math.sin(PI*u));
     AT.crouch=lerp(0.72,0.45,sstep(0.62,1,u));AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.speed=sf.V;AT.tw=0.75-input.x*0.1;AT.look=0.3-input.x*0.08;AT.shiftX=0;AT.rail=0;AT.lt=0;AT.drag=0;AT.hip=-input.x*0.1;
-    if(sf.np){AT.crouch=0.97-0.22*sstep(0.78,1,u);AT.tw=0.75+0.55*sstep(0.04,0.42,u);AT.look=0.55;AT.hip=0.3;AT.shiftX=-0.04}   // nose pick: knees right up, shoulders opened into the turn, eyes back over the lead shoulder   // airs and alley-oops: relaxed, not wrung outAT.claim=0;
+    if(sf.np){AT.crouch=0.97-0.22*sstep(0.78,1,u);AT.tw=0.75+0.55*sstep(0.04,0.42,u);AT.look=0.55;AT.hip=0.3;AT.shiftX=-0.04}   /* nose pick: knees right up, shoulders opened into the turn, eyes back over the lead shoulder; airs and alley-oops: relaxed, not wrung out */AT.claim=0;
     airT=1;grabT=input.crouch?1:0;
     sampleSurf(sf.s,S.top-0.5,S2);setShadow(S2,S2.ts,0.30/(1+sf.h*0.6),1+sf.h*0.25);
   }else if(sf.mode==='float'){
@@ -2506,14 +2650,30 @@ function placeSurfer(dt,time){
       sampleSurf(hP.x,pp,S3);const d=hO.subVectors(hP,S3.pos).dot(S3.n)+(i<2?0.035:0);if(d<mn)mn=d}   // the thin nose and tail may dip a little further
     const push=mn<9?Math.max(0,-0.035-mn):0;A.lift=Math.max(push,damp(A.lift||0,push,9,dt));if(A.lift>1e-3)boardG.position.addScaledVector(S.n,A.lift)}
   else A.lift=0;
+  {const J_=A.ja||(A.ja={tp:new V3(),tv:new V3(),o:new V3(),ov:new V3(),t:-9,w:-1});   /* jump absorber: a sudden step in where the board should be (white water forming under it, a section crumbling) eases out over ~0.15 s; ordinary motion passes straight through */
+   if(time-J_.t>0.1||J_.w!==game.waveId||dt<=1e-4){J_.tp.copy(boardG.position);J_.tv.set(0,0,0);J_.o.set(0,0,0);J_.ov.set(0,0,0)}
+   else{_a.copy(boardG.position).sub(J_.tp);_b.copy(_a).addScaledVector(J_.tv,-dt);const ex=_b.length(),lim=0.03;
+     if(ex>lim){_b.multiplyScalar(1-lim/ex);J_.o.sub(_b);_a.sub(_b)}J_.tv.copy(_a).multiplyScalar(1/dt);J_.tp.copy(boardG.position);
+     const w=16,e=Math.exp(-w*dt);_c.copy(J_.ov).addScaledVector(J_.o,w);J_.o.addScaledVector(_c,dt).multiplyScalar(e);J_.ov.addScaledVector(_c,-w*dt).multiplyScalar(e);
+     if(J_.o.lengthSq()>1e-8)boardG.position.add(J_.o)}
+   J_.t=time;J_.w=game.waveId}
   riderG.quaternion.copy(boardG.quaternion).multiply(qS.setFromAxisAngle(UPV,rootYaw-slip));
   sf.pos.copy(boardG.position);sf.f.set(1,0,0).applyQuaternion(boardG.quaternion);sf.up.set(0,1,0).applyQuaternion(boardG.quaternion);sf.right.set(0,0,1).applyQuaternion(boardG.quaternion);
   riderG.position.copy(boardG.position);riderG.visible=boardG.visible=true;A.throw=Math.max(0,A.throw-dt/0.30);
+  if(A.tb){const B=A.tb;B.t+=dt;const u=clamp(B.t/B.T,0,1),w=u*u*u*(u*(u*6-15)+10),te=0.2*(1-Math.exp(-B.t/0.2));   /* quintic ease: no jump in position, speed or acceleration */
+    _a.copy(B.bp).addScaledVector(B.bv,te);boardG.position.lerpVectors(_a,boardG.position,w);riderG.position.copy(boardG.position);
+    extrapQ(B.bq,B.bw,te,_tbQ2);_tbQ2.slerp(boardG.quaternion,w);boardG.quaternion.copy(_tbQ2);
+    extrapQ(B.rq,B.rw,te,_tbQ2);_tbQ2.slerp(riderG.quaternion,w);riderG.quaternion.copy(_tbQ2);
+    sf.pos.copy(boardG.position);sf.f.set(1,0,0).applyQuaternion(boardG.quaternion);sf.up.set(0,1,0).applyQuaternion(boardG.quaternion);sf.right.set(0,0,1).applyQuaternion(boardG.quaternion);
+    if(u>=1)A.tb=null}
+  if(!A.bpPrev){A.bpPrev=boardG.position.clone();A.bvel=new V3();A.bqPrev=boardG.quaternion.clone();A.rqPrev=riderG.quaternion.clone();A.bw=new V3();A.rw=new V3()}
+  else if(dt>1e-4){A.bvel.copy(boardG.position).sub(A.bpPrev).multiplyScalar(1/dt);angVel(A.bqPrev,boardG.quaternion,dt,A.bw);angVel(A.rqPrev,riderG.quaternion,dt,A.rw);
+    A.bpPrev.copy(boardG.position);A.bqPrev.copy(boardG.quaternion);A.rqPrev.copy(riderG.quaternion)}
   if(sf.mode==='air'&&sf.np){const u=clamp(sf.airT/sf.airDur,0,1),th=1.0*sstep(0.04,0.34,u)*(1-sstep(0.60,0.94,u));AT.npTh=th;   // nose pick: the nose comes up to the sky around the back foot, held while it turns, then down for the landing
     _a.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,th));_b.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.position.add(_a).sub(_b)}
   else AT.npTh=0;
   if(sf.mode==='ride'&&(sf.exV===1||sf.exV===2)){const T=sf.exV===1?0.5:0.62,u=clamp(sf.exT/T,0,1);
-    if(sf.exT<T){const hh=(sf.exV===1?0.32:0.42)*Math.sin(PI*u);   // a small pop, not a launchboardG.position.y+=hh;riderG.position.y+=hh;
+    if(sf.exT<T){const hh=(sf.exV===1?0.32:0.42)*Math.sin(PI*u);   /* a small pop, not a launch */boardG.position.y+=hh;riderG.position.y+=hh;
       if(sf.exV===1)boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,0.30*Math.sin(PI*u)*(1-u)));else boardG.quaternion.multiply(qS.setFromAxisAngle(UPV,2*PI*sstep(0.1,0.88,u)));
       AT.crouch=u<0.12?0.85:u<0.8?0.7:0.55;AT.claim=0}
     else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);if(!game.attract){const v=sf.claimV;if(PROG.celeb.indexOf(v)<0){PROG.celeb.push(v);progSave()}if(PROG.celeb.length>=CELEB.length)giveTro('show')}sf.celebN=''}}}
@@ -2539,11 +2699,12 @@ function boardSpray(dt){
 /* ───────────────────────── camera ───────────────────────── */
 const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',blendDur=1.2,camRP=3.2,camRL=7,camGP=0;const _oT1=new V3,_oT2=new V3;
 const REPLAY_SHOTS=['follow','tele'];   // replays and the start screen cut between chase and side only
-const SCam=mkS(),_bd=new V3(),_gf=new V3(),_gu=new V3();
+const SCam=mkS(),_bd=new V3(),_gf=new V3(),_gu=new V3(),_gfS=new V3(1,0,0),_guS=new V3(0,1,0),_gT=new V3();
 function shot(kind,p,tk,ak){
   if(kind==='tele'){cT1.set(p.x+lerp(15,6.5,tk)+ak*2,lerp(3.0+p.y*0.10,0.9,tk)-ak*0.3,lerp(25,S.z0+3.8,tk)+ak*2);
     cT2.set(p.x+lerp(1.6,0.4,tk),p.y+lerp(1.25,0.7,tk)-ak*sf.h*0.45,p.z*0.8);return lerp(18.5,48,tk)+ak*2.5}
   if(kind==='beach'){sampleSurf(sf.s,Math.max(sf.p,0.3),SCam);_bd.copy(SCam.tp).setY(0);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize().multiplyScalar(-1);   // on the beach side, facing him as he comes in
+    if(sf.mode==='reef'){cT1.copy(p).addScaledVector(_bd,5.4);cT1.y=p.y+1.55;cT2.set(p.x,p.y+0.85,p.z);return 40}   /* the walk out over the reef: close, face on */
     cT1.copy(p).addScaledVector(_bd,7.5);cT1.y=p.y+1.5;cT2.set(p.x,p.y+0.95,p.z);return 44}
   if(kind==='front'){sampleSurf(sf.s,0,SCam);_bd.copy(SCam.tp).setY(0);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize().multiplyScalar(-1);   // square on to the wave from the beach: anchored to the base of the wave, so it does not zoom as he moves on the face
     cT1.copy(SCam.pos).addScaledVector(_bd,17);cT1.x=p.x;cT1.y=2.0;cT2.set(p.x,SCam.pos.y+2.2,SCam.pos.z);return 42}
@@ -2559,8 +2720,8 @@ function shot(kind,p,tk,ak){
     cT2.set(p.x+lerp(lerp(lerp(-1.5,la,kd),Math.min(la+1,0.9+dB*0.95*aK),tk),0.5,Math.min(1,Math.max(0,8.5-(p.x+ox))/2)*(1-tk)),p.y+lerp(0.8,0.75,tk)-ak*sf.h*0.3,p.z+lerp(-1.0,0.2,tk));return lerp(50,lerp(72,62,sstep(1.5,2.5,dB)),tk)+ak*3}
   if(kind==='wide'){cT1.set(p.x+30,7.5,p.z+48);cT2.set(p.x-4,p.y+0.9,p.z-3);return 30}   // from down the line on the beach side, high
   if(kind==='wide2'){cT1.set(p.x-24,9.5,p.z+44);cT2.set(p.x+8,p.y+1.0,p.z-2);return 32}   // from up the line, over the curl
-  if(kind==='gopro'){_gf.set(sf.f.x,0,sf.f.z);if(_gf.lengthSq()<1e-4)_gf.set(1,0,0);_gf.normalize().multiplyScalar(0.32);_gf.x+=0.68;_gf.normalize();   // aimed down the tube, following the board only loosely
-    _gu.copy(UPV).lerp(sf.up,0.35).normalize();cT1.copy(p).addScaledVector(_gf,-1.6).addScaledVector(_gu,0.95);cT2.copy(p).addScaledVector(_gf,3.6).addScaledVector(_gu,0.62);return 98}   // in the barrel: a GoPro on a pole off the tail, low behind him, fisheye, looking out down the tube
+  if(kind==='gopro'){_gf.copy(_gfS).multiplyScalar(0.32);_gf.x+=0.68;_gf.normalize();   /* aimed down the tube, following the board only loosely (and only its smoothed heading) */
+    _gu.copy(UPV).lerp(_guS,0.35).normalize();cT1.copy(p).addScaledVector(_gf,-1.6).addScaledVector(_gu,0.95);cT2.copy(p).addScaledVector(_gf,3.6).addScaledVector(_gu,0.62);return 98}   // in the barrel: a GoPro on a pole off the tail, low behind him, fisheye, looking out down the tube
   if(kind==='barrel'){sampleSurf(sf.s+7,Math.max(sf.p,0.3),SCam);cT1.copy(SCam.pos).addScaledVector(SCam.n,1.5);cT1.y=Math.max(cT1.y+0.35,0.8);   // deep in the barrel: in the tube ahead of him, looking back at him with the curtain behind
     cT1.z=lerp(cT1.z,Math.min(cT1.z,SCam.tipZ-0.3),sstep(2.9,3.4,SCam.aEnd));cT2.set(p.x+0.3,p.y+0.75,p.z);return 48}
   if(kind==='low'){cT1.set(p.x+6.5,0.55,p.z+8.5);cT2.set(p.x+0.6,p.y+0.8,p.z);return 38}
@@ -2568,6 +2729,7 @@ function shot(kind,p,tk,ak){
   cT1.set(p.x+13,1.2,p.z+4.5);cT2.set(p.x,p.y+0.7,p.z);return 24}
 const _sunP=new V3;
 function updateCamera(dt,time){
+  {_gT.set(sf.f.x,0,sf.f.z);if(_gT.lengthSq()>1e-4){_gT.normalize();_gfS.lerp(_gT,1-Math.exp(-3.2*dt)).normalize()}_guS.lerp(sf.up,1-Math.exp(-2.6*dt)).normalize()}   /* the board's heading and tilt, smoothed over ~0.3 s for the GoPro */
   let fov=30,rp=3.2,rl=7,kind='menu';const p=sf.mode==='wipe'||sf.mode==='kickout'?sf.wPos:sf.pos;
   if(game.state==='menu'){const a=time*0.11;cT1.set(19+Math.sin(a)*5,1.5+Math.sin(a*1.7)*0.35,17+Math.cos(a)*2.5);cT2.set(3.5,1.75,0.4);fov=27}
   else{
@@ -2601,10 +2763,10 @@ function updateCamera(dt,time){
   camL.x=damp(camL.x,cT2.x,rl*Math.max(bk,0.8),dt);camL.y=damp(camL.y,cT2.y,rl*0.7*Math.max(bk,0.8),dt);camL.z=damp(camL.z,cT2.z,rl*0.7*Math.max(bk,0.8),dt);
   camFov=damp(camFov,fov,camBlend>0?2:3,dt);
   const calm=1-0.8*(sf.tubeK||0),hx=(Math.sin(time*0.83)*0.07+Math.sin(time*2.1)*0.02)*calm,hy=(Math.sin(time*1.17+1)*0.06+Math.sin(time*0.6)*0.08)*calm;
-  const shk=(game.shake||0)*calm;game.shake=damp(game.shake||0,0,7,dt);
-  camera.position.set(camP.x+hx+rnd(-1,1)*shk*0.09,Math.max(camP.y+hy+rnd(-1,1)*shk*0.09,0.45),camP.z);
+  const shk=(game.shake||0)*(1-0.95*(sf.tubeK||0));game.shake=damp(game.shake||0,0,7,dt);const sx_=Math.sin(time*29.3)*0.6+Math.sin(time*47.1)*0.4,sy_=Math.sin(time*31.7+1.3)*0.6+Math.sin(time*53.9+0.4)*0.4;
+  camera.position.set(camP.x+hx+sx_*shk*0.09,Math.max(camP.y+hy+sy_*shk*0.09,0.45),camP.z);
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
-  camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(sf.up,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
+  camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(_guS,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
   camera.lookAt(camL.x+hx*0.4,camL.y+hy*0.3,camL.z);
   if(Math.abs(camera.fov-camFov)>0.01){camera.fov=camFov;camera.updateProjectionMatrix()}
   camFocus=camera.position.distanceTo(game.state==='menu'?cT2:p);partMat.uniforms.uRZ.value=game.state==='menu'||!sf.visible?1e3:camFocus;
@@ -2656,7 +2818,7 @@ addEventListener('resize',resize);resize();
 // Steady frames matter more than sharp ones: resolution follows what the machine can hold at a locked cadence.
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
-const QL=[[2.0,true,4],[2.0,false,4],[1.75,false,4],[1.5,false,4],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
+const QL=[[2.0,true,4],[2.0,false,4],[1.75,false,4],[1.5,false,4],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
 function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=rt.samples;qLevel=l;const r=Math.min(devicePixelRatio,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0)for(const t of [composer.renderTarget1,composer.renderTarget2]){t.samples=sm;t.dispose()}
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
@@ -2698,7 +2860,7 @@ function frame(nowMs){
   const dR=nowMs-lastRaf;lastRaf=nowMs;
   if(dR>3&&dR<60){if(dR<rafD*0.75)rafD=dR;else if(dR<rafD*1.3)rafD+=(dR-rafD)*0.05}   // refresh = running average of the normal spacing (the fastest one alone reads low from jitter; spacing the GPU stretched is ignored)
   if(prPend){prPend=false;prN++;if(nowMs-last<=(cadN-1)*rafD*1.15+0.5)prOk++}   // how soon the screen came back after the last frame: room for a faster cadence?
-  const nMin=Math.max(1,Math.ceil(11.5/rafD-0.3));if(cadN<nMin)cadN=Math.max(nMin,Math.ceil((16.3-rafD*0.5)/rafD));   // cadence = refreshes per frame; never faster than ~87 fps
+  const nMin=Math.max(1,Math.ceil(6.9/rafD-0.3));if(cadN<nMin)cadN=Math.max(nMin,Math.ceil((16.3-rafD*0.5)/rafD));   /* cadence = refreshes per frame: starts at ~60 fps and goes faster (up to ~144) while the screen keeps coming back early */
   const gate=cadN*rafD-rafD*0.5;if(nowMs-last<gate)return;
   const dtRaw=Math.max(0,(nowMs-last)/1000),dtR=Math.min(dtRaw,0.05);last=nowMs;prPend=true;
   if(game.paused||window.__manual||innerWidth<16){return}
@@ -2727,8 +2889,10 @@ function tick(dtR,draw){
       if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.tt=null}   // he turns to face the beach first
       if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
         if(sf.exV===3){sf.mode='kickout';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.7);sf.wVel.x+=sf.V*Math.cos(sf.th)-CP*0.6;sf.wVel.y=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}   // kicks the board up and steps off
-        else{const C=nextCeleb();sf.claimT=4.2;sf.claimV=C.v;sf.celebN=C.n;sfxNoise(0.22,2600,0.15)}}   // ollie or varial, then the celebration
-      if(game.waveAge>game.waveDur){game.Hbase=1-0.8*sstep(0,3.6,game.waveAge-game.waveDur);if(game.waveAge>game.waveDur+3.5&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done')}}
+        else if(SPOT.id!==1&&!game.attract&&(game.reefTurn=!game.reefTurn)){sf.exV=4;sf.reefAt=game.waveDur+0.25}   /* over a reef, every other wave: he steps off into the shallows and hobbles out over the coral */
+        else{const C=nextCeleb();sf.claimT=4.2;sf.claimV=C.v;sf.celebN=C.n;sfxNoise(0.22,2600,0.15)}}
+      if(sf.exV===4&&sf.mode==='ride'&&game.waveAge>=sf.reefAt)reefStart();   // ollie or varial, then the celebration
+      if(game.waveAge>game.waveDur){game.Hbase=1-0.8*sstep(0,3.6,game.waveAge-game.waveDur);if(game.waveAge>game.waveDur+3.5&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done');if(sf.mode==='reef'&&sf.wT>4.6)endRide('done')}}
     else if(game.state==='end'){game.endT+=dtR;game.Hbase=damp(game.Hbase,1,0.5,dt)}
   }
   const P_=window.__prof;let pt_=P_?performance.now():0;const mk_=n=>{if(P_){const u=performance.now();P_[n]=(P_[n]||0)+u-pt_;pt_=u}};mk_('pre');
@@ -2741,6 +2905,7 @@ function tick(dtR,draw){
       if(sf.mode==='ride')stepRide(h);else if(sf.mode==='air')stepAir(h);else if(sf.mode==='float')stepFloat(h);
       else if(sf.mode==='wipe'){sf.wT+=h;if(sf.wT>1.5&&game.state==='ride')endRide('wipe');if(sf.wT>2.5)sf.visible=false}
       else if(sf.mode==='kickout')sf.wT+=h;
+      else if(sf.mode==='reef'){sf.wT+=h;reefStep(h)}
       if(sf.exV)sf.exT=(sf.exT||0)+h}
   }
   if(game.state==='ride'){const f={t:game.t,age:game.waveAge,H:game.Hbase,rk:game.rhK||0,tube:game.inTube,ix:input.x,cr:input.crouch,st:input.stall,sf:{}};for(const k of REC_KEYS)f.sf[k]=sf[k];game.rec.push(f)}
@@ -2749,7 +2914,7 @@ function tick(dtR,draw){
   sunL.target.position.copy(sf.pos);sunL.position.copy(sf.pos).addScaledVector(SUN,14);
   emitWave(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
   updateCamera(dtR,clockT);
-  updateEnv();updateNeon(dtR,clockT);mk_('camenv');
+  updateEnv();updateNeon(dtR,clockT);if(uluG.visible&&ULU.foamT){ULU.foamT.offset.x=(clockT*0.012)%1;ULU.foamT.offset.y=0.04*Math.sin(clockT*0.9)}mk_('camenv');
   waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;
   {const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
    U.uShdK.value=sf.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float')?(1-0.85*TOD.value)*clamp(1-sf.h*0.2,0.4,1):0}skyMat.uniforms.uTime.value=clockT;
