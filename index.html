@@ -976,6 +976,7 @@ const waveDef={
   side:THREE.DoubleSide};
 const waveMat=new THREE.ShaderMaterial(waveDef),curMat=new THREE.ShaderMaterial({...waveDef,defines:{CURTAIN:1}});
 const waveMesh=new THREE.Mesh(waveGeo,[waveMat,curMat]);waveMesh.frustumCulled=false;scene.add(waveMesh);
+setInterval(()=>{scene.traverse(o=>{if((o.isSkinnedMesh||o.isPoints)&&o.frustumCulled)o.frustumCulled=false})},3000);   /* skinned bodies and particle clouds: their bounds lie, so they are always drawn */
 
 /* ───────────────────────── surface sampling ───────────────────────── */
 function colIndex(s){let lo=0,hi=NS-1;if(s<=colS[0])return 0;if(s>=colS[hi])return hi-1e-4;
@@ -1988,6 +1989,7 @@ const bbG=new THREE.Group();bbG.visible=false;scene.add(bbG);
 setTimeout(()=>{const ld=new GLTFLoader();ld.setMeshoptDecoder(MeshoptDecoder);ld.load('bodyboarder-v2.glb',g=>{const m=g.scene;m.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false}});
   const box=new THREE.Box3().setFromObject(m),sz=box.getSize(new V3()),c=box.getCenter(new V3());m.position.set(-c.x,-box.min.y,-c.z);
   const inner=new THREE.Group();inner.add(m);if(sz.z>sz.x)inner.rotation.y=PI/2;const L=Math.max(sz.x,sz.z);inner.scale.setScalar(1.8/L);
+  inner.traverse(o=>{if(o.isMesh)o.frustumCulled=false});   /* a skinned body is bounded by its rest pose: never let the renderer think it is off screen */
   BB.inner=inner;bbG.add(inner);BB.ready=true},undefined,()=>{})},4000);   // she only shows up mid-ride, so she loads after the intro
 function bbTick(dt,time){bbG.visible=false;BB.on=false;return;   // the bodyboarder is switched off
   if(!BB.ready)return;
@@ -2228,14 +2230,14 @@ musicGo();   // the song starts with the opening vignette, straight away where t
 addEventListener('pointerdown',()=>{if(!MUS.on||MUS.el.paused){initAudio();musicGo()}},{capture:true});['touchstart','mousedown','wheel'].forEach(t=>addEventListener(t,()=>{if(!MUS.on||MUS.el.paused){initAudio();musicGo()}},{capture:true,passive:true}));   /* whatever the first touch is, the music comes in */addEventListener('keydown',()=>{if(!MUS.on||MUS.el.paused){initAudio();musicGo()}},{capture:true});
 $('mPrev').addEventListener('click',e=>{e.stopPropagation();musicGo();musicSet(MUS.i-1)});$('mNext').addEventListener('click',e=>{e.stopPropagation();musicGo();musicSet(MUS.i+1)});
 {const T=TRACKS[MUS.i];$('mTitle').textContent=T.t;$('mBand').textContent=T.b}
-// autopilot for the start screen: carves, hits, a roundhouse now and then, laybacks; keeps away from the curl
-const AP={t:0,k:''};
-function autoPilot(dt){AP.t-=dt;
-  if(AP.t<=0){const r=Math.random();
-    if(sf.s<8){AP.k='R';AP.t=0.9}else if(game.inTube){AP.k='';AP.t=0.7}
-    else if(r<0.34){AP.k='U';AP.t=rnd(0.55,0.85)}else if(r<0.6){AP.k='D';AP.t=rnd(0.4,0.7)}
-    else if(r<0.7&&sf.s>14&&!sf.rh){AP.k='L';AP.t=0.12}else if(r<0.8){AP.k='UH';AP.t=0.75}else{AP.k='';AP.t=rnd(0.4,0.9)}}
-  const k=AP.k;input.x=(k.includes('R')?1:0)-(k.includes('L')?1:0);input.y=(k.includes('U')?1:0)-(k.includes('D')?1:0);input.crouch=false;input.stall=k.includes('H')}
+/* autopilot for the start screen: clean snaps only, the prettiest move: glide down, bottom turn up the face, a quick tap at the top, down again; away from the curl and the foam */
+const AP={t:0,k:'',ph:'glide',up:0},S_AP=mkS();
+function autoPilot(dt){AP.t-=dt;sampleSurf(sf.s,1e6,S_AP);const top=Math.max(S_AP.top||1,0.1),rel=sf.p/top,foamy=S_AP.foam>0.3;let k='';
+  if(sf.s<8||game.inTube){k='R';AP.ph='glide'}
+  else if(AP.ph==='glide'){k='';if(rel<0.46&&!foamy&&AP.t<=0){AP.ph='up';AP.up=0}}   /* let the snap carry him down (holding down at the top would turn it into a tail throw) */
+  else if(AP.ph==='up'){k='U';AP.up+=dt;if(foamy){AP.ph='glide'}else if(rel>0.76||AP.up>1.5){AP.ph='snap';AP.t=0.26}}
+  else if(AP.ph==='snap'){k='D';if(AP.t<=0){AP.ph='glide';AP.t=0.7}}
+  AP.k=k;input.x=(k.includes('R')?1:0)-(k.includes('L')?1:0);input.y=(k.includes('U')?1:0)-(k.includes('D')?1:0);input.crouch=false;input.stall=false}
 
 function award(name,pts,small){if(/^(Snap|Tail Throw|Roundhouse|Cutback|Off the Lip|Vertical Hit|Carve|Layback|Floater|Long Floater|360|Tail Slide)/.test(name))sfxPlay('spray',{vol:0.65,off:[2.0,2.6,8.0,8.8][Math.floor(Math.random()*4)]+rnd(0,0.3),dur:0.8,rate:rnd(0.95,1.12),fo:0.3});   /* the rail throwing water */
   if(/Barrel|Air|Spit/.test(name)&&(SPOT.id===1||SPOT.id===2))sfxPlay('crowd',{vol:0.22,off:2,dur:3,fi:0.4,fo:1.2});   /* the stands, the warungs */
@@ -2279,6 +2281,7 @@ function reefMake(){const g=new THREE.IcosahedronGeometry(1,2),P=g.attributes.po
   const ft=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=128;const x=cv.getContext('2d'),gd=x.createRadialGradient(64,64,22,64,64,62);gd.addColorStop(0,'rgba(255,255,255,0)');gd.addColorStop(0.45,'rgba(255,255,255,0.85)');gd.addColorStop(0.7,'rgba(255,255,255,0.35)');gd.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gd;x.fillRect(0,0,128,128);
     x.globalCompositeOperation='destination-out';for(let i=0;i<70;i++){x.beginPath();x.arc(Math.random()*128,Math.random()*128,2+Math.random()*7,0,PI*2);x.fillStyle='rgba(0,0,0,'+(0.3+Math.random()*0.6)+')';x.fill()}const t=new THREE.CanvasTexture(cv);return t})();   /* froth: soft at both edges, full of holes */
   const rg=new THREE.PlaneGeometry(2.6,2.6);rg.rotateX(-Math.PI/2);const ring=new THREE.InstancedMesh(rg,new THREE.MeshBasicMaterial({map:ft,color:0xf2fbff,transparent:true,opacity:0.55,depthWrite:false}),N);ring.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  im.frustumCulled=false;ring.frustumCulled=false;   /* the heads move every reef run: no stale bounds */
   const grp=new THREE.Group();grp.add(im,ring);grp.visible=false;scene.add(grp);reefG={g:grp,im,ring,N,items:[]};
   const pal=[[0.34,0.22,0.17],[0.30,0.25,0.14],[0.26,0.17,0.22],[0.20,0.24,0.13],[0.42,0.34,0.26],[0.33,0.15,0.13],[0.24,0.21,0.17]],c=new THREE.Color();   /* wet coral: brown, ochre, dark purple, algae green, bleached tan, red-brown */
   for(let i=0;i<N;i++){const q=pal[i%pal.length],v=rnd(0.85,1.15);c.setRGB(q[0]*v,q[1]*v,q[2]*v);im.setColorAt(i,c)}im.instanceColor.needsUpdate=true}
@@ -2961,6 +2964,7 @@ function updateCamera(dt,time){
   const shk=(game.shake||0)*(1-0.95*(sf.tubeK||0));game.shake=damp(game.shake||0,0,7,dt);const sx_=Math.sin(time*29.3)*0.6+Math.sin(time*47.1)*0.4,sy_=Math.sin(time*31.7+1.3)*0.6+Math.sin(time*53.9+0.4)*0.4;
   camera.position.set(camP.x+hx+sx_*shk*0.09,Math.max(camP.y+hy+sy_*shk*0.09,0.45),camP.z);
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
+  {const nr=lastShot==='gopro'||sf.tubeK>0.3?0.08:0.3;if(camera.near!==nr){camera.near=nr;camera.updateProjectionMatrix()}}   /* close to the wall in the barrel: never clip the water */
   camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(_guS,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
   camera.lookAt(camL.x+hx*0.4,camL.y+hy*0.3,camL.z);
   if(Math.abs(camera.fov-camFov)>0.01){camera.fov=camFov;camera.updateProjectionMatrix()}
