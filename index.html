@@ -819,12 +819,12 @@ waveGeo.setAttribute('aInfo',new THREE.BufferAttribute(gInf,4).setUsage(THREE.Dy
  waveGeo.setIndex(new THREE.BufferAttribute(idx,1));waveGeo.addGroup(0,n0,0);waveGeo.addGroup(n0,k-n0,1)}
 const waveDef={
   uniforms:{uSun:{value:SUN},uNight:TOD,uNoise:{value:noiseTex},uTime:{value:0},uX:{value:0},uPool:{value:new THREE.Vector4(62,0.866,0.5,0)},
-    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0}},
+    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0}},
   vertexShader:`attribute vec4 aInfo;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     void main(){vP=position;vN=normal;vI=aInfo;gl_Position=projectionMatrix*viewMatrix*vec4(position,1.);}`,
   fragmentShader:`precision highp float;
     uniform sampler2D uNoise;uniform float uTime;uniform float uX;uniform vec4 uPool;varying vec3 vP;varying vec3 vN;varying vec4 vI;
-    uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef;
+    uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef,uShdK;uniform vec4 uShd;
     ${SKY_GLSL}
     void main(){
       vec3 Ng=vN;if(dot(Ng,Ng)<1e-6)Ng=vec3(0.,1.,0.);Ng=normalize(Ng);vec3 Vv=cameraPosition-vP;float dist=length(Vv);vec3 V=Vv/dist;
@@ -841,12 +841,12 @@ const waveDef={
       vec2 w4=texture2D(uNoise,uv*0.67+vec2(-0.08,0.10)*uTime).rg-0.5;
       vec2 w5=texture2D(uNoise,uv*1.9+vec2(0.17,0.13)*uTime).rg-0.5;
       float df=1./(1.+dist*0.02);
-      vec2 sl=(w1*0.60+w2*0.62+w3*0.42+(w4*0.30+w5*0.20)*df)*mix(0.27,0.15,steep);
+      vec2 sl=(w1*0.60+w2*0.62+w3*0.42+(w4*0.36+w5*0.28)*df)*mix(0.33,0.20,steep);   // a little more fine chop: the face catches the light in small facets
       vec3 Ts=normalize(vec3(1.,0.,0.)-Ng*Ng.x);vec3 Tp=cross(Ng,Ts);
       vec3 N=normalize(Ng-(Ts*sl.x+Tp*sl.y));
       float ndv=max(dot(N,V),0.);float fres=0.02+0.98*pow(1.-ndv,5.);
       vec3 R=reflect(-V,N);R.y=abs(R.y);
-      vec3 refl=skyC(R)*mix(0.92,0.70,steep);   // the steep face mirrors less of the pale sky: it stays deep turquoise
+      vec3 refl=skyC(R)*mix(0.88,0.56,steep);   // the steep face mirrors less of the pale sky: it stays deep turquoise
       vec3 L=uSun;
       float back=pow(clamp(dot(V,-L)*.5+.5,0.,1.),2.);
       float nz=texture2D(uNoise,uv*0.09+w1*0.05).b;
@@ -864,11 +864,13 @@ const waveDef={
       {vec2 pq=vP.xz-vec2(uPool.x,0.);float pa=dot(pq,vec2(uPool.y,uPool.z))+uPool.w,pw=dot(pq,vec2(-uPool.z,uPool.y));
        vec2 fu=vec2(pa,pw)+sl*2.4;
        float lane=1.-smoothstep(0.10,0.20,abs(fract(fu.y/10.)-0.5)*10.),cross=1.-smoothstep(0.08,0.16,abs(fract(fu.x/25.)-0.5)*25.);
-       float cau=smoothstep(0.45,0.95,texture2D(uNoise,fu*0.21+w1*0.35).a)*0.6;
+       float cau=smoothstep(0.45,0.95,texture2D(uNoise,fu*0.21+w1*0.35).a)*0.6+smoothstep(0.62,0.90,texture2D(uNoise,fu*0.47-w2*0.5).a)*0.45;   // two layers of sunlight ripples on the bottom
        float tile=max(1.-smoothstep(0.015,0.05,abs(fract(fu.x/2.5)-0.5)*2.5),1.-smoothstep(0.015,0.05,abs(fract(fu.y/2.5)-0.5)*2.5));
-       lane*=1.-uReef;cross*=1.-uReef;tile*=1.-uReef;vec3 floorC=uFl*(0.86+0.46*cau)*(1.-0.16*tile);floorC=mix(floorC,uFlL,max(lane,cross*0.6)*0.8);
+       lane*=1.-uReef;cross*=1.-uReef;tile*=1.-uReef;vec3 floorC=uFl*(0.86+0.46*cau)*(1.-0.16*tile);floorC=mix(floorC,uFlL,max(lane,cross*0.6)*0.45);
        if(uReef>0.5){float rr=texture2D(uNoise,fu*0.031+vec2(0.37,0.11)).a*0.65+texture2D(uNoise,fu*0.11).b*0.35;floorC=mix(uFlL,uFl,smoothstep(0.32,0.68,rr))*(0.82+0.5*cau);}   // a coral reef under the water
-       float vis=(1.-fres)*smoothstep(0.06,0.55,ndv)*(1.-steep)*(1.-steep)*(1.-clamp(foamA,0.,1.))*(1.-occ)*0.68;
+       if(uShdK>0.001){vec2 fq=vP.xz+sl*2.4-uShd.xy,lq=vec2(dot(fq,uShd.zw),dot(fq,vec2(-uShd.w,uShd.z)));   // his shadow on the bottom, cast along the sun through clear water
+         float bd=smoothstep(1.0,0.55,length(lq/vec2(1.05,0.30))),bo=smoothstep(1.0,0.4,length((lq-vec2(-0.25,0.))/vec2(0.48,0.38)));floorC*=1.-uShdK*0.62*max(bd,bo);}
+       float vis=(1.-fres)*smoothstep(0.06,0.55,ndv)*pow(1.-steep,1.6)*(1.-clamp(foamA,0.,1.))*(1.-occ)*0.72;
        body=mix(body,floorC*uFlK,vis);}
       float sd=max(dot(R,L),0.);
       float spec=(pow(sd,420.)*9.+pow(sd,70.)*0.35)*(1.-occ)*(1.-fk);
@@ -1108,8 +1110,8 @@ function setTOD(n){n=n?1:0;TOD.value=n;game.night=n;try{localStorage.setItem('su
     palmMat.color.set(0x1a2026);lampMat.color.setRGB(9,8.4,7.0);BAN.forEach(m=>m.material.color.setRGB(1.5,1.5,1.5));BILL.forEach(m=>m.material.color.setRGB(1.9,1.9,1.9))}
   else{SUN.set(0.42,0.50,-0.76).normalize();sunL.color.set(0xffe2b8);sunL.intensity=3.4;hemiL.color.set(0xd6e8ff);hemiL.groundColor.set(0x3c8fc0);hemiL.intensity=0.62;fillL.color.set(0xffffff);fillL.intensity=0.55;fillL.position.set(0.6,0.5,1);
     scene.fog.color.setRGB(0.54,0.75,0.97);renderer.toneMappingExposure=1.0;bloom.strength=0.30;
-    S3(U.uWA,0.001,0.048,0.105);S3(U.uWB,0.003,0.215,0.360);S3(U.uG1,0.0,0.30,0.44);S3(U.uG2,0.06,0.80,0.78);S3(U.uFl,0.16,0.58,0.88);S3(U.uFlL,0.04,0.20,0.36);S3(U.uSpecC,1.0,0.96,0.88);
-    S3(U.uFoamA,0.62,0.76,0.88);S3(U.uFoamB,1.0,0.99,0.97);U.uFlK.value=0.95;partMat.uniforms.uTint.value.set(1,1,1);
+    S3(U.uWA,0.001,0.030,0.050);S3(U.uWB,0.004,0.190,0.225);S3(U.uG1,0.02,0.30,0.32);S3(U.uG2,0.22,0.98,0.74);S3(U.uFl,0.36,0.56,0.52);S3(U.uFlL,0.08,0.24,0.27);S3(U.uSpecC,1.0,0.96,0.88);
+    S3(U.uFoamA,0.70,0.80,0.86);S3(U.uFoamB,1.06,1.05,1.02);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
     palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
   if(typeof cityNight==='function')cityNight(n);spotTint(n);bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
@@ -1541,7 +1543,7 @@ function poseRider(time,dt){
   if(bh>0.01){J.pel.x+=0.24*bh;J.pel.y+=0.06*bh;J.pel.z-=0.08*bh}   // backside hit: hips over the front foot, so the back leg straightens and kicks the tail
   {const hy=hp+0.45*sy;J.hax.set(st*Math.cos(hy),0,1-st+st*Math.sin(hy)).normalize()}
   J.hipF.copy(J.pel).addScaledVector(J.hax,0.088);J.hipF.y-=0.02;J.hipB.copy(J.pel).addScaledVector(J.hax,-0.088);J.hipB.y-=0.02;
-  J.ftF.set(lerp(-1.39,-0.06*cs+0.05*ss,st),lerp(0.12,0.11,st),lerp(0.10,0.06*ss+0.05*cs,st));if((AT.npTh||0)>0.005){const t=AT.npTh;J.ftF.x=-0.54+0.48*Math.cos(t);J.ftF.y=0.11+0.48*Math.sin(t)}   // nose pick: the front foot stays on the board as the nose comes up{const yb=sy*(1-0.40*(A.lay||0)),cb=Math.cos(yb),sb=Math.sin(yb);J.ftB.set(lerp(-1.39,-(0.54+0.06*bh)*cb+0.05*sb,st),lerp(0.12,0.11,st),lerp(-0.10,0.54*sb+0.05*cb,st))}   // the back foot lags the kicked tail, out toward the rail
+  J.ftF.set(lerp(-1.39,-0.06*cs+0.05*ss,st),lerp(0.12,0.11,st),lerp(0.10,0.06*ss+0.05*cs,st));if((AT.npTh||0)>0.005){const t=AT.npTh;J.ftF.x=-0.54+0.48*Math.cos(t);J.ftF.y=0.11+0.48*Math.sin(t)}   /* nose pick: the front foot stays on the board as the nose comes up */{const yb=sy*(1-0.40*(A.lay||0)),cb=Math.cos(yb),sb=Math.sin(yb);J.ftB.set(lerp(-1.39,-(0.54+0.06*bh)*cb+0.05*sb,st),lerp(0.12,0.11,st),lerp(-0.10,0.54*sb+0.05*cb,st))}   // the back foot lags the kicked tail, out toward the rail
   ik(J.hipF,J.ftF,0.44,0.43,(0.30*cs-0.78*ss)*st,0.8*st-0.95*pr,(-0.30*ss-0.78*cs)*st,J.knF,J.tA);J.ftF.copy(J.tA);
   ik(J.hipB,J.ftB,0.44,0.43,(0.10*cs-0.85*ss)*st,0.75*st-0.95*pr,(-0.10*ss-0.85*cs)*st,J.knB,J.tA);J.ftB.copy(J.tA);
   fillLimb(legF,J.hipF,J.knF,J.ftF,0.506,0.08);legF.update();fillLimb(legB,J.hipB,J.knB,J.ftB,0.506,0.08);legB.update();
@@ -2290,7 +2292,7 @@ function placeSurfer(dt,time){
      if(game.inTube&&input.x>0.3)cT=lerp(cT,0.78+0.16*Math.sin(time*7.5),0.8)}   // pumping for speed inside
     if(sf.introT>0&&!intro)cT=lerp(0.5,0.3,sstep(0.5,0.2,sf.introT));   // stretched out down the face
     else if(sf.openT>0)cT=Math.max(cT,lerp(0.32,0.84,sstep(1.9,1.3,sf.openT))-0.28*sstep(0.7,0,sf.openT));   // compressing into the bottom turn, then rising out of it
-    AT.lay=sstep(0.35,0.75,sf.layT)*(1-sstep(1.1,1.3,sf.layT));   // down at the start, back up by the time the tail comes roundif(AT.lay>0.05){cT=Math.max(cT,0.82);sh=-0.10}
+    AT.lay=sstep(0.35,0.75,sf.layT)*(1-sstep(1.1,1.3,sf.layT));   /* down at the start, back up by the time the tail comes round */if(AT.lay>0.05){cT=Math.max(cT,0.82);sh=-0.10}
     AT.crouch=cT;AT.shiftX=sh;
     AT.tw=clamp(0.75+clamp(-sf.steer*0.7-sf.om*0.06,-0.95,0.75),-0.45,1.6)-0.95*AT.lay;   /* layback: chest twisted back toward the tail *//* chest and head go round with the body when the board spins: nothing is held back on the wave */AT.snap=snapT;AT.speed=sf.V;
     AT.intent=clamp(sf.steer*0.85+sf.rail*0.45,-1,1);AT.vup=sstep(1.5,6,vpv);
@@ -2465,7 +2467,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*0.014;
       vec3 col=vec3(texture2D(tDiffuse,uv+o).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-o).b);
       float l=dot(col,vec3(0.3,0.59,0.11));
-      col=mix(vec3(l),col,1.22);
+      col=mix(vec3(l),col,1.16);
       col+=vec3(-0.018,0.008,0.020)*(1.-smoothstep(0.,0.45,l));   // teal shadows
       col+=vec3(0.030,0.012,-0.022)*smoothstep(0.45,1.,l);        // golden highlights
       if(uSunK>0.001){vec2 dv=(fUv-uSun)*vec2(uAspect,1.);float dd=length(dv);
@@ -2476,7 +2478,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
           gh+=vec3(1.,0.72,0.42)*smoothstep(r,r*0.55,gd)*0.05/float(i)+vec3(0.35,0.8,1.)*(smoothstep(r*1.7,r*1.4,gd)-smoothstep(r*1.4,r*1.1,gd))*0.035;}   // lens ghosts toward the centre
         col+=(vec3(1.,0.85,0.6)*fl+gh)*uSunK*see;}
       col=mix(col,col*col*(3.-2.*col),0.50);
-      col=col*0.97+0.012;
+      col=col*1.01+0.003;
       vec2 cv=fUv-.5;col*=1.-dot(cv,cv)*0.9;
       float g=fract(sin(dot(gl_FragCoord.xy+fract(uTime)*91.7,vec2(12.9898,78.233)))*43758.5453);
       col+=(g-.5)*0.032;
@@ -2585,7 +2587,9 @@ function tick(dtR,draw){
   emitWave(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
   updateCamera(dtR,clockT);
   updateEnv();updateNeon(dtR,clockT);mk_('camenv');
-  waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;skyMat.uniforms.uTime.value=clockT;
+  waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;
+  {const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
+   U.uShdK.value=sf.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float')?(1-0.85*TOD.value)*clamp(1-sf.h*0.2,0.4,1):0}skyMat.uniforms.uTime.value=clockT;
   gradePass.uniforms.uTime.value=clockT;{_sunP.copy(SUN).multiplyScalar(900).add(camera.position).project(camera);const on=_sunP.z<1&&Math.abs(_sunP.x)<1.15&&Math.abs(_sunP.y)<1.15;   // lens flare follows the sun on screen
     gradePass.uniforms.uSun.value.set(_sunP.x*0.5+0.5,_sunP.y*0.5+0.5);gradePass.uniforms.uSunK.value=on?(1-0.75*TOD.value)*(1-sstep(0.85,1.15,Math.max(Math.abs(_sunP.x),Math.abs(_sunP.y)))):0}bokeh.uniforms.focus.value=damp(bokeh.uniforms.focus.value,camFocus,8,dtR);
   partMat.uniforms.uScale.value=renderer.domElement.height/(2*Math.tan(camera.fov*DEG/2));
