@@ -340,7 +340,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
       <section class="wzS" data-s="2"><h2 class="wzH">STANCE</h2>
         <div class="playRow">
         <div class="pbtns"><button id="goRight" class="pbtn wv big">REGULAR<i>LEFT FOOT FORWARD · RIGHTS</i></button><button id="goLeft" class="pbtn wv big sel">GOOFY<i>RIGHT FOOT FORWARD · LEFTS</i></button></div></div>
-        <p class="wzNote">Your stance sets the wave's direction at SurfPool, Uluwatu and Pipeline. Cloud 9 and Campeche are rights; at Trestles you pick a side.</p></section>
+        <p class="wzNote">Uluwatu and Pipeline are lefts; Cloud 9 and Campeche are rights. Ride them backside if they break against your stance. At SurfPool your stance sets the direction; at Trestles you pick a side.</p></section>
       <section class="wzS" data-s="3"><h2 class="wzH">CHOOSE YOUR WAVE</h2>
         <div class="pbtns spots" id="spotBtns"></div>
         <div class="playRow"><span class="playLbl">YOUR BOARD</span>
@@ -2368,7 +2368,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
   tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
-function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;
+function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
