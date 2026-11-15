@@ -2076,18 +2076,20 @@ function dropTick(dt){
     if(D.ph==='push'){AT.push=1;if(D.t>0.42){D.ph='fall';D.t=0;D.w.set(1,0,0);award('Drop-in Denied',1100);reqShot('Drop-in Denied',900,0.05);game.shake=Math.max(game.shake||0,0.2)}}
     if(D.ph==='fall'){npcPlace(D.s,D.p,D.th);
       D.av=D.w.x>0?-5.2:-4.2;D.az=D.w.x>0?1.4:0.9;D.inW=false;D.tw=0;D.fl=0;
-      if(D.w.x>0){D.v.copy(npcS.n).multiplyScalar(1.1).addScaledVector(UPV,2.7);D.v.x=0.9;D.bv.copy(npcS.n).multiplyScalar(3.2).addScaledVector(UPV,9.0).addScaledVector(npcS.ts,5.5);D.by0=npcBoard.position.y;D.churn=0}   // board thrown straight up, the intruder launched off it
-      else{D.v.copy(npcS.n).multiplyScalar(0.5).addScaledVector(npcS.tp,1.5).addScaledVector(UPV,1.6);D.v.x=1.8;D.bv.copy(D.v).addScaledVector(npcS.ts,2.2);D.bv.y+=1.3}}}   // shoved forward and up the face, away from the rider
+      if(D.w.x>0){D.v.copy(npcS.n).multiplyScalar(0.7).addScaledVector(UPV,2.7).addScaledVector(npcS.tp,1.9);D.v.x=1.6;   /* thrown up the face and ahead, clear of the rider's line: he never falls through him */
+        D.bv.copy(npcS.n).multiplyScalar(3.2).addScaledVector(UPV,9.0).addScaledVector(npcS.ts,5.5);D.by0=npcBoard.position.y;D.churn=0}   // board thrown straight up, the intruder launched off it
+      else{D.v.copy(npcS.n).multiplyScalar(0.5).addScaledVector(npcS.tp,2.4).addScaledVector(UPV,1.8);D.v.x=2.2;D.bv.copy(D.v).addScaledVector(npcS.ts,2.2);D.bv.y+=1.3}}}   // shoved forward and up the face, away from the rider
   else if(D.ph==='fall'){const t=D.t,thr=D.w.x>0;AT.push=thr&&t<0.42?1:0;   // the arm follows the board up: the throw
     /* knocked off: thrown back off his board, arms windmilling, the fall slowing as he lays out flat; he lands in the water on his back and goes under */
-    if(!D.inW){D.v.y-=9.8*dt;D.v.x-=CP*0.9*dt}else{D.v.x=damp(D.v.x,-CP*0.85,3,dt);D.v.z=damp(D.v.z,0,3,dt);D.v.y=damp(D.v.y,-0.7,4,dt)}
+    if(!D.inW){D.v.y-=9.8*dt;D.v.x-=CP*0.3*dt}else{D.v.x=damp(D.v.x,-CP*0.85,3,dt);D.v.z=damp(D.v.z,0,3,dt);D.v.y=damp(D.v.y,-0.7,4,dt)}
     npcG.position.addScaledVector(D.v,dt);D.av*=Math.exp(-(D.inW?6:1.5)*dt);D.az*=Math.exp(-(D.inW?6:1.8)*dt);
     _nq2.setFromAxisAngle(XV,D.av*dt);npcG.quaternion.multiply(_nq2);_nq2.setFromAxisAngle(ZV,D.az*dt);npcG.quaternion.multiply(_nq2);
-    npcApply(NPCP.pop[4]);D.fl=damp(D.fl,D.inW?0.35:1,D.inW?3:9,dt);npcFlail(D.fl,t);
+    npcApply(NPCP.pop[4]);D.fl=damp(D.fl,D.inW?0.3:0.75,D.inW?3:9,dt);npcFlail(D.fl,t);
     const sy=seaY(npcG.position.x,npcG.position.z);
     if(!D.inW&&D.v.y<0&&npcG.position.y<sy+0.3&&t>0.12){D.inW=true;D.tw=t;D.splashed=true;const q=npcG.position;splash(thr?64:44,q,thr?1.5:1.25);game.shake=Math.max(game.shake||0,thr?0.2:0.1);
       for(let i=0;i<(thr?18:10);i++)emit(q.x+rnd(-0.6,0.6),q.y+rnd(-0.2,0.3),q.z+rnd(-0.6,0.6),rnd(-1,1)-CP*0.6,rnd(0.5,2.5),rnd(-1,1),rnd(0.8,1.4),0.6,rnd(1.6,2.6),0.42,3,1.5,1);D.v.multiplyScalar(0.3);D.v.y=-1.2}
-    if(D.inW){const u=t-D.tw;if(D.churn<2&&u>0.3+0.28*D.churn){D.churn++;splash(20,npcG.position,0.85)}   // the washing machine
+    if(D.inW){{const dx=npcG.position.x-riderG.position.x,dz=npcG.position.z-riderG.position.z;if(Math.hypot(dx,dz)<1.6)npcG.visible=false}   /* swept back past him he is already under the water */
+      const u=t-D.tw;if(D.churn<2&&u>0.3+0.28*D.churn){D.churn++;splash(20,npcG.position,0.85)}   // the washing machine
       if(u>0.75)npcG.visible=false}
     else if(t>2.2)npcG.visible=false;
     if(npcBoard.visible){D.bv.y-=9.8*dt;D.bv.x-=CP*0.8*dt;npcBoard.position.addScaledVector(D.bv,dt);_nq2.setFromAxisAngle(ZV,(thr?3:7)*dt);npcBoard.quaternion.multiply(_nq2);_nq2.setFromAxisAngle(XV,(thr?11:4)*dt);npcBoard.quaternion.multiply(_nq2);
@@ -2291,7 +2293,7 @@ $('spX').addEventListener('click',e=>{e.stopPropagation();spHide()});$('spNo').a
 $('spPop').addEventListener('click',e=>{if(e.target.id==='spPop')spHide()});$('spGo').addEventListener('click',e=>{e.stopPropagation();setTimeout(spHide,300)});
 addEventListener('pointerdown',()=>{if(game.state==='end'&&game.hl&&game.showCard)game.showCard()});
 /* what to do right now: a small line at the bottom of the ride with the move that fits this moment and what to press for it */
-const TIPS={cur:'',cand:'',n:0};
+const TIPS={cur:'',cand:'',n:0,ix:{}};
 function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classList.contains('touch');let k='';
   if(game.state==='ride'&&!game.attract&&!game.replay&&!game.paused&&!sf.straight&&!sf.endCl&&!sf.exV){
     const top=Math.max(S.top||1,0.1),rel=sf.p/top,st=Math.sin(sf.th),busy=sf.rh||sf.cv||sf.c360||sf.tt||sf.pivot>0||sf.layT>0;
@@ -2299,24 +2301,22 @@ function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classLi
     if(sf.mode==='air')k='air';else if(sf.mode==='float')k='flo';else if(sf.mode!=='ride'||sf.introT>0)k='';
     else if(game.inTube||(S.aEnd>3.3&&sf.s<6))k='tube';
     else if(busy)k='';
-    else if(sf.openT>0||rel<0.3)k='bt';
-    else if(st>0.35&&rel>0.45)k=fa>0.35?'lipF':'lip';
-    else if(sf.s>26)k='cut';
-    else if(fa>0.4&&rel>0.4)k='flo2';
-    else if(sf.V>5)k='carve'}
+    else if(sf.openT>0)k='';
+    else if(st>0.3&&rel>0.22)k=fa>0.35?'lipF':'lip';   /* only as he starts up the face for a move; the bottom turn needs no telling */
+    else k=''}
   if(k===TIPS.cand)TIPS.n++;else{TIPS.cand=k;TIPS.n=0}
   if(TIPS.n<2||k===TIPS.cur)return;TIPS.cur=k;
   const bk=MIRROR?'\u2192':'\u2190',fw=MIRROR?'\u2190':'\u2192',I=(n,key)=>`<span>${n}${key?`<kbd>${key}</kbd>`:''}</span>`;
   const L={bt:t?[I('BOTTOM TURN','STICK \u2191')]:[I('BOTTOM TURN','\u2191')],
-    lip:t?[I('AT THE LIP'),I('','SNAP'),I('','AIR')]:[I('SNAP','\u2193'),I('AIR','SPACE'),I('NOSE PICK','F')],
-    lipF:t?[I('FOAM AHEAD'),I('','FLOATER'),I('','SNAP')]:[I('FLOATER','R'),I('SNAP','\u2193')],
+    lip:t?[I('SNAP','SNAP'),I('AIR','AIR'),I('CARVE','STICK '+bk),I('CUTBACK','CUT BACK')]:[I('SNAP','\u2193'),I('CARVE',bk),I('AIR','SPACE'),I('CUTBACK','OPTION'),I('CARVE 360','G'),I('NOSE PICK','F')],
+    lipF:t?[I('FOAM AHEAD','FLOATER'),I('HIT THE FOAM','SNAP')]:[I('FLOATER','R'),I('SNAP','\u2193')],
     cut:t?[I('BACK TO THE FOAM','CUT BACK')]:[I('CUTBACK','OPTION')],
     flo2:t?[I('FOAM AHEAD','FLOATER')]:[I('FLOATER','R')],
     carve:t?[I('CARVE','STICK '+bk)]:[I('CARVE',bk),I('CARVE 360','G')],
     air:t?[I('SPIN','STICK'),I('GRAB','AIR')]:[I('SPIN',bk+' '+fw),I('FLIP','\u2191 \u2193'),I('GRAB','SPACE')],
     flo:t?[I('DROP','STICK \u2193')]:[I('DROP','\u2193')],
-    tube:t?[I('STAY ON THE WALL'),I('DEEPER','BRAKE')]:[I('DEEPER','SHIFT'),I('PUMP',fw)]}[k];
-  if(L){el.innerHTML=L.join('');el.classList.add('on')}else el.classList.remove('on')}
+    tube:t?[I('DEEPER','BRAKE'),I('STAY ON THE WALL')]:[I('DEEPER','SHIFT'),I('PUMP',fw)]}[k];
+  if(L){const n=TIPS.ix[k]=((TIPS.ix[k]===undefined?-1:TIPS.ix[k])+1)%L.length;el.innerHTML=L[n];el.classList.add('on')}else el.classList.remove('on')}   /* one suggestion at a time; each time the moment comes round again it offers the next move, so the ride keeps changing */
 function readInput(){
   let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
   let cr=!!keys.Space,stl=!!(keys.ShiftLeft||keys.ShiftRight),cut=!!(keys.AltLeft||keys.AltRight);if(keys.KeyR)y=1;   /* OPTION: the cutback; R: the floater */
