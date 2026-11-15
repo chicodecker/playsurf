@@ -93,7 +93,7 @@ h1 em{display:block;font-size:.13em;letter-spacing:.62em;font-weight:600;font-st
 .dgl b{font-weight:800;color:#f4f1e8}.dgl i{font-weight:600;color:var(--ps-acc);margin-left:.18em}
 .dgw span{display:block;margin-top:18px;font-size:clamp(11px,1.3vw,16px);letter-spacing:.6em;opacity:.7}
 .psLogo{display:block;height:auto}
-.psBrand{--lh:clamp(16px,3vh,26px);position:fixed;z-index:2;left:max(7vw,env(safe-area-inset-left,0px));top:max(6px,calc(var(--bar,5.5vh)/2 - var(--lh)/2));display:flex;align-items:center;gap:14px;pointer-events:none}.psBrand img{display:block;height:var(--lh);width:auto;filter:drop-shadow(0 3px 10px rgba(4,12,34,.55))}.psBrand span{font-size:9px;letter-spacing:.45em;font-weight:800;font-style:italic;opacity:.6;text-shadow:0 2px 10px rgba(0,0,0,.5)}.wz:has(.wzS[data-s="2"].on) .psBrand{position:static;flex-direction:column;align-items:flex-start;gap:7px;margin:0 0 14px -.3vw}.wz:has(.wzS[data-s="2"].on) .psBrand img{width:min(40vw,540px);height:auto;filter:drop-shadow(0 6px 18px rgba(4,12,34,.55))}.wz:has(.wzS[data-s="2"].on) .psBrand span{font-size:clamp(9px,.95vw,13px);letter-spacing:.55em;opacity:.9;padding-left:.7em}.wz:has(.wzS[data-s="2"].on) .psBrand img{width:min(46vw,620px)}.wzS[data-s="2"] .wzH{font-size:clamp(16px,1.7vw,22px);letter-spacing:.32em;margin:4px 0 12px;opacity:.85}.wzS[data-s="2"] .pbtn.big{font-size:15px;padding:11px 20px;min-width:0}.wzS[data-s="2"] .pbtn.big i{font-size:9px}.wz:has(.wzS[data-s="2"].on) .wzTop{opacity:.75}   /* the logo stands big on the first screen; on the others it signs the top bar and takes no room from the choices */
+.psBrand{--lh:clamp(16px,3vh,26px);position:fixed;z-index:2;left:max(7vw,env(safe-area-inset-left,0px));top:max(6px,calc(var(--bar,5.5vh)/2 - var(--lh)/2));display:flex;align-items:center;gap:14px;pointer-events:none}.psBrand img{display:block;height:var(--lh);width:auto;filter:drop-shadow(0 3px 10px rgba(4,12,34,.55))}.psBrand span{font-size:9px;letter-spacing:.45em;font-weight:800;font-style:italic;opacity:.6;text-shadow:0 2px 10px rgba(0,0,0,.5)}.wz:has(.wzS[data-s="2"].on) .psBrand{position:static;flex-direction:column;align-items:flex-start;gap:7px;margin:0 0 14px -.3vw}.wz:has(.wzS[data-s="2"].on) .psBrand img{width:min(40vw,540px);height:auto;filter:drop-shadow(0 6px 18px rgba(4,12,34,.55))}.wz:has(.wzS[data-s="2"].on) .psBrand span{font-size:clamp(9px,.95vw,13px);letter-spacing:.55em;opacity:.9;padding-left:.7em}.wz:has(.wzS[data-s="2"].on) .psBrand img{width:min(46vw,620px)}.wzS[data-s="2"] .wzH{display:none}.wz:has(.wzS[data-s="2"].on) .wzTop{margin-bottom:8px}.wzS[data-s="2"] .playRow{margin-top:4px}.wzS[data-s="2"] .pbtn.big{font-size:15px;padding:11px 20px;min-width:0}.wzS[data-s="2"] .pbtn.big i{font-size:9px}.wz:has(.wzS[data-s="2"].on) .wzTop{opacity:.75}   /* the logo stands big on the first screen; on the others it signs the top bar and takes no room from the choices */
 .logoH{line-height:0;margin:3vh 0 4px -1.2vw;font-style:normal;font-weight:400}.logoH .psLogo{width:min(40vw,580px);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect;filter:drop-shadow(0 8px 24px rgba(0,0,0,.35))}   /* the logo's deep-blue ground melts into the surf behind it */
 @keyframes dgIn{0%{opacity:0;transform:translateY(18px) skewX(-8deg) scale(.96)}100%{opacity:1;transform:none}}
 @keyframes dgLine{to{width:62%}}
@@ -652,6 +652,7 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
 const PS_LOGO=new Image();PS_LOGO.src='playsurf-logo.webp';   /* the wordmark, painted on the beach banners */
 const SCRIPT='Saira,"Avenir Next",Arial,sans-serif',CONDF='Saira,"Avenir Next","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('italic 800 40px Saira'),document.fonts.load('800 40px Saira')]).then(()=>fn(),()=>{})}catch(e){}}
+const KIDU={value:0},KIDSKIN={value:new THREE.Color('#e2ac88')};   /* 1 = the little surfer: the softboard's rider is a kid of seven or eight, skinny, shirtless, pixel-print boardshorts */
 const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.60,0.10,0.09)},k:{value:1},t:{value:new THREE.Vector3(0.93,0.93,0.92)},f:{value:0},tex:{value:null}};
 LYC.tex.value=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.anisotropy=4;
   const paint=()=>{x.clearRect(0,0,256,256);x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';try{x.fontStretch='expanded'}catch(e){}
@@ -984,6 +985,9 @@ function secAt(s,age){let v=0;secClose=0;secFoam=0;secJct=0;if(age<0)return 0;
   return v}
 function buildWave(t){
   secUpdate(game.secAge);const adv=CP*t+game.xOff,rk=game.rhK||0;   // rk: during a roundhouse the curl stops throwing and piles up as foam, so there is a junction to hit
+  /* the shape right at the curl (s = 0), worked out with the same rules as the open wall, so the barrel side behind it blends from exactly that: no step between the tube and the wave */
+  let E0;{const s=0,cr=SPOT.crumble?1:0,ef=endFoam(0,game.secAge),sv=secAt(0,game.secAge),fo=Math.max(secFoam,rk,0.45*secJct,0.85*ef,0.95*cr),e=Math.max(clamp(1+0.3/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose))*(1-fo)*(1-cr);
+   const w0=Math.max(wOf(0,48),fo*0.9,0.95*secJct),w=(w0+(1-w0)*sv*sv)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1);E0={w,ab:(205+65*e)*DEG,hk:lerp(2.0,4.0,sstep(0,0.42,w))/4.0*(1-0.10*fo)*(1-0.26*ef)*(1+0.30*secJct),ec:sstep(0.35,0.95,e),fo}}
   for(let i=0;i<NS;i++){
     const s=colS[i],X=s+adv,Lw=wallLen(X),Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s))*(1-0.42*sstep(62,135,s));
     let o=scA;
@@ -999,7 +1003,7 @@ function buildWave(t){
       for(let j=0;j<=NQ;j++){const q=j/NQ;scB.y[NF+j]+=k*0.26*Math.sin(q*8+X*1.4+t*5.3)*Math.sin(X*0.8-t*3.1)*Math.sin(PI*q)}
       o=scB;colW[i]=0;
       if(k<1){
-        profile(scA,0.28,sstep(0.25,0.6,game.Hbase),(205+65*(1-rk))*DEG,4.0*Hs*(1-0.10*rk),0,0,false,sstep(0.35,0.95,1-rk),rk,s,t);
+        profile(scA,0.28,E0.w,E0.ab,4.0*Hs*E0.hk,0,0,false,E0.ec,E0.fo,s,t);
         for(let j=0;j<NV;j++){scA.z[j]=lerp(scA.z[j],scB.z[j],k);scA.y[j]=lerp(scA.y[j],scB.y[j],k)}
         for(let j=0;j<NV*4;j++)scA.info[j]=lerp(scA.info[j],scB.info[j],k);
         for(let j=0;j<=NQ;j++)scA.a[j]=lerp(scA.a[j],scB.a[j],k);
@@ -1013,6 +1017,8 @@ function buildWave(t){
   }
   /* white water is wider at the foot of the wave than on top (a car's front with its wheels out at the sides): the foam of every breaking section
      spreads a few metres further along the bottom of the face than up top, and runs out ahead onto the flat in surges that keep coming forward */
+  if(SPOT.fat){let sF=-99;for(let i=0;i<NS;i++){const s=colS[i];if(s<0)continue;if(colFoam[i]>0.5){sF=s;continue}const d=s-sF;if(d>7)continue;const b=i*NV,qm=0.42+0.58*sstep(0,7,d);   /* the bore's white water is no square block: up top it runs on ahead like a falling curtain, and lower down the front slants back, down to the big foam at the bottom */
+    for(let j=NF+Math.floor(qm*NQ);j<=NF+NQ;j++){const q=(j-NF)/NQ,f=sstep(qm,Math.min(1,qm+0.12),q)*(1-sstep(5,7,d));gInf[(b+j)*4+1]=Math.max(gInf[(b+j)*4+1],0.95*f)}}}
   {const W=4.5;for(let i=0;i<NS;i++){const s=colS[i];colFW[i]=0;if(s<0)continue;let m=0;for(let d=-26;d<=26;d++){const j=i+d;if(j<0||j>=NS)continue;const ds=Math.abs(colS[j]-s);if(ds>W)continue;const f=(colFoam[j]-(SPOT.bore?0.40:0))*(1-0.45*colEnd[j]);if(f>0.05)m=Math.max(m,f*Math.pow(1-ds/W,0.6))}colFW[i]=m;
     if(m>0.02){const b=i*NV,jL=NF+Math.floor(NQ*0.42),ph=0.5+0.5*Math.sin(s*0.9-t*2.6);
       for(let j=NF;j<jL;j++){const u=(j-NF)/(jL-NF),k=b+j;gInf[k*4+1]=Math.max(gInf[k*4+1],m*0.95*(1-sstep(0.55,1,u)))}
@@ -1037,14 +1043,17 @@ waveGeo.setAttribute('aInfo',new THREE.BufferAttribute(gInf,4).setUsage(THREE.Dy
  waveGeo.setIndex(new THREE.BufferAttribute(idx,1));waveGeo.addGroup(0,n0,0);waveGeo.addGroup(n0,k-n0,1)}
 const waveDef={
   uniforms:{uSun:{value:SUN},uNight:TOD,uDawn:DAWN,uDusk:DUSK,uRain:RAIN,uNoise:{value:noiseTex},uTime:{value:0},uX:{value:0},uPool:{value:new THREE.Vector4(62,0.866,0.5,0)},
-    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0}},
+    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uRR:{value:0},uRU:{value:new V3(0,1,0)}},
   vertexShader:`attribute vec4 aInfo;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     void main(){vP=position;vN=normal;vI=aInfo;gl_Position=projectionMatrix*viewMatrix*vec4(position,1.);}`,
   fragmentShader:`precision highp float;
     uniform sampler2D uNoise;uniform float uTime;uniform float uX;uniform vec4 uPool;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef,uShdK;uniform vec4 uShd;
     ${SKY_GLSL}
+    uniform vec3 uRA;uniform vec3 uRB;uniform vec3 uBA;uniform vec3 uBB;uniform float uRR;uniform vec3 uRU;
+    float capD(vec3 p,vec3 a,vec3 b){vec3 ab=b-a;float t=clamp(dot(p-a,ab)/max(dot(ab,ab),1e-5),0.,1.);return length(p-a-ab*t);}
     void main(){
+      if(uRR>0.&&dot(vP-(uBA+uBB)*0.5,uRU)>0.07){float jt=0.82+0.36*texture2D(uNoise,vP.xz*1.7+vP.y*0.9).r;if(capD(vP,uRA,uRB)<uRR*jt||capD(vP,uBA,uBB)<uRR*0.55*jt)discard;}   /* the water never runs through the surfer or his board: where the lip folds over him it parts around his body */
       vec3 Ng=vN;if(dot(Ng,Ng)<1e-6)Ng=vec3(0.,1.,0.);Ng=normalize(Ng);vec3 Vv=cameraPosition-vP;float dist=length(Vv);vec3 V=Vv/dist;
       if(dot(Ng,V)<0.)Ng=-Ng;
       float arc=vI.x,foamA=vI.y,sss=vI.z,occ=max(vI.w,0.),cur=max(-vI.w,0.);
@@ -1582,10 +1591,15 @@ const amzG=new THREE.Group();amzG.visible=false;scene.add(amzG);const AMZ={logs:
  bank(-150,-1,1900);bank(115,1,1100);[leaves,trunks,palmT,frond].forEach(o=>o.frustumCulled=false);leaves.count=k;trunks.count=kt;palmT.count=kp;frond.count=kf;amzG.add(leaves,trunks,palmT,frond);
  for(const [z,dir] of [[-150,-1],[115,1]]){const fl=new THREE.Mesh(new THREE.PlaneGeometry(1700,130),new THREE.MeshStandardMaterial({color:0x1d3a1c,roughness:1}));fl.rotation.x=-PI/2;fl.position.set(350,1.2,z+dir*66);amzG.add(fl);
    const mud=new THREE.Mesh(new THREE.PlaneGeometry(1700,9),new THREE.MeshStandardMaterial({color:0x6e5b3e,roughness:1}));mud.rotation.x=-PI/2;mud.position.set(350,0.35,z+dir*1.5);amzG.add(mud)}   /* a muddy margin, then the forest floor in shadow */
- const wood=new THREE.MeshStandardMaterial({color:0x5a4330,roughness:0.95}),bark=new THREE.MeshStandardMaterial({color:0x3d2e22,roughness:1});
+ const barkT=(()=>{const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');x.fillStyle='#4a3626';x.fillRect(0,0,256,64);   /* wet bark: dark furrows running along the trunk, lighter ridges, a few knots */
+   for(let i=0;i<70;i++){const y=Math.random()*64,l=40+Math.random()*180,x0=Math.random()*256;x.strokeStyle=Math.random()<0.5?'rgba(25,16,10,0.55)':'rgba(120,96,70,0.35)';x.lineWidth=1+Math.random()*2.5;x.beginPath();x.moveTo(x0,y);x.bezierCurveTo(x0+l*0.3,y+(Math.random()-0.5)*6,x0+l*0.7,y+(Math.random()-0.5)*6,x0+l,y+(Math.random()-0.5)*4);x.stroke()}
+   for(let i=0;i<6;i++){const kx=Math.random()*256,ky=8+Math.random()*48;x.fillStyle='rgba(30,20,12,0.8)';x.beginPath();x.ellipse(kx,ky,5,3,0,0,7);x.fill();x.strokeStyle='rgba(140,110,80,0.5)';x.lineWidth=1.5;x.beginPath();x.ellipse(kx,ky,8,5,0,0,7);x.stroke()}
+   const g=x.createLinearGradient(0,0,0,64);g.addColorStop(0,'rgba(255,255,255,0.10)');g.addColorStop(0.5,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0.25)');x.fillStyle=g;x.fillRect(0,0,256,64);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;return t})();
+ const wood=new THREE.MeshStandardMaterial({map:barkT,color:0xb09070,roughness:0.85}),bark=new THREE.MeshStandardMaterial({map:barkT,color:0x8a7058,roughness:0.95});
  for(let i=0;i<7;i++){const g=new THREE.Group(),big=i<3,L=big?rnd(3.5,6):rnd(1.6,3),R=big?rnd(0.22,0.38):rnd(0.07,0.14),c=new THREE.Mesh(new THREE.CylinderGeometry(R*0.85,R,L,8),i%2?wood:bark);c.rotation.z=PI/2;g.add(c);
    if(!big)for(let b=0;b<3;b++){const t=new THREE.Mesh(new THREE.CylinderGeometry(R*0.35,R*0.5,L*0.45,5),bark);t.position.set((b-1)*L*0.28,0.08,0.12*(b%2?1:-1));t.rotation.set(0.9*(b%2?1:-1),0,PI/2-0.6);g.add(t)}   /* a branch keeps a few twigs */
-   g.visible=false;scene.add(g);AMZ.logs.push({g,on:false,big,L})}
+   if(big){const endM=new THREE.MeshStandardMaterial({color:0xb58d5c,roughness:0.9});for(const sg of [1,-1]){const e=new THREE.Mesh(new THREE.CircleGeometry(R*0.98,10),endM);e.position.x=sg*L/2;e.rotation.y=sg*PI/2;g.add(e)}}   /* sawn ends showing the pale wood */
+   g.visible=false;scene.add(g);AMZ.logs.push({g,on:false,big,L,R})}
  {const g=new THREE.PlaneGeometry(1900,60,190,6),P=g.attributes.position;for(let i=0;i<P.count;i++){const x=P.getX(i),y=P.getY(i);P.setY(i,y<29?y:y+6*Math.sin(x*0.05)+4*Math.sin(x*0.13+1)+3*Math.sin(x*0.31))}g.computeVertexNormals();
   for(const [z,ry] of [[-265,0],[235,PI]]){const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x26472a,roughness:1}));m.position.set(350,22,z);m.rotation.y=ry;amzG.add(m)}}   /* deeper forest fading into the haze behind both banks: no gap of sky under the trees */
  {const g=new THREE.Group(),hull=new THREE.Mesh(new THREE.CapsuleGeometry(0.42,4.6,4,10),new THREE.MeshStandardMaterial({color:0x6b4a2c,roughness:0.85}));hull.rotation.z=PI/2;hull.scale.set(1,1,0.55);hull.position.y=0.05;g.add(hull);
@@ -1616,10 +1630,12 @@ function amzTick(dt,time){const on=amzG.visible&&(game.state==='ride'||game.attr
   if(!on){AMZ.logs.forEach(o=>{o.on=false;o.g.visible=false});if(AMZ.canoe){AMZ.canoe.g.visible=false;AMZ.canoe.on=false}return}
   if(AMZ.wid!==game.waveId){AMZ.wid=game.waveId;AMZ.next=rnd(2,5);if(AMZ.canoe){AMZ.canoe.done=false;AMZ.canoe.on=false;AMZ.canoe.g.visible=false}}
   AMZ.next-=dt;if(AMZ.next<=0){AMZ.next=rnd(2.5,6);const o=AMZ.logs.find(x=>!x.on);if(o){o.on=true;o.x=sf.pos.x+rnd(14,60);o.z=rnd(9,18);o.vx=-CP-rnd(0,0.4);o.vz=-rnd(2.2,3.2);o.y=undefined;o.crest=0;o.yaw=rnd(0,6.3);o.spin=rnd(-0.4,0.4)}}
-  AMZ.logs.forEach(o=>{if(!o.on){o.g.visible=false;return}const hd=amzRide(o,dt,time,o.vx,o.vz);o.yaw+=o.spin*dt;o.g.position.set(o.x,o.y+0.05,o.z);o.g.rotation.set(0.04*Math.sin(time*2+o.x),o.yaw,o.pt*Math.cos(o.yaw-hd));o.g.visible=true;if(o.z<-26||o.x<sf.pos.x-70){o.on=false;o.g.visible=false}});
+  AMZ.logs.forEach(o=>{if(!o.on){o.g.visible=false;return}const hd=amzRide(o,dt,time,o.vx,o.vz);o.yaw+=o.spin*dt;o.g.position.set(o.x,o.y+0.05,o.z);
+    if(game.state==='ride'&&!game.attract&&sf.mode==='ride'&&!(o.hitT>0)){const ax=Math.cos(o.yaw),az=-Math.sin(o.yaw),dx=sf.pos.x-o.x,dy=sf.pos.y-o.y,dz=sf.pos.z-o.z,al=dx*ax+dz*az,px=dx-ax*al,pz=dz-az*al,pr=Math.hypot(px,pz,dy*0.7);   /* a log is an obstacle: run into it and he goes over */
+      if(Math.abs(al)<o.L/2+0.35&&pr<(o.R||0.15)+0.6){o.hitT=1;o.spin+=rnd(-1.5,1.5);_nv.set(o.x,o.y+0.3,o.z);splash(30,_nv,1.2);sampleSurf(sf.s,sf.p,S);wipe();hudMsg('LOG!','watch the river')}}o.hitT=Math.max(0,(o.hitT||0)-dt);o.g.rotation.set(0.04*Math.sin(time*2+o.x),o.yaw,o.pt*Math.cos(o.yaw-hd));o.g.visible=true;if(o.z<-26||o.x<sf.pos.x-70){o.on=false;o.g.visible=false}});
   const C=AMZ.canoe;if(!C)return;const D=game.waveDur;
   if(!C.on){if(C.done||game.attract||game.waveAge<D*0.28||game.waveAge>D*0.65||game.inTube||sf.mode!=='ride')return;amzCrew(C);C.on=true;C.x=sf.pos.x+rnd(30,42);C.z=rnd(10,13);C.vx=-CP-rnd(0.3,0.7);C.vz=-rnd(3.0,3.6);C.y=undefined;C.crest=0;C.big=true}
-  const hd=amzRide(C,dt,time,C.vx,C.vz);C.g.position.set(C.x,C.y+0.03*Math.sin(time*2.3),C.z);C.g.rotation.set(0.05*Math.sin(time*1.6),hd,C.pt);C.g.visible=true;
+  const hd=amzRide(C,dt,time,C.vx,C.vz);C.g.position.set(C.x,C.y+0.03*Math.sin(time*2.3),C.z);if((C.pp||0)>0.08&&C.y>0.4){C.bs=(C.bs||0)+dt;if(C.bs>0.12){C.bs=0;const fx=Math.cos(hd),fz=-Math.sin(hd);_nv.set(C.x+fx*2.4,C.y+0.3,C.z+fz*2.4);splash(6,_nv,0.7);if(game.state==='ride'&&C.x>0.5&&Math.random()<0.35)lipBurst(0.22,C.x+rnd(-1,1))}}   /* the bow cuts up the face, throwing water and tearing at the wave as it climbs */C.g.rotation.set(0.05*Math.sin(time*1.6),hd,C.pt);C.g.visible=true;
   C.pads.forEach((pd,i)=>{pd.rotation.x=(i?-1:1)*(0.9+0.5*Math.sin(time*3.2+i*PI))});C.cam.rotation.y=0.3*Math.sin(time*0.7);   /* the paddles dig, the photographer follows the rider */
   if(C.z<-28||C.x<sf.pos.x-60){C.on=false;C.done=true;C.g.visible=false}}
 // ocean spots: water colour, what lies on the bottom, and the hills behind
@@ -1803,7 +1819,61 @@ function bvShow(on){const cv=document.getElementById('bdView');BV.on=!!on&&!!cv;
     BV.g.rotation.y=0.16*Math.sin(BV.t*0.45);if(BV.inner){BV.inner.rotation.x=1.2+BV.t*0.85;BV.inner.scale.x=MIRROR?-1:1}   // turning on its long axis: deck, rail, bottom and fins, round and round
     BV.r.render(BV.s,BV.c)};
   BV.raf=requestAnimationFrame(loop)}
-function setBoard(id){if(id==='soft'&&typeof softColor==='function')softColor();const b=BOARDS.find(o=>o.id===id);BOARD=b&&boardOpen(b)?b:BOARDS[0];PROG.board=BOARD.id;progSave();buildBoard(BOARD);if(typeof progUI==='function')progUI()}
+function setBoard(id){if(id==='soft'&&typeof softColor==='function')softColor();const b=BOARDS.find(o=>o.id===id);BOARD=b&&boardOpen(b)?b:BOARDS[0];PROG.board=BOARD.id;progSave();buildBoard(BOARD);kidApply();if(typeof progUI==='function')progUI()}
+function kidApply(){try{kidApply0()}catch(e){console.warn('kid',e)}}
+/* the kid's body skin: the same texture with fair, lightly tanned skin */
+function kidTexBuild(){const K=RIG.kidSrc;if(!K||!RIG.fix)return null;const {cv,W,H}=K,out=document.createElement('canvas');out.width=W;out.height=H;const ox=out.getContext('2d',{willReadFrequently:true});ox.drawImage(cv,0,0);
+  const id=ox.getImageData(0,0,W,H),d=id.data,sk=RIG.fix.skin,FAIR=[226,172,136],gR=FAIR[0]/sk[0],gG=FAIR[1]/sk[1],gB=FAIR[2]/sk[2];
+  for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2],l=0.3*r+0.59*g+0.11*b;if(r>g&&g>=b-6&&l<95&&l>6){const k=0.78+0.2*(l/95);d[i]=FAIR[0]*k;d[i+1]=FAIR[1]*k;d[i+2]=FAIR[2]*k;continue}   /* beard, hair and stubble left on the neck: skin */
+    if(r>g&&g>=b-4&&r-b>30&&l>40){d[i]=Math.min(255,r*gR);d[i+1]=Math.min(255,g*gG);d[i+2]=Math.min(255,b*gB)}}
+  ox.putImageData(id,0,0);const t=new THREE.CanvasTexture(out);t.flipY=K.flipY;t.colorSpace=K.cs;t.wrapS=K.ws;t.wrapT=K.wt;t.anisotropy=4;return t}
+/* the kid's head, painted after the photos of the boy: a round seven-year-old face, big brown eyes, a wide toothy grin, rosy cheeks, fair lightly tanned skin
+   and a mop of medium-brown hair with a messy fringe swept to one side. It rides on the head bone (the grown-up head folds away into the neck). */
+function kidHeadBuild(){const A0=RIG.b.head.A0,fwd=RIG.fwd||new V3(0,0,1),up=new V3(0,1,0),xa=new V3().crossVectors(up,fwd).normalize(),s=RIG.s;
+  const RX=0.088,RY=0.112,RZ=0.098,FX=256,W=1024,H=512;let sd=11;const rn=()=>(sd=(sd*16807)%2147483647)/2147483647;
+  /* face (equirectangular: u=0.25 looks forward, v=0.5 is the eye line) */
+  const fc=document.createElement('canvas');fc.width=W;fc.height=H;const x=fc.getContext('2d');
+  {const g=x.createLinearGradient(0,0,W,0);g.addColorStop(0,'#e3b493');g.addColorStop(0.25,'#f3d0b4');g.addColorStop(0.5,'#e3b493');g.addColorStop(1,'#dfae8c');x.fillStyle=g;x.fillRect(0,0,W,H)}
+  for(const sg of[-1,1]){const g=x.createRadialGradient(FX+sg*88,322,4,FX+sg*88,322,40);g.addColorStop(0,'rgba(236,112,98,0.40)');g.addColorStop(1,'rgba(236,112,98,0)');x.fillStyle=g;x.fillRect(FX+sg*88-42,280,84,84)}   /* rosy cheeks */
+  for(const sg of[-1,1]){const ex=FX+sg*56,ey=264,ER=25,EY=16;   /* big brown eyes */
+    x.fillStyle='#fbf6f0';x.beginPath();x.ellipse(ex,ey,ER,EY,0,0,2*PI);x.fill();
+    x.save();x.beginPath();x.ellipse(ex,ey,ER,EY,0,0,2*PI);x.clip();const ix=ex-sg*2,gi=x.createRadialGradient(ix,ey-1,2,ix,ey,15);gi.addColorStop(0,'#8a5a32');gi.addColorStop(0.7,'#5b3a20');gi.addColorStop(1,'#2e1c0e');x.fillStyle=gi;x.beginPath();x.arc(ix,ey,14.5,0,2*PI);x.fill();
+    x.fillStyle='#120a05';x.beginPath();x.arc(ix,ey,6.5,0,2*PI);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(ix-5,ey-5,4.2,0,2*PI);x.fill();x.globalAlpha=0.6;x.beginPath();x.arc(ix+4.5,ey+4.5,1.8,0,2*PI);x.fill();x.globalAlpha=1;
+    x.fillStyle='rgba(120,70,40,0.25)';x.fillRect(ex-ER,ey-EY,2*ER,5);x.restore();
+    x.strokeStyle='#3a2414';x.lineWidth=3.8;x.lineCap='round';x.beginPath();x.ellipse(ex,ey+1,ER+1,EY+1,0,PI*1.06,PI*1.94);x.stroke();   /* lashes */
+    x.strokeStyle='rgba(150,90,60,0.5)';x.lineWidth=1.6;x.beginPath();x.ellipse(ex,ey,ER,EY,0,PI*0.15,PI*0.85);x.stroke();
+    x.strokeStyle='#6a4529';x.lineWidth=6.5;x.beginPath();x.moveTo(ex-sg*25,232);x.quadraticCurveTo(ex,221,ex+sg*27,231);x.stroke()}   /* brows */
+  x.fillStyle='rgba(150,80,55,0.5)';x.beginPath();x.ellipse(FX-8,309,4.5,3,0.3,0,2*PI);x.ellipse(FX+8,309,4.5,3,-0.3,0,2*PI);x.fill();   /* nostrils */
+  {x.save();x.translate(FX,0);x.beginPath();x.moveTo(-56,334);x.quadraticCurveTo(0,352,56,334);x.quadraticCurveTo(0,398,-56,334);x.closePath();x.fillStyle='#5a1c1c';x.fill();x.clip();   /* a wide, happy grin */
+    x.fillStyle='#fffdf6';x.beginPath();x.moveTo(-50,336);x.quadraticCurveTo(0,352,50,336);x.lineTo(50,356);x.quadraticCurveTo(0,368,-50,356);x.closePath();x.fill();
+    x.strokeStyle='rgba(120,100,90,0.5)';x.lineWidth=1.4;for(const tx of[-30,-15,15,30]){x.beginPath();x.moveTo(tx,340);x.lineTo(tx,358);x.stroke()}x.fillStyle='#5a1c1c';x.fillRect(-2.4,342,4.8,16);   /* the gap between the front teeth */
+    x.fillStyle='#d9666a';x.beginPath();x.ellipse(0,384,24,9,0,0,2*PI);x.fill();x.restore()}
+  x.strokeStyle='#c4706a';x.lineWidth=3.8;x.lineCap='round';x.beginPath();x.moveTo(FX-56,334);x.quadraticCurveTo(FX,400,FX+56,334);x.stroke();x.lineWidth=2.4;x.beginPath();x.moveTo(FX-56,334);x.quadraticCurveTo(FX,352,FX+56,334);x.stroke();
+  x.strokeStyle='rgba(170,95,70,0.5)';x.lineWidth=2.2;for(const sg of[-1,1]){x.beginPath();x.moveTo(FX+sg*60,324);x.quadraticCurveTo(FX+sg*68,334,FX+sg*60,344);x.stroke()}   /* smile creases */
+  /* hair (alpha: cut away over the face) */
+  const hc=document.createElement('canvas');hc.width=W;hc.height=H;const y=hc.getContext('2d');const hl=u=>{const d=Math.min(Math.abs(u-0.25),1-Math.abs(u-0.25)),t=d/0.5;return 196+226*sstep(0.12,1,t)+(t>0.2&&t<0.45?18:0)};
+  y.fillStyle='#5e3e24';y.beginPath();y.moveTo(0,0);for(let px=0;px<=W;px+=4)y.lineTo(px,hl(px/W));y.lineTo(W,0);y.closePath();y.fill();
+  for(let i=0;i<900;i++){const px=rn()*W,ln=40+rn()*140,cl=['#4a2f1a','#6e4a2c','#7d5533','#9a6c43','#b88a58'][Math.floor(rn()*5)];y.strokeStyle=cl;y.globalAlpha=0.5+0.4*rn();y.lineWidth=1.5+rn()*3;const y0=rn()*60,y1=Math.min(hl(px/W)-4,y0+ln);if(y1<=y0)continue;y.beginPath();y.moveTo(px,y0);y.quadraticCurveTo(px+(rn()-0.5)*30,(y0+y1)/2,px+(rn()-0.3)*26,y1);y.stroke()}y.globalAlpha=1;
+  for(let i=0;i<40;i++){const u=0.09+0.32*i/39+(rn()-0.5)*0.012,px=u*W,top=hl(u)-34,len=26+rn()*30,sw=10+rn()*16;   /* the fringe: messy locks swept to one side over the forehead */
+    y.fillStyle=['#5e3e24','#6e4a2c','#7d5533','#8d6038'][i%4];y.beginPath();y.moveTo(px-sw*0.5,top);y.quadraticCurveTo(px+sw*0.6,top+len*0.5,px+sw*0.9,top+len);y.quadraticCurveTo(px+sw*0.2,top+len*0.45,px+sw*0.5,top);y.closePath();y.fill()}
+  const mt=t=>{const tx=new THREE.CanvasTexture(t);tx.colorSpace=THREE.SRGBColorSpace;tx.anisotropy=4;return tx};
+  const G=new THREE.Group();G.matrixAutoUpdate=false;G.visible=false;
+  const hg=new THREE.SphereGeometry(1,64,40),hp=hg.attributes.position;for(let i=0;i<hp.count;i++){let vx=hp.getX(i),vy=hp.getY(i),vz=hp.getZ(i);if(vy<0){const k=1-0.2*vy*vy;vx*=k;vz*=k}if(vz>0&&vy<-0.2)vz*=1+0.06*(-vy-0.2);hp.setXYZ(i,vx*RX,vy*RY,vz*RZ)}hg.computeVertexNormals();
+  const ft=mt(fc),skinM=new THREE.MeshStandardMaterial({map:ft,emissive:0xffffff,emissiveMap:ft,emissiveIntensity:0.24,roughness:0.62,metalness:0});   /* a little glow of its own so the chin never sinks into shadow */const face=new THREE.Mesh(hg,skinM);
+  const hairG=new THREE.SphereGeometry(1,64,40);hairG.scale(RX*1.085,RY*1.06,RZ*1.085);hairG.translate(0,0.004,-0.002);
+  const htx=mt(hc),hairM=new THREE.MeshStandardMaterial({map:htx,emissive:0xffffff,emissiveMap:htx,emissiveIntensity:0.10,alphaTest:0.5,roughness:0.78,metalness:0,side:THREE.DoubleSide});const hair=new THREE.Mesh(hairG,hairM);
+  const earM=new THREE.MeshStandardMaterial({color:0xe9b996,emissive:0xe9b996,emissiveIntensity:0.18,roughness:0.65});for(const sg of[-1,1]){const e=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),earM);e.scale.set(0.011,0.024,0.017);e.position.set(sg*RX*0.97,-0.006,-0.006);G.add(e)}
+  const nose=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),new THREE.MeshStandardMaterial({color:0xf0c6a6,emissive:0xf0c6a6,emissiveIntensity:0.2,roughness:0.6}));nose.scale.set(0.0075,0.0085,0.0085);nose.position.set(0,-0.022,RZ*0.975);G.add(nose);
+  const tuftM=new THREE.MeshStandardMaterial({color:0x5e3e24,roughness:0.8});for(let i=0;i<4;i++){const tg=new THREE.ConeGeometry(0.010+0.005*rn(),0.030+0.018*rn(),6);tg.translate(0,0.025,0);const t=new THREE.Mesh(tg,tuftM);   /* a few tufts sticking up, the way his hair does */
+    const a=(rn()-0.5)*2.4,el=0.25+0.5*rn();t.position.set(Math.sin(a)*Math.sin(el)*RX*0.98,Math.cos(el)*RY*1.0,-Math.abs(Math.cos(a))*Math.sin(el)*RZ*0.9+0.01);t.rotation.set(-0.5-0.6*rn(),0,(rn()-0.5)*1.2);G.add(t)}
+  G.add(face,hair);G.traverse(o=>{if(o.isMesh){o.castShadow=o!==hair;o.frustumCulled=false}});
+  const off=new V3(0,0.080,0.010),HS=1.2;RIG.kHeadL=new THREE.Matrix4().makeTranslation(A0.x,A0.y,A0.z).multiply(new THREE.Matrix4().makeBasis(xa,up,fwd)).multiply(new THREE.Matrix4().makeScale(HS/s,HS/s,HS/s)).multiply(new THREE.Matrix4().makeTranslation(off.x,off.y,off.z));
+  const k=0.34;RIG.kHeadK=new THREE.Matrix4().set(k,0,0,A0.x*(1-k),0,k,0,A0.y*(1-k),0,0,k,A0.z*(1-k),0,0,0,1);
+  riderG.add(G);RIG.kHead=G;return G}
+function kidApply0(){const k=typeof BOARD!=='undefined'&&BOARD&&BOARD.id==='soft'?1:0;KIDU.value=k;RIG.kid=k;
+  if(RIG.mesh){const mt=RIG.mesh.material;if(!RIG.baseMap)RIG.baseMap=mt.map;if(k&&!RIG.kidMap)RIG.kidMap=kidTexBuild();const want=k&&RIG.kidMap?RIG.kidMap:RIG.baseMap;if(mt.map!==want){mt.map=want}
+    if(k&&!RIG.kHead&&RIG.b.head)kidHeadBuild();if(RIG.kHead)RIG.kHead.visible=!!k}
+  const sc=k?0.72:1;riderG.scale.set(sc,sc,sc*(riderG.scale.z<0?-1:1))}   /* the softboard is ridden by a kid of seven or eight: same surfer, same style, about 1.3 m tall */
 softColor();buildBoard(BOARD);
 
 /* ───────────────────────── rider ───────────────────────── */
@@ -1989,11 +2059,12 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
  const perp=(v,a)=>{v.addScaledVector(a,-v.dot(a));if(v.lengthSq()<1e-10){v.set(a.y,a.z,a.x);v.addScaledVector(a,-v.dot(a))}return v.normalize()};
  const fY=(q,y,xh)=>{ny.copy(y).normalize();perp(nx.copy(xh),ny);nz.crossVectors(nx,ny);return q.setFromRotationMatrix(nm.makeBasis(nx,ny,nz))};   // y = bone axis, x = hint
  const fZ=(q,z,yh)=>{nz.copy(z).normalize();perp(ny.copy(yh),nz);nx.crossVectors(ny,nz);return q.setFromRotationMatrix(nm.makeBasis(nx,ny,nz))};   // same convention as placeHand / placeFoot
- const drive=(r,T,F,ell,tw)=>{const s=RIG.s,a=r.a0,k=(ell-1)*s,e=ns.elements;
+ const drive=(r,T,F,ell,tw)=>{const hd=RIG.kid&&r===RIG.b.head,kh=hd&&RIG.kHead,s=RIG.s*(hd&&!kh?1.22:1),sp=RIG.kid&&!hd?s*0.82:s,a=r.a0,k=ell*s-sp,e=ns.elements;   /* the kid: a bigger head on a skinny frame (bones thinner across, same length) */
    nq.copy(F).multiply(r.F0i);if(tw)nq.multiply(nq2.setFromAxisAngle(a,tw));
-   e[0]=s+k*a.x*a.x;e[1]=k*a.x*a.y;e[2]=k*a.x*a.z;e[4]=e[1];e[5]=s+k*a.y*a.y;e[6]=k*a.y*a.z;e[8]=e[2];e[9]=e[6];e[10]=s+k*a.z*a.z;
+   e[0]=sp+k*a.x*a.x;e[1]=k*a.x*a.y;e[2]=k*a.x*a.z;e[4]=e[1];e[5]=sp+k*a.y*a.y;e[6]=k*a.y*a.z;e[8]=e[2];e[9]=e[6];e[10]=sp+k*a.z*a.z;
    const M=r.M.makeRotationFromQuaternion(nq).multiply(ns);n4.copy(r.A0).applyMatrix4(M);M.setPosition(T.x-n4.x,T.y-n4.y,T.z-n4.z);
-   r.bone.matrix.multiplyMatrices(M,r.B0);r.bone.matrixWorldNeedsUpdate=true};
+   r.bone.matrix.multiplyMatrices(M,r.B0);r.bone.matrixWorldNeedsUpdate=true;
+   if(kh){RIG.kHead.matrix.multiplyMatrices(M,RIG.kHeadL);RIG.kHead.matrixWorldNeedsUpdate=true;r.bone.matrix.multiplyMatrices(M,RIG.kHeadK).multiply(r.B0)}};   /* the kid wears his own head: the grown-up one is folded away into the neck */
  const cen=(v,o)=>{const R=torso.R,f=clamp(v,0,1)*0.84*(R-1),i=Math.min(f|0,R-2);return o.lerpVectors(torso.C[i],torso.C[i+1],f-i)};   // spine = centreline of the torso skin
  const tan=(v,o)=>{cen(v+0.07,o);cen(v-0.07,nt);return o.sub(nt).normalize()};
  RIG.pose=()=>{const b=RIG.b;
@@ -2042,7 +2113,7 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
      seg=(o,c,hint)=>{const a=P(c).sub(P(o)),l=a.length();a.normalize();return rec(o,P(o),fY(Q(),a,hint(a)),a,l)};
    b.pel=rec(pelvis,hipMid,fY(Q(),up,right));
    RIG.spine=sp.map(o=>{const r=rec(o,P(o),fY(Q(),up,right));r.v=((P(o).y-hipMid.y)*s+0.065)/0.69;return r});
-   b.chest=rec(chest,shMid,fY(Q(),up,right));b.neck=neck!==head?seg(neck,head,()=>right):null;b.head=rec(head,P(head),fZ(Q(),fwd,up));
+   b.chest=rec(chest,shMid,fY(Q(),up,right));b.neck=neck!==head?seg(neck,head,()=>right):null;b.head=rec(head,P(head),fZ(Q(),fwd,up));RIG.fwd=fwd.clone();
    const pos=mesh.geometry.attributes.position,si=mesh.geometry.attributes.skinIndex,sw=mesh.geometry.attributes.skinWeight,
      G=(a,v,k)=>k===0?a.getX(v):k===1?a.getY(v):k===2?a.getZ(v):a.getW(v),St=(a,v,k,x)=>{k===0?a.setX(v,x):k===1?a.setY(v,x):k===2?a.setZ(v,x):a.setW(v,x)};
    arms.forEach(c=>{const i=sd(c),a=RIG.arm[i]={sg:i?1:-1,tau:0},hx=d=>new V3().crossVectors(d,fwd);
@@ -2086,26 +2157,29 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        let ng=0;for(let y=0;y<0;y++)for(let x=0;x<W;x++){   /* off for this model: its navy boardshorts are a cool mid-tone and were being painted skin colour */ const i=(y*W+x)*4,r=d[i],g2=d[i+1],b2=d[i+2],l=(r+g2+b2)/3;if(l<48||l>205||b2<r-6)continue;
          const mx=x>>2,my=y>>2;let nb=0;for(let oy=-1;oy<=1&&!nb;oy++)for(let ox=-1;ox<=1;ox++){const xx=mx+ox,yy=my+oy;if(xx>=0&&yy>=0&&xx<MW&&yy<MH&&dk[yy*MW+xx]){nb=1;break}}
          if(!nb){d[i]=sr;d[i+1]=sg;d[i+2]=sb;ng++}}
-       c2.putImageData(id,0,0);const t=new THREE.CanvasTexture(cv);t.flipY=map.flipY;t.colorSpace=map.colorSpace;t.wrapS=map.wrapS;t.wrapT=map.wrapT;t.anisotropy=4;map=t;RIG.fix={hair:nh,grey:ng,skin:[sr|0,sg|0,sb|0]}}}catch(e){console.warn('surfista 3D textura:',e)}
+       c2.putImageData(id,0,0);const t=new THREE.CanvasTexture(cv);t.flipY=map.flipY;t.colorSpace=map.colorSpace;t.wrapS=map.wrapS;t.wrapT=map.wrapT;t.anisotropy=4;map=t;RIG.fix={hair:nh,grey:ng,skin:[sr|0,sg|0,sb|0]};RIG.kidSrc={cv,W,H,hi,A0:nA.clone(),fwd:fwd.clone(),pos,uv,si,sw,idx:mesh.geometry.index,flipY:map.flipY,cs:map.colorSpace,ws:map.wrapS,wt:map.wrapT}}}catch(e){console.warn('surfista 3D textura:',e)}
    si.needsUpdate=sw.needsUpdate=true;
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
-   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.uniforms.uLyc=LYC.c;sh.uniforms.uLycK=LYC.k;sh.uniforms.uLycT=LYC.t;sh.uniforms.uLycF=LYC.f;sh.uniforms.uLycTex=LYC.tex;
+   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.uniforms.uKid=KIDU;sh.uniforms.uKidSkin=KIDSKIN;sh.uniforms.uLyc=LYC.c;sh.uniforms.uLycK=LYC.k;sh.uniforms.uLycT=LYC.t;sh.uniforms.uLycF=LYC.f;sh.uniforms.uLycTex=LYC.tex;
      sh.vertexShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uLycK;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;{float ed;float m=uLycK*smoothstep(0.,0.004,lycD(position,ed));transformed+=normal*m*(0.0026+0.0012*(1.-smoothstep(0.55,0.64,position.y)))*(1.-0.75*smoothstep(0.80,0.85,position.y));}');
-     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\n#define SH_Y (0.385)\nuniform float uAlt;uniform vec3 uLyc;uniform float uLycK;uniform vec3 uLycT;uniform float uLycF;uniform sampler2D uLycTex;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\n#define SH_Y (0.385)\nuniform float uKid;uniform vec3 uKidSkin;uniform float uAlt;uniform vec3 uLyc;uniform float uLycK;uniform vec3 uLycT;uniform float uLycF;uniform sampler2D uLycTex;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
      float material_eyeK=0.;float neckK=smoothstep(0.8,0.83,vMY)*(1.-smoothstep(0.91,0.93,vMY));float faceK=smoothstep(FSX*0.02,FSX*0.05,vMN.x)*smoothstep(0.85,0.875,vMY)*(1.-smoothstep(0.955,0.975,vMY));   // the face: texture softened so the blotches melt together
      if(faceK>0.01){vec2 o=vec2(0.0024,0.);vec3 av=(texture2D(map,vMapUv+o).rgb+texture2D(map,vMapUv-o).rgb+texture2D(map,vMapUv+o.yx).rgb+texture2D(map,vMapUv-o.yx).rgb+diffuseColor.rgb*2.)/6.;
        float la=dot(av,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,av,0.7*faceK);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.62,0.36,0.20)*(la/0.38),0.18*faceK*smoothstep(0.7,0.45,la));float lc=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb*=mix(1.,min(1.,0.3/max(lc,0.01)),faceK*smoothstep(0.28,0.42,lc));material_eyeK=faceK;}
      {vec3 c0=diffuseColor.rgb;float cool0=max(c0.g,c0.b)-c0.r,neck=smoothstep(0.74,0.77,vMY)*(1.-smoothstep(0.915,0.93,vMY));   // a blue collar left in the model's texture at the base of the neck: painted over in skin
       float l0=dot(c0,vec3(.3,.59,.11));float tealK=smoothstep(0.0,0.035,c0.g-c0.r)*smoothstep(0.0,0.03,c0.b-c0.r*0.9);diffuseColor.rgb=mix(c0,vec3(0.62,0.36,0.20)*clamp(l0/0.3,0.7,1.4),neck*tealK);}
      vec3 cOrig=diffuseColor.rgb;
-     float lycE;float lycK=uLycK*smoothstep(0.0,0.0025,lycD(vMN,lycE));   /* the competition jersey */
+     float lycE;float lycK=uLycK*(1.-uKid)*smoothstep(0.0,0.0025,lycD(vMN,lycE));   /* the competition jersey */
      if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
        c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
        float face=smoothstep(FSX*0.015,FSX*0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
        float hy=mix(0.925,0.86,smoothstep(-FSX*0.01,-FSX*0.02,vMN.x));   // down to the neck at the back, only the crown at the front
        c=mix(c,vec3(0.86,0.60,0.24)*(0.55+1.4*l),smoothstep(0.2,0.07,l)*smoothstep(hy,hy+0.025,vMY)*(1.-face));   // only the dark hair turns sun-bleached golden
        diffuseColor.rgb=c;}
-     {float cool=max(cOrig.g,cOrig.b)-cOrig.r,shK=smoothstep(-0.07,-0.02,cool)*(1.-smoothstep(0.56,0.58,vMY))*step(0.30,vMY)*smoothstep(0.004,0.014,vMN.z);   /* two stripes round one leg of the boardshorts, slanting down to the back */
+     float kidK=0.;if(uKid>0.5){float le;float kk=smoothstep(0.0,0.0025,lycD(vMN,le));kidK=kk;float lu2=dot(cOrig,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,uKidSkin*clamp(0.8+0.35*(lu2-0.55),0.7,1.05),kk);   /* bare chest: no jersey */
+       float cool2=max(cOrig.g,cOrig.b)-cOrig.r,orn=step(0.29,lu2)*step(0.32,cOrig.r-cOrig.b)*step(0.30,vMY),sk2=max(smoothstep(-0.07,-0.02,cool2),orn)*(1.-smoothstep(0.56,0.58,vMY))*step(0.265,vMY)*(1.-kk);float rem=smoothstep(-0.03,0.01,cool2)*step(0.57,vMY)*(1.-step(0.90,vMY))*(1.-kk);diffuseColor.rgb=mix(diffuseColor.rgb,uKidSkin*0.9,rem);kidK=max(kidK,rem);vec2 cell=floor(vec2(vMY*70.,(vMN.z+vMN.x*FSX*0.6)*70.));float hh=fract(sin(dot(cell,vec2(12.9898,78.233)))*43758.5453);
+       vec3 pc=hh<0.42?vec3(0.33,0.62,0.20):hh<0.72?vec3(0.22,0.46,0.13):hh<0.88?vec3(0.46,0.31,0.17):vec3(0.58,0.78,0.30);diffuseColor.rgb=mix(diffuseColor.rgb,pc*clamp(0.75+1.6*lu2,0.75,1.2),sk2);}   /* blocky pixel-print boardshorts */
+     else{float cool=max(cOrig.g,cOrig.b)-cOrig.r,shK=smoothstep(-0.07,-0.02,cool)*(1.-smoothstep(0.56,0.58,vMY))*step(0.30,vMY)*smoothstep(0.004,0.014,vMN.z);   /* two stripes round one leg of the boardshorts, slanting down to the back */
       float y=vMY+vMN.x*FSX*0.30,b1=smoothstep(SH_Y,SH_Y+0.002,y)*(1.-smoothstep(SH_Y+0.016,SH_Y+0.018,y)),b2=smoothstep(SH_Y+0.026,SH_Y+0.028,y)*(1.-smoothstep(SH_Y+0.034,SH_Y+0.036,y));
       float sl=clamp(dot(cOrig,vec3(.3,.59,.11))*4.5,0.72,1.25);vec3 s1=uAlt>0.5?vec3(0.04,0.08,0.18):vec3(0.94,0.94,0.92),s2=uAlt>0.5?vec3(0.94,0.94,0.92):vec3(1.0,0.40,0.22);
       diffuseColor.rgb=mix(diffuseColor.rgb,s1*sl,b1*shK);diffuseColor.rgb=mix(diffuseColor.rgb,s2*sl,b2*shK);}
@@ -2113,7 +2187,7 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
           /* no contrast binding: the dyed lycra runs straight to the skin at the neck and the sleeves */
        float bk=1.-smoothstep(-0.04,-0.018,vMN.x*FSX);vec2 pu=vec2(0.5+mix(vMN.z,-vMN.z,uLycF)/0.15,(vMN.y-0.615)/0.15);
        float pa=bk*step(0.,pu.x)*step(pu.x,1.)*step(0.,pu.y)*step(pu.y,1.)*texture2D(uLycTex,pu).a;fab=mix(fab,uLycT,pa*0.95);
-       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*lycK);material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(material.sheenColor,uLyc*0.22+0.03,lycK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
+       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*max(lycK,kidK));material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(mix(material.sheenColor,uLyc*0.22+0.03,lycK),vec3(0.0),kidK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
    {const ob=mesh.material.onBeforeCompile;mesh.material.onBeforeCompile=sh=>{ob(sh);sh.uniforms.uRim=RIM;
      sh.fragmentShader='uniform vec3 uRim;\n'+sh.fragmentShader.replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g);}\n#include <opaque_fragment>')}}
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
@@ -2249,6 +2323,9 @@ function poseRider0(time,dt){
    if(pw>0.01){const ins=lamN>=0?-1:1,dp=0.5+0.5*sstep(0.5,0.95,Math.abs(lamN));   /* one long diagonal through the shoulders: the lead arm reaches ahead and down to the face on the inside of the turn, nearly straight, palm skimming; the trail arm answers it, back and up behind */
      _b.copy(XV).multiplyScalar(0.62).addScaledVector(WU,-0.38-0.22*dp).addScaledVector(ZV,0.34*ins).normalize().multiplyScalar(0.61).add(J.shF);J.hFt.lerp(_b,pw);
      _c.copy(XV).multiplyScalar(-0.72).addScaledVector(WU,0.30+0.16*dp).addScaledVector(ZV,-0.18*ins).normalize().multiplyScalar(0.58).add(J.shB);J.hBt.lerp(_c,pw*0.95)}}
+  {const on=RB&&sf.mode==='ride'?(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub)*(1-Math.min(1,Math.abs(lay))):0,act=(sf.pivot>0||sf.rh||Math.abs(sf.om||0)>2.2)?1:0;   /* backside: after every move the trail arm is thrown back and swings on behind like a pendulum, tracing the line he just drew; it never just hangs down */
+   A.bsw=damp(A.bsw||0,on*(act?1:0.45),act?7:1.3,dt);A.bph=(A.bph||0)+dt*(4.2+2*act);if(act)A.bam=1;A.bam=Math.max(0,(A.bam||0)-dt*0.9);
+   if(A.bsw>0.01){const sw=0.16*A.bam*Math.sin(A.bph);_c.copy(XV).multiplyScalar(-0.80-sw).addScaledVector(WU,0.22+0.20*A.bam+sw*0.6).addScaledVector(ZV,-0.10).normalize().multiplyScalar(0.58).add(J.shB);J.hBt.lerp(_c,Math.min(1,A.bsw))}}
   if(cl>0.01&&AT.claimV===6){const w=Math.min(1,cl);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());if(RB)_c.z=-_c.z;   // points at the camera, then the hang loose
     if(AT.clPh)_b.copy(_c).sub(J.shF).normalize().multiplyScalar(0.64).add(J.shF);
     else{_b.set(0.30,0,-0.50).addScaledVector(WU,0.85).normalize().multiplyScalar(0.56).add(J.shF);_b.x+=0.06*Math.sin(time*15)}
@@ -2290,6 +2367,7 @@ function poseRider0(time,dt){
   if(air>0.01){const nk=sstep(0,0.3,AT.npTh||0);_a.set(J.shF.x+lerp(0.28,0.32,nk),J.shF.y+lerp(-0.12,0.06,nk),J.shF.z+lerp(-0.24,-0.30,nk));J.hFt.lerp(_a,air);_a.set(J.shB.x+lerp(-0.28,-0.34,nk),J.shB.y+lerp(-0.08,0.14,nk),J.shB.z+lerp(-0.08,0.16,nk));J.hBt.lerp(_a,air)}   // nose pick: both arms up and out for balance
   {const fo=A.flo=damp(A.flo||0,AT.flo||0,7,dt);if(fo>0.01){_a.set(J.shF.x+0.07,J.shF.y-0.50,J.shF.z-0.04);J.hFt.lerp(_a,fo);_a.set(J.shB.x-0.07,J.shB.y-0.50,J.shB.z+0.04);J.hBt.lerp(_a,fo)}}   /* floater: tall and quiet, both arms hanging down beside the body */
   if(gr>0.01){_a.set(-0.31,0.075,-0.255);J.hBt.lerp(_a,gr);_a.set(J.knF.x+0.10,J.knF.y-0.10,J.knF.z-0.16);J.hFt.lerp(_a,gr*0.85)}
+  {const lt=air>0.5&&Math.abs(sf.spin||0)>0.5?1:0,lw=A.lsp=damp(A.lsp||0,lt,6,dt);if(lw>0.01){_a.copy(J.shF).addScaledVector(J.axis,0.30).addScaledVector(J.front,0.27).addScaledVector(WU,0.04);J.hFt.lerp(_a,lw)}}   /* spinning in the air the free arm holds an L: upper arm out, elbow square, forearm flat ahead, palm up like carrying a tray */
   if(fl>0.01){_a.set(J.shF.x+0.3*Math.sin(time*11),J.shF.y+0.45,J.shF.z+0.3*Math.cos(time*9));J.hFt.lerp(_a,fl);_a.set(J.shB.x-0.3*Math.cos(time*10),J.shB.y+0.4,J.shB.z+0.3*Math.sin(time*12));J.hBt.lerp(_a,fl)}
   if(pr>0.001){const push=1-sstep(0.6,0.95,pr);
     paddlePt(AT.paddle,1,_a);_b.set(-0.05,0.08,0.22);_a.lerp(_b,push);J.hFt.lerp(_a,1-st);
@@ -2348,7 +2426,7 @@ function makeNPC(){const src=RIG.mesh,sk=src.skeleton,nb=sk.bones.length;
   npcBoard.visible=false;scene.add(npcBoard)}
 function npcSnap(){riderG.updateMatrixWorld(true);_ni.copy(riderG.matrixWorld).invert();const bs=RIG.mesh.skeleton.bones,a=new Float32Array(bs.length*16);
   for(let i=0;i<bs.length;i++){_nm.multiplyMatrices(_ni,bs[i].matrixWorld);_nm.toArray(a,i*16)}return a}
-function npcCapture(){if(!RIG.on||game.replay||game.state!=='ride')return;
+function npcCapture(){if(!RIG.on||game.replay||game.state!=='ride'||RIG.kid)return;   /* the other surfers are grown-ups: never copy them from the kid */
   if(sf.introT>0.5&&A.prone>0.98){const b=Math.floor((((AT.paddle%(2*PI))+2*PI)%(2*PI))/(2*PI)*12)%12;if(!NPCP.pad[b])NPCP.pad[b]=npcSnap()}
   else if(A.prone<0.98&&game.waveAge<6){const k=A.prone>0.72?0:A.prone>0.48?1:A.prone>0.24?2:A.prone>0.02?3:4;if(!NPCP.pop[k])NPCP.pop[k]=npcSnap()}
   if(!DROP.ready&&NPCP.pad.every(x=>x)&&NPCP.pop.every(x=>x))DROP.ready=true}
@@ -2563,7 +2641,7 @@ function setWaveDir(m){MIRROR=m?1:0;gradePass.uniforms.uFlip.value=MIRROR;ledMat
 /* backside: when the wave breaks the other way from his stance (a goofy at Cloud 9 or Campeche, the other side at Trestles) he rides it with
    his back to the wave: the rider is mirrored across the stringer and the pose reads the rail from the heels (see poseRider) */
 function setBack(){BACK=(typeof game!=='undefined'&&game.attract)?1:(STANCE!==MIRROR?1:0)}   /* behind the menu he always rides backside, so the side camera sees him face on */
-function setMirror(m){STANCE=m?1:0;MIRROR=m?1:0;riderG.scale.set(1,1,1);   /* the regular is the same surfer, same build: only his hair and boardshorts differ */   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));BACK=0;
+function setMirror(m){STANCE=m?1:0;MIRROR=m?1:0;riderG.scale.set(1,1,1);kidApply();   /* the regular is the same surfer, same build: only his hair and boardshorts differ */   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));BACK=0;
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});
 var WZ={s:1};
@@ -2771,7 +2849,10 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/03-low-tide-love.mp3',t:'Low Tide Love',b:'Salt Lagoon Sound System'},{f:'music/04-offshore.mp3',t:'Offshore',b:'Coral Spies'},
   {f:'music/05-barrel-vision.mp3',t:'Barrel Vision',b:'Wax Riot'},{f:'music/06-sunburn-sunday.mp3',t:'Sunburn Sunday',b:'The Skanking Gulls'},{f:'music/07-glassy-morning.mp3',t:'Glassy Morning',b:'Dawn Patrol Dub'},
   {f:'music/08-duck-dive.mp3',t:'Duck Dive',b:'The Duck Divers'},{f:'music/09-salt-in-my-hair.mp3',t:'Salt in My Hair',b:'Tidepool Saints'},
-  {f:'music/11-wipeout-weekend.mp3',t:'Wipeout Weekend',b:'Kook Patrol'},{f:'music/12-tube-ride.mp3',t:'Tube Ride',b:'The Reverb Reef'}];
+  {f:'music/11-wipeout-weekend.mp3',t:'Wipeout Weekend',b:'Kook Patrol'},{f:'music/12-tube-ride.mp3',t:'Tube Ride',b:'The Reverb Reef'},
+  {f:'music/13-golden-lineup.mp3',t:'Golden Lineup',b:'Velvet Offshore'},{f:'music/14-dawn-patrol-dub.mp3',t:'Dawn Patrol Dub',b:'Low Tide Lions'},
+  {f:'music/15-boardwalk-bounce.mp3',t:'Boardwalk Bounce',b:'Pier Pressure'},{f:'music/16-tide-chart-serenade.mp3',t:'Tide Chart Serenade',b:'Sandal Sound System'},
+  {f:'music/17-shred-till-sundown.mp3',t:'Shred Till Sundown',b:'Skeg Breakers'},{f:'music/18-closeout.mp3',t:'Closeout',b:'Bail Out Brigade'},{f:'music/19-same-crew.mp3',t:'Same Crew',b:'Reef Rash'}];
 const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0};   /* the songs play shuffled, from the very first one, a new order every time round */
 function musShuffle(not){const o=TRACKS.map((_,i)=>i);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}if(o.length>1&&o[0]===not){const j=1+Math.floor(Math.random()*(o.length-1));[o[0],o[j]]=[o[j],o[0]]}MUS.order=o;MUS.k=0}
 musShuffle(-1);MUS.i=MUS.order[0];
@@ -3165,7 +3246,9 @@ function stepRide(dt){
   let inp=game.state==='ride'&&!sf.exV&&!sf.straight?input:{x:0,y:0,crouch:false,stall:false,cut:false};const now=game.waveAge;
   if(sf.fallAt&&now>=sf.fallAt){sf.fallAt=0;if(game.state==='ride'&&!game.attract){sampleSurf(sf.s,sf.p,S);wipe();return}}   // he catches a rail
   sampleSurf(sf.s,sf.p,S);
-  if(sf.snapRet&&(sf.pivPrev||0)>0&&sf.pivot<=0&&sf.mode==='ride'){sf.snapRet=0;if(S.foam<0.6)lipBreak(0.24,sf.s+0.5)}sf.pivPrev=sf.pivot;   /* coming back down out of the move the rail clips the lip again: a smaller burst */
+  if(sf.snapRet&&(sf.pivPrev||0)>0&&sf.pivot<=0&&sf.mode==='ride'){sf.snapRet=0;if(S.foam<0.6)lipBreak(0.24,sf.s+0.5);if(game.state==='ride'&&!game.attract&&Math.random()<0.28)picada(0.6,0.18)}sf.pivPrev=sf.pivot;
+  if(sf.picD>0&&sf.mode==='ride'){const d=Math.min(sf.picD,2.4*dt);sf.p=Math.max(0.15*S.top,sf.p-d);sf.picD-=d}   /* the stutter carries him a little further down the face, smoothly */
+  if(sf.picT>0){sf.picT-=dt;if(sf.picT<=0&&sf.mode==='ride'){A.impact=Math.max(A.impact,0.45*sf.picK);splash(12,S.pos,0.75);sfxNoise(0.25,1600,0.18)}}   /* ...and a second little knock as the rail bites again */   /* coming back down out of the move the rail clips the lip again: a smaller burst */
   /* free fall: off a hit in a very hollow section, coming back down he lets go of the wall, drops through the air for about a second and lands at the base with speed */
   if(sf.ffArm&&sf.mode==='ride'){if(sf.pivot<=0&&Math.sin(sf.th)<-0.35&&sf.p>0.42*S.top){sf.ffArm=0;sf.ffU=0.001;sf.ffD=clamp(0.55+0.55*sf.p/Math.max(S.top,1),0.75,1.05)}else if(now-sf.lastTop>1.3)sf.ffArm=0}
   if(sf.ffU>0){sf.ffU+=dt/sf.ffD;if(sf.ffU>=1||sf.p<0.10*S.top||sf.mode!=='ride'){if(sf.ffU>=0.55&&sf.mode==='ride'&&game.state==='ride'){splash(24,S.pos,1.0);A.impact=Math.max(A.impact,0.6);game.shake=Math.max(game.shake||0,0.25);sf.V=Math.max(sf.V,CP+3.4);award('Free Fall',650);sfxPlay('splash',{vol:0.6,rate:1.2,dur:0.8,fo:0.3})}sf.ffU=0}}
@@ -3346,9 +3429,10 @@ function stepRide(dt){
       sf.cb=null}
     else if(now-sf.cb.t>5)sf.cb=null}
 }
+function picada(k,drop){sf.picK=k;sf.picT=0.17;sf.picD=drop||0;A.impact=Math.max(A.impact,0.7*k);game.shake=Math.max(game.shake||0,0.18*k)}   /* a stutter: the board knocks on the chop, he absorbs it in his knees, a beat later it knocks again */
 function endSlide(){sf.tt=null;if(sf.slipMax>1.5&&game.state==='ride'){const pt=300+700*Math.min(sf.slipMax,1.8);award('Tail Slide',pt);reqShot('Tail Slide',pt,0)}sf.slipMax=0}
 function launchAir(vp,inp){sfxPlay('wind',{vol:0.55,off:rnd(0,8),dur:2.4,fi:0.25,fo:0.8,rate:rnd(0.95,1.08)});sf.tt=null;sf.slip=0;sf.np=false;
-  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.78;sf.spinDir=0;   // a little more hang time, so a full rotation fits
+  sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.70;sf.spinDir=0;   /* a lower air: just enough hang time for one clean full rotation */
   sf.airT=0;sf.airDur=2*sf.vh/GA;sf.spin=0;sf.flip=0;sf.th0=sf.th;
   sf.alley=!!(inp&&inp.x<-0.3);if(sf.alley){sf.vh*=1.16;sf.airDur=2*sf.vh/GA}   /* alley-oop: off the lip turning back against the way he is going, high, drifting back over the curl */
   sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42-(sf.alley?2.4:0);sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
@@ -3358,8 +3442,8 @@ function stepAir(dt){
   if(sf.np){const u=clamp(sf.airT/sf.airDur,0,1);sf.spin=sf.npDir*PI*sstep(0.16,0.86,u);sf.flip=0}   // the nose pick turns a reverse: 180 in the air, landing tail first
   else{const tL=(sf.vh+Math.sqrt(Math.max(0,sf.vh*sf.vh+2*GA*Math.max(sf.h,0))))/GA,held=Math.abs(input.x)>0.3;   // time left before the board touches down
    if(held)sf.spinDir=-Math.sign(input.x);if(!sf.alley&&held&&input.x<0&&sf.airT<0.22&&Math.abs(sf.spin)<0.6){sf.alley=true;sf.vsAir-=2.4}
-   if(held&&tL>0.26)sf.spin+=-input.x*8.2*dt;
-   else{const k=sf.spin/PI,d=sf.spinDir||Math.sign(sf.spin)||1,th_=held?0.02:0.3;let tg=(d>0?Math.ceil(k-th_):Math.floor(k+th_))*PI;if(Math.abs(tg-sf.spin)>18*Math.max(tL-0.04,0.06))tg-=d*PI;const dd=tg-sf.spin;   // still holding: carry on to the next half turn if there is time   // finish the turn the way it was going (or fall back if it barely started),
+   if(held&&tL>0.26)sf.spin=clamp(sf.spin-input.x*9.0*dt,-2*PI,2*PI);   /* never past a full rotation */
+   else{const k=sf.spin/PI,d=sf.spinDir||Math.sign(sf.spin)||1,th_=held?0.02:0.3;let tg=(d>0?Math.ceil(k-th_):Math.floor(k+th_))*PI;if(Math.abs(tg-sf.spin)>18*Math.max(tL-0.04,0.06))tg-=d*PI;tg=clamp(tg,-2*PI,2*PI);const dd=tg-sf.spin;   // still holding: carry on to the next half turn if there is time   // finish the turn the way it was going (or fall back if it barely started),
      sf.spin+=Math.sign(dd)*Math.min(Math.abs(dd),clamp(Math.abs(dd)/Math.max(tL-0.04,0.06),3.5,18)*dt)}}   // timed to land square on the touchdown
   if(sf.np){}else if(Math.abs(input.y)>0.3)sf.flip+=input.y*7.4*dt;else{const tg=Math.round(sf.flip/(2*PI))*2*PI;sf.flip+=clamp(tg-sf.flip,-4.5*dt,4.5*dt)}   // ↑ backflip, ↓ frontflip
   if(input.crouch)sf.grabT+=dt;
@@ -3370,7 +3454,7 @@ function stepAir(dt){
     const r=wrapPi(sf.spin),clean=Math.abs(r)<1.2,rev=Math.abs(Math.abs(r)-PI)<1.2,flips=Math.round(Math.abs(sf.flip)/(2*PI));
     const rf=game.state==='ride'&&!game.attract&&game.waveAge>8&&Math.random()<0.03+0.06*flips+(Math.abs(sf.spin)>4.5?0.02:0)+(sf.hMax>2.4?0.03:0);   // even a clean landing is lost now and then
     if(sf.s<0.2||(!clean&&!rev)||Math.abs(wrapPi(sf.flip))>0.95||rf){sampleSurf(sf.s,S.top-0.4,S);sf.pos.copy(S.pos);wipe();return}
-    sf.mode='ride';sf.p=S.top-0.18;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=Math.abs(r)>PI/2&&sf.spinDir?-Math.sign(sf.spinDir)*Math.abs(r):r;sfxPlay('splash',{vol:0.42,rate:1.25,dur:1.0,fo:0.45});sf.landT=0.45;sf.blendT=0.4;   /* touchdown: the board settles onto the face over a moment (no jump), and a reverse keeps turning the same way to come round */sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
+    sf.mode='ride';sf.p=S.top-0.18;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=Math.abs(r)>PI/2&&sf.spinDir?-Math.sign(sf.spinDir)*Math.abs(r):r;sfxPlay('splash',{vol:0.42,rate:1.25,dur:1.0,fo:0.45});sf.landT=0.45;sf.blendT=0.4;if(game.state==='ride'&&!game.attract&&Math.random()<0.4)picada(0.8+0.4*Math.random(),0.30+0.30*Math.random());   /* now and then he lands a little lower on the face with a stutter */   /* touchdown: the board settles onto the face over a moment (no jump), and a reverse keeps turning the same way to come round */sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
     const rot=Math.round(Math.abs(sf.spin)/PI)*180;
     let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm=rot===180?'Nose Pick Air Revo':'Nose Pick'+(rot?' '+rot:'');if(sf.np)sf.revSlow=0.9;const oop=!sf.np&&!flips&&sf.alley&&sf.spin>0&&rot>=360;if(oop)nm='Alley-Oop'+(rot>360?' '+rot:'')+(sf.grabT>0.25?' Grab':'');
     const pt=1300+700*sf.hMax+rot*9+(sf.grabT>0.25?400:0)+flips*1900+(sf.np?1200:0)+(oop?700:0);sf.np=false;sf.alley=false;sf.flip=0;
@@ -3408,6 +3492,13 @@ const _tbQ=new THREE.Quaternion(),_tbQ2=new THREE.Quaternion(),_tbA=new V3();
 function angVel(q0,q1,dt,out){_tbQ.copy(q1).multiply(_tbQ2.copy(q0).invert());if(_tbQ.w<0){_tbQ.x=-_tbQ.x;_tbQ.y=-_tbQ.y;_tbQ.z=-_tbQ.z;_tbQ.w=-_tbQ.w}
   const sn=Math.sqrt(Math.max(1e-12,1-_tbQ.w*_tbQ.w)),an=2*Math.acos(clamp(_tbQ.w,-1,1));return out.set(_tbQ.x/sn,_tbQ.y/sn,_tbQ.z/sn).multiplyScalar(dt>1e-4&&an>1e-6?an/dt:0)}
 function extrapQ(q,w,te,out){const a=w.length()*te;if(a<1e-6)return out.copy(q);return out.setFromAxisAngle(_tbA.copy(w).normalize(),a).multiply(q)}   /* q carried on at angular velocity w for an effective time te */
+const _rcA=new V3(),_rcB=new V3(),_rcU=new V3(),_rcX=new V3();
+function riderCut(){const U=waveMat.uniforms,on=sf.visible&&riderG.visible&&boardG.visible&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float');
+  if(!on){U.uRR.value=0;return}const sc=Math.abs(riderG.scale.x)||1;_rcU.set(0,1,0).applyQuaternion(boardG.quaternion);_rcX.set(1,0,0).applyQuaternion(boardG.quaternion);
+  U.uRA.value.copy(boardG.position).addScaledVector(_rcU,0.18*sc);U.uRU.value.copy(_rcU);
+  if(RIG.on&&RIG.b&&RIG.b.head&&RIG.b.head.bone){(RIG.kid&&RIG.kHead?_rcB.setFromMatrixPosition(RIG.kHead.matrixWorld):_rcB.setFromMatrixPosition(RIG.b.head.bone.matrixWorld))}else _rcB.copy(boardG.position).addScaledVector(_rcU,1.45*sc);
+  if(_rcB.distanceTo(U.uRA.value)>2.4)_rcB.copy(U.uRA.value).addScaledVector(_rcU,1.3*sc);U.uRB.value.copy(_rcB);
+  U.uBA.value.copy(boardG.position).addScaledVector(_rcX,0.95);U.uBB.value.copy(boardG.position).addScaledVector(_rcX,-0.95);U.uRR.value=0.27*sc}
 function placeSurfer(dt,time){
   RB=BACK&&sf.mode!=='reef'?1:0;riderG.scale.z=Math.abs(riderG.scale.z)*(RB?-1:1);LYC.f.value=MIRROR^RB;   // backside is drawn mirrored (the jersey print flipped back so it reads); walking on the reef he is himself again
   shadowM.visible=false;
@@ -3611,7 +3702,8 @@ function boardSpray(dt){
     const rs=sg*0.22,tx=sf.pos.x-sf.f.x*(0.6+r*0.3)+sf.right.x*rs,ty=sf.pos.y-sf.f.y*(0.6+r*0.3)+sf.right.y*rs,tz=sf.pos.z-sf.f.z*(0.6+r*0.3)+sf.right.z*rs;   /* off the working rail, not the middle of the tail */
     const stp=sstep(0.35,0.9,1-Math.abs(sf.up.y))*sstep(0.35,0.7,rel),un=(0.7+r2*r2*5.0*k)*lowK*(1-0.85*stp),sd=sg*(1.3+r*6.8)*k*(1-0.4*stp),bk=-(0.8+r2*2.5),upf=rel>0.6?(2+r*5)*k:0,fan=(2.5+r2*6.5)*k*stp;
     emit(tx,ty,tz,sf.up.x*un+sf.right.x*sd+sf.f.x*bk-CP*0.3+S.tp.x*fan,sf.up.y*un+sf.right.y*sd+sf.f.y*bk+upf*0.7+S.tp.y*fan+(1+r*2.5)*k*stp,sf.up.z*un+sf.right.z*sd+sf.f.z*bk-upf*0.55+S.tp.z*fan-1.5*k*stp,
-      rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0)}}
+      rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0);
+    if(r<0.16*k)emit(tx,ty+0.1,tz,(sf.up.x*un+sf.right.x*sd)*0.55+sf.f.x*bk*0.5-CP*0.3,(sf.up.y*un+sf.right.y*sd)*0.55+0.6,(sf.up.z*un+sf.right.z*sd)*0.55+sf.f.z*bk*0.5,rnd(0.9,1.6),rnd(0.3,0.6),rnd(1.4,2.6),0.16,1.4,1.5,1)}}   /* the fan gets a body: a soft cloud of mist filling it out, thicker than smoke, hanging after the spray */
 
 /* ───────────────────────── camera ───────────────────────── */
 const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',camShotT=9,blendFrom='',blendDur=1.2,camRP=3.2,camRL=7,camGP=0;const _oT1=new V3,_oT2=new V3;
@@ -3657,7 +3749,7 @@ function updateCamera(dt,time){
     {const at=sf.mode==='air'?1:0,w=5.5;sf.airKv=(sf.airKv||0)+((at-sf.airK)*w*w-2*w*(sf.airKv||0))*dt;sf.airK=clamp(sf.airK+sf.airKv*dt,0,1);if(sf.airK<=0||sf.airK>=1)sf.airKv=0}
     if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
     else if(game.replay)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
-    else if(game.attract)kind='tele';   /* behind the menu: the chase camera, or the side camera when he rides backside */   // start screen: two wide shots from far off, the whole wave and the place around it
+    else if(game.attract)kind=REEL.cam||'tele';   /* behind the menu: the chase camera, or the side camera when he rides backside */   // start screen: two wide shots from far off, the whole wave and the place around it
     else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
       {let base=['follow','tele','front'][game.cam];const a=game.waveAge,D=game.waveDur||80;
        if(game.cam===1&&a>D-Math.max(8,D*0.3)&&a<D-4.5&&!(lastShot!=='front'&&(game.inTube||sf.tubeK>0.05||(S.aEnd>3.3&&sf.s<9)||a-(game.tubeOut||-99)<3||SEC.some(C=>C.fol&&a>C.t0-3.5&&a<C.t0+C.d+2))))base='front';   /* not while a barrel is about to close over him or he is just out of one */   /* the side camera directs the end of the ride: square on from the beach for the last stretch, then back to the side for the arrival */
@@ -3810,7 +3902,17 @@ function frame(nowMs){
   autoQuality(dtRaw*1000,cadN*rafD,nMin);
   tick(dtR,true)}
 const GSPD=0.9;   /* game speed: everything runs at 90% of real time */
-function tick(dtR,draw){
+/* the intro reel: while the player picks a stance, the demo behind the menu cuts every few seconds to another wave, another camera and other weather,
+   dropped straight into the middle of a ride, with a quick dip to black on each cut */
+const REEL={t:0,i:0,cam:'',fade:false};
+function reelTick(dtR){const cv=renderer.domElement;if(!game.attract||WZ.s!==2||game.state!=='ride'||document.hidden){REEL.t=0;if(REEL.fade){REEL.fade=false;cv.style.opacity=1}return}
+  REEL.t+=dtR;if(REEL.t>3.3&&!REEL.fade){REEL.fade=true;cv.style.transition='opacity .25s';cv.style.opacity=0}if(REEL.t<3.6)return;REEL.t=0;REEL.fade=false;reelCut();cv.style.opacity=1}
+function reelCut(){const ids=SPOTS.filter(spotOpen).map(o=>o.id);if(ids.length<1)return;const nx=ids[(ids.indexOf(SPOT.id)+1)%ids.length];REEL.i++;
+  if(nx!==SPOT.id)setSpot(nx);startAttract();
+  const WX=['','rain','shower','','shower','rain'],wx=nx!==1&&nx!==2?WX[REEL.i%WX.length]:'';if(wx!==(game.wx||'')){game.wx=wx;setTOD(game.night,false)}
+  const ff=3+((REEL.i*2.7)%6);for(let k=0;k<ff*20;k++){if(game.state!=='ride'||!game.attract)break;tick(1/20,false)}   /* straight into the middle of the ride */
+  REEL.cam=['tele','follow','drone','front','tele','follow'][REEL.i%6];camInit=false}
+function tick(dtR,draw){if(draw)reelTick(dtR);
   clockT+=dtR;if(game.lipQ&&game.lipQ.length&&game.waveAge>=game.lipQ[0].at){const q=game.lipQ.shift();if(game.state==='ride'||game.attract)lipBurst(q.k,q.s)}if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
   let dt;const rp=game.replay;
   if(rp){
@@ -3869,7 +3971,7 @@ function tick(dtR,draw){
   updateCamera(dt,clockT);if(BOW.value>0&&game.bowT!==undefined&&(game.bowT-=dtR)<=0){game.bowT=undefined;camera.getWorldDirection(_bowF);const h=Math.hypot(_bowF.x,_bowF.z)||1,top=Math.asin(clamp(_bowF.y,-1,1))/DEG+camera.fov*0.40,E=clamp(42-top,12,41)*DEG;BOWC.value.set(_bowF.x/h*Math.cos(E),-Math.sin(E),_bowF.z/h*Math.cos(E))}   /* at each cut the rainbow is set where this shot sees sky, then it stays put in the world */
   /* the camera follows in game time: the same lag in slow motion and in replays, so he doesn't swing across the screen each time the speed changes */
   updateEnv();updateNeon(dtR,clockT);if(uluG.visible&&ULU.foamT){ULU.foamT.offset.x=(clockT*0.012)%1;ULU.foamT.offset.y=0.04*Math.sin(clockT*0.9)}if(!game.replay){faunaTick(dtR,clockT);crowdTick(dtR,clockT)}droneTick(dtR,clockT);boteTick(dtR,clockT);amzTick(dtR,clockT);softBreakTick(dtR);if(campG.visible&&ULU.campFoam)ULU.campFoam.offset.x=(clockT*0.01)%1;mk_('camenv');
-  waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;
+  waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;riderCut();
   {const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
    U.uShdK.value=sf.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float')?(1-0.85*TOD.value)*clamp(1-sf.h*0.2,0.4,1):0}skyMat.uniforms.uTime.value=clockT;
   gradePass.uniforms.uTime.value=clockT;gradePass.uniforms.uExp.value=renderer.toneMappingExposure;{_sunP.copy(SUN).multiplyScalar(900).add(camera.position).project(camera);const on=_sunP.z<1&&Math.abs(_sunP.x)<1.15&&Math.abs(_sunP.y)<1.15;   // lens flare follows the sun on screen
