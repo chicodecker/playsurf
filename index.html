@@ -170,6 +170,9 @@ body.touch.riding #touch{display:block}
 #tSnap.on{background:rgba(255,217,74,.55);color:#111}
 .tb.sm{--rad:calc(var(--R) + var(--g)*var(--k) + var(--s)*(var(--k) - 0.5));width:var(--s);height:var(--s);font-size:min(1.75vh,9.5px);letter-spacing:.08em;line-height:1.1;
   right:calc(var(--m) + var(--R) - var(--s)/2 - var(--dx)*var(--rad));bottom:calc(var(--b) + var(--R) - var(--s)/2 + var(--dy)*var(--rad))}
+.tb.sm.big{--sb:calc(var(--s)*1.38);--rad:calc(var(--R) + var(--g) + var(--sb)/2);width:var(--sb);height:var(--sb);font-size:min(2.7vh,14px);letter-spacing:.14em;border:3px solid #7fe3ff;background:rgba(40,190,230,.20);box-shadow:0 5px 20px rgba(0,0,0,.3);
+  right:calc(var(--m) + var(--R) - var(--sb)/2 - var(--dx)*var(--rad));bottom:calc(var(--b) + var(--R) - var(--sb)/2 + var(--dy)*var(--rad))}   /* the carve: a big button of its own next to SNAP */
+.tb.sm.big.on{background:rgba(127,227,255,.6);color:#0b1520;border-color:#7fe3ff}
 #tTop{position:absolute;left:50%;top:calc(var(--bar,5.5vh) + 4.2vh);transform:translateX(-50%);display:flex;gap:10px;pointer-events:auto}
 #tTop .tb{position:static;border-radius:10px;height:34px;padding:0 12px;font-size:11px}
 #tHint{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 1vh);transform:translateX(-50%);font-size:11px;letter-spacing:.16em;text-align:center;opacity:0;transition:opacity 1s;text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap;pointer-events:none}
@@ -370,10 +373,10 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <a id="spGo" class="spGo" href="#" target="_blank" rel="noopener">&#9654;&nbsp; LISTEN ON SPOTIFY</a><button id="spNo" class="spNo">Not now</button></div></div>
   <div id="touch"><div id="stick"><i></i></div>
     <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
-    <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:1">CUT<br>BACK</button><button class="tb sm" id="tFloat" style="--dx:-1;--dy:0;--k:1">FLOATER</button>
+    <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm big" id="tCarve" style="--dx:-.7071;--dy:.7071;--k:1">CARVE</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:2.34">CUT<br>BACK</button><button class="tb sm" id="tFloat" style="--dx:-1;--dy:0;--k:1">FLOATER</button>
     <button class="tb sm" id="tLay" style="--dx:-.3827;--dy:.9239;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-.9239;--dy:.3827;--k:2">BRAKE</button>
     <div id="tTop"><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button><button class="tb" id="tFull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button></div>
-    <div id="tHint">STICK: STEER · STICK BACK: CARVE · SNAP AT THE TOP · AIR AT THE LIP</div></div>
+    <div id="tHint">STICK: STEER · CARVE UP HIGH · SNAP AT THE TOP · AIR AT THE LIP</div></div>
   <div id="ld"><b>LOADING</b><i><u id="ldU"></u></i></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <button id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
@@ -390,7 +393,6 @@ import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
-import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {BokehPass} from 'three/addons/postprocessing/BokehPass.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 /* a quick LOADING bar while the models and textures come down */
@@ -457,22 +459,27 @@ const TOD={value:0};   // 0 = day, 1 = night (shared by every shader)
 const DAWN={value:0};   /* 1 = first light: Uluwatu and Pipeline */
 const SKY_GLSL=`
 uniform vec3 uSun;uniform float uNight;uniform float uDawn;
-vec3 skyC(vec3 d){
+vec3 skyC(vec3 d){   /* only the parts of the sky that show are worked out: day, dawn and night each cost as much as the rest of the water shader */
   float y=clamp(d.y,0.,1.);
-  vec3 c=mix(vec3(0.54,0.75,0.97),vec3(0.26,0.56,0.95),smoothstep(0.0,0.26,y));
-  c=mix(c,vec3(0.07,0.32,0.80),smoothstep(0.18,0.95,y));
   float sd=max(dot(d,uSun),0.);
-  c+=vec3(1.0,0.92,0.78)*(pow(sd,6.)*0.10+pow(sd,60.)*0.5);
-  vec3 n=mix(vec3(0.045,0.065,0.125),vec3(0.008,0.014,0.045),smoothstep(0.0,0.55,y));
-  n+=vec3(0.30,0.36,0.50)*(pow(sd,10.)*0.25+pow(sd,200.)*0.9);
-  n+=vec3(0.10,0.08,0.05)*(1.-smoothstep(0.,0.10,y));
-  float sh=clamp(dot(normalize(vec2(d.x,d.z)+1e-5),normalize(vec2(uSun.x,uSun.z)+1e-5))*0.5+0.5,0.,1.);   /* toward the sun or away from it, round the horizon */
-  vec3 hz=mix(vec3(0.62,0.40,0.52),vec3(1.0,0.46,0.16),pow(sh,2.2));   /* the horizon: orange under the sun, mauve behind */
-  vec3 w=mix(hz,mix(vec3(0.66,0.38,0.50),vec3(1.0,0.56,0.34),pow(sh,2.5)),smoothstep(0.0,0.06,y));
-  w=mix(w,mix(vec3(0.36,0.30,0.56),vec3(0.62,0.40,0.52),pow(sh,3.)),smoothstep(0.04,0.20,y));w=mix(w,vec3(0.16,0.22,0.48),smoothstep(0.16,0.45,y));w=mix(w,vec3(0.05,0.10,0.30),smoothstep(0.40,0.95,y));   /* pink-gold band, rose-violet, then blue to deep blue overhead */   /* violet, then deep blue overhead */
-  w+=vec3(0.95,0.42,0.12)*pow(sd,9.)*0.34+vec3(1.0,0.62,0.24)*pow(sd,60.)*0.75+vec3(1.0,0.84,0.58)*pow(sd,700.)*2.6;   /* the glow round the sun, wide and orange, tight and gold */
-  c=mix(c,w,uDawn);
-  return mix(c,n,uNight);
+  vec3 c=vec3(0.);
+  if(uDawn<0.999&&uNight<0.999){
+    c=mix(vec3(0.58,0.80,1.0),vec3(0.15,0.45,1.0),smoothstep(0.0,0.13,y));   /* a thin band of bright haze on the horizon, then deep saturated azure */
+    c=mix(c,vec3(0.025,0.20,0.82),smoothstep(0.10,0.75,y));
+    c+=vec3(1.0,0.90,0.72)*(pow(sd,6.)*0.12+pow(sd,60.)*0.55);}
+  if(uDawn>0.001&&uNight<0.999){
+    float sh=clamp(dot(normalize(vec2(d.x,d.z)+1e-5),normalize(vec2(uSun.x,uSun.z)+1e-5))*0.5+0.5,0.,1.);   /* toward the sun or away from it, round the horizon */
+    vec3 hz=mix(vec3(0.62,0.40,0.52),vec3(1.0,0.46,0.16),pow(sh,2.2));   /* the horizon: orange under the sun, mauve behind */
+    vec3 w=mix(hz,mix(vec3(0.66,0.38,0.50),vec3(1.0,0.56,0.34),pow(sh,2.5)),smoothstep(0.0,0.06,y));
+    w=mix(w,mix(vec3(0.36,0.30,0.56),vec3(0.62,0.40,0.52),pow(sh,3.)),smoothstep(0.04,0.20,y));w=mix(w,vec3(0.16,0.22,0.48),smoothstep(0.16,0.45,y));w=mix(w,vec3(0.05,0.10,0.30),smoothstep(0.40,0.95,y));   /* pink-gold band, rose-violet, then blue to deep blue overhead */   /* violet, then deep blue overhead */
+    w+=vec3(0.95,0.42,0.12)*pow(sd,9.)*0.34+vec3(1.0,0.62,0.24)*pow(sd,60.)*0.75+vec3(1.0,0.84,0.58)*pow(sd,700.)*2.6;   /* the glow round the sun, wide and orange, tight and gold */
+    c=mix(c,w,uDawn);}
+  if(uNight>0.001){
+    vec3 n=mix(vec3(0.045,0.065,0.125),vec3(0.008,0.014,0.045),smoothstep(0.0,0.55,y));
+    n+=vec3(0.30,0.36,0.50)*(pow(sd,10.)*0.25+pow(sd,200.)*0.9);
+    n+=vec3(0.10,0.08,0.05)*(1.-smoothstep(0.,0.10,y));
+    c=mix(c,n,uNight);}
+  return c;
 }`;
 const skyMat=new THREE.ShaderMaterial({
   uniforms:{uSun:{value:SUN},uNight:TOD,uDawn:DAWN,uNoise:{value:noiseTex},uTime:{value:0},uEnv:{value:0}},
@@ -483,9 +490,9 @@ const skyMat=new THREE.ShaderMaterial({
     c+=mix(mix(vec3(1.,0.96,0.86)*30.*smoothstep(0.99945,0.9997,sd),vec3(1.,0.80,0.50)*46.*smoothstep(0.99955,0.99978,sd)+vec3(1.,0.58,0.24)*4.*smoothstep(0.9985,0.9997,sd),uDawn),vec3(0.95,0.97,1.0)*3.4*smoothstep(0.9990,0.9993,sd),uNight);
     vec2 cu=d.xz/(max(d.y,0.)+0.16);
     float n=texture2D(uNoise,cu*0.045+vec2(uTime*0.0012,0.)).b*0.62+texture2D(uNoise,cu*0.13+vec2(0.,uTime*0.002)).b*0.38;
-    float cl=smoothstep(0.50,0.76,n)*smoothstep(0.01,0.14,d.y);
+    float cl=smoothstep(0.47,0.70,n)*smoothstep(0.01,0.14,d.y);   /* fair-weather cumulus: more of them, with crisper edges */
     float n2=texture2D(uNoise,cu*0.045+vec2(uTime*0.0012,0.)+uSun.xz*0.012).b;
-    vec3 ccD=mix(vec3(0.62,0.68,0.78),vec3(1.12,1.10,1.06),clamp((n-n2)*5.+0.6,0.,1.))*(0.9+0.5*pow(sd,4.));ccD=mix(ccD,mix(vec3(0.30,0.24,0.36),vec3(1.30,0.72,0.40),clamp((n-n2)*5.+0.45,0.,1.))*(0.75+2.2*pow(sd,6.)),uDawn);   /* low sun: dark mauve undersides, gold-lit edges, blazing near the sun */
+    vec3 ccD=mix(vec3(0.56,0.65,0.80),vec3(1.20,1.18,1.12),clamp((n-n2)*5.+0.6,0.,1.))*(0.9+0.5*pow(sd,4.));ccD=mix(ccD,mix(vec3(0.30,0.24,0.36),vec3(1.30,0.72,0.40),clamp((n-n2)*5.+0.45,0.,1.))*(0.75+2.2*pow(sd,6.)),uDawn);   /* low sun: dark mauve undersides, gold-lit edges, blazing near the sun */
     vec3 ccN=mix(vec3(0.020,0.028,0.050),vec3(0.10,0.12,0.17),clamp((n-n2)*5.+0.4,0.,1.))*(1.+2.5*pow(sd,6.));
     if(uNight>0.01){vec3 q=d*190.,f=fract(q)-0.5;float h=fract(sin(dot(floor(q),vec3(12.9898,78.233,37.719)))*43758.5453);
       c+=vec3(0.9,0.95,1.0)*step(0.9968,h)*(0.4+0.6*fract(h*91.3))*smoothstep(0.34,0.06,length(f))*smoothstep(0.02,0.25,d.y)*(0.75+0.25*sin(uTime*3.+h*400.))*1.8*uNight;}
@@ -959,6 +966,7 @@ const waveDef={
       float arc=vI.x,foamA=vI.y,sss=vI.z,occ=max(vI.w,0.),cur=max(-vI.w,0.);
       float steep=smoothstep(0.15,0.8,1.-abs(Ng.y));
       vec2 uv=vec2(vP.x+uX,arc-uTime*4.2);
+      vec2 dUx=dFdx(uv),dUy=dFdy(uv),dPx=dFdx(vP.xz),dPy=dFdy(vP.xz);   /* texture footprints worked out up here, so lookups inside the branches below keep their filtering */
       #ifdef CURTAIN
       if(cur>0.02){float hn=texture2D(uNoise,vec2(uv.x*0.50,uv.y*0.085)).a*0.62+texture2D(uNoise,vec2(uv.x*1.9,uv.y*0.30)).b*0.38;if(hn<cur*0.80-0.10)discard;}
       #endif
@@ -980,7 +988,7 @@ const waveDef={
       float hf=clamp(vP.y/4.0,0.,1.);
       vec3 body=mix(uWA,uWB,hf*0.9+0.05);
       float thin=clamp(sss*sss*(0.65+0.7*nz),0.,1.);
-      vec3 glow=mix(uG1,uG2,thin)*thin*(0.26+1.5*back);
+      vec3 glow=mix(uG1,uG2,thin)*thin*(0.34+1.5*back);   /* the thin lip lets daylight through from every side, brightest against the sun */
       body+=glow+uWB*0.22*max(dot(N,L),0.);
       vec3 waveC=uWB*0.58*(0.6+0.9*back);
       float el=R.y/max(-R.z,1e-3);
@@ -988,34 +996,34 @@ const waveDef={
       refl=mix(refl,waveC,fk*0.75);
       vec3 inner=uWB*0.72*(0.5+back)+glow*0.45;
       refl=mix(refl,inner,occ*0.9);
-      {vec2 pq=vP.xz-vec2(uPool.x,0.);float pa=dot(pq,vec2(uPool.y,uPool.z))+uPool.w,pw=dot(pq,vec2(-uPool.z,uPool.y));
-       vec2 fu=vec2(pa,pw)+sl*2.4;
+      float vis=(1.-fres)*smoothstep(0.06,0.55,ndv)*pow(1.-steep,1.6)*(1.-clamp(foamA,0.,1.))*(1.-occ)*0.72;
+      if(vis>0.004){vec2 pq=vP.xz-vec2(uPool.x,0.);float pa=dot(pq,vec2(uPool.y,uPool.z))+uPool.w,pw=dot(pq,vec2(-uPool.z,uPool.y));
+       vec2 fu=vec2(pa,pw)+sl*2.4,fx=vec2(dot(dPx,uPool.yz),dot(dPx,vec2(-uPool.z,uPool.y))),fy=vec2(dot(dPy,uPool.yz),dot(dPy,vec2(-uPool.z,uPool.y)));
        float lane=1.-smoothstep(0.10,0.20,abs(fract(fu.y/10.)-0.5)*10.),cross=1.-smoothstep(0.08,0.16,abs(fract(fu.x/25.)-0.5)*25.);
-       float cau=smoothstep(0.45,0.95,texture2D(uNoise,fu*0.21+w1*0.35).a)*0.6+smoothstep(0.62,0.90,texture2D(uNoise,fu*0.47-w2*0.5).a)*0.45;   // two layers of sunlight ripples on the bottom
+       float cau=smoothstep(0.45,0.95,textureGrad(uNoise,fu*0.21+w1*0.35,fx*0.21,fy*0.21).a)*0.6+smoothstep(0.62,0.90,textureGrad(uNoise,fu*0.47-w2*0.5,fx*0.47,fy*0.47).a)*0.45;   // two layers of sunlight ripples on the bottom
        float tile=max(1.-smoothstep(0.015,0.05,abs(fract(fu.x/2.5)-0.5)*2.5),1.-smoothstep(0.015,0.05,abs(fract(fu.y/2.5)-0.5)*2.5));
        lane*=1.-uReef;cross*=1.-uReef;tile*=1.-uReef;vec3 floorC=uFl*(0.86+0.46*cau)*(1.-0.16*tile);floorC=mix(floorC,uFlL,max(lane,cross*0.6)*0.45);
-       if(uReef>0.5){float rr=texture2D(uNoise,fu*0.031+vec2(0.37,0.11)).a*0.65+texture2D(uNoise,fu*0.11).b*0.35;floorC=mix(floorC,mix(uFlL,uFl,smoothstep(0.32,0.68,rr))*(0.82+0.5*cau),0.38);}   /* a coral reef under the water, kept soft so the face reads as clean as the first wave's */
+       if(uReef>0.5){float rr=textureGrad(uNoise,fu*0.031+vec2(0.37,0.11),fx*0.031,fy*0.031).a*0.65+textureGrad(uNoise,fu*0.11,fx*0.11,fy*0.11).b*0.35;floorC=mix(floorC,mix(uFlL,uFl,smoothstep(0.32,0.68,rr))*(0.82+0.5*cau),0.38);}   /* a coral reef under the water, kept soft so the face reads as clean as the first wave's */
        if(uShdK>0.001){vec2 fq=vP.xz+sl*2.4-uShd.xy,lq=vec2(dot(fq,uShd.zw),dot(fq,vec2(-uShd.w,uShd.z)));   // his shadow on the bottom, cast along the sun through clear water
          float bd=smoothstep(1.0,0.55,length(lq/vec2(1.05,0.30))),bo=smoothstep(1.0,0.4,length((lq-vec2(-0.25,0.))/vec2(0.48,0.38)));floorC*=1.-uShdK*0.62*max(bd,bo);}
-       float vis=(1.-fres)*smoothstep(0.06,0.55,ndv)*pow(1.-steep,1.6)*(1.-clamp(foamA,0.,1.))*(1.-occ)*0.72;
-       body=mix(body,floorC*uFlK,vis);}
+       body=mix(body,floorC*uFlK,vis);}   /* the bottom is only worked out where it shows through */
       float sd=max(dot(R,L),0.);
       float spec=(pow(sd,420.)*9.+pow(sd,70.)*0.35)*(1.-occ)*(1.-fk);
-      spec+=smoothstep(0.80,0.97,texture2D(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6).a)*pow(sd,3.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*5.;   // sun glitter dancing on the water
+      if(sd>0.12)spec+=smoothstep(0.12,0.3,sd)*smoothstep(0.80,0.97,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,3.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*5.;   // sun glitter dancing on the water
       vec3 col=mix(body,refl,fres)+uSpecC*spec;
       float f1=texture2D(uNoise,uv*0.045+w1*0.05).a,f2=texture2D(uNoise,uv*0.15+vec2(0.02,0.)*uTime+w2*0.04).a,f3=texture2D(uNoise,uv*0.5+w3*0.03).a;
       float fp=f1*0.45+f2*0.35+f3*0.20;
       float thr=0.86-foamA*1.22;
       float fm=smoothstep(thr,thr+0.18,fp+nz*0.12);
-      float st=texture2D(uNoise,vec2(uv.x*0.42,uv.y*0.022)+w1*0.02).a;
+      if(steep*(1.-occ)*(1.-foamA)>0.01){float st=textureGrad(uNoise,vec2(uv.x*0.42,uv.y*0.022)+w1*0.02,dUx*vec2(0.42,0.022),dUy*vec2(0.42,0.022)).a;
       fm=max(fm,smoothstep(0.34,0.70,st)*steep*0.26*(1.-occ)*(1.-foamA)*(0.25+0.95*nz));
-      float st2=texture2D(uNoise,vec2(uv.x*1.15+3.7,uv.y*0.036)+w1*0.03).a;
+      float st2=textureGrad(uNoise,vec2(uv.x*1.15+3.7,uv.y*0.036)+w1*0.03,dUx*vec2(1.15,0.036),dUy*vec2(1.15,0.036)).a;
       float stk=(smoothstep(0.42,0.74,st)*0.62+smoothstep(0.52,0.80,st2)*0.50)*smoothstep(0.26,0.60,f1+nz*0.25);
-      fm=max(fm,stk*steep*0.24*(1.-occ)*(1.-foamA)*(0.25+0.95*nz));
-      float lace=(1.-smoothstep(0.012,0.070,abs(f2-0.52+(f3-0.5)*0.35)))*smoothstep(0.04,0.30,foamA)*(1.-smoothstep(0.80,1.0,foamA));
+      fm=max(fm,stk*steep*0.24*(1.-occ)*(1.-foamA)*(0.25+0.95*nz));}
+      if(foamA>0.02){float lace=(1.-smoothstep(0.012,0.070,abs(f2-0.52+(f3-0.5)*0.35)))*smoothstep(0.04,0.30,foamA)*(1.-smoothstep(0.80,1.0,foamA));
       fm=max(fm,lace*0.78);
       float aer=smoothstep(thr-0.34,thr+0.05,fp+nz*0.12)*smoothstep(0.02,0.25,foamA)*(1.-occ);
-      col=mix(col,mix(uWB*1.6,uFoamA,0.45)*(0.45+0.5*max(dot(Ng,L),0.)+0.6*back),aer*0.5);
+      col=mix(col,mix(uWB*1.6,uFoamA,0.45)*(0.45+0.5*max(dot(Ng,L),0.)+0.6*back),aer*0.5);}
       float fsh=texture2D(uNoise,uv*0.33).b;
       float lit=min(0.56+0.42*max(dot(Ng,L),0.)+0.40*back*(0.3+sss),1.12);
       vec3 Nf=normalize(Ng-(Ts*(w2.x+w3.x*1.4)+Tp*(w2.y+w3.y*1.4))*1.7);float nlf=dot(Nf,normalize(L+vec3(0.,0.9,0.5)))*0.5+0.5;
@@ -1023,7 +1031,7 @@ const waveDef={
       foamC*=mix(1.,0.42,occ);
       col=mix(col,foamC,fm);
       vec3 fogC=skyC(normalize(vec3(-V.x,0.03,-V.z)));
-      col=mix(col,fogC,(1.-exp(-dist*0.0013))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
+      col=mix(col,fogC,(1.-exp(-dist*0.0010))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
       if(any(isnan(col))||any(isinf(col)))col=fogC;
       gl_FragColor=vec4(col,1.);}`,
   side:THREE.DoubleSide};
@@ -1243,10 +1251,10 @@ function setTOD(n,save){n=n?1:0;TOD.value=n;game.night=n;if(save!==false)try{loc
     S3(U.uWA,0.002,0.022,0.060);S3(U.uWB,0.006,0.120,0.250);S3(U.uG1,0.0,0.18,0.38);S3(U.uG2,0.22,0.78,1.0);S3(U.uFl,0.10,0.50,0.85);S3(U.uFlL,0.01,0.08,0.18);S3(U.uSpecC,0.85,0.92,1.0);
     S3(U.uFoamA,0.16,0.22,0.36);S3(U.uFoamB,0.62,0.72,0.92);U.uFlK.value=0.75;partMat.uniforms.uTint.value.set(0.40,0.50,0.74);
     palmMat.color.set(0x1a2026);lampMat.color.setRGB(9,8.4,7.0);BAN.forEach(m=>m.material.color.setRGB(1.5,1.5,1.5));BILL.forEach(m=>m.material.color.setRGB(1.9,1.9,1.9))}
-  else{SUN.set(0.42,0.50,-0.76).normalize();sunL.color.set(0xffe2b8);sunL.intensity=3.4;hemiL.color.set(0xd6e8ff);hemiL.groundColor.set(0x3c8fc0);hemiL.intensity=0.62;fillL.color.set(0xffffff);fillL.intensity=0.55;fillL.position.set(0.6,0.5,1);
-    scene.fog.color.setRGB(0.54,0.75,0.97);renderer.toneMappingExposure=1.0;bloom.strength=0.30;
-    S3(U.uWA,0.001,0.030,0.050);S3(U.uWB,0.004,0.190,0.225);S3(U.uG1,0.02,0.30,0.32);S3(U.uG2,0.22,0.98,0.74);S3(U.uFl,0.36,0.56,0.52);S3(U.uFlL,0.08,0.24,0.27);S3(U.uSpecC,1.0,0.96,0.88);
-    S3(U.uFoamA,0.70,0.80,0.86);S3(U.uFoamB,1.06,1.05,1.02);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
+  else{SUN.set(0.42,0.50,-0.76).normalize();sunL.color.set(0xffdcae);sunL.intensity=3.7;hemiL.color.set(0xd2e6ff);hemiL.groundColor.set(0x2f9ccc);   /* a hot tropical sun, the shade filled by blue sky and turquoise sea */hemiL.intensity=0.62;fillL.color.set(0xffffff);fillL.intensity=0.55;fillL.position.set(0.6,0.5,1);
+    scene.fog.color.setRGB(0.56,0.80,1.0);renderer.toneMappingExposure=1.0;bloom.strength=0.30;
+    S3(U.uWA,0.0,0.030,0.068);S3(U.uWB,0.003,0.200,0.250);S3(U.uG1,0.01,0.32,0.38);S3(U.uG2,0.16,1.0,0.86);S3(U.uFl,0.36,0.56,0.52);S3(U.uFlL,0.08,0.24,0.27);S3(U.uSpecC,1.1,1.0,0.86);   /* clear Caribbean turquoise where the light comes through, deep blue at the base */
+    S3(U.uFoamA,0.68,0.80,0.90);S3(U.uFoamB,1.12,1.10,1.05);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
     palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
   if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&(SPOT.id===2||SPOT.id===3));bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
@@ -1401,7 +1409,7 @@ const SPOT_LOOK={2:{wa:[0.0,0.034,0.080],wb:[0.0,0.190,0.300],g1:[0.0,0.28,0.38]
   6:{wa:[0.0,0.036,0.060],wb:[0.0,0.205,0.250],g1:[0.0,0.30,0.34],g2:[0.14,0.95,0.80],fl:[0.52,0.50,0.40],fll:[0.30,0.29,0.22],flk:0.9,fog:[0.66,0.80,0.93],hill:0x3f7a3a,hy:0.5,rot:0.2,camp:1},   /* Campeche: South Atlantic green-blue over sand */
   5:{wa:[0.003,0.040,0.055],wb:[0.020,0.180,0.200],g1:[0.02,0.26,0.28],g2:[0.25,0.85,0.70],fl:[0.30,0.32,0.28],fll:[0.12,0.13,0.12],flk:0.7,fog:[0.64,0.74,0.84],hill:0x9a8a62,hy:0.5,rot:0.9}};
 function spotTint(n){const on=SPOT.id!==1,U=waveMat.uniforms,S3=(u,v,k)=>u.value.set(v[0]*k,v[1]*k,v[2]*k);
-  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;uluG.visible=false;campG.visible=false;U.uReef.value=on?1:0;scene.fog.density=SPOT.id===6?0.0009:0.0015;
+  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;uluG.visible=false;campG.visible=false;U.uReef.value=on?1:0;scene.fog.density=SPOT.id===6?0.0007:0.0011;   /* clear tropical air: the far hills keep their colour */
   if(!on)return;
   const L=SPOT_LOOK[SPOT.id]||SPOT_LOOK[2];tahitiG.visible=!L.cliffs&&!L.camp;uluG.visible=!!L.cliffs;campG.visible=!!L.camp;ULU.lights.emissiveIntensity=n?2.4:0.25;ULU.lights.color.set(n?0xffd9a0:0x9a8f80);
   tahitiG.children.forEach(m=>m.material.color.set(L.hill));tahitiG.scale.set(1,L.hy,1);tahitiG.rotation.y=L.rot;
@@ -2144,8 +2152,8 @@ $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 $('goDesk').addEventListener('click',e=>{e.stopPropagation();setTouch(false);wzGo(2)});
 /* touch: a stick for the wall on the left; on the right a big SNAP under the thumb and the other tricks on two arcs round it; they press what the keyboard does */
-const TOUCH={on:false,x:0,y:0,id:null};const TB={dn:0,up:0,bk:0,st:0,fl:0};   /* trick buttons held right now */
-addEventListener('blur',()=>{TB.dn=TB.up=TB.bk=TB.st=0});
+const TOUCH={on:false,x:0,y:0,id:null};const TB={dn:0,up:0,bk:0,st:0,fl:0,cv:0};   /* trick buttons held right now */
+addEventListener('blur',()=>{TB.dn=TB.up=TB.bk=TB.st=TB.cv=0});
 const isTouchDev=(()=>{try{return matchMedia('(pointer:coarse)').matches&&!matchMedia('(pointer:fine)').matches||(navigator.maxTouchPoints>0&&matchMedia('(hover:none)').matches)}catch(e){return false}})();
 function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStorage.setItem('playsurf_touch',on?'1':'0')}catch(e){}
   $('goMob').classList.toggle('wv',!on);$('goDesk').classList.toggle('wv',!!on);{const d=document.querySelector('.wzDots i[data-s="1"]');if(d)d.textContent='1 · '+(on?'MOBILE':'DESKTOP')}if(TUT&&WZ&&WZ.s===4)tutUI()}
@@ -2159,7 +2167,7 @@ function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStor
  st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end);st.addEventListener('lostpointercapture',end)}
 {const key=(code,dn)=>dispatchEvent(new KeyboardEvent(dn?'keydown':'keyup',{code}));
  /* SNAP is ↓ (tap = snap, hold = tail throw); the trick buttons hold their input for at least a beat so a quick tap still lands the move */
- [['tSnap',{dn:1},0],['tAir','Space',0],['tRound',{bk:1},0.22],['tFloat',{up:1,fl:1},1.2],['tLay',{dn:1,st:1},0.6],['tBrake',{st:1},0]].forEach(([id,act,minT])=>{const b=$(id);let pid=null,t0=0;
+ [['tSnap',{dn:1},0],['tAir','Space',0],['tRound',{bk:1},0.22],['tCarve',{cv:1},0.35],['tFloat',{up:1,fl:1},1.2],['tLay',{dn:1,st:1},0.6],['tBrake',{st:1},0]].forEach(([id,act,minT])=>{const b=$(id);let pid=null,t0=0;
    const press=on=>{if(typeof act==='string')key(act,on);else for(const k in act)TB[k]=Math.max(0,TB[k]+(on?1:-1))};
    b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();if(pid!==null)return;pid=e.pointerId;t0=performance.now();try{b.setPointerCapture(e.pointerId)}catch(_){}b.classList.add('on');initAudio();press(true)});
    const up=e=>{if(e.pointerId!==pid)return;pid=null;b.classList.remove('on');const left=minT*1000-(performance.now()-t0);if(left>0)setTimeout(()=>press(false),left);else press(false)};
@@ -2217,7 +2225,7 @@ function tutUI(){const t=document.body.classList.contains('touch'),K=x=>`<span c
     ['Tail Throw',M(`at the top, hold ${K('↓')}: the tail comes round and he rides it out`,`at the top, hold ${K('SNAP')} or tap ${K('TAIL THROW')}`)],
     ['Off the Lip',`go straight up to the lip and let the board pivot`],
     ['Layback',M(`hold ${K('SHIFT')} during a snap or a hit: he lays back on the water`,`${K('LAYBACK')} at the top: he snaps and lays back on the water`)],
-    ['Carve',M(`with speed, tap ${K('←')}: up the face, then the whole rail laid over in one big arc of spray`,`with speed, push the stick ${K('←')}: the whole rail laid over in one big arc of spray`)],
+    ['Carve',M(`with speed, tap ${K('←')}: up the face, then the whole rail laid over in one big arc of spray`,`with speed, tap ${K('CARVE')}: up the face, then the whole rail laid over in one big arc of spray`)],
     ['Cutback',M(`out on the shoulder, tap ${K('OPTION')}: a long carve back to the foam and off it`,`out on the shoulder, tap ${K('CUTBACK')}: a long carve back to the foam and off it`)],
     ['Carve 360',M(`${K('G')}: up to the lip and one full turn in the white of it`,`${K('CARVE 360')} on the open face`)],
     ['Barrel',M(`when the lip throws, stay on the wall; ${K('SHIFT')} brakes to get deeper, ${K('→')} pumps for speed`,`when the lip throws, stay on the wall; ${K('BRAKE')} to get deeper`)],
@@ -2308,7 +2316,7 @@ function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classLi
   if(TIPS.n<2||k===TIPS.cur)return;TIPS.cur=k;
   const bk=MIRROR?'\u2192':'\u2190',fw=MIRROR?'\u2190':'\u2192',I=(n,key)=>`<span>${n}${key?`<kbd>${key}</kbd>`:''}</span>`;
   const L={bt:t?[I('BOTTOM TURN','STICK \u2191')]:[I('BOTTOM TURN','\u2191')],
-    lip:t?[I('SNAP','SNAP'),I('AIR','AIR'),I('CARVE','STICK '+bk),I('CUTBACK','CUT BACK')]:[I('SNAP','\u2193'),I('CARVE',bk),I('AIR','SPACE'),I('CUTBACK','OPTION'),I('CARVE 360','G'),I('NOSE PICK','F')],
+    lip:t?[I('SNAP','SNAP'),I('AIR','AIR'),I('CARVE','CARVE'),I('CUTBACK','CUT BACK')]:[I('SNAP','\u2193'),I('CARVE',bk),I('AIR','SPACE'),I('CUTBACK','OPTION'),I('CARVE 360','G'),I('NOSE PICK','F')],
     lipF:t?[I('FOAM AHEAD','FLOATER'),I('HIT THE FOAM','SNAP')]:[I('FLOATER','R'),I('SNAP','\u2193')],
     cut:t?[I('BACK TO THE FOAM','CUT BACK')]:[I('CUTBACK','OPTION')],
     flo2:t?[I('FOAM AHEAD','FLOATER')]:[I('FLOATER','R')],
@@ -2324,7 +2332,7 @@ function readInput(){
   if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;cut=cut||!!gp.buttons[2]?.pressed;
     if(gp.buttons[9]?.pressed&&(game.attract||game.state==='menu'||game.state==='end'&&game.endT>1.2))beginPlay()}
   if(TOUCH.on){x=TOUCH.x*(MIRROR?-1:1);y=TOUCH.y}   /* the on-screen stick, analog */
-  if(TB.dn)y=-1;else if(TB.up)y=1;if(TB.bk)cut=true;if(TB.st)stl=true;   /* the trick buttons win over the stick */
+  if(TB.dn)y=-1;else if(TB.up)y=1;if(TB.bk)cut=true;if(TB.cv)x=-1;if(TB.st)stl=true;   /* the trick buttons win over the stick */
   input.x=x;input.y=y;input.crouch=cr;input.stall=stl;input.cut=cut}
 
 /* ───────────────────────── audio ───────────────────────── */
@@ -3265,30 +3273,39 @@ function updateCamera(dt,time){
   sky.position.copy(camera.position)}
 
 /* ───────────────────────── post ───────────────────────── */
-const rt=new THREE.WebGLRenderTarget(4,4,{type:THREE.HalfFloatType,samples:4});
+const rt=new THREE.WebGLRenderTarget(4,4,{type:THREE.HalfFloatType});
 const composer=new EffectComposer(renderer,rt);
-composer.addPass(new RenderPass(scene,camera));
+/* multisampling only where edges are drawn: the scene goes into its own multisampled target and is copied once into the post chain,
+   instead of every post pass writing (and resolving) multisampled buffers */
+class MSScenePass extends RenderPass{constructor(sc,cam){super(sc,cam);this.ms=new THREE.WebGLRenderTarget(4,4,{type:THREE.HalfFloatType,samples:2});
+    this.cp=new ShaderPass({uniforms:{tDiffuse:{value:null}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`uniform sampler2D tDiffuse;varying vec2 vUv;void main(){gl_FragColor=texture2D(tDiffuse,vUv);}`})}
+  setSize(w,h){this.ms.setSize(w,h)}
+  render(r,wb,rb,dt,mask){if(!this.ms.samples){super.render(r,wb,rb,dt,mask);return}super.render(r,wb,this.ms,dt,mask);this.cp.render(r,rb,this.ms)}}
+const scenePass=new MSScenePass(scene,camera);composer.addPass(scenePass);
 const bokeh=new BokehPass(scene,camera,{focus:20,aperture:0.00045,maxblur:0.0045});bokeh.materialDepth.side=THREE.DoubleSide;composer.addPass(bokeh);
 const bloom=new UnrealBloomPass(new THREE.Vector2(4,4),0.36,0.75,0.9);composer.addPass(bloom);{const bs=bloom.setSize.bind(bloom);bloom.setSize=(w,h)=>bs(Math.round(w/2),Math.round(h/2))}   // a soft glow: half resolution looks the same and costs a quarter
-composer.addPass(new OutputPass());
 const drops=[];for(let i=0;i<6;i++)drops.push(new THREE.Vector4(0.5,0.5,0.05,0));
 function spawnDrops(n){for(const d of drops){if(n<=0)break;if(d.w<0.05){const ex=Math.random()<0.5?rnd(0.04,0.26):rnd(0.74,0.96);d.set(ex,rnd(0.2,0.85),rnd(0.015,0.04),1);n--}}}
 function updateDrops(dt){for(const d of drops)if(d.w>0){d.w=Math.max(0,d.w-dt*0.26);d.y-=dt*0.012*(1+d.z*30)}}
-const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0},uWarm:{value:0}},
+const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0},uWarm:{value:0},uExp:{value:1}},
   vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uWarm;uniform float uSunK;uniform float uFlip;uniform float uFish;varying vec2 vUv;
+  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uWarm;uniform float uSunK;uniform float uFlip;uniform float uFish;uniform float uExp;varying vec2 vUv;
+    vec3 tm(vec3 c){c*=uExp/0.6;c=mat3(0.59719,0.07600,0.02840,0.35458,0.90834,0.13383,0.04823,0.01566,0.83777)*c;   /* the output pass folded in here: ACES filmic tone mapping, then sRGB (one full-screen pass less) */
+      c=(c*(c+0.0245786)-0.000090537)/(c*(0.983729*c+0.4329510)+0.238081);c=clamp(mat3(1.60475,-0.10208,-0.00327,-0.53108,1.10813,-0.07276,-0.07367,-0.00605,1.07602)*c,0.,1.);
+      return mix(pow(c,vec3(0.41666))*1.055-0.055,c*12.92,vec3(lessThanEqual(c,vec3(0.0031308))));}
     void main(){vec2 fUv=vec2(mix(vUv.x,1.-vUv.x,uFlip),vUv.y);vec2 uv=fUv;float rim=0.;
       for(int i=0;i<6;i++){vec4 d=uDrops[i];vec2 q=(fUv-d.xy)*vec2(uAspect,1.);float r=length(q)/d.z;
         if(d.w>0.002&&r<1.){float k=sqrt(1.-r*r)*min(d.w*3.,1.);uv-=(fUv-d.xy)*k*k*0.7;}}
       if(uFish>0.001){vec2 fc=uv-.5,fa=fc*vec2(uAspect,1.);float fr=dot(fa,fa);uv=.5+fc*(1.+uFish*fr)/(1.+uFish*0.62);}   // fisheye: the middle swells, the edges bend
       vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*(0.014+0.03*uFish);
-      vec3 col=vec3(texture2D(tDiffuse,uv+o).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-o).b);
+      vec3 col=tm(vec3(texture2D(tDiffuse,uv+o).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-o).b));
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.16);
+      {float mx=max(col.r,max(col.g,col.b)),mn=min(col.r,min(col.g,col.b));col=max(mix(vec3(l),col,1.+0.36*(1.-clamp((mx-mn)/(mx+1e-3),0.,1.))*(1.-uWarm)),0.);}   /* vibrance: washed-out colours (hazy sky, pale water) gain the most, skin and strong colours stay put */
       col+=vec3(-0.018,0.008,0.020)*(1.-smoothstep(0.,0.45,l));   // teal shadows
       col+=vec3(0.030,0.012,-0.022)*smoothstep(0.45,1.,l);        // golden highlights
       if(uSunK>0.001){vec2 dv=(fUv-uSun)*vec2(uAspect,1.);float dd=length(dv);
-        float see=smoothstep(0.90,0.985,dot(texture2D(tDiffuse,uSun).rgb,vec3(0.3,0.59,0.11)));   // only when the sun itself is in view, not behind the wave
+        float see=smoothstep(0.90,0.985,dot(tm(texture2D(tDiffuse,uSun).rgb),vec3(0.3,0.59,0.11)));   // only when the sun itself is in view, not behind the wave
         float fl=exp(-dd*dd*26.)*0.30+exp(-dd*6.)*0.07+pow(max(0.,cos(atan(dv.y,dv.x)*6.+0.4)),48.)*exp(-dd*5.)*0.14;
         vec2 ax=vec2(0.5)-uSun;vec3 gh=vec3(0.);
         for(int i=1;i<5;i++){vec2 gp=uSun+ax*(0.42*float(i));float gd=length((fUv-gp)*vec2(uAspect,1.));float r=0.018+0.022*float(i);
@@ -3314,8 +3331,8 @@ addEventListener('resize',resize);resize();
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
 const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return c?Math.min(devicePixelRatio,2.5):Math.max(devicePixelRatio,1.5)})();   /* a computer with a plain 1x screen draws at 1.5x and scales down (clean edges); a phone uses up to 2.5x of its own pixels */
 const QL=[[2.5,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
-function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=rt.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
-  bokeh.enabled=QL[l][1];if(sm!==s0)for(const t of [composer.renderTarget1,composer.renderTarget2]){t.samples=sm;t.dispose()}
+function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=scenePass.ms.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
+  bokeh.enabled=QL[l][1];if(sm!==s0){scenePass.ms.samples=sm;scenePass.ms.dispose()}
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
 setQuality((()=>{try{return matchMedia('(pointer:coarse)').matches?3:1}catch(e){return 1}})());
 // one step down that really changes something (on a 1x screen several levels share the same resolution)
@@ -3415,7 +3432,7 @@ function tick(dtR,draw){
   waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;
   {const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
    U.uShdK.value=sf.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float')?(1-0.85*TOD.value)*clamp(1-sf.h*0.2,0.4,1):0}skyMat.uniforms.uTime.value=clockT;
-  gradePass.uniforms.uTime.value=clockT;{_sunP.copy(SUN).multiplyScalar(900).add(camera.position).project(camera);const on=_sunP.z<1&&Math.abs(_sunP.x)<1.15&&Math.abs(_sunP.y)<1.15;   // lens flare follows the sun on screen
+  gradePass.uniforms.uTime.value=clockT;gradePass.uniforms.uExp.value=renderer.toneMappingExposure;{_sunP.copy(SUN).multiplyScalar(900).add(camera.position).project(camera);const on=_sunP.z<1&&Math.abs(_sunP.x)<1.15&&Math.abs(_sunP.y)<1.15;   // lens flare follows the sun on screen
     gradePass.uniforms.uSun.value.set(_sunP.x*0.5+0.5,_sunP.y*0.5+0.5);gradePass.uniforms.uWarm.value=DAWN.value;gradePass.uniforms.uSunK.value=on?(1-0.75*TOD.value)*(1-0.6*DAWN.value)*(1-sstep(0.85,1.15,Math.max(Math.abs(_sunP.x),Math.abs(_sunP.y)))):0}   /* a low sun flares soft and warm */bokeh.uniforms.focus.value=damp(bokeh.uniforms.focus.value,camFocus,8,dtR);
   partMat.uniforms.uScale.value=renderer.domElement.height/(2*Math.tan(camera.fov*DEG/2));
   hudAcc+=dtR;if(!draw)return;
