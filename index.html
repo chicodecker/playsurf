@@ -1990,7 +1990,7 @@ function poseRider0(time,dt){
   if(AT.drag>0.01){const z=-0.62,y=Math.min(-z*Math.tan(clamp(AT.lt,0,1.1))+0.02,J.shB.y+0.10);_a.set(J.pel.x-0.20,y,z);J.hBt.lerp(_a,AT.drag)}
   {const ia=clamp(A.aa*0.012,-0.18,0.18)*st*(RB?-1:1);J.hFt.z+=ia;J.hBt.z-=ia;J.hFt.y+=Math.abs(ia)*0.3;J.hBt.y+=Math.abs(ia)*0.3}
   if(air>0.01){const nk=sstep(0,0.3,AT.npTh||0);_a.set(J.shF.x+lerp(0.28,0.32,nk),J.shF.y+lerp(-0.12,0.06,nk),J.shF.z+lerp(-0.24,-0.30,nk));J.hFt.lerp(_a,air);_a.set(J.shB.x+lerp(-0.28,-0.34,nk),J.shB.y+lerp(-0.08,0.14,nk),J.shB.z+lerp(-0.08,0.16,nk));J.hBt.lerp(_a,air)}   // nose pick: both arms up and out for balance
-  {const fo=A.flo=damp(A.flo||0,AT.flo||0,7,dt);if(fo>0.01){_a.set(J.shF.x+0.36,J.shF.y+0.0,J.shF.z-0.30);J.hFt.lerp(_a,fo);_a.set(J.shB.x-0.38,J.shB.y+0.05,J.shB.z+0.14);J.hBt.lerp(_a,fo)}}   /* floater: both arms out wide for balance */
+  {const fo=A.flo=damp(A.flo||0,AT.flo||0,7,dt);if(fo>0.01){_a.set(J.shF.x+0.07,J.shF.y-0.50,J.shF.z-0.04);J.hFt.lerp(_a,fo);_a.set(J.shB.x-0.07,J.shB.y-0.50,J.shB.z+0.04);J.hBt.lerp(_a,fo)}}   /* floater: tall and quiet, both arms hanging down beside the body */
   if(gr>0.01){_a.set(-0.31,0.075,-0.255);J.hBt.lerp(_a,gr);_a.set(J.knF.x+0.10,J.knF.y-0.10,J.knF.z-0.16);J.hFt.lerp(_a,gr*0.85)}
   if(fl>0.01){_a.set(J.shF.x+0.3*Math.sin(time*11),J.shF.y+0.45,J.shF.z+0.3*Math.cos(time*9));J.hFt.lerp(_a,fl);_a.set(J.shB.x-0.3*Math.cos(time*10),J.shB.y+0.4,J.shB.z+0.3*Math.sin(time*12));J.hBt.lerp(_a,fl)}
   if(pr>0.001){const push=1-sstep(0.6,0.95,pr);
@@ -3161,8 +3161,8 @@ function placeSurfer(dt,time){
   AT.flo=sf.mode==='float'?1:0;
   if(sf.mode!=='ride'){AT.slipYaw=slip=0;rootYaw=0;AT.rev=0;AT.lay=0;AT.gz=0}
   if(sf.mode==='float'){const f=sf.fT||0,L=sf.fFoam?1.2:1.3,u=clamp(f/L,0,1),pm=Math.sin(4*PI*u);   // old-school rock and roll floater: two pumps over the white water, the board sliding sideways under him
-    slip=0.30*sstep(0,0.22,u)*(1-sstep(0.82,1,u))+0.05*pm;AT.slipYaw=slip;rootYaw=0.3*slip;   /* across the top of the lip: low over the board, arms wide, the board nearly straight; he drops with the white water */
-    AT.crouch=0.66-0.08*pm+0.22*sstep(0.85,1,u);AT.tw=0.75+0.3*Math.sin(f*3.2);AT.look=0.25;AT.hip=0.15+0.15*Math.sin(f*2.4);AT.rail=-0.3;sf.lam=damp(sf.lam,-0.22,6,dt);
+    slip=0.30*sstep(0,0.22,u)*(1-sstep(0.82,1,u))+0.05*pm;AT.slipYaw=slip;rootYaw=0.3*slip;   /* across the top of the lip: stretched up tall over the board, arms at his sides, the board nearly straight; he sinks to absorb the drop with the white water */
+    AT.crouch=0.24-0.04*pm+0.24*sstep(0.85,1,u);AT.tw=0.55+0.08*Math.sin(f*3.2);AT.look=0.25;AT.hip=0.04+0.04*Math.sin(f*2.4);AT.rail=-0.3;sf.lam=damp(sf.lam,-0.22,6,dt);
     bP.y+=0.04*Math.max(0,pm)*(sf.fFoam?1:0.6)}
   bZ.crossVectors(bX,bY).normalize();
   if(spin!==0){bX.applyAxisAngle(bY,spin);bZ.crossVectors(bX,bY).normalize()}
