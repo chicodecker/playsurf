@@ -181,6 +181,8 @@ body.touch .thelp{display:block}
 #rotate{position:absolute;inset:0;z-index:70;display:none;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:#0c3e52;color:#fff;font-size:15px;letter-spacing:.3em;font-weight:700;text-align:center;padding:24px;line-height:1.6}
 #rotate b{font-size:64px;display:block;animation:rot 2.4s ease-in-out infinite}
 @keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+#ld{position:fixed;left:50%;bottom:max(7vh,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;transition:opacity .5s}
+#ld.off{opacity:0}#ld b{font-size:12px;letter-spacing:.34em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.7)}#ld i{display:block;width:min(46vw,240px);height:3px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden}#ld u{display:block;height:100%;width:4%;background:#9ff5dc;transition:width .25s}
 @media (orientation:portrait){body.touch #rotate{display:flex}body.touch #psAd{display:none!important}}
 /* full screen: a button like a video player's, on phones and tablets; on iPhone Safari (no full screen for pages) a swipe up hides the browser bars */
 #fsBtn{position:absolute;top:calc(var(--bar,5.5vh) + 10px);right:max(14px,env(safe-area-inset-right,0px));z-index:60;width:42px;height:42px;border-radius:10px;border:2px solid rgba(255,255,255,.55);background:rgba(0,0,0,.32);display:none;align-items:center;justify-content:center;padding:0;pointer-events:auto;cursor:pointer}
@@ -292,6 +294,9 @@ var Z={"America/Sao_Paulo":"BR","America/Bahia":"BR","America/Fortaleza":"BR","A
 var cc=Z[tz]||(tz.indexOf('America/Argentina/')===0?'AR':tz.indexOf('America/Indiana/')===0||tz.indexOf('America/Kentucky/')===0?'US':tz.indexOf('Australia/')===0?'AU':'');
 if(!cc){var l=(navigator.language||'').split('-');cc=(l[1]||'').toUpperCase()}if(!/^[A-Z]{2}$/.test(cc))cc='XX';
 var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearInterval(id);g.count({path:'pais-'+cc,title:'País '+cc,event:true})}else if(++n>40)clearInterval(id)},500)})();</script>
+<!-- Google H5 Games Ads (Ad Placement API): interstitials between the choice screens -->
+<script async data-ad-frequency-hint="60s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9543654204689824" crossorigin="anonymous"></script>
+<script>window.adsbygoogle=window.adsbygoogle||[];var adBreak=adConfig=function(o){adsbygoogle.push(o);};</script>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -323,11 +328,11 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   <div id="menu" class="panel"><h1 class="srh">PlaySurf: Free Online Surf Game</h1>
     <div class="wz">
       <div class="wzTop"><button id="wzBack" class="pbtn wv sm" aria-label="Back">&#9664; BACK</button>
-        <div class="wzDots"><i data-s="1">1 · PLAY ON</i><i data-s="3">2 · WAVE</i><i data-s="4">3 · TURNS</i></div></div>
+        <div class="wzDots"><i data-s="1">1 · PLAY ON</i><i data-s="2">2 · STANCE</i><i data-s="3">3 · WAVE</i><i data-s="4">4 · TURNS</i></div></div>
       <section class="wzS" data-s="1"><h2 class="wzH">HOW DO YOU PLAY?</h2>
         <div class="pbtns"><button id="goDesk" class="pbtn big">DESKTOP<i>KEYBOARD · GAMEPAD</i></button><button id="goMob" class="pbtn big wv">MOBILE<i>TOUCH SCREEN</i></button></div>
         <p class="cred">3D surfer: made with Magnific (Tripo) · Music: original tracks made with Suno</p></section>
-      <section class="wzS" data-s="2"><h2 class="wzH">YOUR SURFER</h2>
+      <section class="wzS" data-s="2"><h2 class="wzH">STANCE</h2>
         <div class="playRow"><span class="playLbl">STANCE</span>
         <div class="pbtns"><button id="goRight" class="pbtn wv big">REGULAR<i>LEFT FOOT FORWARD · RIGHTS</i></button><button id="goLeft" class="pbtn wv big sel">GOOFY<i>RIGHT FOOT FORWARD · LEFTS</i></button></div></div>
         <p class="wzNote">Your stance sets the wave's direction at SurfPool, Uluwatu and Pipeline. Cloud 9 and Campeche are rights; at Trestles you pick a side.</p></section>
@@ -363,7 +368,8 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:1">CUT<br>BACK</button><button class="tb sm" id="tFloat" style="--dx:-1;--dy:0;--k:1">FLOATER</button>
     <button class="tb sm" id="tLay" style="--dx:-.3827;--dy:.9239;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-.9239;--dy:.3827;--k:2">BRAKE</button>
     <div id="tTop"><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button><button class="tb" id="tFull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button></div>
-    <div id="tHint">STICK: STEER · SNAP AT THE TOP · AIR AT THE LIP · FLOATER ON THE FOAM</div></div>
+    <div id="tHint">STICK: STEER · STICK BACK: CARVE · SNAP AT THE TOP · AIR AT THE LIP</div></div>
+  <div id="ld"><b>LOADING</b><i><u id="ldU"></u></i></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <button id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
   <div id="fsSwipe"><div class="fsHand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><b>SWIPE UP FOR FULL SCREEN</b><span>OR SHARE &#9656; ADD TO HOME SCREEN</span><button id="fsX" aria-label="Close">&#10005;</button></div>
@@ -382,6 +388,9 @@ import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {BokehPass} from 'three/addons/postprocessing/BokehPass.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+/* a quick LOADING bar while the models and textures come down */
+{const ld=document.getElementById('ld'),u=document.getElementById('ldU');let done=false;const fin=()=>{if(done)return;done=true;if(u)u.style.width='100%';if(ld){ld.classList.add('off');setTimeout(()=>ld.remove(),700)}};
+ THREE.DefaultLoadingManager.onProgress=(url,n,t)=>{if(!done&&u)u.style.width=Math.max(4,Math.round(100*n/Math.max(t,1)))+'%'};THREE.DefaultLoadingManager.onLoad=()=>setTimeout(fin,200);setTimeout(fin,15000)}
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 
 window.addEventListener('error',e=>{document.getElementById('err').textContent+=e.message+'\n'});
@@ -434,7 +443,7 @@ function makeNoiseTex(){
     d[i*4]=clamp(128+dx*26*127,0,255);d[i*4+1]=clamp(128+dy*26*127,0,255);d[i*4+2]=H[i]*255;d[i*4+3]=F[i]*255}
   const t=new THREE.DataTexture(d,N,N,THREE.RGBAFormat);
   t.wrapS=t.wrapT=THREE.RepeatWrapping;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;
-  t.generateMipmaps=true;t.anisotropy=8;t.needsUpdate=true;return t;
+  t.generateMipmaps=true;t.anisotropy=16;t.needsUpdate=true;return t;
 }
 const noiseTex=makeNoiseTex();
 
@@ -1216,7 +1225,7 @@ const sunL=new THREE.DirectionalLight(0xffdfb0,3.2);sunL.position.copy(SUN).mult
 const hemiL=new THREE.HemisphereLight(0xcfe2ff,0x1d7a78,0.45);scene.add(hemiL);
 const fillL=new THREE.DirectionalLight(0xffe6cc,0.45);fillL.position.set(0.6,0.5,1);scene.add(fillL);
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-sunL.castShadow=true;sunL.shadow.mapSize.set(2048,2048);sunL.shadow.bias=-0.0012;sunL.shadow.normalBias=0.02;
+sunL.castShadow=true;sunL.shadow.mapSize.set(4096,4096);sunL.shadow.bias=-0.0012;sunL.shadow.normalBias=0.02;
 {const c=sunL.shadow.camera;c.left=-1.8;c.right=1.8;c.top=1.8;c.bottom=-1.8;c.near=1;c.far=30;c.updateProjectionMatrix()}
 const envScene=new THREE.Scene(),pmrem=new THREE.PMREMGenerator(renderer);
 {const m=skyMat.clone();m.uniforms.uEnv.value=1;m.uniforms.uNoise.value=noiseTex;m.uniforms.uSun=skyMat.uniforms.uSun;m.uniforms.uNight=TOD;m.uniforms.uDawn=DAWN;const e=new THREE.Mesh(sky.geometry,m);e.frustumCulled=false;envScene.add(e)}
@@ -1935,6 +1944,7 @@ function poseRider0(time,dt){
   if(AT.drag>0.01){const z=-0.62,y=Math.min(-z*Math.tan(clamp(AT.lt,0,1.1))+0.02,J.shB.y+0.10);_a.set(J.pel.x-0.20,y,z);J.hBt.lerp(_a,AT.drag)}
   {const ia=clamp(A.aa*0.012,-0.18,0.18)*st*(RB?-1:1);J.hFt.z+=ia;J.hBt.z-=ia;J.hFt.y+=Math.abs(ia)*0.3;J.hBt.y+=Math.abs(ia)*0.3}
   if(air>0.01){const nk=sstep(0,0.3,AT.npTh||0);_a.set(J.shF.x+lerp(0.28,0.32,nk),J.shF.y+lerp(-0.12,0.06,nk),J.shF.z+lerp(-0.24,-0.30,nk));J.hFt.lerp(_a,air);_a.set(J.shB.x+lerp(-0.28,-0.34,nk),J.shB.y+lerp(-0.08,0.14,nk),J.shB.z+lerp(-0.08,0.16,nk));J.hBt.lerp(_a,air)}   // nose pick: both arms up and out for balance
+  {const fo=A.flo=damp(A.flo||0,AT.flo||0,7,dt);if(fo>0.01){_a.set(J.shF.x+0.36,J.shF.y+0.0,J.shF.z-0.30);J.hFt.lerp(_a,fo);_a.set(J.shB.x-0.38,J.shB.y+0.05,J.shB.z+0.14);J.hBt.lerp(_a,fo)}}   /* floater: both arms out wide for balance */
   if(gr>0.01){_a.set(-0.31,0.075,-0.255);J.hBt.lerp(_a,gr);_a.set(J.knF.x+0.10,J.knF.y-0.10,J.knF.z-0.16);J.hFt.lerp(_a,gr*0.85)}
   if(fl>0.01){_a.set(J.shF.x+0.3*Math.sin(time*11),J.shF.y+0.45,J.shF.z+0.3*Math.cos(time*9));J.hFt.lerp(_a,fl);_a.set(J.shB.x-0.3*Math.cos(time*10),J.shB.y+0.4,J.shB.z+0.3*Math.sin(time*12));J.hBt.lerp(_a,fl)}
   if(pr>0.001){const push=1-sstep(0.6,0.95,pr);
@@ -2015,6 +2025,13 @@ function npcPoint(w,t){if(w<0.01)return;npcIdx();npcG.updateMatrixWorld(true);ri
     dir.y+=0.12*sh;dir.normalize();_pq.setFromUnitVectors(_pb,dir);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of A)npcRot(i,_pa,_pq)}
   if(hb>=0){_pa.setFromMatrixPosition(npcBones[hb].matrix);const yaw=clamp(Math.atan2(-(_pt.x-_pa.x),-(_pt.z-_pa.z)),-1.25,1.25)*w*NPCYAW;
     _pq.setFromAxisAngle(UPV,yaw);_pq2.setFromAxisAngle(_pb.set(1,0,0),(-0.18+0.10*Math.sin(t*9))*w);_pq.multiply(_pq2);npcRot(NPI.head,_pa,_pq);if(NPI.neck>=0&&NPI.neck!==NPI.head)npcRot(NPI.neck,_pa,_pq)}}
+/* falling: both arms thrown out and windmilling for balance that is not there */
+const _pf=new V3;
+function npcFlail(w,t){if(w<0.01)return;npcIdx();const hb=NPI.neck>=0?NPI.neck:NPI.head;_pc.setFromMatrixPosition(npcBones[hb>=0?hb:NPI.arms[0][0]].matrix);
+  for(let a=0;a<2;a++){const A=NPI.arms[a];_pa.setFromMatrixPosition(npcBones[A[0]].matrix);_pb.setFromMatrixPosition(npcBones[A[5]].matrix).sub(_pa).normalize();
+    const lx=_pa.x-_pc.x,lz=_pa.z-_pc.z,ll=Math.hypot(lx,lz)||1,ph=t*(10.5+a*2.4)+a*2.2;
+    _pf.set(lx/ll*0.8+0.35*Math.sin(ph),0.45+0.45*Math.sin(ph*0.8+1.3),lz/ll*0.8+0.35*Math.cos(ph)).normalize();
+    _pq.setFromUnitVectors(_pb,_pf);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of A)npcRot(i,_pa,_pq)}}
 /* his voice: "My wave!!!" (the browser's own speech, so it costs nothing to download); quiet when the game is muted */
 function sayMyWave(){if(audio.muted||game.attract||!('speechSynthesis' in window))return;try{const u=new SpeechSynthesisUtterance('My wave!!!');u.lang='en-US';u.rate=1.2;u.pitch=0.7;u.volume=1;
   const vs=speechSynthesis.getVoices(),v=vs.find(v=>/^en/i.test(v.lang)&&/Daniel|Fred|Alex|Aaron|Arthur|Gordon|Rishi|Male/i.test(v.name))||vs.find(v=>/^en/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
@@ -2041,31 +2058,35 @@ function dropTick(dt){
   D.t+=dt;sampleSurf(D.s,Math.max(D.p,0),npcS);const top=npcS.top,pT=Math.min(sf.p+0.5,top-0.35);
   if(D.ph==='pad'){D.s-=2.6*dt;D.p=damp(D.p,0.42*top,1.5,dt);D.th=damp(D.th,-0.7,2,dt);   // paddling in; the wave picks him up and brings him back toward the rider
     const u=((D.t*9.5)%(2*PI))/(2*PI)*12,i0=Math.floor(u)%12;npcApply(NPCP.pad[i0],NPCP.pad[(i0+1)%12],u-Math.floor(u));
-    if(D.t>1.5){D.ph='pop';D.t=0;hudMsg('DROP-IN!','get off my wave!');sfxNoise(0.25,2600,0.15)}}
+    if(D.t>1.5){D.ph='pop';D.t=0;hudMsg('DROP-IN!','get off my wave!')}}
   else if(D.ph==='pop'){D.s-=2.0*dt;D.th=damp(D.th,-0.15,4,dt);D.p=damp(D.p,pT,2,dt);const u=clamp(D.t/0.5,0,1)*4,i0=Math.min(3,Math.floor(u));npcApply(NPCP.pop[i0],NPCP.pop[i0+1],u-i0);
-    if(D.t>0.5){D.ph='ride';D.t=0;sayMyWave()}}
+    if(D.t>0.5){D.ph='ride';D.t=0}}   /* no voice: the local says it all with his arms */
   else if(D.ph==='ride'||D.ph==='push'){const tg=sf.s+1.15;
     if(D.ph==='ride'){D.s-=Math.max(1.4,(D.s-tg)*2.2)*dt;if(D.s<tg)D.s=tg}else D.s=tg;
     D.p=damp(D.p,pT,3,dt);D.th=damp(D.th,sf.th*0.6,4,dt);npcApply(NPCP.pop[4]);D.pw=damp(D.pw||0,D.ph==='ride'?1:0,D.ph==='ride'?7:16,dt);
     const ok=sf.mode==='ride'&&sf.pivot<=0&&!sf.tt&&!game.inTube;
     if(D.ph==='ride'&&D.s-tg<0.3&&ok&&D.t>1.5){D.ph='push';D.t=0}   /* he gets a good moment to claim it first */
     else if(D.ph==='ride'&&D.t>4.5){D.ph='fall';D.t=0;D.w.set(0,0,0)}   // never reached: he loses it on his own
-    if(D.ph==='push'){AT.push=1;if(D.t>0.42){D.ph='fall';D.t=0;D.w.set(1,0,0);award('Drop-in Denied',1100);reqShot('Drop-in Denied',900,0.05);sfxNoise(0.45,1300,0.35);game.shake=Math.max(game.shake||0,0.2)}}
+    if(D.ph==='push'){AT.push=1;if(D.t>0.42){D.ph='fall';D.t=0;D.w.set(1,0,0);award('Drop-in Denied',1100);reqShot('Drop-in Denied',900,0.05);game.shake=Math.max(game.shake||0,0.2)}}
     if(D.ph==='fall'){npcPlace(D.s,D.p,D.th);
-      if(D.w.x>0){D.v.copy(npcS.n).multiplyScalar(1.1).addScaledVector(UPV,3.3);D.v.x=0.9;D.bv.copy(npcS.n).multiplyScalar(3.2).addScaledVector(UPV,9.0).addScaledVector(npcS.ts,5.5);D.by0=npcBoard.position.y;D.churn=0}   // board thrown straight up, the intruder launched off it
+      D.av=D.w.x>0?-5.2:-4.2;D.az=D.w.x>0?1.4:0.9;D.inW=false;D.tw=0;D.fl=0;
+      if(D.w.x>0){D.v.copy(npcS.n).multiplyScalar(1.1).addScaledVector(UPV,2.7);D.v.x=0.9;D.bv.copy(npcS.n).multiplyScalar(3.2).addScaledVector(UPV,9.0).addScaledVector(npcS.ts,5.5);D.by0=npcBoard.position.y;D.churn=0}   // board thrown straight up, the intruder launched off it
       else{D.v.copy(npcS.n).multiplyScalar(0.5).addScaledVector(npcS.tp,1.5).addScaledVector(UPV,1.6);D.v.x=1.8;D.bv.copy(D.v).addScaledVector(npcS.ts,2.2);D.bv.y+=1.3}}}   // shoved forward and up the face, away from the rider
   else if(D.ph==='fall'){const t=D.t,thr=D.w.x>0;AT.push=thr&&t<0.42?1:0;   // the arm follows the board up: the throw
-    D.v.y-=9.8*dt;D.v.x-=CP*0.9*dt;npcG.position.addScaledVector(D.v,dt);_nq2.setFromAxisAngle(XV,(thr?-8.5:-5.5)*dt);npcG.quaternion.multiply(_nq2);_nq2.setFromAxisAngle(ZV,(thr?2.6:1.6)*dt);npcG.quaternion.multiply(_nq2);   // over the falls, head first
-    if(npcBoard.visible){D.bv.y-=9.8*dt;D.bv.x-=CP*0.8*dt;npcBoard.position.addScaledVector(D.bv,dt);_nq2.setFromAxisAngle(ZV,(thr?3:7)*dt);npcBoard.quaternion.multiply(_nq2);_nq2.setFromAxisAngle(XV,(thr?11:4)*dt);npcBoard.quaternion.multiply(_nq2)}
-    if(thr){
-      if(t>0.62&&!D.splashed){D.splashed=true;const q=npcG.position;splash(70,q,1.6);sfxNoise(0.7,800,0.42);game.shake=Math.max(game.shake||0,0.25);
-        for(let i=0;i<18;i++)emit(q.x+rnd(-0.6,0.6),q.y+rnd(-0.2,0.3),q.z+rnd(-0.6,0.6),rnd(-1,1)-CP*0.6,rnd(0.5,2.5),rnd(-1,1),rnd(0.8,1.4),0.6,rnd(1.6,2.6),0.42,3,1.5,1)}
-      if(D.splashed&&D.churn<2&&t>0.88+0.26*D.churn){D.churn++;const q=npcG.position;splash(26,q,1.0);sfxNoise(0.35,700,0.2)}   // the washing machine
-      if(t>1.25)npcG.visible=false;
-      if(npcBoard.visible&&t>0.8&&D.bv.y<0&&npcBoard.position.y<D.by0-0.5){npcBoard.visible=false;splash(24,npcBoard.position,0.9);sfxNoise(0.3,1500,0.2)}
-      if((!npcBoard.visible&&t>1.3)||t>3.2){npcBoard.visible=false;D.done=true;dropEnd()}}
-    else{if(t>0.32&&!D.splashed){D.splashed=true;splash(42,npcG.position,1.25);sfxNoise(0.5,900,0.3)}
-      if(t>0.7)npcG.visible=false;if(t>1.3){npcBoard.visible=false;D.done=true;dropEnd()}}}
+    /* knocked off: thrown back off his board, arms windmilling, the fall slowing as he lays out flat; he lands in the water on his back and goes under */
+    if(!D.inW){D.v.y-=9.8*dt;D.v.x-=CP*0.9*dt}else{D.v.x=damp(D.v.x,-CP*0.85,3,dt);D.v.z=damp(D.v.z,0,3,dt);D.v.y=damp(D.v.y,-0.7,4,dt)}
+    npcG.position.addScaledVector(D.v,dt);D.av*=Math.exp(-(D.inW?6:1.5)*dt);D.az*=Math.exp(-(D.inW?6:1.8)*dt);
+    _nq2.setFromAxisAngle(XV,D.av*dt);npcG.quaternion.multiply(_nq2);_nq2.setFromAxisAngle(ZV,D.az*dt);npcG.quaternion.multiply(_nq2);
+    npcApply(NPCP.pop[4]);D.fl=damp(D.fl,D.inW?0.35:1,D.inW?3:9,dt);npcFlail(D.fl,t);
+    const sy=seaY(npcG.position.x,npcG.position.z);
+    if(!D.inW&&D.v.y<0&&npcG.position.y<sy+0.3&&t>0.12){D.inW=true;D.tw=t;D.splashed=true;const q=npcG.position;splash(thr?64:44,q,thr?1.5:1.25);game.shake=Math.max(game.shake||0,thr?0.2:0.1);
+      for(let i=0;i<(thr?18:10);i++)emit(q.x+rnd(-0.6,0.6),q.y+rnd(-0.2,0.3),q.z+rnd(-0.6,0.6),rnd(-1,1)-CP*0.6,rnd(0.5,2.5),rnd(-1,1),rnd(0.8,1.4),0.6,rnd(1.6,2.6),0.42,3,1.5,1);D.v.multiplyScalar(0.3);D.v.y=-1.2}
+    if(D.inW){const u=t-D.tw;if(D.churn<2&&u>0.3+0.28*D.churn){D.churn++;splash(20,npcG.position,0.85)}   // the washing machine
+      if(u>0.75)npcG.visible=false}
+    else if(t>2.2)npcG.visible=false;
+    if(npcBoard.visible){D.bv.y-=9.8*dt;D.bv.x-=CP*0.8*dt;npcBoard.position.addScaledVector(D.bv,dt);_nq2.setFromAxisAngle(ZV,(thr?3:7)*dt);npcBoard.quaternion.multiply(_nq2);_nq2.setFromAxisAngle(XV,(thr?11:4)*dt);npcBoard.quaternion.multiply(_nq2);
+      if(t>0.5&&D.bv.y<0&&npcBoard.position.y<seaY(npcBoard.position.x,npcBoard.position.z)+0.05){npcBoard.visible=false;splash(24,npcBoard.position,0.9)}}
+    if((!npcG.visible&&!npcBoard.visible)||t>3.2){npcG.visible=false;npcBoard.visible=false;D.done=true;dropEnd()}}
   if(D.ph!=='fall'&&D.on)npcPlace(D.s,D.p,D.th);
   SHOUT.visible=false;if(D.on&&(D.ph==='ride'||D.ph==='push'))npcPoint(D.pw||0,D.t+game.waveAge);
   if(AT.push>0){npcG.updateMatrixWorld(true);if(D.ph==='fall')_nv.copy(npcBoard.position);else _nv.set(-0.78,0.06,0).applyMatrix4(npcG.matrixWorld);riderG.updateMatrixWorld(true);D.hand.copy(_nv);riderG.worldToLocal(D.hand)}
@@ -2090,10 +2111,10 @@ function bbTick(dt,time){bbG.visible=false;BB.on=false;return;   // the bodyboar
   if(BB.s<sf.s-14||BB.t>16){BB.on=false;BB.done=true;bbG.visible=false}}
 
 /* ───────────────────────── input ───────────────────────── */
-const keys={},input={x:0,y:0,crouch:false,stall:false};
+const keys={},input={x:0,y:0,crouch:false,stall:false,cut:false};
 addEventListener('keydown',e=>{
   if(!$('intro').classList.contains('off')){introEnd();e.preventDefault();return}
-  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','AltLeft','AltRight'].includes(e.code))e.preventDefault();
   if(e.repeat)return;keys[e.code]=true;initAudio();
   if((e.code==='Enter'||e.code==='NumpadEnter')&&game.attract){if(WZ.s<4)wzGo(WZ.s+1);else $('goPlay').click();return}
   if(!$('wavePick').classList.contains('off')){if(e.code==='Escape'||e.code==='KeyP')wpClose();return}   /* the wave picker is open: Esc closes it */
@@ -2178,7 +2199,7 @@ function setMirror(m){STANCE=m?1:0;MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});
 var WZ={s:1};
-function wzGo(n){if(n===2)n=WZ.s>2?1:3;   /* the surfer step is gone: straight from the device to the wave */WZ.s=clamp(n,1,4);document.querySelectorAll('.wzS').forEach(e=>e.classList.toggle('on',+e.dataset.s===WZ.s));
+function wzGo(n){WZ.s=clamp(n,1,4);   /* 1 device, 2 stance, 3 wave, 4 turns */if(typeof adBreakNext==='function')adBreakNext(WZ.s);document.querySelectorAll('.wzS').forEach(e=>e.classList.toggle('on',+e.dataset.s===WZ.s));
   document.querySelectorAll('.wzDots i').forEach(e=>{const k=+e.dataset.s;e.classList.toggle('on',k===WZ.s);e.classList.toggle('done',k<WZ.s)});
   $('wzBack').style.visibility=WZ.s>1?'visible':'hidden';if(WZ.s===3)progUI();if(WZ.s===4)tutUI()}
 function tutUI(){const t=document.body.classList.contains('touch'),K=x=>`<span class="kk">${x}</span>`,M=(d,m)=>t?m:d;
@@ -2187,13 +2208,15 @@ function tutUI(){const t=document.body.classList.contains('touch'),K=x=>`<span c
     ['Tail Throw',M(`at the top, hold ${K('↓')}: the tail comes round and he rides it out`,`at the top, hold ${K('SNAP')} or tap ${K('TAIL THROW')}`)],
     ['Off the Lip',`go straight up to the lip and let the board pivot`],
     ['Layback',M(`hold ${K('SHIFT')} during a snap or a hit: he lays back on the water`,`${K('LAYBACK')} at the top: he snaps and lays back on the water`)],
-    ['Cutback',M(`out on the shoulder, one tap of ${K('←')}: a long carve back to the foam`,`out on the shoulder, tap ${K('CUTBACK')}: a long carve back to the foam and off it`)],
-    ['Carve 360',M(`${K('G')} on the open face: one full turn on the rail`,`${K('CARVE 360')} on the open face`)],
+    ['Carve',M(`with speed, tap ${K('←')}: up the face, then the whole rail laid over in one big arc of spray`,`with speed, push the stick ${K('←')}: the whole rail laid over in one big arc of spray`)],
+    ['Cutback',M(`out on the shoulder, tap ${K('OPTION')}: a long carve back to the foam and off it`,`out on the shoulder, tap ${K('CUTBACK')}: a long carve back to the foam and off it`)],
+    ['Carve 360',M(`${K('G')}: up to the lip and one full turn in the white of it`,`${K('CARVE 360')} on the open face`)],
     ['Barrel',M(`when the lip throws, stay on the wall; ${K('SHIFT')} brakes to get deeper, ${K('→')} pumps for speed`,`when the lip throws, stay on the wall; ${K('BRAKE')} to get deeper`)],
-    ['Floater',M(`come into a crumbling section sideways and ride across the top of the foam`,`tap ${K('FLOATER')}: up to the top and across the foam`)],
+    ['Floater',M(`${K('R')}, or come into a crumbling section sideways: up on top of the lip and across it`,`tap ${K('FLOATER')}: up to the top and across the foam`)],
     ['Air',M(`hit the lip fast with ${K('SPACE')}; in the air ${K('←')}${K('→')} spin, ${K('↑')}${K('↓')} flip, ${K('SPACE')} grabs`,`hit the lip fast with ${K('AIR')}; the stick spins and flips you, ${K('AIR')} grabs`)],
+    ['Alley-Oop',M(`take off with ${K('SPACE')} holding ${K('←')}: a full turn in the air, back over the curl`,`take off with ${K('AIR')} and the stick held ${K('←')}: a full turn in the air, back over the curl`)],
     ['Nose Pick',M(`at the lip, ${K('F')}: an air revo, nose to the sky, 180 and back round`,`at the lip, ${K('NOSE PICK')}: an air revo, nose to the sky, 180 and back round`)]];
-  if(t){const keep=['Bottom Turn','Snap','Air','Cutback','Floater','Layback','Barrel'];for(let i=L.length-1;i>=0;i--)if(!keep.includes(L[i][0]))L.splice(i,1)}
+  if(t){const keep=['Bottom Turn','Snap','Carve','Air','Alley-Oop','Cutback','Floater','Layback','Barrel'];for(let i=L.length-1;i>=0;i--)if(!keep.includes(L[i][0]))L.splice(i,1)}
   TUT.L=L;$('tutDots').innerHTML=L.map((_,i)=>`<i data-i="${i}"></i>`).join('');tutShow(TUT.i%L.length);clearInterval(TUT.tm);TUT.tm=setInterval(()=>{if(WZ.s===4&&game.attract)tutShow(TUT.i+1)},3600)}   // one move at a time in the middle, on a loop
 var TUT={L:[],i:0,tm:0};
 function tutShow(i){const L=TUT.L;if(!L.length)return;TUT.i=(i+L.length)%L.length;const [n,d]=L[TUT.i],c=$('tutCard');
@@ -2205,7 +2228,7 @@ $('wzNext3').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.bl
 $('tutCard').addEventListener('click',e=>{e.stopPropagation();tutShow(TUT.i+1);clearInterval(TUT.tm);TUT.tm=setInterval(()=>{if(WZ.s===4&&game.attract)tutShow(TUT.i+1)},3600)});
 $('tutDots').addEventListener('click',e=>{const d=e.target.closest('i');if(d){e.stopPropagation();tutShow(+d.dataset.i)}});
 $('goPlay').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();beginPlay();if(document.body.classList.contains('touch')){$('tHint').classList.add('on');setTimeout(()=>$('tHint').classList.remove('on'),7000)}});
-wzGo(2);   // phone or computer is detected (touch screen, finger-sized pointer); tap step 1 to change it
+wzGo(2);   // phone or computer is detected (touch screen, finger-sized pointer); tap step 1 to change it. The menus open on the stance
    /* no stance to remember: the direction is the spot's */
 const LYCS={red:[0.60,0.10,0.09],blue:[0.03,0.14,0.62],yellow:[0.97,0.60,0.0],black:[0.025,0.025,0.03]};
 function setLycra(c){if(!LYCS[c])c='red';LYC.c.value.set(LYCS[c][0],LYCS[c][1],LYCS[c][2]);if(c==='yellow')LYC.t.value.set(0.03,0.07,0.22);else LYC.t.value.set(0.93,0.93,0.92);PROG.lyc=c;progSave();document.querySelectorAll('#lycBtns .lyc').forEach(b=>b.classList.toggle('sel',b.dataset.c===c))}
@@ -2234,7 +2257,7 @@ setTimeout(()=>{if(vin.paused||vin.readyState<2)introEnd()},9000);   // never st
 $('intro').addEventListener('click',()=>{if(!$('intro').classList.contains('snd')){$('intro').classList.add('snd');initAudio();musicGo()}else introEnd()});   // first click: the song (the vignette stays muted under it); second click skips
 $('rdN').addEventListener('click',e=>{e.stopPropagation();setRider(1);e.target.blur()});$('rdC').addEventListener('click',e=>{e.stopPropagation();setRider(0);e.target.blur()});
 $('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);game.nightPref=0;e.target.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();if(SPOT.id!==1)return;setTOD(1);game.nightPref=1;e.target.blur()});
-$('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(b.id==='eMenu')toMenu();else{if(b.dataset.spot)setSpot(+b.dataset.spot);startWave()}return}if(game.state==='end'&&game.endT>1.2)startWave()});
+$('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(ADS.busy)return;if(b.id==='eMenu')adShow('browse','end-menu',toMenu);else{const sp=b.dataset.spot;adShow('next','next-wave',()=>{if(game.state!=='end')return;if(sp)setSpot(+sp);startWave()})}return}if(game.state==='end'&&game.endT>1.2)startWave()});
 function toMenu(){startAttract();wzGo(3)}   /* back to the start screen: pick a spot or a board you just opened */
 /* change wave in the middle of a ride: the wave pauses, pick a spot, a new wave starts there */
 let wpPaused=false;
@@ -2247,7 +2270,7 @@ $('wpClose').addEventListener('click',e=>{e.stopPropagation();wpClose()});
 $('wavePick').addEventListener('click',e=>{if(e.target.id==='wavePick'){e.stopPropagation();wpClose()}});
 $('wpBtns').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();b.blur();const o=SPOTS.find(x=>x.id===+b.dataset.spot);if(!o)return;
   if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}
-  wpPaused=false;game.paused=false;$('pause').style.display='none';$('wavePick').classList.add('off');game.pickSpot=o.id;if(o.id!==SPOT.id)setSpot(o.id);startWave()});
+  wpPaused=false;game.paused=false;$('pause').style.display='none';$('wavePick').classList.add('off');game.pickSpot=o.id;if(o.id!==SPOT.id)setSpot(o.id);adShow('next','change-wave',startWave)});
 /* the soundtrack on Spotify: offered once (at most every three days) when the pointer heads for the tab bar to close the game;
    on touch screens, where there is no pointer to watch, on the end card after the second wave */
 const SPOTIFY_URL='';   /* the playlist link goes here; with no link the pop-up never shows */
@@ -2262,13 +2285,13 @@ $('spPop').addEventListener('click',e=>{if(e.target.id==='spPop')spHide()});$('s
 addEventListener('pointerdown',()=>{if(game.state==='end'&&game.hl&&game.showCard)game.showCard()});
 function readInput(){
   let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
-  let cr=!!keys.Space,stl=!!(keys.ShiftLeft||keys.ShiftRight);
+  let cr=!!keys.Space,stl=!!(keys.ShiftLeft||keys.ShiftRight),cut=!!(keys.AltLeft||keys.AltRight);if(keys.KeyR)y=1;   /* OPTION: the cutback; R: the floater */
   const gp=navigator.getGamepads?[...navigator.getGamepads()].find(g=>g):null;
-  if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;
+  if(gp){if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}cr=cr||gp.buttons[0]?.pressed;stl=stl||gp.buttons[1]?.pressed||gp.buttons[7]?.pressed;cut=cut||!!gp.buttons[2]?.pressed;
     if(gp.buttons[9]?.pressed&&(game.attract||game.state==='menu'||game.state==='end'&&game.endT>1.2))beginPlay()}
   if(TOUCH.on){x=TOUCH.x*(MIRROR?-1:1);y=TOUCH.y}   /* the on-screen stick, analog */
-  if(TB.dn)y=-1;else if(TB.up)y=1;if(TB.bk)x=-(MIRROR?-1:1);if(TB.st)stl=true;   /* the trick buttons win over the stick */
-  input.x=x;input.y=y;input.crouch=cr;input.stall=stl}
+  if(TB.dn)y=-1;else if(TB.up)y=1;if(TB.bk)cut=true;if(TB.st)stl=true;   /* the trick buttons win over the stick */
+  input.x=x;input.y=y;input.crouch=cr;input.stall=stl;input.cut=cut}
 
 /* ───────────────────────── audio ───────────────────────── */
 const audio={ctx:null,muted:(()=>{try{return /[?&]mute\b/.test(location.search)}catch(e){return false}})()};   /* ?mute=1 opens the game silent */
@@ -2325,7 +2348,7 @@ function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(
   if(game.attract){$('menu').classList.remove('off');progUI();return}   // behind the start screen
   sfxNoise(1.2,900,0.25);if(SPOT.id===5&&!window.__manual)pickOpen()}   /* Trestles: pick a side before the drop */
 function startAttract(){startWave(true)}
-function beginPlay(){initAudio();game.ts=1;startWave();musicGo()}
+function beginPlay(){ADS.rode=true;initAudio();game.ts=1;startWave();musicGo()}
 /* Trestles: an A-frame. At the start of each ride the wave holds while he picks a side */
 let pkTm=0;
 function pickOpen(){$('pick').classList.remove('off');game.paused=true;clearTimeout(pkTm);pkTm=setTimeout(()=>pickDone(STANCE),6000)}
@@ -2342,6 +2365,19 @@ MUS.el.addEventListener('ended',()=>musicSet(MUS.i+1));
 function musicSet(i,first){MUS.i=((i%TRACKS.length)+TRACKS.length)%TRACKS.length;const T=TRACKS[MUS.i];MUS.el.src=T.f;$('mTitle').textContent=T.t;$('mBand').textContent=T.b;
   const w=$('music');w.classList.add('flash');clearTimeout(MUS.ft);MUS.ft=setTimeout(()=>w.classList.remove('flash'),3200);if(MUS.on){const p=MUS.el.play();if(p&&p.catch)p.catch(()=>{if(first){MUS.on=false;$('music').classList.remove('on')}})}}
 function musicGo(){if(MUS.on&&!MUS.el.paused)return;MUS.on=true;MUS.el.muted=!!audio.muted;if(!MUS.el.src)musicSet(MUS.i,1);else{const p=MUS.el.play();if(p&&p.catch)p.catch(()=>{MUS.on=false;$('music').classList.remove('on')})}$('music').classList.add('on')}   // if the browser refuses sound before a tap, it tries again on the first tap
+/* H5 Games Ads: an ad break is offered when the player moves between the choice screens (the menu steps, the end-of-wave buttons, the wave
+   picker). Google decides whether an ad actually shows; the frequency hint keeps it to about one a minute at most. While one is on screen the
+   game is paused and silent. If the ad script is blocked or slow, the game simply carries on. */
+var ADS={busy:false,m:false,p:false,shown:false,rode:false};
+try{adConfig({preloadAdBreaks:'on',sound:'on'})}catch(e){}
+function adShow(type,name,done){let fin=false;const end=()=>{if(fin)return;fin=true;ADS.busy=false;if(done)done()};
+  if(ADS.busy||typeof adBreak!=='function'||game.replay){end();return}ADS.busy=true;ADS.shown=false;
+  const tm=setTimeout(()=>{if(!ADS.shown)end()},1500);   /* no ad started in time: go on */
+  try{adBreak({type,name,
+    beforeAd(){ADS.shown=true;ADS.m=MUS.el.muted;ADS.p=game.paused;if(audio.master)audio.master.gain.value=0;MUS.el.muted=true;game.paused=true;document.body.classList.add('adOn')},
+    afterAd(){if(audio.master)audio.master.gain.value=audio.muted?0:0.55;MUS.el.muted=audio.muted;game.paused=ADS.p;document.body.classList.remove('adOn')},
+    adBreakDone(){clearTimeout(tm);end()}})}catch(e){clearTimeout(tm);end()}}
+function adBreakNext(s){if(s>=3&&ADS.rode&&typeof game!=='undefined'&&(game.attract||game.state==='menu'))adShow('browse','menu-'+(s===3?'wave':'turns'))}   /* back in the menu after a wave: on to the wave choice, on to the turns (never before the first ride) */
 function setMuted(m,keep){audio.muted=!!m;if(audio.master)audio.master.gain.value=audio.muted?0:0.55;MUS.el.muted=audio.muted;if(!keep)try{localStorage.setItem('playsurf_muted',audio.muted?'1':'0')}catch(e){}
   const b=$('muteBtn');if(b){b.innerHTML=audio.muted?'&#128263; SOUND OFF':'&#128266; SOUND ON';b.classList.toggle('off',audio.muted);b.setAttribute('aria-label',audio.muted?'Sound off':'Sound on')}const t=$('tMute');if(t)t.innerHTML=audio.muted?'&#128263;':'&#128266;';if(!audio.muted){initAudio();musicGo()}}
 $('muteBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();setMuted(!audio.muted)});$('tMute').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();setMuted(!audio.muted)});
@@ -2365,7 +2401,7 @@ function award(name,pts,small){if(/^(Snap|Tail Throw|Roundhouse|Cutback|Off the 
   let tot=pts,mult=1;
   if(!small){const now=game.waveAge;game.marks.push(now);game.combo=now-game.comboT<5.5?game.combo+1:1;game.comboT=now;mult=1+0.25*Math.min(game.combo-1,6)}
   tot=Math.round(pts*mult/10)*10;game.pts+=tot;game.list.push({name,pts:tot,t:game.waveAge,small:!!small});
-  if(/Barrel/.test(name))giveTro('barrel');if(name==='Huge Barrel')giveTro('huge');if(/^(Air|Backflip|Frontflip|Nose Pick)/.test(name))giveTro('air');if(/^(Air|Nose Pick).*360/.test(name))giveTro('air360');if(game.combo>=5)giveTro('combo5');
+  if(/Barrel/.test(name))giveTro('barrel');if(name==='Huge Barrel')giveTro('huge');if(/^(Air|Backflip|Frontflip|Nose Pick|Alley)/.test(name))giveTro('air');if(/^(Air|Nose Pick).*360|^Alley/.test(name))giveTro('air360');if(game.combo>=5)giveTro('combo5');
   const el=document.createElement('div');el.className='p'+(small?' sm':'');
   el.innerHTML=`<b>${name}</b><span>+${tot}${mult>1?`<i>×${mult}</i>`:''}</span>`;$('pop').appendChild(el);setTimeout(()=>el.remove(),2300);
   if(!small){sfxChime(Math.min(game.combo+1,4));if(name.indexOf('Barrel')===0){sf.claimT=1.5;sf.claimV=pickClaim()}return tot}return tot}
@@ -2587,7 +2623,7 @@ function boteTick(dt,time){const B=BOTE,g=B.g;if(!g)return;if(B.wid!==game.waveI
   B.x+=B.vx*dt;B.z+=B.vz*dt;const wvx=B.vx+CP,ul=Math.hypot(wvx,B.vz),ux=wvx/ul,uz=B.vz/ul,h0=seaY(B.x-ux*1.6,B.z-uz*1.6),h1=seaY(B.x+ux*1.6,B.z+uz*1.6);
   const yT=seaY(B.x,B.z);B.y=B.y===undefined||B.y<-50?yT:damp(B.y,yT,yT>B.y?5.5:4,dt);B.pt=damp(B.pt||0,clamp(Math.atan2(h1-h0,3.2),-0.5,0.5),5,dt);   /* the hull rides up the face and over, it does not snap to it */
   g.position.set(B.x,B.y+0.04*Math.sin(time*2.2),B.z);g.rotation.set(0.05*Math.sin(time*1.7),Math.atan2(-B.vz,wvx),B.pt);g.visible=true;
-  const dc=g.position.distanceTo(camera.position);if(B.called===0&&dc<34){B.called=1;sfxPlay('crowd',{vol:0.8,off:rnd(0,8),dur:2.6,fi:0.2,fo:0.8});sayCheer()}
+     /* the boat goes by in silence */
   if(B.z<-28||B.x<sf.pos.x-60){B.on=false;B.done=true;g.visible=false}}
 function droneTick(dt,time){const D=DRONE,g=D.g;if(game.replay||game.state==='menu'){g.visible=false;return}
   if(D.t<0){D.next-=dt;if(D.next<=0&&game.state==='ride'&&!game.inTube){D.t=0;D.side=Math.random()<0.5?1:-1;D.dist=rnd(10,14);D.h=rnd(0.2,1.0)}else{g.visible=false;return}}
@@ -2683,15 +2719,18 @@ function endRide(kind){
     game.showCard()},kind==='wipe'?900:500)}
 
 function stepRide(dt){
-  if(game.npReq&&sf.mode==='ride'&&game.state==='ride'){const rl=sf.p/Math.max(S.top,0.5),vu=sf.V*Math.sin(sf.th);if(game.waveAge-game.npReq>0.6)game.npReq=0;else if(rl>0.5&&vu>1.0&&!sf.rh){game.npReq=0;sampleSurf(sf.s,sf.p,S);launchAir(Math.max(vu,4.5),input);sf.np=true;sf.npDir=-1;splash(38,S.pos,1.35);return}}   // nose pick air revo: off the lip nose first, the tail kicked out in a fan of spray
+  if(game.npReq&&sf.mode==='ride'&&game.state==='ride'){const rl=sf.p/Math.max(S.top,0.5),vu=sf.V*Math.sin(sf.th);if(game.waveAge-game.npReq>0.6)game.npReq=0;else if(rl>0.5&&vu>1.0&&!sf.rh){game.npReq=0;sampleSurf(sf.s,sf.p,S);launchAir(Math.max(vu*1.1,5.6),input);sf.alley=false;sf.vh*=1.14;sf.airDur=2*sf.vh/GA;sf.np=true;sf.npDir=-1;splash(38,S.pos,1.35);return}}   // nose pick air revo: off the lip nose first, the tail kicked out in a fan of spray
   if(game.state==='ride')for(const C of SEC)if(C.fol&&!C.set&&game.waveAge>=C.t0-0.05){C.c0=clamp(sf.s+2.4,10,62);C.set=true}
-  let inp=game.state==='ride'&&!sf.exV&&!sf.straight?input:{x:0,y:0,crouch:false,stall:false};const now=game.waveAge;
+  let inp=game.state==='ride'&&!sf.exV&&!sf.straight?input:{x:0,y:0,crouch:false,stall:false,cut:false};const now=game.waveAge;
   if(sf.fallAt&&now>=sf.fallAt){sf.fallAt=0;if(game.state==='ride'&&!game.attract){sampleSurf(sf.s,sf.p,S);wipe();return}}   // he catches a rail
   sampleSurf(sf.s,sf.p,S);
   // Roundhouse cutback: one touch of ← out on the shoulder commits him. He carves all the way back to where the wave is breaking,
   // climbs the foam at the junction, rebounds off it on the other rail and comes out down the line again (→ cancels during the carve).
-  if(sf.rhLock){if(inp.x<-0.3)inp={x:0,y:inp.y,crouch:inp.crouch,stall:inp.stall};else sf.rhLock=false}
-  if(!sf.rh&&inp.x<-0.3&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>8&&Math.cos(sf.th)>0.2){sf.rh={ph:0,t:0,up:sf.p<0.45*S.top};sf.cb=null;sfxNoise(0.3,2000,0.18)}
+  if(sf.rhLock){if(inp.x<-0.3||inp.cut)inp={x:0,y:inp.y,crouch:inp.crouch,stall:inp.stall,cut:false};else sf.rhLock=false}
+  if(!sf.rh&&!sf.cv&&inp.cut&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>8&&Math.cos(sf.th)>0.2){sf.rh={ph:0,t:0,up:sf.p<0.45*S.top};sf.cb=null;sfxNoise(0.3,2000,0.18)}
+  /* the carve (back): up high on the face, then the whole rail laid over in one round, powerful arc back toward the curl, a fan of spray off the tail, and round the bottom into the line again */
+  if(!sf.rh&&!sf.cv&&!sf.c360&&inp.x<-0.3&&!inp.cut&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>6&&Math.cos(sf.th)>0.2&&sf.V>4.4){sf.cv={t:0,t1:0,ph:sf.p<0.62*S.top?0:1,sp:0,shot:false};sf.cb=null;sfxNoise(0.3,2000,0.18)}
+  if(sf.cv){sf.cv.t+=dt;if(game.state!=='ride'||sf.cv.t>3.4)sf.cv=null}
   if(sf.rh){sf.rh.t+=dt;if((sf.rh.ph===0&&(inp.x>0.3||sf.rh.t>6))||game.state!=='ride')sf.rh=null}
   if(sf.rh&&sf.rh.ph===2&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.0;sf.V=clamp(sf.V*1.12,CP+1.5,CP+3.0);sf.cb=null;sf.lastTop=now;const pt=1150+sf.V*45;award('Open Carve',pt);reqShot('Open Carve',pt,0)}   // no foam to hit: wide carve, snap, and back down the line with speed
   if(sf.rh&&sf.rh.ph===1&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.5;sf.V=clamp(sf.V*1.10,CP+1.6,CP+3.0);sf.cb=null;sf.lastTop=now;const pt=1700+sf.V*40;award('Roundhouse',pt);reqShot('Roundhouse',pt,0)}
@@ -2706,7 +2745,10 @@ function stepRide(dt){
     if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
   else if(sf.pivot>0){thT=sf.pivotTh;rate=5.4;sf.pivot-=dt;piv=true}
   else if(sf.straight){thT=-1.05;rate=2.0}   /* the end: angled in, staying close to the white water */
-  else if(sf.c360){const C=sf.c360;if(C.up){thT=0.75;rate=4.8;if(rel>0.62||C.t>0.7){C.up=false;C.pth=sf.th}}else{thT=sf.th-1.45;rate=12.0*(0.6+0.4*clamp(sf.V/7,0,1.3));sf.V=clamp(sf.V-2.6*dt,CP+0.8,Math.max(CP+0.8,8.6))}}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
+  else if(sf.c360){const C=sf.c360;if(C.up){thT=1.2;rate=5.6;if(rel>0.86||C.t>1.1){C.up=false;C.pth=sf.th}}   /* straight up to the lip first: the whole turn is done up there, in the white of it */else{thT=sf.th-1.45;rate=12.0*(0.6+0.4*clamp(sf.V/7,0,1.3));sf.V=clamp(sf.V-2.6*dt,CP+0.8,Math.max(CP+0.8,8.6))}}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
+  else if(sf.cv){const C=sf.cv,vk=0.6+0.4*clamp(sf.V/7,0,1.3);
+    if(C.ph===0){thT=1.08;rate=5.4*vk;if(rel>0.68||C.t>0.9)C.ph=1}
+    else{C.t1+=dt;thT=-2.5;rate=6.6*vk}}
   else if(sf.glideT>0&&!sf.rh){thT=-0.95;rate=2.6}   // coming down off the foam: one long smooth carve down the face
   else if(auto){const R=sf.rh,tp=S.top;
     if(R.up){thT=0.9;rate=3.8;if(sf.p>0.55*tp||R.t>0.35)R.up=false}   // first up to the top of the shoulder, so the whole arc fits on the face
@@ -2723,13 +2765,14 @@ function stepRide(dt){
   else if(now<(sf.rhHold||0)){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}   // after the hit: down to the base of the wave and round into the next turn, not out onto the flat
   else{thT=clamp((0.6*top-sf.p)*0.3,-0.45,0.45);rate=1.5;if(Math.cos(sf.th)<0)rate=2.8}
   let d=wrapPi(thT-sf.th);
+  if(sf.cv&&sf.cv.ph===1&&d>0.5)d-=2*PI;   // the carve always goes round by the bottom
   if(auto&&!sf.rh.up&&d>0&&Math.cos(sf.th)>-0.55)d-=2*PI;                  // the carve goes round by the bottom, heel rail
   if(piv&&((sf.rh&&sf.rh.ph===1)||sf.bsHit)&&d<-0.6)d+=2*PI;   // the hit off the junction always comes round the other way, backside, and back into the wave   // the return off the foam turns the other way, on the toe rail: a figure of eight
   if(mag>0.3&&!piv&&Math.abs(inp.x)<0.3&&inp.y<0&&d>0&&Math.sin(sf.th)>0.2&&Math.cos(sf.th)>-0.5)d-=2*PI;
-  sf.steer=(mag>0.3||piv||auto)?clamp(d,-1.6,1.6):d*0.5;
+  sf.steer=(mag>0.3||piv||auto||sf.cv)?clamp(d,-1.6,1.6):d*0.5;
   if(piv){sf.om=damp(sf.om,clamp(d*6,-rate,rate),8,dt);sf.rail=damp(sf.rail,clamp(sf.om/4.5,-1,1),8,dt)}
   else if(sld){sf.om=damp(sf.om,clamp(d*6,-rate,rate),12,dt);sf.rail=damp(sf.rail,clamp(sf.om/4.5,-1,1)*0.6-0.25*Math.abs(Math.sin(sf.slip)),8,dt)}
-  else{const rT=clamp((d-sf.om*0.15)*2.6,-1,1),rr=((mag>0.3||auto)&&!(sf.tt&&sf.tt.ph>0)?(inp.crouch?7.2:5.4)*(rel>0.72?1.3:1):3.2)*dt;
+  else{const rT=clamp((d-sf.om*0.15)*2.6,-1,1),rr=((mag>0.3||auto||sf.cv)&&!(sf.tt&&sf.tt.ph>0)?(inp.crouch?7.2:5.4)*(rel>0.72?1.3:1):3.2)*dt;
     sf.rail+=clamp((rT-sf.rail)*Math.min(1,16*dt),-rr,rr);sf.om=damp(sf.om,sf.rail*rate*BOARD.trn,16,dt)}
   // rabeta: a quick tap snaps and the board comes straight back; holding the turn pushes the tail right round until he rides tail-first
   {const key=mag>0.3&&sf.introT<=0,dn=key&&inp.y<-0.3,sth0=Math.sin(sf.th);
@@ -2760,6 +2803,7 @@ function stepRide(dt){
   {const sth=Math.sin(sf.th);acc+=-G*(sth>0?0.52-0.24*sstep(0.35,0.85,sth):0.82)*sinA*sth;if(sth>0.4&&!sf.rh&&rel>0.1&&sf.V<CP+3.2)acc+=2.8*sstep(0.4,0.8,sth)}   // the bottom turn carries him up to the lip
   acc-=0.010*sf.V*sf.V;
   if(sf.c360)acc+=1.8;
+  if(sf.cv)acc+=Math.max(0,8.4-sf.V)*3.2-Math.max(0,sf.V-10.5)*4;   // the carve is driven: speed held right through the arc
   if(sf.introT>0&&sf.introT<=0.5)acc+=5.5;   // he throws himself into the drop
   if(sf.openT>0&&sf.introT<=0)acc+=Math.max(0,CP+3.2-sf.V)*2.5;   // and carries the speed through the bottom turn
   if(sf.boostT>0){sf.boostT-=dt;acc+=Math.max(0,sf.boostV-sf.V)*3.2}   // the spit-out speed comes on over a moment, not in one frame
@@ -2774,8 +2818,12 @@ function stepRide(dt){
   sf.V=clamp(sf.V+acc*dt,1.8,15.5);
   const st=Math.sin(sf.th),ct=Math.cos(sf.th);
   if(sf.c360){const C=sf.c360;C.t+=dt;if(!C.up)C.acc+=Math.abs(wrapPi(sf.th-C.pth));C.pth=sf.th;if(C.acc>=2*PI-0.15){sf.c360=null;sf.lastTop=now;sf.rhHold=now+0.8;const pt=1500+sf.V*45;award('Carve 360',pt);reqShot('Carve 360',pt,0)}else if(C.t>4.5)sf.c360=null}
-  if(sf.bsHit&&sf.pivot<=0)sf.bsHit=0;{const mv=(sf.rh&&sf.rh.ph===1)||sf.bsHit?sstep(0.34,0.06,sf.pivot):1;   // the rebound pivots on the foam before it drops
-   sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;{const dpp=sf.V*st*mv*dt;sf.p+=dpp>0?dpp*clamp((top-0.06-sf.p)/0.5,0.04,1):dpp}}   /* the climb eases off into the lip instead of hitting a ceiling */
+  if(sf.cv&&sf.cv.ph===1){const C=sf.cv;sf.burst=Math.max(sf.burst,1.9);C.sp+=dt;if(C.sp>0.06){C.sp=0;splash(10,S.pos,1.2)}
+    if(!C.shot&&C.t1>0.24){C.shot=true;const pt=1000+sf.V*60;C.pt=pt;reqShot('Carve',pt,0);game.slowT=Math.max(game.slowT||0,0.38);A.impact=Math.max(A.impact||0,0.25)}
+    if((ct<-0.6&&st<0)||C.t1>1.5){const pt=C.pt||1000+sf.V*60;sf.cv=null;sf.rhLock=true;sf.rhHold=now+0.9;sf.lastTop=now;sf.cb=null;sf.upT=0;award('Carve',pt)}}
+  if(sf.c360&&!sf.c360.up){sf.burst=Math.max(sf.burst,1.5);sf.c360.sp=(sf.c360.sp||0)+dt;if(sf.c360.sp>0.08){sf.c360.sp=0;splash(8,S.pos,1.0)}}
+  if(sf.bsHit&&sf.pivot<=0)sf.bsHit=0;{const mv=(sf.rh&&sf.rh.ph===1)||sf.bsHit?sstep(0.34,0.06,sf.pivot):sf.c360&&!sf.c360.up?0.42:1;   /* the 360 turns at the top of the wave, almost on the spot */   // the rebound pivots on the foam before it drops
+   sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;{const dpp=sf.V*st*mv*dt;sf.p+=dpp>0?dpp*clamp((top-0.02-sf.p)/0.12,0.2,1):dpp}}   /* full speed up the face all the way to the lip (where the hit happens); only the last hand's breadth eases off, so nothing flies over the top */
      // deep in the pocket, then out through the mouth
   if(sf.p>0&&top>0.5){const fi=colIndex(sf.s),i0=Math.floor(fi),t1=lerp(colTop[i0],colTop[Math.min(i0+1,NS-1)],fi-i0);if(t1>0.5)sf.p*=clamp(t1/top,0.985,1.015)}
   {const drop=(sf.prevTop||top)-top;if(sf.mode==='ride'&&drop>0.2&&S.foam>0.4&&sf.p>top-0.1&&!sf.pivot)sf.p=Math.max(top-0.1,sf.p-drop*1.05);sf.prevTop=top}   // the white water collapsed under him: he goes down with it instead of being left hanging over the lip
@@ -2793,10 +2841,10 @@ function stepRide(dt){
     if(!game.attract&&game.waveAge>8&&Math.random()<0.04)sf.fallAt=now+0.3}
   if(sf.rh&&sf.rh.ph===1&&sf.s<1.3)sf.s=1.3;
   if(auto&&vp>0&&sf.p>top-0.16){sf.p=top-0.16;sf.rh.up=false}
-  if(sf.c360&&vp>0&&sf.p>top-0.3)sf.p=top-0.3;   /* the carve 360 turns on the face, never over the top of it */   // committed: the lip and the foam on the way do not take over
+  if(sf.c360&&vp>0&&sf.p>top-0.1)sf.p=top-0.1;if(sf.cv&&vp>0&&sf.p>top-0.22)sf.p=top-0.22;   /* the carve 360 turns on the face, never over the top of it */   // committed: the lip and the foam on the way do not take over
   if(sf.p>=top-0.12&&vp>0&&sf.tt&&sf.tt.ph>0){sf.p=top-0.12;sf.th=damp(sf.th,-0.2,6,dt)}
-  else if(sf.p>=top-0.12&&vp>0&&!auto){
-    const flR=TB.fl>0&&game.state==='ride'&&ct>0.02&&sf.V>3.8;   /* the FLOATER button */
+  else if(sf.p>=top-0.12&&vp>0&&!auto&&!sf.c360&&!sf.cv){
+    const flR=(TB.fl>0||keys.KeyR)&&game.state==='ride'&&ct>0.02&&sf.V>3.8;   /* the FLOATER button */
     if(flR||S.foam>0.45&&Math.abs(st)<0.62&&ct>0.2&&sf.V>4.8&&game.state==='ride'&&!inp.crouch){sf.fForce=flR;sf.mode='float';sf.fT=0;sf.fFoam=true;sf.fV=Math.min(Math.max(sf.V*(now-sf.foamAt>1.4?1.10:1),CP+1.8),13.5);sf.foamAt=now;sf.burst=0.5;splash(10,S.pos,0.6);sfxNoise(0.4,2200,0.2);return}   // shallow line: up onto the foam and along it
     if(S.aEnd>2.6){
       if(sf.s<5&&Math.abs(sf.th)<1.05&&sf.V>5&&game.state==='ride'){sf.mode='float';sf.fT=0;sf.fFoam=false;sf.burst=0.8;return}
@@ -2827,7 +2875,7 @@ function stepRide(dt){
   if(sf.s<1.1&&!inp.stall&&ct>0.3)sf.V=damp(sf.V,Math.max(sf.V,CP+0.5),6,dt);
   if(game.state!=='ride')return;
   // maneuvers
-  if(sf.rh)sf.upT=0;else if(st>0.55&&rel>0.42){sf.upT=now;sf.upV=sf.V}
+  if(sf.rh||sf.cv||sf.c360)sf.upT=0;else if(st>0.55&&rel>0.42){sf.upT=now;sf.upV=sf.V}
   if(sf.upT>0){
     if(st<-0.5){const du=now-sf.upT;
       if(du<1.15&&now-sf.lastTop>0.7&&rel>0.3){
@@ -2838,7 +2886,7 @@ function stepRide(dt){
     else if(now-sf.upT>1.2)sf.upT=0}
   if(st<-0.55&&rel<0.5){sf.dnT=now}
   if(sf.dnT>0&&st>0.5){if(now-sf.dnT<0.75&&rel<0.45&&sf.V>8.2)award('Bottom Turn',120,true);sf.dnT=0}
-  if(sf.rh)sf.cb=null;else if(!sf.cb&&ct<-0.45&&sf.s>7)sf.cb={t:now,minS:sf.s};
+  if(sf.rh||sf.cv||sf.c360||now<(sf.rhHold||0))sf.cb=null;else if(!sf.cb&&ct<-0.45&&sf.s>7)sf.cb={t:now,minS:sf.s};
   if(sf.cb){sf.cb.minS=Math.min(sf.cb.minS,sf.s);
     if(ct>0.35){const du=now-sf.cb.t;
       if(du>0.3&&du<4){if(sf.cb.minS<4.8){const pt=1500+sf.V*40;award('Roundhouse',pt);reqShot('Roundhouse',pt,0)}else{const pt=800+sf.V*40;award('Cutback',pt);reqShot('Cutback',pt,0)}sf.lastTop=now}
@@ -2849,13 +2897,14 @@ function endSlide(){sf.tt=null;if(sf.slipMax>1.5&&game.state==='ride'){const pt=
 function launchAir(vp,inp){sfxPlay('wind',{vol:0.55,off:rnd(0,8),dur:2.4,fi:0.25,fo:0.8,rate:rnd(0.95,1.08)});sf.tt=null;sf.slip=0;sf.np=false;
   sf.mode='air';sf.h=0.05;sf.vh=(vp*0.60+1.1)*0.78;sf.spinDir=0;   // a little more hang time, so a full rotation fits
   sf.airT=0;sf.airDur=2*sf.vh/GA;sf.spin=0;sf.flip=0;sf.th0=sf.th;
-  sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42;sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
+  sf.alley=!!(inp&&inp.x<-0.3);if(sf.alley){sf.vh*=1.16;sf.airDur=2*sf.vh/GA}   /* alley-oop: off the lip turning back against the way he is going, high, drifting back over the curl */
+  sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42-(sf.alley?2.4:0);sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
   sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);sfxNoise(0.4,3000,0.3)}
 function stepAir(dt){
   sf.airT+=dt;sf.vh-=GA*dt;sf.h+=sf.vh*dt;sf.hMax=Math.max(sf.hMax,sf.h);sf.s+=sf.vsAir*dt;
   if(sf.np){const u=clamp(sf.airT/sf.airDur,0,1);sf.spin=sf.npDir*PI*sstep(0.16,0.86,u);sf.flip=0}   // the nose pick turns a reverse: 180 in the air, landing tail first
   else{const tL=(sf.vh+Math.sqrt(Math.max(0,sf.vh*sf.vh+2*GA*Math.max(sf.h,0))))/GA,held=Math.abs(input.x)>0.3;   // time left before the board touches down
-   if(held)sf.spinDir=-Math.sign(input.x);
+   if(held)sf.spinDir=-Math.sign(input.x);if(!sf.alley&&held&&input.x<0&&sf.airT<0.22&&Math.abs(sf.spin)<0.6){sf.alley=true;sf.vsAir-=2.4}
    if(held&&tL>0.26)sf.spin+=-input.x*8.2*dt;
    else{const k=sf.spin/PI,d=sf.spinDir||Math.sign(sf.spin)||1,th_=held?0.02:0.3;let tg=(d>0?Math.ceil(k-th_):Math.floor(k+th_))*PI;if(Math.abs(tg-sf.spin)>18*Math.max(tL-0.04,0.06))tg-=d*PI;const dd=tg-sf.spin;   // still holding: carry on to the next half turn if there is time   // finish the turn the way it was going (or fall back if it barely started),
      sf.spin+=Math.sign(dd)*Math.min(Math.abs(dd),clamp(Math.abs(dd)/Math.max(tL-0.04,0.06),3.5,18)*dt)}}   // timed to land square on the touchdown
@@ -2870,8 +2919,8 @@ function stepAir(dt){
     if(sf.s<0.2||(!clean&&!rev)||Math.abs(wrapPi(sf.flip))>0.95||rf){sampleSurf(sf.s,S.top-0.4,S);sf.pos.copy(S.pos);wipe();return}
     sf.mode='ride';sf.p=S.top-0.18;sf.th=Math.cos(sf.th0)>=-0.4?-0.95:-(PI-0.95);sf.om=0;sf.V=Math.max(sf.V*0.94,6.6);sf.spinVis=Math.abs(r)>PI/2&&sf.spinDir?-Math.sign(sf.spinDir)*Math.abs(r):r;sfxPlay('splash',{vol:0.42,rate:1.25,dur:1.0,fo:0.45});sf.landT=0.45;sf.blendT=0.4;   /* touchdown: the board settles onto the face over a moment (no jump), and a reverse keeps turning the same way to come round */sf.pivot=0;sf.lastTop=game.waveAge;sf.upT=0;
     const rot=Math.round(Math.abs(sf.spin)/PI)*180;
-    let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm=rot===180?'Nose Pick Air Revo':'Nose Pick'+(rot?' '+rot:'');if(sf.np)sf.revSlow=0.9;
-    const pt=1300+700*sf.hMax+rot*9+(sf.grabT>0.25?400:0)+flips*1900+(sf.np?1200:0);sf.np=false;sf.flip=0;
+    let nm=flips?(sf.flip>0?'Backflip':'Frontflip')+(flips>1?' Double':'')+(rot?' '+rot:''):rot===0?'Air':rot===180?'Air Reverse':'Air '+rot;if(sf.grabT>0.25)nm+=' Grab';if(sf.np)nm=rot===180?'Nose Pick Air Revo':'Nose Pick'+(rot?' '+rot:'');if(sf.np)sf.revSlow=0.9;const oop=!sf.np&&!flips&&sf.alley&&sf.spin>0&&rot>=360;if(oop)nm='Alley-Oop'+(rot>360?' '+rot:'')+(sf.grabT>0.25?' Grab':'');
+    const pt=1300+700*sf.hMax+rot*9+(sf.grabT>0.25?400:0)+flips*1900+(sf.np?1200:0)+(oop?700:0);sf.np=false;sf.alley=false;sf.flip=0;
     award(nm,pt);if(sf.airShot)addPhoto(nm,pt,sf.airShot);
     sampleSurf(sf.s,sf.p,S);splash(50,S.pos,1.1);sfxNoise(0.6,1800,0.4);sf.burst=1;A.impact=1;game.shake=0.6;sf.rail=0;spawnDrops(2)}}
 let accFl=0;
@@ -2885,7 +2934,7 @@ function stepFloat(dt){
     if(sf.s<-0.6){wipe();return}
     const busy=Math.abs(input.x)>0.3||input.y>0.3||input.crouch;   // no manoeuvre: after a moment he slides back down on his own
     flSpray(dt,true);
-    if((input.y<-0.3&&sf.fT>0.25)||(S.foam<0.3&&!(sf.fForce&&sf.fT<1.1))||sf.fT>(busy?2.2:1.2)){
+    if((input.y<-0.3&&sf.fT>0.25)||(S.foam<0.3&&!(sf.fForce&&sf.fT<1.1))||sf.fT>(busy?2.4:1.7)){
       sf.mode='ride';sf.fFoam=false;sf.fForce=false;sf.p=S.top-0.16;sf.th=Math.min(sf.th,-0.12);sf.om=0;sf.pivot=0;sf.lastTop=game.waveAge;sf.glideT=0.8;sf.V=Math.max(sf.V,CP+2.0);
       if(sf.fT>0.3){const nm=sf.fT>1.4?'Long Floater':'Floater',pt=500+650*sf.fT;award(nm,pt);reqShot(nm,pt,0)}
       sampleSurf(sf.s,sf.p,S);splash(12,S.pos,0.7);A.impact=0.08;sf.rail=0}   // no jolt coming off the foam
@@ -2949,7 +2998,7 @@ function placeSurfer(dt,time){
     sampleSurf(sf.s,sf.p,S);
     const c=Math.cos(sf.th),sn=Math.sin(sf.th);
     bX.copy(S.ts).multiplyScalar(c).addScaledVector(S.tp,sn).normalize();
-    {const bank=Math.sign(sf.rail)*Math.min((sf.c360&&!sf.c360.up)||(sf.rh&&sf.rh.ph===0)?0.82:1.0,0.46*Math.abs(sf.rail)+0.46*Math.atan(sf.V*Math.abs(sf.om)/9.8));sf.lam=damp(sf.lam,bank,14,dt)}   // lean angle follows speed × turn rate, like any carving turn
+    {const bank=sf.cv&&sf.cv.ph===1?-1.02*sstep(0,0.22,sf.cv.t1):Math.sign(sf.rail)*Math.min((sf.c360&&!sf.c360.up)||(sf.rh&&sf.rh.ph===0)?0.82:1.0,0.46*Math.abs(sf.rail)+0.46*Math.atan(sf.V*Math.abs(sf.om)/9.8));sf.lam=damp(sf.lam,bank,14,dt)}   // lean angle follows speed × turn rate, like any carving turn
     tL.crossVectors(S.n,bX);
     _x.set(0,1,0).addScaledVector(bX,-bX.y);const ul=_x.length();let lg=0;
     if(ul>0.05){_x.multiplyScalar(1/ul);_y.crossVectors(S.n,_x);lg=-Math.atan2(_y.dot(bX),S.n.dot(_x))*0.62*ul}
@@ -2986,6 +3035,7 @@ function placeSurfer(dt,time){
     AT.intent=clamp(sf.steer*0.85+sf.rail*0.45,-1,1);AT.vup=sstep(1.5,6,vpv);
     AT.look=clamp(sf.steer*0.40+sf.rail*0.15,-0.75,0.75);if(BB.on){const ds=BB.s-sf.s,k=sstep(9,2,Math.abs(ds))*(ds<0?1:0.5);AT.look=lerp(AT.look,BB.lookSign*(ds<0?0.85:0.35),k)}/* a look back at the bodyboarder as she paddles past */{const R2=sf.rh;AT.gz=R2&&R2.ph===0&&!R2.up?(R2.climb?(rel<0.5?-0.42:0.30):-0.14):(R2&&R2.ph===1?0.12:0);   /* backside hit: eyes down through the bottom turn, then up at the foam */
      if(R2&&R2.ph===0&&R2.climb)AT.crouch=rel<0.5?Math.max(AT.crouch,0.74):Math.min(AT.crouch,0.52);if((R2&&R2.ph===0&&!R2.climb&&!R2.up)||(sf.c360&&!sf.c360.up))AT.crouch=clamp(AT.crouch,0.5,0.7);if(R2&&R2.ph===1)AT.crouch=Math.max(AT.crouch,0.76);
+     if(sf.cv&&sf.cv.ph===1){AT.crouch=clamp(AT.crouch,0.66,0.82);AT.gz=-0.12;AT.look=-0.6}   /* the carve: sat low over the back foot, eyes round to where the arc is going */
      AT.bsh=bsK;if(bsK>0.5){const fw=R2&&R2.ph===1?sstep(0.35,0.05,sf.pivot):0;AT.gz=lerp(-0.45,0,fw);AT.crouch=Math.max(AT.crouch,0.80);AT.tw=lerp(AT.tw,0.35,0.8*(1-fw));AT.look=lerp(0.55,0,fw)}}   // coming off the snap his eyes go back down the line   // backside hit: folded over the toes, eyes down the face   // the head leads the turn a little and never looks back against the spin
     AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);
     sf.claimT=Math.max(0,(sf.claimT||0)-dt);AT.claim=sf.claimT>0.05&&(sf.claimT<1.15||sf.endCl)&&ao<1.5&&!game.inTube&&!(sf.exV&&sf.exT<(sf.exV===1?0.56:0.68))?1:0;AT.claimV=sf.claimV||0;AT.clPh=sf.claimT>2.0?1:0;if(AT.claim){AT.crouch=Math.min(AT.crouch,0.36);AT.look=0.2}
@@ -3010,15 +3060,16 @@ function placeSurfer(dt,time){
   }else if(sf.mode==='float'){
     sampleSurf(sf.s,1e6,S);
     bY.set(0,1,0.12).normalize();bX.set(1,0.04,0).normalize();
-    if(sf.fFoam){sampleSurf(sf.s,Math.max(0,sf.p-0.7),S2);bY.copy(S2.n).lerp(UPV,0.55).normalize();bX.copy(S2.ts).addScaledVector(bY,-S2.ts.dot(bY)).normalize();bP.copy(S2.pos).addScaledVector(S2.n,0.09)}   // on the front of the foam roll, touching it
+    if(sf.fFoam){sampleSurf(sf.s,Math.max(0,sf.p-0.22),S2);bY.copy(S2.n).lerp(UPV,0.72).normalize();bX.copy(S2.ts).addScaledVector(bY,-S2.ts.dot(bY)).normalize();bP.copy(S2.pos).addScaledVector(S2.n,0.09)}   // on the front of the foam roll, touching it
     else bP.set(sf.s,S.H+0.38+0.42*sstep(-1.5,1,sf.s),S.cz+0.5+0.5*sstep(-1.5,1,sf.s));
     sf.lam=damp(sf.lam,-0.1,6,dt);
     AT.crouch=0.55;AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.speed=sf.V;AT.tw=0.75;AT.look=0.1;AT.shiftX=-0.03;AT.rail=-0.15;AT.lt=0;AT.drag=0;AT.hip=0.1;AT.claim=0;if(sf.fFoam){AT.crouch=0.20;AT.shiftX=0.02}}   // on the foam he stretches up, legs long
+  AT.flo=sf.mode==='float'?1:0;
   if(sf.mode!=='ride'){AT.slipYaw=slip=0;rootYaw=0;AT.rev=0;AT.lay=0;AT.gz=0}
   if(sf.mode==='float'){const f=sf.fT||0,L=sf.fFoam?1.2:1.3,u=clamp(f/L,0,1),pm=Math.sin(4*PI*u);   // old-school rock and roll floater: two pumps over the white water, the board sliding sideways under him
-    slip=0.68*sstep(0,0.22,u)*(1-sstep(0.82,1,u))+0.14*pm;AT.slipYaw=slip;rootYaw=0.3*slip;
-    AT.crouch=0.55-0.22*pm+0.3*sstep(0.85,1,u);AT.tw=0.75+0.3*Math.sin(f*3.2);AT.look=0.25;AT.hip=0.15+0.15*Math.sin(f*2.4);AT.rail=-0.3;sf.lam=damp(sf.lam,-0.22,6,dt);
-    bP.y+=0.09*Math.max(0,pm)*(sf.fFoam?1:0.6)}
+    slip=0.30*sstep(0,0.22,u)*(1-sstep(0.82,1,u))+0.05*pm;AT.slipYaw=slip;rootYaw=0.3*slip;   /* across the top of the lip: low over the board, arms wide, the board nearly straight; he drops with the white water */
+    AT.crouch=0.66-0.08*pm+0.22*sstep(0.85,1,u);AT.tw=0.75+0.3*Math.sin(f*3.2);AT.look=0.25;AT.hip=0.15+0.15*Math.sin(f*2.4);AT.rail=-0.3;sf.lam=damp(sf.lam,-0.22,6,dt);
+    bP.y+=0.04*Math.max(0,pm)*(sf.fFoam?1:0.6)}
   bZ.crossVectors(bX,bY).normalize();
   if(spin!==0){bX.applyAxisAngle(bY,spin);bZ.crossVectors(bX,bY).normalize()}
   const pt=A.pitch.step(pitchT,dt,3,0.65);if(Math.abs(pt)>1e-3)bX.applyAxisAngle(bZ,pt);
@@ -3056,7 +3107,7 @@ function placeSurfer(dt,time){
   if(!A.bpPrev){A.bpPrev=boardG.position.clone();A.bvel=new V3();A.bqPrev=boardG.quaternion.clone();A.rqPrev=riderG.quaternion.clone();A.bw=new V3();A.rw=new V3()}
   else if(dt>1e-4){A.bvel.copy(boardG.position).sub(A.bpPrev).multiplyScalar(1/dt);angVel(A.bqPrev,boardG.quaternion,dt,A.bw);angVel(A.rqPrev,riderG.quaternion,dt,A.rw);
     A.bpPrev.copy(boardG.position);A.bqPrev.copy(boardG.quaternion);A.rqPrev.copy(riderG.quaternion)}
-  if(sf.mode==='air'&&sf.np){const u=clamp(sf.airT/sf.airDur,0,1),th=1.0*sstep(0.04,0.34,u)*(1-sstep(0.60,0.94,u));AT.npTh=th;   // nose pick: the nose comes up to the sky around the back foot, held while it turns, then down for the landing
+  if(sf.mode==='air'&&sf.np){const u=clamp(sf.airT/sf.airDur,0,1),th=1.32*sstep(0.04,0.30,u)*(1-sstep(0.62,0.94,u));AT.npTh=th;   // nose pick: the nose comes up to the sky around the back foot, held while it turns, then down for the landing
     _a.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,th));_b.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.position.add(_a).sub(_b)}
   else AT.npTh=0;
   if(sf.mode==='ride'&&(sf.exV===1||sf.exV===2)){const T=sf.exV===1?0.5:0.62,u=clamp(sf.exT/T,0,1);
@@ -3200,6 +3251,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       float g=fract(sin(dot(gl_FragCoord.xy+fract(uTime)*91.7,vec2(12.9898,78.233)))*43758.5453);
       col+=(g-.5)*0.032;
       gl_FragColor=vec4(col,1.);}`});
+try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}   /* the stance he picked last time */
 composer.addPass(gradePass);
 game.nightPref=(()=>{try{return +(localStorage.getItem('surfpool_night')||0)}catch(e){return 0}})();setTOD(SPOT.id===1?game.nightPref:0,false);   /* night only at the pool */
 setBoard(PROG.board);setSpot(spotOpen(SPOTS.find(o=>o.id===PROG.spot)||SPOTS[0])?PROG.spot:1);game.pickSpot=SPOT.id;
@@ -3210,11 +3262,12 @@ addEventListener('resize',resize);resize();
 // Steady frames matter more than sharp ones: resolution follows what the machine can hold at a locked cadence.
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
-const QL=[[2.0,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
-function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=rt.samples;qLevel=l;const r=Math.min(devicePixelRatio,QL[l][0]),sm=QL[l][2];
+const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return c?Math.min(devicePixelRatio,2.5):Math.max(devicePixelRatio,1.5)})();   /* a computer with a plain 1x screen draws at 1.5x and scales down (clean edges); a phone uses up to 2.5x of its own pixels */
+const QL=[[2.5,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
+function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=rt.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0)for(const t of [composer.renderTarget1,composer.renderTarget2]){t.samples=sm;t.dispose()}
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
-setQuality((()=>{try{return matchMedia('(pointer:coarse)').matches?5:3}catch(e){return 3}})());
+setQuality((()=>{try{return matchMedia('(pointer:coarse)').matches?3:1}catch(e){return 1}})());
 // one step down that really changes something (on a 1x screen several levels share the same resolution)
 function qStepDown(){const l0=qLevel;for(let l=l0+1;l<=qFloor;l++)if(setQuality(l))return true;setQuality(l0);return false}
 function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.visibilityState!=='visible'){qBuf.length=0;qWin=0;return}
@@ -3279,7 +3332,7 @@ function tick(dtR,draw){
     dt=dtR*game.ts;game.t+=dt;
     if(game.state==='ride'&&game.attract&&game.waveAge>Math.min(game.waveDur-1,18))endRide('done');
     if(game.state==='ride'){game.waveAge+=dt;if(game.waveAge<=game.waveDur){let gr=0;for(const C of SEC)if(C.fol){const t=game.waveAge-C.t0;gr=Math.max(gr,sstep(-1,3,t)*(1-sstep(C.d,C.d+2.5,t)))}game.Hbase=1+0.32*(1-sstep(5,13,game.waveAge))+0.2*gr}   // the set stands up bigger for the drop, and swells as each barrel forms   // the set wave: it stands up bigger for the drop
-      if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.tt=null}   // he turns to face the beach first
+      if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.cv=null;sf.tt=null}   // he turns to face the beach first
       if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
         if(sf.exV===3){sf.mode='kickout';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.7);sf.wVel.x+=sf.V*Math.cos(sf.th)-CP*0.6;sf.wVel.y=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}   // kicks the board up and steps off
         else if((SPOT.id===2||SPOT.id===4)&&!game.attract&&(game.reefTurn=!game.reefTurn)){sf.exV=4;sf.reefAt=game.waveDur+0.25}   /* over a reef, every other wave: he steps off into the shallows and hobbles out over the coral */
@@ -3294,7 +3347,7 @@ function tick(dtR,draw){
   if(!rp&&game.state!=='menu'&&sf.visible){
     const sub=2,h=dt*MOVE/sub;
     for(let i=0;i<sub;i++){
-      if(sf.mode!=='ride')sf.rh=null;{const on=sf.rh||game.waveAge<(sf.rhHold||0);game.rhK=damp(game.rhK||0,on?1:0,on?2.4:0.9,h)}   // the foam stays piled up until he has ridden clear of it
+      if(sf.mode!=='ride'){sf.rh=null;sf.cv=null}{const on=sf.rh||game.waveAge<(sf.rhHold||0);game.rhK=damp(game.rhK||0,on?1:0,on?2.4:0.9,h)}   // the foam stays piled up until he has ridden clear of it
       if(sf.mode==='ride')stepRide(h);else if(sf.mode==='air')stepAir(h);else if(sf.mode==='float')stepFloat(h);
       else if(sf.mode==='wipe'){sf.wT+=h;if(sf.wT>1.5&&game.state==='ride')endRide('wipe');if(sf.wT>2.5)sf.visible=false}
       else if(sf.mode==='kickout')sf.wT+=h;
