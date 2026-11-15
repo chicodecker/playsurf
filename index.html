@@ -1024,11 +1024,18 @@ const waveDef={
       fm=max(fm,lace*0.78);
       float aer=smoothstep(thr-0.34,thr+0.05,fp+nz*0.12)*smoothstep(0.02,0.25,foamA)*(1.-occ);
       col=mix(col,mix(uWB*1.6,uFoamA,0.45)*(0.45+0.5*max(dot(Ng,L),0.)+0.6*back),aer*0.5);}
+      float hk=0.,hgt=0.5;
+      if(foamA>0.35){hk=smoothstep(0.35,0.75,foamA);   /* broken water: a churned, cauliflower mass of foam, not a sheet with round holes */
+       float c1=texture2D(uNoise,vec2(uv.x*0.21,uv.y*0.11)+w1*0.03).a,c2=texture2D(uNoise,vec2(uv.x*0.58,uv.y*0.29)+w2*0.03).b,c3=texture2D(uNoise,uv*1.35+w3*0.02).a;
+       hgt=c1*0.50+c2*0.32+c3*0.18;
+       float drain=smoothstep(0.60,0.80,texture2D(uNoise,vec2(uv.x*0.50+1.3,uv.y*0.034)+w1*0.02).a)*smoothstep(0.56,0.30,hgt);   /* thin channels of water running down through it */
+       fm=mix(fm,1.-0.80*drain,hk);}
       float fsh=texture2D(uNoise,uv*0.33).b;
       float lit=min(0.56+0.42*max(dot(Ng,L),0.)+0.40*back*(0.3+sss),1.12);
       vec3 Nf=normalize(Ng-(Ts*(w2.x+w3.x*1.4)+Tp*(w2.y+w3.y*1.4))*1.7);float nlf=dot(Nf,normalize(L+vec3(0.,0.9,0.5)))*0.5+0.5;
       vec3 foamC=mix(uFoamA,uFoamB,clamp(-0.26+nlf*0.85+fsh*0.50+fp*0.50+0.15*back,0.,1.))*min(lit,1.0)*(0.80+0.20*smoothstep(0.15,0.75,f2))*(0.86+0.14*smoothstep(0.22,0.60,f1));
       foamC*=mix(1.,0.42,occ);
+      if(hk>0.)foamC*=mix(vec3(1.),mix(vec3(0.62,0.78,0.92),vec3(1.05),smoothstep(0.22,0.74,hgt)),hk);   /* lit tops of the lumps, blue-grey in the hollows between */
       col=mix(col,foamC,fm);
       vec3 fogC=skyC(normalize(vec3(-V.x,0.03,-V.z)));
       col=mix(col,fogC,(1.-exp(-dist*0.0010))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
@@ -1086,10 +1093,16 @@ const partMat=new THREE.ShaderMaterial({
     void main(){vec2 c=gl_PointCoord-.5;float d=length(c)*2.;
       float n=texture2D(uNoise,gl_PointCoord*0.20+vS).b,n2=texture2D(uNoise,gl_PointCoord*0.55+vS*1.7).a;
       float edge=d+(n-0.5)*0.55+(n2-0.5)*0.25;
-      float aD=smoothstep(0.98,0.70,edge);                                                  // white water: a solid lump with a broken, splashy edge
+      float aD=0.;float hb=1.;
+      if(vF>0.5){vec2 ca=c/max(d*0.5,1e-3);float lb=texture2D(uNoise,ca*0.06+vS*3.1).a,lb2=texture2D(uNoise,ca*0.12+vS*5.3).b;
+        float r=0.60+0.34*lb+0.10*(lb2-0.5);   /* a churned, lobed outline: never a disc */
+        edge=d/r+(n-0.5)*0.34+(n2-0.5)*0.18;
+        float hq=texture2D(uNoise,gl_PointCoord*0.85+vS*2.3).a,hq2=texture2D(uNoise,gl_PointCoord*1.9+vS*4.1).b;
+        hb=smoothstep(0.18,0.55,hq*0.65+hq2*0.35+0.25*(1.-d));   /* aerated: holes of clear water through the thinner parts */
+        aD=smoothstep(1.02,0.45,edge)*mix(0.60,1.,hb);}                                    // white water: a churned mass of foam with a broken, splashy edge
       float aS=max(exp(-d*d*2.8)-0.06,0.)*smoothstep(0.30,0.62,n+0.30*(1.-d));             // spray: soft droplets
       float a=mix(aS,aD,vF),thin=smoothstep(0.45,0.95,edge)*vF;
-      vec3 lit=mix(vec3(0.58,0.72,0.85),vec3(1.06,1.03,0.99),0.30+0.70*vB)*(0.80+0.34*n)*(0.64+0.52*(1.-gl_PointCoord.y));   // lit tops, shaded undersides
+      vec3 lit=mix(vec3(0.58,0.72,0.85),vec3(1.06,1.03,0.99),0.30+0.70*vB)*(0.80+0.34*n)*(0.64+0.52*(1.-gl_PointCoord.y))*mix(1.,0.80+0.26*hb,vF);   // lit tops, shaded undersides, bubbly
       vec3 col=mix(lit,lit*vec3(0.55,0.86,0.95),thin*0.6)*uTint;                           // the thin rim lets the blue of the water through
       gl_FragColor=vec4(col,a*vA*mix(1.6,2.0,vF));}`,
   transparent:true,depthWrite:false});
@@ -1142,7 +1155,7 @@ function updateJet(dt,time){
   const a=jet.fg.attributes.position.array,f0=jet.f0;for(let i=0;i<a.length;i+=3){const u=-f0[i]/1.6;a[i+2]=Math.sin(u*7-time*13)*0.07*u;a[i+1]=f0[i+1]+Math.sin(u*5-time*9)*0.02*u}jet.fg.attributes.position.needsUpdate=true;
   jet.acc+=dt*110;while(jet.acc>=1){jet.acc--;const up=Math.random()<0.3;
     emit(jet.x-jet.dir*1.5+rnd(-0.2,0.2),0.2,z+rnd(-0.35,0.35),-jet.v*rnd(0.15,0.4),up?rnd(3,6):rnd(0.8,2.4),rnd(-1.4,1.4),rnd(0.45,0.9),0.15,rnd(0.6,1.3),0.26,7,1.2)}}
-let accLip=0,accWW=0,accCurl=0,accSpr=0,accLand=0,accBall=0,accFm=0,accJet=0,accPile=0,accSecF=0,accCloud=0,accSkirt=0;const JETS=[];
+let accLip=0,accWW=0,accCurl=0,accSpr=0,accLand=0,accBall=0,accFm=0,accJet=0,accPile=0,accSecF=0,accCloud=0,accSkirt=0,accEndC=0;const JETS=[];
 function emitWave(dt){
   const pw=game.Hbase;
   accLip+=1500*dt*pw;   /* the offshore wind combing the crest: a veil of fine water torn off low and blown back flat, in gusts along the line */
@@ -1185,10 +1198,10 @@ function emitWave(dt){
   while(accSkirt>=1){accSkirt--;const s=rnd(-6,58),i=Math.round(colIndex(Math.max(s,0.05))),fo=s<0.3?0.9:colFoam[i];if(Math.random()>fo)continue;const k=i*NV+NF+Math.floor(rnd(0,0.22)*NQ);
     emit(s,rnd(0.05,0.5),PZ[k]+rnd(0.3,3.2),-CP*rnd(0.3,0.6),rnd(0.1,0.7),rnd(0.8,2.8),rnd(1.2,2.2),0.5,rnd(1.6,3.0),rnd(0.07,0.10),0.2,0.9)}
   // crumbling sections in the middle of the wave: white water tumbling down the face from the roll, spray puffing off its top and blown back
-  accSecF+=1500*dt*pw;
+  accSecF+=2300*dt*pw;
   while(accSecF>=1){accSecF--;const s=rnd(3,64),i=Math.round(colIndex(s)),fv=Math.max(colSecF[i],colFoam[i]-0.5*colEnd[i]);if(fv<0.22||Math.random()>fv)continue;const fk=sstep(0.22,0.8,fv);   /* a section still forming throws a few small pieces, not lone white discs */   // the end-of-wave white water stays low: hardly any cascade
     const q=rnd(0.38,0.60),j0=Math.min(NQ-1,Math.floor(q*NQ)),k=i*NV+NF+j0,tz=PZ[k+1]-PZ[k],ty=PY[k+1]-PY[k],tl=Math.hypot(tz,ty)||1,nz=ty/tl,ny=-tz/tl,dn=rnd(1.0,2.6),out=rnd(0.05,0.35);
-    if(Math.random()<0.88)emit(s+rnd(-0.3,0.3),PY[k]+ny*out,PZ[k]+nz*out,-rnd(2.6,3.8),-ty/tl*dn+ny*0.4,-tz/tl*dn+nz*0.4,rnd(0.5,0.9),rnd(0.7,1.1)*(0.3+0.7*fk),rnd(1.2,2.0)*(0.3+0.7*fk),rnd(0.32,0.42)*(0.55+0.45*fk),2.6,1.2,1);   // tumbling down the face off the roll, one white mass moving with the section
+    if(Math.random()<0.88){const ez=1-0.35*colEnd[i];emit(s+rnd(-0.3,0.3),PY[k]+ny*out,PZ[k]+nz*out,-rnd(2.6,3.8),-ty/tl*dn+ny*0.4,-tz/tl*dn+nz*0.4,rnd(0.5,0.9),rnd(0.7,1.1)*(0.3+0.7*fk)*ez,rnd(1.2,2.0)*(0.3+0.7*fk)*ez,rnd(0.30,0.40)*(0.55+0.45*fk),2.6,1.2,1)}   // tumbling down the face off the roll, one white mass moving with the section
     else emit(s,PY[k]+ny*0.4,PZ[k]+nz*0.4,-CP*rnd(0.3,0.5),rnd(1.0,2.6),rnd(-1.4,0),rnd(0.4,0.8),0.06,rnd(0.12,0.26),rnd(0.32,0.45),9,0.4)}   // a little spray off the top
   // foam sections: the front of the roll keeps breaking — low lumps of white water rolling out ahead of it, plus the droplets it throws
   accCloud+=240*dt*pw;
@@ -1200,6 +1213,12 @@ function emitWave(dt){
   while(accWW>=1){accWW--;const u=Math.random(),s=0.8-u*u*26,i=Math.round(colIndex(s)),h=colH[i],near=sstep(-5,0.5,s);
     const q=Math.random(),k=i*NV+NF+Math.floor(q*NQ);
     emit(s,PY[k]+rnd(0,0.3),PZ[k]+rnd(-0.2,0.5),-CP*rnd(0.3,0.7),rnd(0.8,3.2)+near*rnd(0,5.5),rnd(0.5,3.2),rnd(0.45,1.0)+near*0.3,rnd(0.3,0.5),rnd(0.7,1.4)+near*0.5,rnd(0.24,0.34),6.5,0.9,1)}
+  /* the end of the wave: the whole line boiling over as one rolling bore — foam tumbling over the top edge and mist torn off it, so the crest is never a clean line */
+  accEndC+=1100*dt*pw;
+  while(accEndC>=1){accEndC--;const s=rnd(0.5,64),i=Math.round(colIndex(s)),ce=colEnd[i];if(ce<0.2||Math.random()>ce*(0.55+0.45*Math.sin(s*0.43+game.t*1.3)*Math.sin(s*0.13-game.t*0.7)+0.3))continue;
+    const k=i*NV+NF+Math.floor(rnd(0.72,1.0)*NQ);
+    if(Math.random()<0.8)emit(s+rnd(-0.4,0.4),PY[k]+rnd(-0.1,0.35),PZ[k]+rnd(-0.2,0.4),-CP*rnd(0.3,0.6),rnd(0.3,1.4),rnd(0.6,2.0),rnd(0.7,1.3),rnd(0.5,0.9),rnd(1.3,2.3),rnd(0.30,0.42),2.4,1.2,1);
+    else emit(s+rnd(-0.5,0.5),PY[k]+rnd(0.2,0.6),PZ[k]+rnd(-0.3,0.3),-CP*rnd(0.4,0.7),rnd(0.6,1.8),rnd(-0.4,0.8),rnd(1.2,2.0),0.6,rnd(2.4,3.8),rnd(0.08,0.12),0.6,1.0)}
 }
 
 /* ───────────────────────── wake ribbon ───────────────────────── */
@@ -1256,13 +1275,18 @@ function setTOD(n,save){n=n?1:0;TOD.value=n;game.night=n;if(save!==false)try{loc
     S3(U.uWA,0.0,0.030,0.068);S3(U.uWB,0.003,0.200,0.250);S3(U.uG1,0.01,0.32,0.38);S3(U.uG2,0.16,1.0,0.86);S3(U.uFl,0.36,0.56,0.52);S3(U.uFlL,0.08,0.24,0.27);S3(U.uSpecC,1.1,1.0,0.86);   /* clear Caribbean turquoise where the light comes through, deep blue at the base */
     S3(U.uFoamA,0.68,0.80,0.90);S3(U.uFoamB,1.12,1.10,1.05);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
     RIM.value.setRGB(0.30,0.36,0.42);palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
-  if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&(SPOT.id===2||SPOT.id===3));bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
+  if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&SPOT.id===3);goldenTint(!n&&SPOT.id===2);bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
 function dawnTint(on){DAWN.value=on?1:0;bloom.threshold=0.9;if(!on)return;const U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);   /* first light: the sun just off the horizon out to sea, behind the wave, so the lip glows and a gold road runs across the water */
   SUN.set(0.50,0.25,-0.83).normalize();   /* low over the sea, off to the shoulder side so it shows above the wave */sunL.color.set(0xffa456);sunL.intensity=2.3;hemiL.color.set(0x8f7fb8);hemiL.groundColor.set(0x223654);hemiL.intensity=0.62;fillL.color.set(0x8aa0ff);fillL.intensity=0.55;fillL.position.set(-0.5,0.4,1);
   scene.fog.color.setRGB(0.60,0.36,0.38);renderer.toneMappingExposure=1.0;bloom.strength=0.34;bloom.threshold=1.45;   /* only the sun and the glitter bloom: the bright sky round it must not turn into fog */
   S3(U.uWA,0.0,0.016,0.040);S3(U.uWB,0.006,0.115,0.165);S3(U.uG1,0.02,0.24,0.27);S3(U.uG2,0.42,1.0,0.50);
   RIM.value.setRGB(0.55,0.30,0.16);S3(U.uSpecC,2.0,1.15,0.50);S3(U.uFoamA,0.58,0.52,0.66);S3(U.uFoamB,1.10,0.92,0.78);partMat.uniforms.uTint.value.set(1.06,0.86,0.78)}
+/* Uluwatu: late afternoon. The same clear day as the pool, the sun lower and yellower out over the sea, light warm on the cliffs and the lip, no red in it */
+function goldenTint(on){if(!on)return;DAWN.value=0.15;   /* just a touch of the low-sun sky: a warmer horizon and gilded cloud edges */const U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);
+  SUN.set(0.46,0.34,-0.82).normalize();sunL.color.set(0xffd497);sunL.intensity=3.4;hemiL.color.set(0xdde4ee);hemiL.groundColor.set(0x3596bd);hemiL.intensity=0.64;fillL.color.set(0xfff0d8);fillL.intensity=0.70;fillL.position.set(0.5,0.45,1);
+  scene.fog.color.setRGB(0.72,0.80,0.89);renderer.toneMappingExposure=1.0;bloom.strength=0.32;
+  RIM.value.setRGB(0.40,0.35,0.25);S3(U.uSpecC,1.30,1.06,0.72);S3(U.uFoamA,0.70,0.78,0.86);S3(U.uFoamB,1.14,1.09,0.98);partMat.uniforms.uTint.value.set(1.03,0.99,0.92)}
 /* ───────────────────────── spots ───────────────────────── */
 // Teahupo'o: open ocean over a reef, the green peaks of Tahiti behind; the wave is bigger and keeps throwing: barrel after barrel with open wall between for airs
 const tahitiG=new THREE.Group();tahitiG.visible=false;scene.add(tahitiG);
@@ -2385,7 +2409,7 @@ function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
-  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false});
+  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
@@ -2780,7 +2804,7 @@ function stepRide(dt){
   if(sf.rhLock){if(inp.x<-0.3||inp.cut)inp={x:0,y:inp.y,crouch:inp.crouch,stall:inp.stall,cut:false};else sf.rhLock=false}
   if(!sf.rh&&!sf.cv&&inp.cut&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>8&&Math.cos(sf.th)>0.2){sf.rh={ph:0,t:0,up:sf.p<0.45*S.top};sf.cb=null;sfxNoise(0.3,2000,0.18)}
   /* the carve (back): up high on the face, then the whole rail laid over in one round, powerful arc back toward the curl, a fan of spray off the tail, and round the bottom into the line again */
-  if(!sf.rh&&!sf.cv&&!sf.c360&&inp.x<-0.3&&!inp.cut&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>6&&Math.cos(sf.th)>0.2&&sf.V>4.4){sf.cv={t:0,t1:0,ph:sf.p<0.84*S.top?0:1,sp:0,shot:false};sf.cb=null;sfxNoise(0.3,2000,0.18)}
+  if(!sf.rh&&!sf.cv&&!sf.c360&&inp.x<-0.3&&!inp.cut&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>6&&Math.cos(sf.th)>0.2&&sf.V>4.4){sf.cv={t:0,t1:0,t2:0,v1:sf.V,ph:sf.p<0.93*S.top?0:1,sp:0,shot:false};sf.cb=null;sfxNoise(0.3,2000,0.18)}
   if(sf.cv){sf.cv.t+=dt;if(game.state!=='ride'||sf.cv.t>3.4)sf.cv=null}
   if(sf.rh){sf.rh.t+=dt;if((sf.rh.ph===0&&(inp.x>0.3||sf.rh.t>6))||game.state!=='ride')sf.rh=null}
   if(sf.rh&&sf.rh.ph===2&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.0;sf.V=clamp(sf.V*1.12,CP+1.5,CP+3.0);sf.cb=null;sf.lastTop=now;const pt=1150+sf.V*45;award('Open Carve',pt);reqShot('Open Carve',pt,0)}   // no foam to hit: wide carve, snap, and back down the line with speed
@@ -2795,11 +2819,12 @@ function stepRide(dt){
     if(sf.openT>1.65){thT=-0.95;rate=2.6}else if(sf.openT>1.0&&sf.p<0.3*top){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}else{sf.openT=Math.min(sf.openT,0.99);thT=1.38;rate=5.2*(0.55+0.45*clamp(sf.V/7,0,1.3));sf.openC=(sf.openC||0)+dt;sf.openT=sf.openC>2.2?0:Math.max(sf.openT,0.05)}
     if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
   else if(sf.pivot>0){thT=sf.pivotTh;rate=5.4;sf.pivot-=dt;piv=true}
-  else if(sf.straight){thT=-1.05;rate=2.0}   /* the end: angled in, staying close to the white water */
+  else if(sf.straight){thT=clamp((0.24*top-sf.p)*0.75,-1.05,0.3);rate=2.6}   /* the end: angled in, low on the face right at the foot of the white water, carried along by it instead of running out onto the flat */
   else if(sf.c360){const C=sf.c360;if(C.up){thT=1.2;rate=5.6;if(rel>0.86||C.t>1.1){C.up=false;C.pth=sf.th}}   /* straight up to the lip first: the whole turn is done up there, in the white of it */else{thT=sf.th-1.45;rate=12.0*(0.6+0.4*clamp(sf.V/7,0,1.3));sf.V=clamp(sf.V-2.6*dt,CP+0.8,Math.max(CP+0.8,8.6))}}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
   else if(sf.cv){const C=sf.cv,vk=0.6+0.4*clamp(sf.V/7,0,1.3);
-    if(C.ph===0){thT=1.40;rate=6.4*vk;if(rel>0.86||C.t>1.1)C.ph=1}   /* straight up the face, the turn starts right under the lip */
-    else{C.t1+=dt;thT=-2.5;rate=6.6*vk}}
+    if(C.ph===0){thT=1.50;rate=7.0*vk;if(rel>0.93||C.t>1.3){C.ph=1;C.v1=sf.V}}   /* straight up the face, the turn starts right under the lip */
+    else if(C.ph===1){C.t1+=dt;thT=-2.5;rate=6.6*vk}
+    else{C.t2+=dt;thT=-2.8;rate=4.2*vk}}   /* the last drive: rail still in, pointed back at the curl, a final push off the back foot */
   else if(sf.glideT>0&&!sf.rh){thT=-0.95;rate=2.6}   // coming down off the foam: one long smooth carve down the face
   else if(auto){const R=sf.rh,tp=S.top;
     if(R.up){thT=0.9;rate=3.8;if(sf.p>0.55*tp||R.t>0.35)R.up=false}   // first up to the top of the shoulder, so the whole arc fits on the face
@@ -2816,7 +2841,7 @@ function stepRide(dt){
   else if(now<(sf.rhHold||0)){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}   // after the hit: down to the base of the wave and round into the next turn, not out onto the flat
   else{thT=clamp((0.6*top-sf.p)*0.3,-0.45,0.45);rate=1.5;if(Math.cos(sf.th)<0)rate=2.8}
   let d=wrapPi(thT-sf.th);
-  if(sf.cv&&sf.cv.ph===1&&d>0.5)d-=2*PI;   // the carve always goes round by the bottom
+  if(sf.cv&&sf.cv.ph>=1&&d>0.5)d-=2*PI;   // the carve always goes round by the bottom
   if(auto&&!sf.rh.up&&d>0&&Math.cos(sf.th)>-0.55)d-=2*PI;                  // the carve goes round by the bottom, heel rail
   if(piv&&((sf.rh&&sf.rh.ph===1)||sf.bsHit)&&d<-0.6)d+=2*PI;   // the hit off the junction always comes round the other way, backside, and back into the wave   // the return off the foam turns the other way, on the toe rail: a figure of eight
   if(mag>0.3&&!piv&&Math.abs(inp.x)<0.3&&inp.y<0&&d>0&&Math.sin(sf.th)>0.2&&Math.cos(sf.th)>-0.5)d-=2*PI;
@@ -2838,7 +2863,7 @@ function stepRide(dt){
      if(T.ph===0){const base=inp.crouch?1.6:1.35;
        if(dn&&T.t>0.18&&sf.pivot>0&&sf.pivotTh>-1.6)sf.pivotTh=Math.max(sf.pivotTh,-0.4);   // held: he stalls high instead of dropping
        T.target=T.dir*(sstep(0,0.26,T.t)*base+sstep(0.22,0.62,T.t)*(PI-base));
-       if(as0>2.75){T.ph=1;T.hold=0;if(game.state==='ride'){award('Tail Throw',1100);reqShot('Tail Throw',1100,0.05);game.slowT=0.3;sfxNoise(0.5,1900,0.3)}}
+       if(as0>2.75){T.ph=1;T.hold=0;if(game.state==='ride'){award('Tail Throw',1100);reqShot('Tail Throw',1100,0.05);sfxNoise(0.5,1900,0.3)}}
        else if(!dn&&T.t>0.24){if(as0<1.75)endSlide();else T.ph=2}}
      else if(T.ph===1){T.target=T.dir*PI;T.hold+=dt;if(!dn||T.hold>5)T.ph=2}
      else{T.target=T.dir*(2*PI+0.3);if(as0>=2*PI-0.02){sf.slip=0;sf.tt=null;sf.slipMax=0;if(game.state==='ride')award('360',900)}}}
@@ -2854,7 +2879,7 @@ function stepRide(dt){
   {const sth=Math.sin(sf.th);acc+=-G*(sth>0?0.52-0.24*sstep(0.35,0.85,sth):0.82)*sinA*sth;if(sth>0.4&&!sf.rh&&rel>0.1&&sf.V<CP+3.2)acc+=2.8*sstep(0.4,0.8,sth)}   // the bottom turn carries him up to the lip
   acc-=0.010*sf.V*sf.V;
   if(sf.c360)acc+=1.8;
-  if(sf.cv)acc+=Math.max(0,8.4-sf.V)*3.2-Math.max(0,sf.V-10.5)*4;   // the carve is driven: speed held right through the arc
+  if(sf.cv)acc+=sf.cv.ph===2?Math.max(0,(sf.cv.v1||9)+2.2-sf.V)*5:Math.max(0,8.4-sf.V)*3.2-Math.max(0,sf.V-10.5)*4;   /* through the arc the speed is held; the last drive is where it comes back */   // the carve is driven: speed held right through the arc
   if(sf.introT>0&&sf.introT<=0.5)acc+=5.5;   // he throws himself into the drop
   if(sf.openT>0&&sf.introT<=0)acc+=Math.max(0,CP+3.2-sf.V)*2.5;   // and carries the speed through the bottom turn
   if(sf.boostT>0){sf.boostT-=dt;acc+=Math.max(0,sf.boostV-sf.V)*3.2}   // the spit-out speed comes on over a moment, not in one frame
@@ -2866,14 +2891,18 @@ function stepRide(dt){
   if(S.foam>0.05){const fk=S.foam*sstep(0.45,0.7,rel);if(fk>0.3){sf.burst=Math.max(sf.burst,0.25*fk);if(now-sf.foamAt>1.4){sf.foamAt=now;sf.V=Math.min(sf.V*1.10,14)}}}   // touching the foam gives a 10% kick
   if(mag<=0.3&&!piv&&sf.s>24)acc-=Math.min(4,(sf.s-24)*0.4);
   if(sf.glideT>0){acc+=5.0*Math.min(1,sf.glideT/0.3);sf.glideT=Math.max(0,sf.glideT-dt)}   // ...and the drop gives the speed back
+  if(piv)sf.snapT=now;else if(now-(sf.snapT||-9)>1.6)sf.preV=sf.V;
+  if(now-(sf.snapT||-9)<1.6&&sf.preV>0)acc-=Math.max(0,sf.V-(sf.preV+0.4))*5;   /* off the top he comes back down at the speed he went up with, not a dive that runs away */
   sf.V=clamp(sf.V+acc*dt,1.8,15.5);
+  if(sf.cv&&sf.cv.ph===1)sf.V=Math.min(sf.V,Math.max(sf.cv.v1,7.5)+0.4);   /* the arc holds the speed he brought to it */
   const st=Math.sin(sf.th),ct=Math.cos(sf.th);
   if(sf.c360){const C=sf.c360;C.t+=dt;if(!C.up)C.acc+=Math.abs(wrapPi(sf.th-C.pth));C.pth=sf.th;if(C.acc>=2*PI-0.15){sf.c360=null;sf.lastTop=now;sf.rhHold=now+0.8;const pt=1500+sf.V*45;award('Carve 360',pt);reqShot('Carve 360',pt,0)}else if(C.t>4.5)sf.c360=null}
   if(sf.cv&&sf.cv.ph===1){const C=sf.cv;sf.burst=Math.max(sf.burst,1.9);C.sp+=380*dt;{const hx=S.ts.x*ct+S.tp.x*st,hy=S.ts.y*ct+S.tp.y*st,hz=S.ts.z*ct+S.tp.z*st,sg=sf.om<0?1:-1,ox=(S.tp.x*ct-S.ts.x*st)*sg,oy=(S.tp.y*ct-S.ts.y*st)*sg,oz=(S.tp.z*ct-S.ts.z*st)*sg;   /* heading, and the outside of the arc */
       while(C.sp>=1){C.sp--;const b=rnd(0.35,0.95),sp=rnd(6.5,8.5),up=rnd(2.6,4.0),lump=Math.random()<0.16;
         emit(S.pos.x-hx*b+rnd(-0.08,0.08),S.pos.y-hy*b+0.05,S.pos.z-hz*b+rnd(-0.08,0.08),ox*sp+S.n.x*up-CP*0.3,oy*sp+S.n.y*up+1.2,oz*sp+S.n.z*up,rnd(0.7,1.05),lump?0.3:0.12,lump?rnd(0.9,1.4):rnd(0.5,0.9),lump?0.42:0.62,8,lump?1.3:1.0,lump?1:undefined)}}
-    if(!C.shot&&C.t1>0.24){C.shot=true;const pt=1000+sf.V*60;C.pt=pt;reqShot('Carve',pt,0);game.slowT=Math.max(game.slowT||0,0.38);A.impact=Math.max(A.impact||0,0.25)}
-    if((ct<-0.6&&st<0)||C.t1>1.5){const pt=C.pt||1000+sf.V*60;sf.cv=null;sf.rhLock=true;sf.rhHold=now+0.9;sf.lastTop=now;sf.cb=null;sf.upT=0;award('Carve',pt)}}
+    if(!C.shot&&C.t1>0.24){C.shot=true;const pt=1000+sf.V*60;C.pt=pt;reqShot('Carve',pt,0);A.impact=Math.max(A.impact||0,0.25)}
+    if((ct<-0.6&&st<0)||C.t1>1.5){C.ph=2;C.t2=0;A.impact=Math.max(A.impact||0,0.3)}}
+  if(sf.cv&&sf.cv.ph===2){const C=sf.cv;sf.burst=Math.max(sf.burst,1.3*sstep(0.4,0.1,C.t2));if(C.t2>0.4){const pt=C.pt||1000+sf.V*60;sf.cv=null;sf.rhLock=true;sf.rhHold=now+0.9;sf.lastTop=now;sf.cb=null;sf.upT=0;award('Carve',pt)}}
   if(sf.c360&&!sf.c360.up){sf.burst=Math.max(sf.burst,1.5);sf.c360.sp=(sf.c360.sp||0)+dt;if(sf.c360.sp>0.08){sf.c360.sp=0;splash(8,S.pos,1.0)}}
   if(sf.bsHit&&sf.pivot<=0)sf.bsHit=0;{const mv=(sf.rh&&sf.rh.ph===1)||sf.bsHit?sstep(0.34,0.06,sf.pivot):sf.c360&&!sf.c360.up?0.42:1;   /* the 360 turns at the top of the wave, almost on the spot */   // the rebound pivots on the foam before it drops
    sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;{const dpp=sf.V*st*mv*dt;sf.p+=dpp>0&&!(sf.pivot>0)?dpp*clamp((top-0.02-sf.p)/0.10,0.3,1):dpp}}   /* full speed up the face all the way to the lip (where the hit happens); only the last hand's breadth eases off, so nothing flies over the top */
@@ -2887,14 +2916,14 @@ function stepRide(dt){
   const vp=sf.V*st;
   // the hit: at the top of the climb (or up in the foam) he slams the tail into it; the nose comes round over the top and he drops back down the line
   if(auto&&!sf.rh.up&&sf.rh.climb&&sf.rh.open&&ct<0.1&&S.foam<0.25&&(sf.p>=top-0.9||sf.rh.ct>0.5)){   // open carve: snap off the top, back down the line
-    sf.rh.ph=2;sf.rh.t=0;sf.pivot=0.42;sf.pivotTh=-0.85;sf.p=Math.min(sf.p,top-0.2);sf.burst=1.7;A.impact=0.35;game.shake=0.22;sf.lastTop=now;splash(26,S.pos,1.05);sfxNoise(0.45,2600,0.3);game.slowT=0.25}
+    sf.rh.ph=2;sf.rh.t=0;sf.pivot=0.42;sf.pivotTh=-0.85;sf.p=Math.min(sf.p,top-0.2);sf.burst=1.7;A.impact=0.35;game.shake=0.22;sf.lastTop=now;splash(26,S.pos,1.05);sfxNoise(0.45,2600,0.3)}
   if(auto&&!sf.rh.up&&sf.rh.climb&&!sf.rh.open&&ct<0.25&&((sf.s-sf.rh.sF<0.9&&sf.p>0.5*top)||sf.p>=top-0.40||(S.foam>0.2&&sf.p>0.55*top)||sf.s<2.2)){
     sf.rh.ph=1;sf.rh.t=0;sf.pivot=0.50;sf.pivotTh=-0.78;sf.p=Math.min(sf.p,top-0.14);sf.V=clamp(sf.V,CP+0.6,8.6);
-    sf.burst=1.6;A.impact=0.45;game.shake=0.22;sf.foamAt=now;sf.lastTop=now;splash(30,S.pos,1.1);sfxNoise(0.5,2400,0.32);game.slowT=0.25;   // a backside snap off the foam
+    sf.burst=1.6;A.impact=0.45;game.shake=0.22;sf.foamAt=now;sf.lastTop=now;splash(30,S.pos,1.1);sfxNoise(0.5,2400,0.32);   // a backside snap off the foam
     if(!game.attract&&game.waveAge>8&&Math.random()<0.04)sf.fallAt=now+0.3}
   if(sf.rh&&sf.rh.ph===1&&sf.s<1.3)sf.s=1.3;
   if(auto&&vp>0&&sf.p>top-0.16){sf.p=top-0.16;sf.rh.up=false}
-  if(sf.c360&&vp>0&&sf.p>top-0.1)sf.p=top-0.1;if(sf.cv&&vp>0&&sf.p>top-0.22)sf.p=top-0.22;   /* the carve 360 turns on the face, never over the top of it */   // committed: the lip and the foam on the way do not take over
+  if(sf.c360&&vp>0&&sf.p>top-0.1)sf.p=top-0.1;if(sf.cv&&vp>0&&sf.p>top-0.15)sf.p=top-0.15;   /* the carve 360 turns on the face, never over the top of it */   // committed: the lip and the foam on the way do not take over
   if(sf.p>=top-0.12&&vp>0&&sf.tt&&sf.tt.ph>0){sf.p=top-0.12;sf.th=damp(sf.th,-0.2,6,dt)}
   else if(sf.p>=top-0.12&&vp>0&&!auto&&!sf.c360&&!sf.cv){
     const flR=(TB.fl>0||keys.KeyR)&&game.state==='ride'&&ct>0.02&&sf.V>3.8;   /* the FLOATER button */
@@ -2905,7 +2934,7 @@ function stepRide(dt){
     }else if(S.aMax>0.85&&game.state==='ride'){
       if(vp>4.4&&inp.crouch&&!sf.rh){launchAir(vp,inp);return}
       if(sf.pivot<=0){const vert=Math.abs(st),bk=ct<-0.4;sf.p=top-0.15;sf.pivot=0.50;sf.pivotTh=bk?-0.78:-1.0;if(bk){sf.bsHit=1;sf.burst=Math.max(sf.burst,1.6)}{const fz=S.foam>0.45;if(fz){if(now-sf.foamAt>1.4){sf.foamAt=now;sf.V=Math.min(sf.V*1.10,14)}}else sf.V*=0.9;sf.burst=fz?0.7:1.3;A.impact=fz?0.2:0.45;game.shake=fz?0:0.35}
-        if(now-sf.lastTop>0.5&&vp>2.2){const fm_=S.foam>0.45,nm=bk?'Backside Hit':fm_?'Foam Hit':vert>0.86?'Vertical Hit':'Off the Lip',pt=550+vert*500+sf.V*45+(fm_?250:0);award(nm,pt);reqShot(nm,pt,0.16);game.slowT=fm_?0:0.42;if(!fm_&&vert>0.8&&!game.attract&&game.waveAge>8&&Math.random()<0.045)sf.fallAt=now+0.28;sfxNoise(0.5,2600,fm_?0.2:0.35);if(fm_)splash(16,S.pos,0.8)}
+        if(now-sf.lastTop>0.5&&vp>2.2){const fm_=S.foam>0.45,nm=bk?'Backside Hit':fm_?'Foam Hit':vert>0.86?'Vertical Hit':'Off the Lip',pt=550+vert*500+sf.V*45+(fm_?250:0);award(nm,pt);reqShot(nm,pt,0.16);if(!fm_&&vert>0.8&&!game.attract&&game.waveAge>8&&Math.random()<0.045)sf.fallAt=now+0.28;sfxNoise(0.5,2600,fm_?0.2:0.35);if(fm_)splash(16,S.pos,0.8)}
         sf.lastTop=now;sf.upT=0}
     }else{
       sf.p=Math.min(sf.p,top);sf.th=damp(sf.th,ct>=0?0:PI*Math.sign(sf.th||1),5,dt);
@@ -3052,7 +3081,8 @@ function placeSurfer(dt,time){
     sampleSurf(sf.s,sf.p,S);
     {const relL=clamp(sf.p/Math.max(S.top,0.1),0,1),room=Math.max(0,S.L-S.top),nearT=sstep(0.72,0.94,relL);   /* the top third of the wave is the lip itself, standing past vertical: a hit, a 360 and the paddle in all go up into it */
      const kT=Math.max((sf.hit||0)*nearT*(sf.cv?0:1),sf.c360&&!sf.c360.up?0.55*nearT:0,sf.introT>0.5?0.6:0);sf.lipK=damp(sf.lipK||0,kT,kT>(sf.lipK||0)?22:5,dt);
-     if(sf.lipK>0.005&&room>0.05)sampleSurf(sf.s,sf.p+sf.lipK*Math.min((sf.introT>0.5?0.62:1.0)*room,sf.introT>0.5?2.2:4.6),S);sf.lipUp=(sf.hit||0)*nearT*(sf.cv||sf.c360?0:1)}
+     {const oT=kT*Math.min((sf.introT>0.5?0.62:1.0)*room,sf.introT>0.5?2.2:4.6),vr=Math.max(2,sf.V*0.5);if(!(sf.lipO>=0)||sf.introT>0.5)sf.lipO=oT;else sf.lipO+=clamp((oT-sf.lipO)*Math.min(1,7*dt),-vr*dt,vr*dt);   /* the reach up into the lip moves at his own riding speed, never a jump */
+     if(sf.lipO>0.005&&room>0.05)sampleSurf(sf.s,sf.p+sf.lipO,S)}sf.lipUp=(sf.hit||0)*nearT*(sf.cv||sf.c360?0:1)}
     const c=Math.cos(sf.th),sn=Math.sin(sf.th);
     bX.copy(S.ts).multiplyScalar(c).addScaledVector(S.tp,sn).normalize();
     {const bank=sf.cv&&sf.cv.ph===1?-1.02*sstep(0,0.22,sf.cv.t1):Math.sign(sf.rail)*Math.min((sf.c360&&!sf.c360.up)||(sf.rh&&sf.rh.ph===0)?0.82:1.0,0.46*Math.abs(sf.rail)+0.46*Math.atan(sf.V*Math.abs(sf.om)/9.8));sf.lam=damp(sf.lam,bank,14,dt)}   // lean angle follows speed × turn rate, like any carving turn
@@ -3093,7 +3123,7 @@ function placeSurfer(dt,time){
     AT.intent=clamp(sf.steer*0.85+sf.rail*0.45,-1,1);AT.vup=sstep(1.5,6,vpv);
     AT.look=clamp(sf.steer*0.40+sf.rail*0.15,-0.75,0.75);if(BB.on){const ds=BB.s-sf.s,k=sstep(9,2,Math.abs(ds))*(ds<0?1:0.5);AT.look=lerp(AT.look,BB.lookSign*(ds<0?0.85:0.35),k)}/* a look back at the bodyboarder as she paddles past */{const R2=sf.rh;AT.gz=R2&&R2.ph===0&&!R2.up?(R2.climb?(rel<0.5?-0.42:0.30):-0.14):(R2&&R2.ph===1?0.12:0);   /* backside hit: eyes down through the bottom turn, then up at the foam */
      if(R2&&R2.ph===0&&R2.climb)AT.crouch=rel<0.5?Math.max(AT.crouch,0.74):Math.min(AT.crouch,0.52);if((R2&&R2.ph===0&&!R2.climb&&!R2.up)||(sf.c360&&!sf.c360.up))AT.crouch=clamp(AT.crouch,0.5,0.7);if(R2&&R2.ph===1)AT.crouch=Math.max(AT.crouch,0.76);
-     if(sf.cv&&sf.cv.ph===1){AT.crouch=clamp(AT.crouch,0.66,0.82);AT.gz=0.02;AT.look=1.25*sstep(0.6,-0.5,Math.cos(sf.th))}   /* the carve: sat low over the back foot, eyes round to where the arc is going */
+     if(sf.cv&&sf.cv.ph===1){AT.crouch=clamp(AT.crouch,0.66,0.82);AT.gz=0.02;AT.look=1.25*sstep(0.6,-0.5,Math.cos(sf.th))}else if(sf.cv&&sf.cv.ph===2){AT.crouch=lerp(0.74,0.40,sstep(0.02,0.3,sf.cv.t2));AT.gz=0.02;AT.look=1.25*sstep(0.6,-0.5,Math.cos(sf.th));AT.drive=Math.max(AT.drive||0,0.8)}   /* the projection: he unfolds off the back foot */   /* the carve: sat low over the back foot, eyes round to where the arc is going */
      AT.bsh=bsK;if(bsK>0.5){const fw=R2&&R2.ph===1?sstep(0.35,0.05,sf.pivot):0;AT.gz=lerp(-0.45,0,fw);AT.crouch=Math.max(AT.crouch,0.80);AT.tw=lerp(AT.tw,0.35,0.8*(1-fw));AT.look=lerp(0.55,0,fw)}}   // coming off the snap his eyes go back down the line   // backside hit: folded over the toes, eyes down the face   // the head leads the turn a little and never looks back against the spin
     AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);
     sf.claimT=Math.max(0,(sf.claimT||0)-dt);AT.claim=sf.claimT>0.05&&(sf.claimT<1.15||sf.endCl)&&ao<1.5&&!game.inTube&&!(sf.exV&&sf.exT<(sf.exV===1?0.56:0.68))?1:0;AT.claimV=sf.claimV||0;AT.clPh=sf.claimT>2.0?1:0;if(AT.claim){AT.crouch=Math.min(AT.crouch,0.36);AT.look=0.2}
@@ -3414,7 +3444,6 @@ function tick(dtR,draw){
       if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.cv=null;sf.tt=null}   // he turns to face the beach first
       if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
         if(sf.exV===3){sf.mode='kickout';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.7);sf.wVel.x+=sf.V*Math.cos(sf.th)-CP*0.6;sf.wVel.y=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}   // kicks the board up and steps off
-        else if((SPOT.id===2||SPOT.id===4)&&!game.attract&&(game.reefTurn=!game.reefTurn)){sf.exV=4;sf.reefAt=game.waveDur+0.25}   /* over a reef, every other wave: he steps off into the shallows and hobbles out over the coral */
         else{const C=nextCeleb();sf.claimT=4.2;sf.claimV=C.v;sf.celebN=C.n;sfxNoise(0.22,2600,0.15)}}
       if(sf.exV===4&&sf.mode==='ride'&&game.waveAge>=sf.reefAt)reefStart();   // ollie or varial, then the celebration
       if(game.waveAge>game.waveDur){game.Hbase=1-0.8*sstep(0,3.6,game.waveAge-game.waveDur);if(game.waveAge>game.waveDur+3.5&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done');if(sf.mode==='reef'&&sf.wT>4.6)endRide('done')}}
