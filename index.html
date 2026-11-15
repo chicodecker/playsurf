@@ -31,12 +31,12 @@
 <link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://playsurfgame.com/#website","url":"https://playsurfgame.com/","name":"PlaySurf","alternateName":["Play Surf","PlaySurf Game"],"inLanguage":"en"},{"@type":["VideoGame","WebApplication"],"@id":"https://playsurfgame.com/#game","name":"PlaySurf","alternateName":"PlaySurf: The Ultimate Surfing Game","url":"https://playsurfgame.com/","image":"https://playsurfgame.com/og-image.jpg","description":"Free 3D surf game in your browser: surf a perfect left in a wave pool, by day or under the floodlights, with bottom turns, snaps, off the lips, barrels, floaters and airs.","genre":["Sports","Surfing","Arcade"],"gamePlatform":["Web browser","PC","Mac"],"applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","playMode":"SinglePlayer","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"Decker Games"},"publisher":{"@type":"Organization","name":"Decker Games"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,100..900;1,50..125,100..900&display=swap" rel="stylesheet">
 <style>
-:root{--ps-pink:#ff4f9e;--ps-orange:#ffa53d;--ps-acc:#ffb347;--ps-navy:#0e1838;--ps-grad:linear-gradient(100deg,#e3368f 0%,#f75a78 48%,#ffab3d 100%)}   /* PlaySurf identity: the pink-to-orange brush under the logo, deep navy, white */
+:root{--ps-f:Saira,"Avenir Next","Segoe UI",Arial,sans-serif;--ps-pink:#ff4f9e;--ps-orange:#ffa53d;--ps-acc:#ffb347;--ps-navy:#0e1838;--ps-grad:linear-gradient(100deg,#e3368f 0%,#f75a78 48%,#ffab3d 100%)}   /* PlaySurf identity: the pink-to-orange brush under the logo, deep navy, white */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#05090c;overflow:hidden;color:#fff;
-  font-family:"Avenir Next Condensed","Barlow Condensed","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;user-select:none}
+  font-family:var(--ps-f);font-stretch:96%;-webkit-font-smoothing:antialiased;user-select:none}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block}
 #ui{position:fixed;inset:0;pointer-events:none}
 #bars i{position:absolute;left:0;right:0;height:var(--bar,5.5vh);background:#000;transition:height .5s}
@@ -51,7 +51,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block}
 #wavebar.on{opacity:1}#wavebar i{display:block;height:100%;width:100%;background:#fff;border-radius:2px;transform-origin:left}
 #tip{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 2.4vh);transform:translateX(-50%);display:none;gap:14px;align-items:center;white-space:nowrap;padding:7px 16px;border-radius:999px;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.16);font-size:12px;font-weight:700;letter-spacing:.16em;color:#fff;transition:opacity .25s;opacity:0;pointer-events:none}
 body.riding #tip{display:flex}#tip.on{opacity:.92}#tip kbd{font:inherit;font-weight:800;color:var(--ps-navy);background:var(--ps-grad);border-radius:5px;padding:1px 7px;margin-left:6px;letter-spacing:.06em}body.touch #tip{font-size:10px;padding:5px 12px;gap:10px;bottom:calc(var(--bar,5.5vh) + 1.2vh)}
-#pop{position:absolute;left:4vw;bottom:calc(var(--bar,5.5vh) + 9vh);display:flex;flex-direction:column-reverse;gap:6px}
+#pop{position:absolute;left:4vw;bottom:calc(var(--bar,5.5vh) + 12vh);display:flex;flex-direction:column-reverse;gap:6px}
 #pop .p{animation:pop 2.3s cubic-bezier(.2,.9,.2,1) forwards;text-shadow:0 3px 22px rgba(0,0,0,.5)}
 #pop .p b{display:block;font-size:clamp(34px,5.2vw,74px);font-style:italic;font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
 #pop .p span{font-size:22px;font-weight:700;color:var(--ps-acc);font-style:italic}
@@ -180,7 +180,7 @@ body.touch.riding #touch{display:block}
 #tHint{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 1vh);transform:translateX(-50%);font-size:11px;letter-spacing:.16em;text-align:center;opacity:0;transition:opacity 1s;text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap;pointer-events:none}
 #tHint.on{opacity:.9}
 body.touch #keys,body.touch #camBtn{display:none}
-body.touch #music{display:none}body.touch:not(.riding) #music{display:flex;top:auto;right:auto;left:max(3vw,env(safe-area-inset-left,0px));bottom:calc(var(--bar,5.5vh) + 1.2vh);transform:scale(.82);transform-origin:left bottom}body.touch #music button{font-size:19px;padding:6px 9px}
+body.touch #music{display:none}body.touch:not(.riding) #music{display:flex;top:auto;left:auto;right:max(3vw,env(safe-area-inset-right,0px));bottom:calc(var(--bar,5.5vh) + 1.2vh);transform:scale(.82);transform-origin:right bottom}   /* bottom right, clear of the menu column and its GO SURF */body.touch #music button{font-size:19px;padding:6px 9px}
 #music.hold .mInfo{opacity:.5}#music #mPlay{font-size:12px}
 body.touch #pop{bottom:auto;top:calc(var(--bar,5.5vh) + 11vh)}
 body.touch #tube{bottom:auto;top:calc(var(--bar,5.5vh) + 10vh)}
@@ -237,7 +237,7 @@ html.fsScroll body{min-height:calc(100vh + 320px)}
 #end .endBtns{display:flex;gap:12px;margin:16px 0 0 4px;flex-wrap:wrap}
 #end.panel{overflow-y:auto;justify-content:safe center;padding-block:calc(var(--bar,5.5vh) + 2vh)}
 #end h2{font-size:15px;letter-spacing:.5em;font-weight:600;opacity:.8}
-#end .nota{font-size:clamp(90px,15vw,200px);font-style:italic;font-weight:800;line-height:.9}
+#end .nota{font-size:clamp(76px,min(11vw,19vh),160px);font-style:italic;font-weight:800;line-height:.9}
 #end .nota small{font-size:.16em;letter-spacing:.3em;font-style:normal;font-weight:600;opacity:.7;margin-left:14px}
 #end .judges{display:flex;gap:8px;margin:6px 0 14px 4px}
 #end .judges i{font-style:normal;font-weight:700;font-size:15px;padding:3px 9px;border:1px solid rgba(255,255,255,.45);border-radius:3px}
@@ -246,7 +246,7 @@ html.fsScroll body{min-height:calc(100vh + 320px)}
 #end .list b{color:var(--ps-acc);font-style:italic;margin-left:8px}
 #end .photos{display:flex;gap:14px;margin:18px 0 0 4px;flex-wrap:wrap}
 #end .ph{background:#f6f3ea;padding:7px 7px 4px;transform:rotate(-2deg);box-shadow:0 10px 30px rgba(0,0,0,.5);color:#222;font-size:12px;letter-spacing:.12em;font-weight:700;text-transform:uppercase;text-align:center}
-#end .ph:nth-child(2n){transform:rotate(1.6deg)}#end .ph img{display:block;width:min(21vw,250px);margin-bottom:4px}
+#end .ph:nth-child(2n){transform:rotate(1.6deg)}#end .ph img{display:block;width:min(16vw,26vh,210px);margin-bottom:4px}
 #end .heat{margin:16px 0 0 4px;font-size:14px;letter-spacing:.16em;opacity:.9}
 #end .heat b{font-size:20px;font-style:italic;color:#9ff5dc;margin:0 12px 0 6px}
 #rep{position:absolute;right:3vw;top:calc(var(--bar,5.5vh) + 2vh);font-size:24px;letter-spacing:.42em;text-shadow:0 2px 12px rgba(0,0,0,.5);font-weight:700;opacity:0;transition:opacity .5s}#rep.on{opacity:.9}#rep:before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff3b30;margin-right:10px;animation:bl 1.2s infinite}
@@ -263,6 +263,34 @@ html.fsScroll body{min-height:calc(100vh + 320px)}
 .wpSub{font-size:12px;letter-spacing:.14em;opacity:.7;margin-bottom:16px}#wpBtns{justify-content:center;margin-bottom:18px}
 #pause{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:60px;font-style:italic;font-weight:800;letter-spacing:.2em;background:rgba(0,0,0,.4)}
 #err{position:absolute;left:20px;bottom:20px;color:#f88;font:12px monospace;white-space:pre-wrap;max-width:80vw}
+/* ── PlaySurf type: one family, Saira, the squared, sporty letter of the cover's "THE ULTIMATE SURFING GAME" and "OUT NOW".
+   display: black italic · labels: bold italic, expanded and tracked like the tagline · buttons: extra bold, upright (the skew slants them) · text: medium, plain */
+h1,.wzH,#pop .p b,#hud b,.tutCard b,#end .nota,.pkBox b,.wpBox h3,.spBox h3,#pause,#tube b{font-family:var(--ps-f);font-weight:900;font-style:italic;font-stretch:100%;letter-spacing:-.005em}
+#hud b,#end .nota,#end .judges i,#end .heat b,#xpTxt,#combo,#pop .p span{font-variant-numeric:tabular-nums}
+.wzH{letter-spacing:0;line-height:.95;text-transform:uppercase}
+#pop .p b{font-size:clamp(30px,4.4vw,64px);font-stretch:94%;line-height:.92}
+#pop .p span,#combo{font-weight:800;font-style:italic;font-stretch:100%;letter-spacing:.02em}
+#hud b{font-size:44px;line-height:.95}
+#hud small,.playLbl,.tutCard small,.howto .htl,.howto summary,#music small,.pkBox small,#end h2,.trBox h3,#tube,#rep,#ld b,#vinHint,.psBrand span,.wpSub,#trSub{font-weight:700;font-style:italic;font-stretch:112%}
+#hud small{letter-spacing:.3em}.playLbl{letter-spacing:.34em}.tutCard small{letter-spacing:.3em}#end h2{letter-spacing:.42em}.trBox h3{letter-spacing:.42em}#tube{letter-spacing:.34em}#rep{letter-spacing:.34em}#ld b{letter-spacing:.32em}.howto .htl,.howto summary{letter-spacing:.28em}
+.wzDots i{font-weight:700;font-style:italic;font-stretch:104%;letter-spacing:.16em}
+.pbtn{font-weight:800;font-stretch:100%;letter-spacing:.07em}.pbtn.sm{letter-spacing:.07em}.pbtn.big{letter-spacing:.06em}
+.pbtn.big i,.pbtn.wv i,.pbtn.soon i{font-weight:600;font-stretch:104%;letter-spacing:.14em}
+.lyc,.tod button{font-weight:800;font-stretch:100%;letter-spacing:.08em}
+#camBtn,#waveBtn,#muteBtn,.spNo{font-weight:700;font-stretch:100%;letter-spacing:.1em}
+.spGo{font-weight:800;font-style:italic;letter-spacing:.08em}
+.tb{font-weight:800;font-stretch:92%;letter-spacing:.05em}#tSnap{letter-spacing:.06em}.tb.sm{letter-spacing:.04em}.tb.sm.big{letter-spacing:.06em}#tSnap small{letter-spacing:.08em;font-weight:600}
+.wzNote,.tutCard p,.cred,.bdInfo,.pkBox p,.thelp,.trBox p,.tr span,#end .list,#end .goal,#tHint,.spBox p,#fsSwipe span,.sub{font-weight:500;font-style:normal;font-stretch:96%;letter-spacing:.03em}
+.tutCard p{letter-spacing:.01em;line-height:1.45}.wzNote{letter-spacing:.02em;line-height:1.5}
+#keys{font-weight:600;font-stretch:96%;letter-spacing:.08em}#keys k,.kk{font-weight:800;font-stretch:100%}
+#tip{font-weight:700;font-stretch:100%;letter-spacing:.1em}#toast div{font-weight:700;font-style:italic;font-stretch:104%;letter-spacing:.12em}
+.prog,#end .prg,#end .heat,#end .unl div{font-weight:700;font-style:italic;font-stretch:104%;letter-spacing:.14em}
+.tr b{font-weight:800;font-style:italic;letter-spacing:.08em}.grid b{font-weight:800;letter-spacing:.02em}
+#music b{font-weight:800;font-style:italic;letter-spacing:.02em}#music span{font-weight:600;letter-spacing:.14em}
+#rotate,#fsSwipe b{font-weight:800;font-style:italic;font-stretch:104%;letter-spacing:.2em}
+#end .nota small{font-weight:700;font-style:italic;font-stretch:112%;letter-spacing:.3em}
+#muteBtn{left:auto;right:max(3vw,env(safe-area-inset-right,0px))}#keys{bottom:calc(var(--bar,5.5vh) + 2vh + 64px)}   /* the sound switch stacks over CHANGE WAVE on the right, away from the menu column and the score card */
+#rep{left:50%;right:auto;transform:translateX(-50%);top:calc(var(--bar,5.5vh) + 2.2vh + 10px);font-size:18px}   /* REPLAY sits top centre, under the wave bar, clear of the music player */
 /* phones in landscape: compact menu, card and HUD (last, so it wins over the rules above) */
 @media (max-height:540px){
   .psBrand{display:none}.wz:has(.wzS[data-s="1"].on) .psBrand{display:flex;margin-bottom:4px;gap:3px}.wz:has(.wzS[data-s="1"].on) .psBrand img{width:min(36vw,300px)}.wz:has(.wzS[data-s="1"].on) .psBrand span{font-size:8px}
@@ -278,6 +306,7 @@ html.fsScroll body{min-height:calc(100vh + 320px)}
   #end .prg{margin-top:6px;font-size:11px}#end .prg .xpbar{width:120px}#end .unl{margin-top:4px;gap:2px}#end .unl div{font-size:11px}#end .goal{font-size:10px;margin-top:4px}#end .endBtns{margin-top:8px;gap:8px}#end .go{display:none}
   #trGrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.tr{padding:8px 10px}.tr b{font-size:11px}.tr span{font-size:10px}
   #score b,#speed b{font-size:34px}
+  .pbtn,.lyc{font-stretch:86%}.pbtns.spots .pbtn{font-stretch:80%;letter-spacing:.03em}.wzH{font-stretch:92%}.wzDots i{font-stretch:92%}   /* the wide letter drawn narrower on a phone, so the rows keep to one line */
 }
 @media (max-height:430px){
   .playRow{margin:2px 0 0 2px}.playLbl{font-size:9px;margin:0 0 3px 3px}
@@ -309,10 +338,10 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="intro"><video id="vinBg" muted playsinline preload="auto" aria-hidden="true"></video><video id="vin" src="vinheta-v2.mp4" muted playsinline preload="auto"></video><div id="vinHint">CLICK FOR SOUND &nbsp;·&nbsp; ANY KEY TO SKIP</div></div>
+<div id="intro"><video id="vinBg" muted playsinline preload="auto" aria-hidden="true"></video><video id="vin" src="vinheta-v3.mp4" muted playsinline preload="auto"></video><div id="vinHint">CLICK FOR SOUND &nbsp;·&nbsp; ANY KEY TO SKIP</div></div>
 <script>/* the opening on any screen narrower than the film (a phone held upright, a 4:3 tablet): the whole film fits the width, over a soft blurred copy of itself, so the logo is never cut */
 (function(){var v=document.getElementById('vin'),bg=document.getElementById('vinBg'),it=document.getElementById('intro'),q=matchMedia('(max-aspect-ratio:33/20)');
- var set=function(){var p=q.matches;it.classList.toggle('vport',p);if(p&&!bg.getAttribute('src')){bg.src='vinheta-v2.mp4'}if(p&&!v.paused){try{bg.currentTime=v.currentTime}catch(e){}var r=bg.play();if(r&&r.catch)r.catch(function(){})}};set();
+ var set=function(){var p=q.matches;it.classList.toggle('vport',p);if(p&&!bg.getAttribute('src')){bg.src='vinheta-v3.mp4'}if(p&&!v.paused){try{bg.currentTime=v.currentTime}catch(e){}var r=bg.play();if(r&&r.catch)r.catch(function(){})}};set();
  v.addEventListener('playing',function(){if(!q.matches)return;try{bg.currentTime=v.currentTime}catch(e){}var r=bg.play();if(r&&r.catch)r.catch(function(){})});
  if(q.addEventListener)q.addEventListener('change',set);else if(q.addListener)q.addListener(set);
  try{if(matchMedia('(pointer:coarse)').matches)document.getElementById('vinHint').innerHTML='TAP FOR SOUND &nbsp;·&nbsp; TAP AGAIN TO SKIP'}catch(e){}})();</script>
@@ -373,7 +402,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <div class="pkBtns"><button id="pkR" class="pbtn">&#9664; THE RIGHT</button><button id="pkL" class="pbtn">THE LEFT &#9654;</button></div><p>&#8592; / &#8594; or tap a side · the arrow is the way you'll ride</p></div></div>
   <div id="toast"></div>
   <div id="spPop" class="off" role="dialog" aria-modal="true" aria-labelledby="spT"><div class="spBox"><button id="spX" aria-label="Close">&times;</button>
-    <img src="sign-logo-v2.webp" alt="PlaySurf official soundtrack"><h3 id="spT">Liked the music?</h3><p>Follow our soundtrack on Spotify</p>
+    <img src="sign-logo-v3.webp" alt="PlaySurf official soundtrack"><h3 id="spT">Liked the music?</h3><p>Follow our soundtrack on Spotify</p>
     <a id="spGo" class="spGo" href="#" target="_blank" rel="noopener">&#9654;&nbsp; LISTEN ON SPOTIFY</a><button id="spNo" class="spNo">Not now</button></div></div>
   <div id="touch"><div id="stick"><i></i></div>
     <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
@@ -468,8 +497,8 @@ vec3 skyC(vec3 d){   /* only the parts of the sky that show are worked out: day,
   float sd=max(dot(d,uSun),0.);
   vec3 c=vec3(0.);
   if(uDawn<0.999&&uNight<0.999){
-    c=mix(vec3(0.58,0.80,1.0),vec3(0.15,0.45,1.0),smoothstep(0.0,0.13,y));   /* a thin band of bright haze on the horizon, then deep saturated azure */
-    c=mix(c,vec3(0.025,0.20,0.82),smoothstep(0.10,0.75,y));
+    c=mix(vec3(0.52,0.58,0.98),vec3(0.16,0.40,0.98),smoothstep(0.0,0.10,y));   /* the cover's sky: a lavender haze on the horizon, then cobalt blue */
+    c=mix(c,vec3(0.06,0.20,0.76),smoothstep(0.10,0.75,y));
     c+=vec3(1.0,0.90,0.72)*(pow(sd,6.)*0.12+pow(sd,60.)*0.55);}
   if(uDawn>0.001&&uNight<0.999){
     float sh=clamp(dot(normalize(vec2(d.x,d.z)+1e-5),normalize(vec2(uSun.x,uSun.z)+1e-5))*0.5+0.5,0.,1.);   /* toward the sun or away from it, round the horizon */
@@ -496,7 +525,7 @@ const skyMat=new THREE.ShaderMaterial({
     float n=texture2D(uNoise,cu*0.045+vec2(uTime*0.0012,0.)).b*0.62+texture2D(uNoise,cu*0.13+vec2(0.,uTime*0.002)).b*0.38;
     float cl=smoothstep(0.47,0.70,n)*smoothstep(0.01,0.14,d.y);   /* fair-weather cumulus: more of them, with crisper edges */
     float n2=texture2D(uNoise,cu*0.045+vec2(uTime*0.0012,0.)+uSun.xz*0.012).b;
-    vec3 ccD=mix(vec3(0.56,0.65,0.80),vec3(1.20,1.18,1.12),clamp((n-n2)*5.+0.6,0.,1.))*(0.9+0.5*pow(sd,4.));ccD=mix(ccD,mix(vec3(0.30,0.24,0.36),vec3(1.30,0.72,0.40),clamp((n-n2)*5.+0.45,0.,1.))*(0.75+2.2*pow(sd,6.)),uDawn);   /* low sun: dark mauve undersides, gold-lit edges, blazing near the sun */
+    vec3 ccD=mix(vec3(0.66,0.56,0.88),vec3(1.32,1.00,1.08),clamp((n-n2)*5.+0.6,0.,1.))*(0.9+0.5*pow(sd,4.));ccD=mix(ccD,mix(vec3(0.30,0.24,0.36),vec3(1.30,0.72,0.40),clamp((n-n2)*5.+0.45,0.,1.))*(0.75+2.2*pow(sd,6.)),uDawn);   /* low sun: dark mauve undersides, gold-lit edges, blazing near the sun */
     vec3 ccN=mix(vec3(0.020,0.028,0.050),vec3(0.10,0.12,0.17),clamp((n-n2)*5.+0.4,0.,1.))*(1.+2.5*pow(sd,6.));
     if(uNight>0.01){vec3 q=d*190.,f=fract(q)-0.5;float h=fract(sin(dot(floor(q),vec3(12.9898,78.233,37.719)))*43758.5453);
       c+=vec3(0.9,0.95,1.0)*step(0.9968,h)*(0.4+0.6*fract(h*91.3))*smoothstep(0.34,0.06,length(f))*smoothstep(0.02,0.25,d.y)*(0.75+0.25*sin(uTime*3.+h*400.))*1.8*uNight;}
@@ -592,8 +621,8 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
   const m=new THREE.InstancedMesh(g,palmMat,PALM.length);m.frustumCulled=false;envG.add(m);return m})();
 // brand type comes from the web fonts; anything painted on a canvas is repainted once they have arrived
 const PS_LOGO=new Image();PS_LOGO.src='playsurf-logo.webp';   /* the wordmark, painted on the beach banners */
-const SCRIPT='"Barlow Condensed","Avenir Next Condensed",Arial,sans-serif',CONDF='"Barlow Condensed","Avenir Next Condensed","Helvetica Neue",Arial,sans-serif';
-function whenFonts(fn){fn();try{Promise.all([document.fonts.load('italic 800 40px "Barlow Condensed"'),document.fonts.load('800 40px "Barlow Condensed"')]).then(()=>fn(),()=>{})}catch(e){}}
+const SCRIPT='Saira,"Avenir Next",Arial,sans-serif',CONDF='Saira,"Avenir Next","Helvetica Neue",Arial,sans-serif';
+function whenFonts(fn){fn();try{Promise.all([document.fonts.load('italic 800 40px Saira'),document.fonts.load('800 40px Saira')]).then(()=>fn(),()=>{})}catch(e){}}
 const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.60,0.10,0.09)},k:{value:1},t:{value:new THREE.Vector3(0.93,0.93,0.92)},f:{value:0},tex:{value:null}};
 LYC.tex.value=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';
   x.font='italic 900 44px "Arial Black",Impact,sans-serif';x.fillText('PLAYSURF',128,58,236);x.font='italic 900 150px "Arial Black",Impact,sans-serif';x.fillText('67',128,206,210);
@@ -612,7 +641,7 @@ const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.heigh
     {const sl='T H E   U L T I M A T E   S U R F I N G   G A M E',F=p=>`italic 800 ${p}px ${CONDF}`;x.font=F(fitFont(x,sl,F,30,1024-580-24));x.fillStyle='#ffffff';x.fillText(sl,580,58)}t.needsUpdate=true};
   whenFonts(paint);PS_LOGO.addEventListener('load',paint);
   return t})();
-const FONT='"Avenir Next Condensed","Barlow Condensed","Helvetica Neue",Arial,sans-serif';
+const FONT='Saira,"Avenir Next","Helvetica Neue",Arial,sans-serif';
 function txtFlip(t,f){t.wrapS=THREE.RepeatWrapping;const r=(t.userData.baseFlip?-1:1)*(f?-1:1);t.repeat.x=r;t.offset.x=r<0?1:0;t.needsUpdate=true}
 function brandTex(w,h,draw,flip){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;
   t.userData.baseFlip=!!flip;if(flip){t.wrapS=THREE.RepeatWrapping;t.repeat.x=-1;t.offset.x=1}TXT.push(t);return t}
@@ -758,7 +787,7 @@ const neonWord=new THREE.Mesh(new THREE.PlaneGeometry(56,19.7),neonMat(neonWordT
 neonWord.position.set(9,NEON.y+3.2,0.25);neonSub.position.set(9,NEON.y-8.6,0.25);neonWord.renderOrder=neonSub.renderOrder=3;neonG.add(neonWord,neonSub);
 const neonWave=new THREE.Mesh(new THREE.PlaneGeometry(21,21),neonMat(neonWaveTex));neonWave.position.set(-28.5,NEON.y+1.2,0.25);neonWave.renderOrder=3;neonG.add(neonWave);
 neonWord.visible=neonSub.visible=neonWave.visible=false;   // replaced by the LED wall below
-const signTex=new THREE.TextureLoader().load('sign-logo-v2.webp');signTex.colorSpace=THREE.SRGBColorSpace;signTex.anisotropy=8;
+const signTex=new THREE.TextureLoader().load('sign-logo-v3.webp');signTex.colorSpace=THREE.SRGBColorSpace;signTex.anisotropy=8;
 const ledMat=new THREE.ShaderMaterial({uniforms:{map:{value:signTex},uRes:{value:new THREE.Vector2(256,143)},uK:{value:1.35},uT:{value:0},uFlip:{value:0}},toneMapped:false,fog:false,
   vertexShader:`varying vec2 vU;void main(){vU=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
   fragmentShader:`uniform sampler2D map;uniform vec2 uRes;uniform float uK;uniform float uT;uniform float uFlip;varying vec2 vU;
@@ -771,7 +800,7 @@ const ledMat=new THREE.ShaderMaterial({uniforms:{map:{value:signTex},uRes:{value
      #include <colorspace_fragment>
    }`});
 const ledWall=new THREE.Mesh(new THREE.PlaneGeometry(54,30.2),ledMat);ledWall.position.set(0,NEON.y,0.12);neonG.add(ledWall);
-{const v=document.createElement('video');v.src='sign-loop-v2.mp4';v.muted=true;v.playsInline=true;v.preload='auto';   // the LED wall plays the opening animation, holds the logo, then plays it again
+{const v=document.createElement('video');v.src='sign-loop-v3.mp4';v.muted=true;v.playsInline=true;v.preload='auto';   // the LED wall plays the opening animation, holds the logo, then plays it again
  const vt=new THREE.VideoTexture(v);vt.colorSpace=THREE.SRGBColorSpace;let hold=0;
  const play=()=>{hold=0;try{v.currentTime=0}catch(e){}const p=v.play();if(p&&p.catch)p.catch(()=>{})};
  v.addEventListener('playing',()=>{ledMat.uniforms.map.value=vt});
@@ -1281,8 +1310,16 @@ function setTOD(n,save){n=n?1:0;TOD.value=n;game.night=n;if(save!==false)try{loc
     S3(U.uWA,0.0,0.030,0.068);S3(U.uWB,0.003,0.200,0.250);S3(U.uG1,0.01,0.32,0.38);S3(U.uG2,0.16,1.0,0.86);S3(U.uFl,0.36,0.56,0.52);S3(U.uFlL,0.08,0.24,0.27);S3(U.uSpecC,1.1,1.0,0.86);   /* clear Caribbean turquoise where the light comes through, deep blue at the base */
     S3(U.uFoamA,0.68,0.80,0.90);S3(U.uFoamB,1.12,1.10,1.05);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
     RIM.value.setRGB(0.30,0.36,0.42);palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
-  if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&SPOT.id===3);goldenTint(!n&&SPOT.id===2);bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
+  if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&SPOT.id===3);goldenTint(!n&&SPOT.id===2);coverTint(n);bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
+/* the PlaySurf cover palette, laid over every wave once its own look is set: deep navy water, cobalt-teal face, cyan-blue light through the lip, lavender shade in the foam, a rose glint */
+function coverTint(n){const U=waveMat.uniforms,k=n?0.22:SPOT.id===3?0.25:SPOT.id===2?0.35:0.55,M=(u,r,g,b,kk)=>u.value.lerp(_tintV.set(r,g,b),kk===undefined?k:kk);
+  if(n){M(U.uWA,0.004,0.020,0.075);M(U.uWB,0.010,0.090,0.250);M(U.uFoamA,0.20,0.20,0.40);return}
+  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===3?0.25:SPOT.id===2?0.35:C.k;
+  M(U.uWA,...C.wa,kd);M(U.uWB,...C.wb,kd);M(U.uG1,...C.g1,kd);M(U.uG2,...C.g2,kd);M(U.uFl,...C.fl,kd);M(U.uFlL,...C.fll,kd);
+  M(U.uFoamA,...C.fa,kd);M(U.uFoamB,...C.fb,kd);M(U.uSpecC,1.15,0.98,0.92,kd*0.6);
+  const f=scene.fog.color;f.lerp(_fogC.setRGB(...C.fog),kd*0.7)}
+const _fogC=new THREE.Color();
 function dawnTint(on){DAWN.value=on?1:0;bloom.threshold=0.9;if(!on)return;const U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);   /* first light: the sun just off the horizon out to sea, behind the wave, so the lip glows and a gold road runs across the water */
   SUN.set(0.50,0.25,-0.83).normalize();   /* low over the sea, off to the shoulder side so it shows above the wave */sunL.color.set(0xffa456);sunL.intensity=2.3;hemiL.color.set(0x8f7fb8);hemiL.groundColor.set(0x223654);hemiL.intensity=0.62;fillL.color.set(0x8aa0ff);fillL.intensity=0.55;fillL.position.set(-0.5,0.4,1);
   scene.fog.color.setRGB(0.60,0.36,0.38);renderer.toneMappingExposure=1.0;bloom.strength=0.34;bloom.threshold=1.45;   /* only the sun and the glitter bloom: the bright sky round it must not turn into fog */
@@ -2060,15 +2097,20 @@ function npcPlace(s,p,th){sampleSurf(s,Math.max(p,0),npcS);_nx.copy(npcS.ts).mul
   _nz.crossVectors(_nx,_ny).normalize();_ny.crossVectors(_nz,_nx);_nq.setFromRotationMatrix(_nb.makeBasis(_nx,_ny,_nz));
   npcG.quaternion.copy(_nq);npcG.position.copy(npcS.pos).addScaledVector(npcS.n,0.055);npcBoard.quaternion.copy(_nq);npcBoard.position.copy(npcG.position)}
 /* the local claiming the wave: the arm on the rider's side jabs a finger at him, the head turns to shout at him, and a "MY WAVE!" goes up over his head */
-const NPI={};function npcIdx(){if(NPI.ok)return;const bs=RIG.mesh.skeleton.bones,ix=r=>r&&r.bone?bs.indexOf(r.bone):-1;NPI.arms=RIG.arm.map(a=>[a.up,a.fo,a.tw[0],a.tw[1],a.tw[2],a.ha].map(ix));NPI.head=ix(RIG.b.head);NPI.neck=ix(RIG.b.neck);NPI.ok=true}
-const _pa=new V3,_pb=new V3,_pc=new V3,_pt=new V3,_pq=new THREE.Quaternion(),_pq2=new THREE.Quaternion(),_pI=new THREE.Quaternion(),_pM=new THREE.Matrix4(),_pT=new THREE.Matrix4();
+const NPI={};function npcIdx(){if(NPI.ok)return;const bs=RIG.mesh.skeleton.bones,ix=r=>r&&r.bone?bs.indexOf(r.bone):-1;NPI.arms=RIG.arm.map(a=>{const l=[a.up,a.fo,a.tw[0],a.tw[1],a.tw[2],a.ha].map(ix);if(a.ha&&a.ha.bone)a.ha.bone.traverse(o=>{const k=bs.indexOf(o);if(k>=0&&!l.includes(k))l.push(k)});return l});   /* the whole arm, fingers too: they hang off the hand and would stay behind as long slivers */
+  NPI.fore=NPI.arms.map(l=>l.slice(1));NPI.head=ix(RIG.b.head);NPI.neck=ix(RIG.b.neck);NPI.ok=true}
+const _pa=new V3,_pb=new V3,_pc=new V3,_pc2=new V3,_pt=new V3,_pq=new THREE.Quaternion(),_pq2=new THREE.Quaternion(),_pI=new THREE.Quaternion(),_pM=new THREE.Matrix4(),_pT=new THREE.Matrix4();
 function npcRot(i,pv,q){if(i<0)return;_pM.makeRotationFromQuaternion(q);_pT.makeTranslation(-pv.x,-pv.y,-pv.z);_pM.multiply(_pT);_pT.makeTranslation(pv.x,pv.y,pv.z);_pT.multiply(_pM);npcBones[i].matrix.premultiply(_pT);npcBones[i].matrixWorldNeedsUpdate=true}
 function npcPoint(w,t){if(w<0.01)return;npcIdx();npcG.updateMatrixWorld(true);riderG.updateMatrixWorld(true);_pt.copy(J.hbase);riderG.localToWorld(_pt);npcG.worldToLocal(_pt);   // the rider's head, in the local's own frame
   const hb=NPI.neck>=0?NPI.neck:NPI.head;_pc.setFromMatrixPosition(npcBones[hb>=0?hb:NPI.arms[0][0]].matrix);   // the neck: the middle of his shoulders
-  for(let a=0;a<2;a++){const A=NPI.arms[a];_pa.setFromMatrixPosition(npcBones[A[0]].matrix);_pb.setFromMatrixPosition(npcBones[A[5]].matrix).sub(_pa).normalize();
-    const lx=_pa.x-_pc.x,lz=_pa.z-_pc.z,ll=Math.hypot(lx,lz)||1,tx=_pt.x-_pa.x,tz=_pt.z-_pa.z,tl=Math.hypot(tx,tz)||1,sh=Math.sin(t*13+a*1.9);
-    _pq2.set(0,0,0,1);const dir=new V3(lx/ll*0.42+tx/tl*0.30,1.0,lz/ll*0.42+tz/tl*0.30).normalize();   // up and out, a little toward him: "what the hell!"
-    dir.y+=0.12*sh;dir.normalize();_pq.setFromUnitVectors(_pb,dir);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of A)npcRot(i,_pa,_pq)}
+  let cl=0,best=-9;for(let a=0;a<2;a++){_pa.setFromMatrixPosition(npcBones[NPI.arms[a][0]].matrix);const d=(_pa.x-_pc.x)*(_pt.x-_pc.x)+(_pa.z-_pc.z)*(_pt.z-_pc.z);if(d>best){best=d;cl=a}}   // the arm on the rider's side does the talking
+  for(let a=0;a<2;a++){const A=NPI.arms[a],F=NPI.fore[a],up=a===cl;_pa.setFromMatrixPosition(npcBones[A[0]].matrix);_pb.setFromMatrixPosition(npcBones[A[1]].matrix).sub(_pa).normalize();
+    const lx=_pa.x-_pc.x,lz=_pa.z-_pc.z,ll=Math.hypot(lx,lz)||1,ox=lx/ll,oz=lz/ll,tx=_pt.x-_pa.x,tz=_pt.z-_pa.z,tl=Math.hypot(tx,tz)||1,rx=tx/tl,rz=tz/tl,sh=Math.sin(t*11+a*1.9);
+    const du=up?_pf.set(ox*0.62+rx*0.30,0.50+0.06*sh,oz*0.62+rz*0.30).normalize():_pf.set(ox*0.78+rx*0.12,-0.62,oz*0.78+rz*0.12).normalize();   /* upper arm: raised out to the side, or hanging out low for balance */
+    _pq.setFromUnitVectors(_pb,du);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of A)npcRot(i,_pa,_pq);
+    const e=_pc2.setFromMatrixPosition(npcBones[A[1]].matrix);_pb.setFromMatrixPosition(npcBones[A[5]].matrix).sub(e).normalize();
+    const df=up?_pf.set(rx*0.34+ox*0.10+0.10*sh,0.92,rz*0.34+oz*0.10).normalize():_pf.set(ox*0.55+rx*0.30,-0.78,oz*0.55+rz*0.30).normalize();   /* forearm: bent up at the elbow, fist shaking at him; the low one only softly bent */
+    _pq.setFromUnitVectors(_pb,df);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of F)npcRot(i,e,_pq)}
   if(hb>=0){_pa.setFromMatrixPosition(npcBones[hb].matrix);const yaw=clamp(Math.atan2(-(_pt.x-_pa.x),-(_pt.z-_pa.z)),-1.25,1.25)*w*NPCYAW;
     _pq.setFromAxisAngle(UPV,yaw);_pq2.setFromAxisAngle(_pb.set(1,0,0),(-0.18+0.10*Math.sin(t*9))*w);_pq.multiply(_pq2);npcRot(NPI.head,_pa,_pq);if(NPI.neck>=0&&NPI.neck!==NPI.head)npcRot(NPI.neck,_pa,_pq)}}
 /* falling: both arms thrown out and windmilling for balance that is not there */
@@ -2077,7 +2119,8 @@ function npcFlail(w,t){if(w<0.01)return;npcIdx();const hb=NPI.neck>=0?NPI.neck:N
   for(let a=0;a<2;a++){const A=NPI.arms[a];_pa.setFromMatrixPosition(npcBones[A[0]].matrix);_pb.setFromMatrixPosition(npcBones[A[5]].matrix).sub(_pa).normalize();
     const lx=_pa.x-_pc.x,lz=_pa.z-_pc.z,ll=Math.hypot(lx,lz)||1,ph=t*(10.5+a*2.4)+a*2.2;
     _pf.set(lx/ll*0.8+0.35*Math.sin(ph),0.45+0.45*Math.sin(ph*0.8+1.3),lz/ll*0.8+0.35*Math.cos(ph)).normalize();
-    _pq.setFromUnitVectors(_pb,_pf);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of A)npcRot(i,_pa,_pq)}}
+    _pq.setFromUnitVectors(_pb,_pf);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w);for(const i of A)npcRot(i,_pa,_pq);
+    {const e=_pc2.setFromMatrixPosition(npcBones[A[1]].matrix);_pb.setFromMatrixPosition(npcBones[A[5]].matrix).sub(e).normalize();_pt.copy(_pf).multiplyScalar(0.7).add(_pa.set(0,0.55+0.25*Math.sin(ph*1.3),0)).normalize();_pq.setFromUnitVectors(_pb,_pt);_pq2.copy(_pq);_pq.copy(_pI).slerp(_pq2,w*0.8);for(const i of NPI.fore[a])npcRot(i,e,_pq)}}}
 /* his voice: "My wave!!!" (the browser's own speech, so it costs nothing to download); quiet when the game is muted */
 function sayMyWave(){if(audio.muted||game.attract||!('speechSynthesis' in window))return;try{const u=new SpeechSynthesisUtterance('My wave!!!');u.lang='en-US';u.rate=1.2;u.pitch=0.7;u.volume=1;
   const vs=speechSynthesis.getVoices(),v=vs.find(v=>/^en/i.test(v.lang)&&/Daniel|Fred|Alex|Aaron|Arthur|Gordon|Rishi|Male/i.test(v.name))||vs.find(v=>/^en/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
@@ -2250,7 +2293,7 @@ $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.curr
 var WZ={s:1};
 function wzGo(n){WZ.s=clamp(n,1,4);   /* 1 device, 2 stance, 3 wave, 4 turns */if(typeof adBreakNext==='function')adBreakNext(WZ.s);document.querySelectorAll('.wzS').forEach(e=>e.classList.toggle('on',+e.dataset.s===WZ.s));
   document.querySelectorAll('.wzDots i').forEach(e=>{const k=+e.dataset.s;e.classList.toggle('on',k===WZ.s);e.classList.toggle('done',k<WZ.s)});
-  $('wzBack').style.visibility=WZ.s>1?'visible':'hidden';if(WZ.s===3)progUI();if(WZ.s===4)tutUI()}
+  $('wzBack').style.display=WZ.s>1?'':'none';   /* gone, not just hidden, so the step names line up with the logo and title */if(WZ.s===3)progUI();if(WZ.s===4)tutUI()}
 function tutUI(){const t=document.body.classList.contains('touch'),K=x=>`<span class="kk">${x}</span>`,M=(d,m)=>t?m:d;
   const L=[['Bottom Turn',M(`drop down and point ${K('↑')} at the bottom — that's where the speed comes from`,`push the stick ${K('↑')} at the bottom — that's where the speed comes from`)],
     ['Snap',M(`climb and tap ${K('↓')} at the top: he turns, throws the tail and comes back`,`climb and tap ${K('SNAP')} at the top; hold it for a tail throw`)],
@@ -2800,6 +2843,7 @@ function endRide(kind){
     game.showCard()},kind==='wipe'?900:500)}
 
 function stepRide(dt){
+  const mk=clamp(sf.V/8.5,0.5,1.1),mkT=clamp(sf.V/8.5,0.62,1.08);   /* maneuver tempo: the turn rate follows the speed he comes in with, as if the rail held one radius */
   if(game.npReq&&sf.mode==='ride'&&game.state==='ride'){const rl=sf.p/Math.max(S.top,0.5),vu=sf.V*Math.sin(sf.th);if(game.waveAge-game.npReq>0.6)game.npReq=0;else if(rl>0.5&&vu>1.0&&!sf.rh){game.npReq=0;sampleSurf(sf.s,sf.p,S);launchAir(Math.max(vu*1.1,5.6),input);sf.alley=false;sf.vh*=1.14;sf.airDur=2*sf.vh/GA;sf.np=true;sf.npDir=-1;splash(38,S.pos,1.35);return}}   // nose pick air revo: off the lip nose first, the tail kicked out in a fan of spray
   if(game.state==='ride')for(const C of SEC)if(C.fol&&!C.set&&game.waveAge>=C.t0-0.05){C.c0=clamp(sf.s+2.4,10,62);C.set=true}
   let inp=game.state==='ride'&&!sf.exV&&!sf.straight?input:{x:0,y:0,crouch:false,stall:false,cut:false};const now=game.waveAge;
@@ -2813,8 +2857,8 @@ function stepRide(dt){
   if(!sf.rh&&!sf.cv&&!sf.c360&&inp.x<-0.3&&!inp.cut&&game.state==='ride'&&sf.introT<=0&&!(sf.openT>0)&&sf.pivot<=0&&!sf.tt&&!game.inTube&&sf.s>6&&Math.cos(sf.th)>0.2&&sf.V>4.4){sf.cv={t:0,t1:0,t2:0,v1:sf.V,ph:sf.p<0.93*S.top?0:1,sp:0,shot:false};sf.cb=null;sfxNoise(0.3,2000,0.18)}
   if(sf.cv){sf.cv.t+=dt;if(game.state!=='ride'||sf.cv.t>3.4)sf.cv=null}
   if(sf.rh){sf.rh.t+=dt;if((sf.rh.ph===0&&(inp.x>0.3||sf.rh.t>6))||game.state!=='ride')sf.rh=null}
-  if(sf.rh&&sf.rh.ph===2&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.0;sf.V=clamp(sf.V*1.12,CP+1.5,CP+3.0);sf.cb=null;sf.lastTop=now;const pt=1150+sf.V*45;award('Open Carve',pt);reqShot('Open Carve',pt,0)}   // no foam to hit: wide carve, snap, and back down the line with speed
-  if(sf.rh&&sf.rh.ph===1&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.5;sf.V=clamp(sf.V*1.10,CP+1.6,CP+3.0);sf.cb=null;sf.lastTop=now;const pt=1700+sf.V*40;award('Roundhouse',pt);reqShot('Roundhouse',pt,0)}
+  if(sf.rh&&sf.rh.ph===2&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.0;sf.V=Math.max(sf.V,CP+1.2);sf.cb=null;sf.lastTop=now;const pt=1150+sf.V*45;award('Open Carve',pt);reqShot('Open Carve',pt,0)}   // no foam to hit: wide carve, snap, and back down the line with speed
+  if(sf.rh&&sf.rh.ph===1&&sf.pivot<=0){sf.rh=null;sf.rhLock=true;sf.rhHold=now+1.5;sf.V=Math.max(sf.V,CP+1.2);sf.cb=null;sf.lastTop=now;const pt=1700+sf.V*40;award('Roundhouse',pt);reqShot('Roundhouse',pt,0)}
   const auto=!!sf.rh&&sf.rh.ph===0;
   const top=S.top,a=S.alpha,sinA=Math.sin(Math.min(a,1.45)),rel=clamp(sf.p/top,0,1);
   const mag=Math.hypot(inp.x,inp.y);let thT,rate,piv=false,sld=false;
@@ -2824,24 +2868,24 @@ function stepRide(dt){
   else if(sf.openT>0){sf.openT-=dt;   // the first bottom turn, built from the same moves as the rest of the wave: the glide off the foam, the round turn at the base, the climb to the lip
     if(sf.openT>1.65){thT=-0.95;rate=2.6}else if(sf.openT>1.0&&sf.p<0.3*top){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}else{sf.openT=Math.min(sf.openT,0.99);thT=1.38;rate=5.2*(0.55+0.45*clamp(sf.V/7,0,1.3));sf.openC=(sf.openC||0)+dt;sf.openT=sf.openC>2.2?0:Math.max(sf.openT,0.05)}
     if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
-  else if(sf.pivot>0){thT=sf.pivotTh;rate=5.4;sf.pivot-=dt;piv=true}
+  else if(sf.pivot>0){thT=sf.pivotTh;rate=4.8*mk;sf.pivot-=dt*mkT;piv=true}
   else if(sf.straight){thT=clamp((0.24*top-sf.p)*0.75,-1.05,0.3);rate=2.6}   /* the end: angled in, low on the face right at the foot of the white water, carried along by it instead of running out onto the flat */
-  else if(sf.c360){const C=sf.c360;if(C.up){thT=1.2;rate=5.6;if(rel>0.86||C.t>1.1){C.up=false;C.pth=sf.th}}   /* straight up to the lip first: the whole turn is done up there, in the white of it */else{thT=sf.th-1.45;rate=12.0*(0.6+0.4*clamp(sf.V/7,0,1.3));sf.V=clamp(sf.V-2.6*dt,CP+0.8,Math.max(CP+0.8,8.6))}}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
-  else if(sf.cv){const C=sf.cv,vk=0.6+0.4*clamp(sf.V/7,0,1.3);
-    if(C.ph===0){thT=1.50;rate=7.0*vk;if(rel>0.93||C.t>1.3){C.ph=1;C.v1=sf.V}}   /* straight up the face, the turn starts right under the lip */
-    else if(C.ph===1){C.t1+=dt;thT=-2.5;rate=6.6*vk}
-    else{C.t2+=dt;thT=-2.8;rate=4.2*vk}}   /* the last drive: rail still in, pointed back at the curl, a final push off the back foot */
+  else if(sf.c360){const C=sf.c360;if(C.up){thT=1.2;rate=5.0*mk;if(rel>0.86||C.t>1.1){C.up=false;C.pth=sf.th}}   /* straight up to the lip first: the whole turn is done up there, in the white of it */else{thT=sf.th-1.45;rate=9.0*mk;sf.V=clamp(sf.V-0.8*dt,CP+0.8,Math.max(CP+0.8,sf.V))}}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
+  else if(sf.cv){const C=sf.cv,vk=mk;
+    if(C.ph===0){thT=1.50;rate=6.0*vk;if(rel>0.93||C.t>1.3){C.ph=1;C.v1=sf.V}}   /* straight up the face, the turn starts right under the lip */
+    else if(C.ph===1){C.t1+=dt*mkT;thT=-2.5;rate=5.6*vk}
+    else{C.t2+=dt*mkT;thT=-2.8;rate=3.8*vk}}   /* the last drive: rail still in, pointed back at the curl, a final push off the back foot */
   else if(sf.glideT>0&&!sf.rh){thT=-0.95;rate=2.6}   // coming down off the foam: one long smooth carve down the face
   else if(auto){const R=sf.rh,tp=S.top;
-    if(R.up){thT=0.9;rate=3.8;if(sf.p>0.55*tp||R.t>0.35)R.up=false}   // first up to the top of the shoulder, so the whole arc fits on the face
+    if(R.up){thT=0.9;rate=3.6*mk;if(sf.p>0.55*tp||R.t>0.35)R.up=false}   // first up to the top of the shoulder, so the whole arc fits on the face
     else{   // backside hit on the first foam ahead: low across the face, a bottom turn with the eyes down, then straight up into the foam
       if(!R.climb){let sF=null;for(let x=sf.s-0.5;x>sf.s-22&&x>1.5;x-=0.5){const fi=colIndex(x),i0=Math.floor(fi);if(lerp(colFoam[i0],colFoam[Math.min(i0+1,NS-1)],fi-i0)>0.28){sF=x;break}}   // the leading edge of the foam: a long arc back to it
         if(R.open===undefined)R.open=sF===null;if(!R.open&&sF===null)sF=R.sF||sf.s-8;
         R.sF=sF;if(sf.p<(R.open?0.62:0.52)*tp||Math.cos(sf.th)<-0.8)R.low=true;if(R.low&&R.t>0.35&&(R.open?R.t>0.95:sf.s-sF<2.6+0.6*Math.max(0,tp-sf.p))){R.climb=true;R.ct=0}}   // always down to the bottom first: no hit without the bottom turn
-      if(R.climb){R.ct=(R.ct||0)+dt;thT=PI-(R.open?1.0:1.05);rate=(R.open?4.4:4.8)*(0.6+0.4*clamp(sf.V/7,0,1.3))}   // a round climb into the foam, not a jab   // the bottom turn: up and back toward the foam, steep
-      else if(Math.cos(sf.th)>-0.8){thT=PI;rate=10.5*(0.6+0.4*clamp(sf.V/7,0,1.3));sf.V=clamp(sf.V-3.0*dt,CP+0.8,Math.max(CP+0.8,9.0))}   /* the carve back: a round, tight arc on the rail, heading for the curl by mid-face */
-      else{const pT=0.48*tp;thT=PI-clamp((pT-sf.p)*0.7,-0.6,0.45);rate=3.5*(0.6+0.4*clamp(sf.V/7,0,1.3))}}}   // a long, open arc back toward the foam   // a tight carve: no further down the face than it needs
-  else if(sf.tt&&(sf.tt.ph>0||sf.tt.t>0.2)){thT=clamp((0.60*top-sf.p)*0.45,-0.5,0.4);rate=4.5;sld=true}
+      if(R.climb){R.ct=(R.ct||0)+dt;thT=PI-(R.open?1.0:1.05);rate=(R.open?4.0:4.3)*mk}   // a round climb into the foam, not a jab   // the bottom turn: up and back toward the foam, steep
+      else if(Math.cos(sf.th)>-0.8){thT=PI;rate=8.0*mk;sf.V=clamp(sf.V-1.0*dt,CP+0.8,Math.max(CP+0.8,sf.V))}   /* the carve back: a round, tight arc on the rail, heading for the curl by mid-face */
+      else{const pT=0.48*tp;thT=PI-clamp((pT-sf.p)*0.7,-0.6,0.45);rate=3.2*mk}}}   // a long, open arc back toward the foam   // a tight carve: no further down the face than it needs
+  else if(sf.tt&&(sf.tt.ph>0||sf.tt.t>0.2)){thT=clamp((0.60*top-sf.p)*0.45,-0.5,0.4);rate=4.0*mk;sld=true}
   else if(mag>0.3){thT=Math.abs(inp.x)<0.3?(inp.y>0?1.38:-1.20):Math.atan2(inp.y,inp.x);rate=(3.4+1.0*(inp.crouch?1:0))*(0.55+0.45*clamp(sf.V/7,0,1.3));rate*=lerp(0.74,1.0,sstep(0.05,0.4,rel));if(rel>0.72)rate*=1.75;
     if(sf.tt&&thT<-0.3)thT=lerp(thT,-0.3,sstep(0.4,1.3,Math.abs(sf.slip)))}
   else if(now<(sf.rhHold||0)){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}   // after the hit: down to the base of the wave and round into the next turn, not out onto the flat
@@ -2868,7 +2912,7 @@ function stepRide(dt){
    if(T){T.t+=dt;const as0=Math.abs(sf.slip);
      if(T.ph===0){const base=inp.crouch?1.6:1.35;
        if(dn&&T.t>0.18&&sf.pivot>0&&sf.pivotTh>-1.6)sf.pivotTh=Math.max(sf.pivotTh,-0.4);   // held: he stalls high instead of dropping
-       T.target=T.dir*(sstep(0,0.26,T.t)*base+sstep(0.22,0.62,T.t)*(PI-base));
+       {const tq=T.t*mkT;T.target=T.dir*(sstep(0,0.26,tq)*base+sstep(0.22,0.62,tq)*(PI-base))}
        if(as0>2.75){T.ph=1;T.hold=0;if(game.state==='ride'){award('Tail Throw',1100);reqShot('Tail Throw',1100,0.05);sfxNoise(0.5,1900,0.3)}}
        else if(!dn&&T.t>0.24){if(as0<1.75)endSlide();else T.ph=2}}
      else if(T.ph===1){T.target=T.dir*PI;T.hold+=dt;if(!dn||T.hold>5)T.ph=2}
@@ -2933,13 +2977,13 @@ function stepRide(dt){
   if(sf.p>=top-0.12&&vp>0&&sf.tt&&sf.tt.ph>0){sf.p=top-0.12;sf.th=damp(sf.th,-0.2,6,dt)}
   else if(sf.p>=top-0.12&&vp>0&&!auto&&!sf.c360&&!sf.cv){
     const flR=(TB.fl>0||keys.KeyR)&&game.state==='ride'&&ct>0.02&&sf.V>3.8;   /* the FLOATER button */
-    if(flR||S.foam>0.45&&Math.abs(st)<0.62&&ct>0.2&&sf.V>4.8&&game.state==='ride'&&!inp.crouch){sf.fForce=flR;sf.mode='float';sf.fT=0;sf.fFoam=true;sf.fV=Math.min(Math.max(sf.V*(now-sf.foamAt>1.4?1.10:1),CP+1.8),13.5);sf.foamAt=now;sf.burst=0.5;splash(10,S.pos,0.6);sfxNoise(0.4,2200,0.2);return}   // shallow line: up onto the foam and along it
+    if(flR||S.foam>0.45&&Math.abs(st)<0.62&&ct>0.2&&sf.V>4.8&&game.state==='ride'&&!inp.crouch){sf.fForce=flR;sf.mode='float';sf.fT=0;sf.fFoam=true;sf.fV=Math.min(Math.max(sf.V,CP+1.2),13.5);sf.foamAt=now;sf.burst=0.5;splash(10,S.pos,0.6);sfxNoise(0.4,2200,0.2);return}   // shallow line: up onto the foam and along it
     if(S.aEnd>2.6){
       if(sf.s<5&&Math.abs(sf.th)<1.05&&sf.V>5&&game.state==='ride'){sf.mode='float';sf.fT=0;sf.fFoam=false;sf.burst=0.8;return}
-      sf.p=top-0.12;if(sf.pivot<=0){const bk=ct<-0.4;sf.pivot=bk?0.50:0.35;sf.pivotTh=bk?-0.78:-0.7;sf.V*=0.92;if(bk){sf.bsHit=1;sf.burst=1.6;A.impact=0.5;game.shake=0.4;splash(30,S.pos,1.1)}}
+      sf.p=top-0.12;if(sf.pivot<=0){const bk=ct<-0.4;sf.pivot=bk?0.50:0.35;sf.pivotTh=bk?-0.78:-0.7;sf.V*=0.98;if(bk){sf.bsHit=1;sf.burst=1.6;A.impact=0.5;game.shake=0.4;splash(30,S.pos,1.1)}}
     }else if(S.aMax>0.85&&game.state==='ride'){
       if(vp>4.4&&inp.crouch&&!sf.rh){launchAir(vp,inp);return}
-      if(sf.pivot<=0){const vert=Math.abs(st),bk=ct<-0.4;sf.p=top-0.15;sf.pivot=0.50;sf.pivotTh=bk?-0.78:-1.0;if(bk){sf.bsHit=1;sf.burst=Math.max(sf.burst,1.6)}{const fz=S.foam>0.45;if(fz){if(now-sf.foamAt>1.4){sf.foamAt=now;sf.V=Math.min(sf.V*1.10,14)}}else sf.V*=0.9;sf.burst=fz?0.7:1.3;A.impact=fz?0.2:0.45;game.shake=fz?0:0.35}
+      if(sf.pivot<=0){const vert=Math.abs(st),bk=ct<-0.4;sf.p=top-0.15;sf.pivot=0.50;sf.pivotTh=bk?-0.78:-1.0;if(bk){sf.bsHit=1;sf.burst=Math.max(sf.burst,1.6)}{const fz=S.foam>0.45;if(fz){if(now-sf.foamAt>1.4)sf.foamAt=now}else sf.V*=0.97;sf.burst=fz?0.7:1.3;A.impact=fz?0.2:0.45;game.shake=fz?0:0.35}
         if(now-sf.lastTop>0.5&&vp>2.2){const fm_=S.foam>0.45,nm=bk?'Backside Hit':fm_?'Foam Hit':vert>0.86?'Vertical Hit':'Off the Lip',pt=550+vert*500+sf.V*45+(fm_?250:0);award(nm,pt);reqShot(nm,pt,0.16);if(!fm_&&vert>0.8&&!game.attract&&game.waveAge>8&&Math.random()<0.045)sf.fallAt=now+0.28;sfxNoise(0.5,2600,fm_?0.2:0.35);if(fm_)splash(16,S.pos,0.8)}
         sf.lastTop=now;sf.upT=0}
     }else{
@@ -3350,8 +3394,9 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.16);
       {float mx=max(col.r,max(col.g,col.b)),mn=min(col.r,min(col.g,col.b));col=max(mix(vec3(l),col,1.+0.36*(1.-clamp((mx-mn)/(mx+1e-3),0.,1.))*(1.-uWarm)),0.);}   /* vibrance: washed-out colours (hazy sky, pale water) gain the most, skin and strong colours stay put */
-      col+=vec3(-0.018,0.008,0.020)*(1.-smoothstep(0.,0.45,l));   // teal shadows
-      col+=vec3(0.030,0.012,-0.022)*smoothstep(0.45,1.,l);        // golden highlights
+      col+=vec3(-0.016,-0.004,0.030)*(1.-smoothstep(0.,0.45,l));   /* navy shadows, as on the cover */
+      col+=vec3(0.030,0.008,-0.006)*smoothstep(0.45,1.,l);   /* rose-gold lights */
+      {float cy=clamp((min(col.g,col.b)-col.r)*2.2,0.,1.)*clamp((col.g-col.b)*6.+0.5,0.,1.);col.b+=0.10*cy;col.g-=0.035*cy;}   /* green-turquoise water leans toward the cover's cobalt-teal; foliage (little blue in it) is left alone */
       if(uSunK>0.001){vec2 dv=(fUv-uSun)*vec2(uAspect,1.);float dd=length(dv);
         float see=smoothstep(0.90,0.985,dot(tm(texture2D(tDiffuse,uSun).rgb),vec3(0.3,0.59,0.11)));   // only when the sun itself is in view, not behind the wave
         float fl=exp(-dd*dd*26.)*0.30+exp(-dd*6.)*0.07+pow(max(0.,cos(atan(dv.y,dv.x)*6.+0.4)),48.)*exp(-dd*5.)*0.14;
