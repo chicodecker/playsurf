@@ -3239,7 +3239,7 @@ function updateCamera(dt,time){
     {const at=sf.mode==='air'?1:0,w=5.5;sf.airKv=(sf.airKv||0)+((at-sf.airK)*w*w-2*w*(sf.airKv||0))*dt;sf.airK=clamp(sf.airK+sf.airKv*dt,0,1);if(sf.airK<=0||sf.airK>=1)sf.airKv=0}
     if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
     else if(game.replay)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
-    else if(game.attract)kind='follow';   /* behind the menu: the chase camera */   // start screen: two wide shots from far off, the whole wave and the place around it
+    else if(game.attract)kind=BACK?'tele':'follow';   /* behind the menu: the chase camera, or the side camera when he rides backside */   // start screen: two wide shots from far off, the whole wave and the place around it
     else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
       {let base=['follow','tele','front'][game.cam];const a=game.waveAge,D=game.waveDur||80;
        if(game.cam===1&&a>D-Math.max(8,D*0.3)&&a<D-4.5&&!(lastShot!=='front'&&(game.inTube||sf.tubeK>0.05||(S.aEnd>3.3&&sf.s<9)||a-(game.tubeOut||-99)<3||SEC.some(C=>C.fol&&a>C.t0-3.5&&a<C.t0+C.d+2))))base='front';   /* not while a barrel is about to close over him or he is just out of one */   /* the side camera directs the end of the ride: square on from the beach for the last stretch, then back to the side for the arrival */
