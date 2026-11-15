@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PlaySurf">
 <title>PlaySurf | Free Online Surf Game · The Ultimate Surfing Game</title>
 <meta name="description" content="PlaySurf, The Ultimate Surfing Game: surf a perfect left in a wave pool, by day or under the floodlights. Bottom turns, snaps, barrels, floaters and airs. Free 3D surf game in your browser, by Decker Games.">
 <meta property="og:title" content="PlaySurf | Free Online Surf Game · The Ultimate Surfing Game">
@@ -71,6 +73,10 @@ h1 em{display:block;font-size:.13em;letter-spacing:.62em;font-weight:600;font-st
 #intro{position:fixed;inset:0;z-index:50;background:#0c3e52;display:flex;align-items:center;justify-content:center}
 #intro.fade{animation:introOut 1.1s forwards}
 #intro video{width:100%;height:100%;object-fit:cover;display:block}
+#intro #vinBg{display:none}
+#intro.vport #vin{position:absolute;left:50%;top:47%;width:136vw;height:auto;max-width:none;transform:translate(-50%,-50%);object-fit:contain;
+  -webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+#intro.vport #vinBg{display:block;position:absolute;left:-10%;top:-10%;width:120%;height:120%;object-fit:cover;filter:blur(30px) brightness(.5) saturate(1.1)}
 #vinHint{position:absolute;left:50%;bottom:4.5vh;transform:translateX(-50%);font-size:11px;letter-spacing:.32em;opacity:0;color:#cfe8ff;transition:opacity .6s;white-space:nowrap;pointer-events:none}
 #intro.live #vinHint{opacity:.55}#intro.snd #vinHint{opacity:0}
 #intro.off{display:none}
@@ -175,7 +181,24 @@ body.touch .thelp{display:block}
 #rotate{position:absolute;inset:0;z-index:70;display:none;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:#0c3e52;color:#fff;font-size:15px;letter-spacing:.3em;font-weight:700;text-align:center;padding:24px;line-height:1.6}
 #rotate b{font-size:64px;display:block;animation:rot 2.4s ease-in-out infinite}
 @keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
-@media (orientation:portrait){body.touch #rotate{display:flex}}
+@media (orientation:portrait){body.touch #rotate{display:flex}body.touch #psAd{display:none!important}}
+/* full screen: a button like a video player's, on phones and tablets; on iPhone Safari (no full screen for pages) a swipe up hides the browser bars */
+#fsBtn{position:absolute;top:calc(var(--bar,5.5vh) + 10px);right:max(14px,env(safe-area-inset-right,0px));z-index:60;width:42px;height:42px;border-radius:10px;border:2px solid rgba(255,255,255,.55);background:rgba(0,0,0,.32);display:none;align-items:center;justify-content:center;padding:0;pointer-events:auto;cursor:pointer}
+#fsBtn svg,#tFull svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+body.touch.canFS:not(.riding):not(.isFS) #fsBtn{display:flex}
+#tFull{display:none}body.canFS:not(.isFS) #tFull{display:flex}
+#fsSwipe{position:absolute;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(5,22,30,.66);color:#fff;pointer-events:auto;touch-action:pan-y}
+body.swipeOn #fsSwipe{display:flex}
+#fsSwipe b{font-size:20px;letter-spacing:.24em;font-weight:800;margin-top:16px}
+#fsSwipe span{font-size:11px;letter-spacing:.2em;opacity:.72;margin-top:10px}
+.fsHand svg{width:48px;height:48px;fill:none;stroke:#9ff5dc;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;animation:fsUp 1.6s ease-in-out infinite}
+@keyframes fsUp{0%{transform:translateY(24px);opacity:0}25%{opacity:1}80%{transform:translateY(-22px);opacity:1}100%{transform:translateY(-26px);opacity:0}}
+#fsX{position:absolute;top:calc(var(--bar,5.5vh) + 10px);right:max(14px,env(safe-area-inset-right,0px));width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(0,0,0,.3);color:#fff;font-size:15px;cursor:pointer}
+html.fsScroll,html.fsScroll body{overflow:visible!important;height:auto!important}
+html.fsScroll body{min-height:calc(100vh + 320px)}
+/* notch and rounded corners in landscape (viewport-fit=cover): keep the HUD clear of them */
+#hud{left:max(3vw,env(safe-area-inset-left,0px));right:max(3vw,env(safe-area-inset-right,0px))}
+#pop{left:max(4vw,env(safe-area-inset-left,0px))}#rep{right:max(3vw,env(safe-area-inset-right,0px))}
 /* progression: spots, boards, trophies */
 .pbtn.sm{font-size:14px;padding:11px 18px;letter-spacing:.14em}
 .pbtn.wv.lock{opacity:.5;border-style:dashed}
@@ -272,7 +295,13 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="intro"><video id="vin" src="vinheta.mp4" muted playsinline preload="auto"></video><div id="vinHint">CLICK FOR SOUND &nbsp;·&nbsp; ANY KEY TO SKIP</div></div>
+<div id="intro"><video id="vinBg" muted playsinline preload="auto" aria-hidden="true"></video><video id="vin" src="vinheta.mp4" muted playsinline preload="auto"></video><div id="vinHint">CLICK FOR SOUND &nbsp;·&nbsp; ANY KEY TO SKIP</div></div>
+<script>/* the opening on a phone held upright: the film is drawn larger so the whole logo spans the screen, over a soft blurred copy of itself */
+(function(){var v=document.getElementById('vin'),bg=document.getElementById('vinBg'),it=document.getElementById('intro'),q=matchMedia('(orientation:portrait)');
+ var set=function(){var p=q.matches;it.classList.toggle('vport',p);if(p&&!bg.getAttribute('src')){bg.src='vinheta.mp4'}if(p&&!v.paused){try{bg.currentTime=v.currentTime}catch(e){}var r=bg.play();if(r&&r.catch)r.catch(function(){})}};set();
+ v.addEventListener('playing',function(){if(!q.matches)return;try{bg.currentTime=v.currentTime}catch(e){}var r=bg.play();if(r&&r.catch)r.catch(function(){})});
+ if(q.addEventListener)q.addEventListener('change',set);else if(q.addListener)q.addListener(set);
+ try{if(matchMedia('(pointer:coarse)').matches)document.getElementById('vinHint').innerHTML='TAP FOR SOUND &nbsp;·&nbsp; TAP AGAIN TO SKIP'}catch(e){}})();</script>
 <div id="ui">
   <div id="bars"><i></i><i></i></div>
   <div id="hud">
@@ -333,9 +362,11 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
     <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:1">CUT<br>BACK</button><button class="tb sm" id="tFloat" style="--dx:-1;--dy:0;--k:1">FLOATER</button>
     <button class="tb sm" id="tLay" style="--dx:-.3827;--dy:.9239;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-.9239;--dy:.3827;--k:2">BRAKE</button>
-    <div id="tTop"><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button></div>
+    <div id="tTop"><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tPause">&#10074;&#10074;</button><button class="tb" id="tFull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button></div>
     <div id="tHint">STICK: STEER · SNAP AT THE TOP · AIR AT THE LIP · FLOATER ON THE FOAM</div></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
+  <button id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+  <div id="fsSwipe"><div class="fsHand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><b>SWIPE UP FOR FULL SCREEN</b><span>OR SHARE &#9656; ADD TO HOME SCREEN</span><button id="fsX" aria-label="Close">&#10005;</button></div>
   <div id="rep">REPLAY</div>
   <div id="music"><button id="mPrev" aria-label="Previous track">&#9198;</button><div class="mInfo"><small>&#9835; NOW PLAYING</small><b id="mTitle"></b><span id="mBand"></span></div><button id="mNext" aria-label="Next track">&#9197;</button></div>
   <div id="pause">PAUSED</div>
@@ -548,7 +579,7 @@ const LYC_GLSL=`float lycD(vec3 p,out float edge){float az=abs(p.z),fx=p.x*FSX;
   float dSleeve=0.200-az;
   float fr=smoothstep(-0.035,0.0,fx);float yTop=mix(0.866,mix(0.828,0.806,fr),1.-smoothstep(0.034,0.060,az));float dNeck=yTop-p.y;
   float dHem=p.y-mix(0.546,0.552,fr);edge=min(dSleeve,dNeck);return min(min(dSleeve,dNeck),dHem);}
-`;let MIRROR=0;const TXT=[];   // textures with writing on them: mirrored back in RIGHT mode so they still read
+`;let MIRROR=0,BACK=0,RB=0;const TXT=[];   /* BACK 1: the wave breaks the other way from his stance (backside); RB 1: the rider is drawn mirrored this frame */   // textures with writing on them: mirrored back in RIGHT mode so they still read
 const banTex=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=128;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;TXT.push(t);
   whenFonts(()=>{x.fillStyle='#0d2530';x.fillRect(0,0,1024,128);x.fillStyle='#12b5a6';x.fillRect(0,112,1024,16);x.textBaseline='middle';
     x.font=`76px ${SCRIPT}`;x.lineWidth=10;x.lineJoin='round';x.strokeStyle='#06162b';x.strokeText('PlaySurf',36,52);x.fillStyle='#f2fbff';x.fillText('PlaySurf',36,52);
@@ -1768,7 +1799,18 @@ class Sp3{constructor(){this.x=new V3;this.v=new V3;this.init=false}
 const A={drive:0,tube:0,throw:0,snapPrev:0,intent:new Sp(0),hip:new Sp(0.28),snap:new Sp(0),claim:0,aa:0,omPrev:0,crouch:new Sp(0.5),tw:new Sp(0.75),shift:new Sp(0),look:new Sp(0),pitch:new Sp(0),hF:new Sp3(),hB:new Sp3(),wind:new V3,prone:0,flail:0,grab:0,air:0,impact:0};
 const AT={drive:0,tube:0,intent:0,vup:0,hip:0.15,snap:0,claim:0,crouch:0.42,tw:0.45,shiftX:0,look:0,rail:0,lt:0,drag:0,grab:0,air:0,paddle:0};
 function paddlePt(ph,side,o){const sn=Math.sin(ph);o.set(0.10+0.47*Math.cos(ph),sn>0?-0.33*sn:-0.12*sn,side*0.36)}   /* long reach, the hand buried deep through the pull */
+/* backside: the rider is drawn mirrored across the stringer (riderG.scale.z<0), so everything the pose reads from the board and the world
+   comes in mirrored too: the rail he leans on is his heels, the tail kicks the other way, the horizon is mirrored. His eyes go back over
+   the lead shoulder to the wave, and in the barrel the trailing hand grabs the outside rail (pig-dog) instead of dragging on the wall. */
 function poseRider(time,dt){
+  if(!RB)return poseRider0(time,dt);
+  const k0={rail:AT.rail,intent:AT.intent,slip:AT.slipYaw,look:AT.look,drag:AT.drag,gz:AT.gz,tw:AT.tw},g0=A.grab;
+  AT.rail=-(AT.rail||0);AT.intent=-(AT.intent||0);AT.slipYaw=-(AT.slipYaw||0);
+  if(sf.mode==='ride'&&!AT.claim){AT.look=clamp(-0.22-0.45*(AT.look||0),-0.75,0.30);AT.gz=(AT.gz||0)+0.06;AT.tw=(AT.tw||0)+0.38*clamp(k0.rail||0,0,1)}   // on the heels the shoulders open to the wave
+  const dg=AT.drag||0;if(dg>0.01){A.grab=Math.max(g0,0.80*dg);AT.drag=0}
+  poseRider0(time,dt);
+  AT.rail=k0.rail;AT.intent=k0.intent;AT.slipYaw=k0.slip;AT.look=k0.look;AT.drag=k0.drag;AT.gz=k0.gz;AT.tw=k0.tw;A.grab=g0}
+function poseRider0(time,dt){
   // Posture rules below were tuned frame by frame against footage of a goofy-footer surfing a wave-pool left frontside:
   // huge range between full squat and standing tall, torso folding far forward the way the chest faces, arms low and in line
   // with the board, trailing arm up only at the lip, lay-back as the tail releases, wide stance with open knees.
@@ -1777,7 +1819,7 @@ function poseRider(time,dt){
         hp=A.hip.step(AT.hip,dt,1.9,0.8),sn=clamp(A.snap.step(AT.snap,dt,3.0,0.9),0,1.1);
   const pr=A.prone,st=1-pr*pr*(3-2*pr),lamN=clamp(AT.rail,-1,1)*st,toe=Math.max(lamN,0),heel=Math.max(-lamN,0),fl=A.flail,air=A.air,cl=A.claim,gr=A.grab;
   const ti=clamp(A.intent.step(AT.intent,dt,3.1,0.85),-1.1,1.1)*st,toeI=Math.max(ti,0),heelI=Math.max(-ti,0),up=AT.vup*st,th_=A.throw,drv=A.drive=damp(A.drive,AT.drive||0,5,dt),tub=A.tube=damp(A.tube,AT.tube||0,5,dt),rev=A.rev=damp(A.rev||0,AT.rev||0,6,dt);
-  WU.copy(UPV).applyQuaternion(_q.copy(riderG.quaternion).invert());
+  WU.copy(UPV).applyQuaternion(_q.copy(riderG.quaternion).invert());if(RB)WU.z=-WU.z;   // mirrored rider: mirrored horizon
   // pelvis & legs
   const sy=(AT.slipYaw||0)*st,cs=Math.cos(sy),ss=Math.sin(sy);
   const bh=(A.bsh=damp(A.bsh||0,AT.bsh||0,(AT.bsh||0)>(A.bsh||0)?8:4.5,dt))*st;   // backside hit off the foam
@@ -1804,7 +1846,7 @@ function poseRider(time,dt){
   setLimb(RP.cuff,legB.C[legB.R-4],legB.C[legB.R-2]);
   // torso: folds forward the way the chest faces (opened toward the nose); stays upright in the world as the board goes vertical at the lip
   A.layV=(A.layV||0)+(((AT.lay||0)-(A.lay||0))*110-(A.layV||0)*13)*dt;A.lay=clamp((A.lay||0)+A.layV*dt,-0.2,1.12);const lay=A.lay;   // a spring: the throw overshoots a little, and the water pushes him back up past upright
-  const fold=lerp(clamp(0.22+1.0*c-0.20*up+0.10*toe-0.80*sn+0.14*drv-0.10*air+0.35*gr-0.30*cl-2.3*lay,-0.85-1.0*Math.max(0,lay),1.25),1.15,bh)+0.32*pu,sf_=Math.sin(fold);
+  const fold=lerp(clamp(0.22+1.0*c-0.20*up+0.10*toe-(RB?0.42*heel*c:0)-0.80*sn+0.14*drv-0.10*air+0.35*gr-0.30*cl-2.3*lay,-0.85-1.0*Math.max(0,lay),1.25),1.15,bh)+0.32*pu,sf_=Math.sin(fold);
   _a.set(sf_*Math.sin(tw)+0.06-sx*0.4+0.018*Math.sin(time*1.7)+fl*Math.sin(time*9)*0.3,Math.cos(fold),-sf_*Math.cos(tw)-0.10*lamN+0.014*Math.sin(time*2.3+1)).normalize();_b.set(0.95,0.31,0);
   J.spine.lerpVectors(_b,_a,st).addScaledVector(WU,(0.13+0.16*toe+0.10*heel+0.42*sn*(1-lay)+0.3*cl)*st*(1-gr)*(1-0.75*Math.max(0,lay))*(1-0.85*bh)).normalize();
   if(lay>0.01)J.spine.addScaledVector(WU,-0.32*lay).normalize();   // back flat on the water
@@ -1816,7 +1858,7 @@ function poseRider(time,dt){
   // head: gaze levelled against the world horizon, then pitched (up at the lip in a bottom turn, down at the landing); the neck extends as the torso folds
   J.neck.copy(J.chest).addScaledVector(J.spine,0.085);
   _c.copy(WU).multiplyScalar(1-air).addScaledVector(J.spine,air).normalize();   // in the air the head turns and flips with the body instead of twisting to keep the horizon level
-  _a.set(Math.cos(la),0,-Math.sin(la));_a.addScaledVector(_c,-_a.dot(_c)).normalize().addScaledVector(_c,-0.06+0.40*toe*(0.4+0.6*AT.vup)+0.22*cl-0.42*gr-0.25*air*(1-gr)-0.14*sn+(A.gz=damp(A.gz||0,AT.gz||0,6,dt))).normalize();
+  _a.set(Math.cos(la),0,-Math.sin(la));_a.addScaledVector(_c,-_a.dot(_c)).normalize().addScaledVector(_c,-0.06+0.40*(RB?0.75*heel:toe)*(0.4+0.6*AT.vup)+0.22*cl-0.42*gr-0.25*air*(1-gr)-0.14*sn+(A.gz=damp(A.gz||0,AT.gz||0,6,dt))).normalize();
   _b.set(1,0.2,0);J.look.lerpVectors(_b,_a,st).normalize();
   _y.copy(J.spine).multiplyScalar((0.50+0.6*air)*st).addScaledVector(_c,0.80*(1-0.5*air)*st).addScaledVector(UPV,1-st).addScaledVector(J.spine,0.9*pr).addScaledVector(J.axis,(A.hroll=damp(A.hroll||0,AT.hroll||0,7,dt))*st).normalize();   // head tilt (celebrations)
   J.hbase.copy(J.neck).addScaledVector(_y,0.088).addScaledVector(J.look,0.008);
@@ -1855,11 +1897,11 @@ function poseRider(time,dt){
    {const live=(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub*0.7)*(1-Math.min(1,Math.abs(lay))),tq=sstep(1.0,4.2,Math.abs(sf.om||0))*live;   /* arms that ride: in a hard turn the trail arm lifts and swings out for balance and the lead arm reaches into the turn; cruising, small balance movements */
     J.hBt.y+=0.11*tq+0.016*Math.sin(time*1.6+1.0)*live;_d.subVectors(J.shB,J.shF);_d.y=0;if(_d.lengthSq()>1e-6){_d.normalize();J.hBt.addScaledVector(_d,0.07*tq)}
     J.hFt.addScaledVector(J.front,0.09*tq);J.hFt.y+=0.05*tq+0.012*Math.sin(time*1.9)*live}}
-  if(cl>0.01&&AT.claimV===6){const w=Math.min(1,cl);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());   // points at the camera, then the hang loose
+  if(cl>0.01&&AT.claimV===6){const w=Math.min(1,cl);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());if(RB)_c.z=-_c.z;   // points at the camera, then the hang loose
     if(AT.clPh)_b.copy(_c).sub(J.shF).normalize().multiplyScalar(0.64).add(J.shF);
     else{_b.set(0.30,0,-0.50).addScaledVector(WU,0.85).normalize().multiplyScalar(0.56).add(J.shF);_b.x+=0.06*Math.sin(time*15)}
     J.hFt.lerp(_b,w);_a.set(-0.40,0,0.30).addScaledVector(WU,-0.75).normalize().multiplyScalar(0.42).add(J.shB);J.hBt.lerp(_a,w)}
-  else if(cl>0.01&&AT.claimV===7){const w=Math.min(1,cl),sh=0.035*Math.sin(time*9);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());_c.y=0;_c.normalize();   // both open hands up at the camera: a 10
+  else if(cl>0.01&&AT.claimV===7){const w=Math.min(1,cl),sh=0.035*Math.sin(time*9);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());if(RB)_c.z=-_c.z;_c.y=0;_c.normalize();   // both open hands up at the camera: a 10
     _b.copy(_c).multiplyScalar(1.0).addScaledVector(WU,0.38).normalize().multiplyScalar(0.6).add(J.shF);_b.addScaledVector(WU,sh);J.hFt.lerp(_b,w);
     _a.copy(_c).multiplyScalar(1.0).addScaledVector(WU,0.38).normalize().multiplyScalar(0.6).add(J.shB);_a.addScaledVector(WU,-sh);J.hBt.lerp(_a,w)}
   else if(cl>0.01&&AT.claimV>=8){const w=Math.min(1,cl),e=AT.clE||0,v=AT.claimV,T=2*PI,F=J.front,S=J.axis,U=WU;   // end-of-wave celebrations: 67, macarena, "ihhh, não sei", "tô doidão"
@@ -1891,7 +1933,7 @@ function poseRider(time,dt){
   if(pu>0.01){_a.subVectors(DROP.hand,J.shF);const l=_a.length();if(l>0.62)_a.multiplyScalar(0.62/l);_a.add(J.shF);J.hFt.lerp(_a,pu);   // lead hand on the intruder's tail
     _b.subVectors(DROP.hand,J.shB);const lb=_b.length();if(lb>0.62)_b.multiplyScalar(0.62/lb);_b.add(J.shB);J.hBt.lerp(_b,pu)}   // both hands on the board   // trail arm back: the shove comes from the shoulders
   if(AT.drag>0.01){const z=-0.62,y=Math.min(-z*Math.tan(clamp(AT.lt,0,1.1))+0.02,J.shB.y+0.10);_a.set(J.pel.x-0.20,y,z);J.hBt.lerp(_a,AT.drag)}
-  {const ia=clamp(A.aa*0.012,-0.18,0.18)*st;J.hFt.z+=ia;J.hBt.z-=ia;J.hFt.y+=Math.abs(ia)*0.3;J.hBt.y+=Math.abs(ia)*0.3}
+  {const ia=clamp(A.aa*0.012,-0.18,0.18)*st*(RB?-1:1);J.hFt.z+=ia;J.hBt.z-=ia;J.hFt.y+=Math.abs(ia)*0.3;J.hBt.y+=Math.abs(ia)*0.3}
   if(air>0.01){const nk=sstep(0,0.3,AT.npTh||0);_a.set(J.shF.x+lerp(0.28,0.32,nk),J.shF.y+lerp(-0.12,0.06,nk),J.shF.z+lerp(-0.24,-0.30,nk));J.hFt.lerp(_a,air);_a.set(J.shB.x+lerp(-0.28,-0.34,nk),J.shB.y+lerp(-0.08,0.14,nk),J.shB.z+lerp(-0.08,0.16,nk));J.hBt.lerp(_a,air)}   // nose pick: both arms up and out for balance
   if(gr>0.01){_a.set(-0.31,0.075,-0.255);J.hBt.lerp(_a,gr);_a.set(J.knF.x+0.10,J.knF.y-0.10,J.knF.z-0.16);J.hFt.lerp(_a,gr*0.85)}
   if(fl>0.01){_a.set(J.shF.x+0.3*Math.sin(time*11),J.shF.y+0.45,J.shF.z+0.3*Math.cos(time*9));J.hFt.lerp(_a,fl);_a.set(J.shB.x-0.3*Math.cos(time*10),J.shB.y+0.4,J.shB.z+0.3*Math.sin(time*12));J.hBt.lerp(_a,fl)}
@@ -2096,12 +2138,43 @@ function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStor
  $('tCam').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();setCam(game.cam+1);$('tCam').textContent=['CHASE','SIDE','FRONT'][game.cam]});
  $('tPause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();key('KeyP',true);key('KeyP',false)});
  $('touch').addEventListener('contextmenu',e=>e.preventDefault())}
-function goFull(){try{const d=document.documentElement;if(d.requestFullscreen&&!document.fullscreenElement)d.requestFullscreen({navigationUI:'hide'}).then(()=>{try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}}).catch(()=>{})}catch(_){}}   // full screen and landscape where the browser allows it
+/* full screen on phones. Turning the phone sideways asks for it at once; browsers only grant it from a tap, so if that is refused the very
+   next tap anywhere takes the game full screen (and locks landscape). Swiping out of it is respected until the phone is turned again.
+   iPhone Safari has no full screen for web pages: there the game runs full screen when it is opened from the home screen icon. */
+const FS={api:!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen),out:false,ours:false,req:false};
+const isFS=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+const landQ=matchMedia('(orientation:landscape)');
+const standalone=(()=>{try{return !!navigator.standalone||matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches}catch(e){return false}})();
+function goFull(){try{const d=document.documentElement;if(isFS()||!FS.api||FS.req)return;FS.ours=true;FS.req=true;
+  const rq=d.requestFullscreen?d.requestFullscreen({navigationUI:'hide'}):d.webkitRequestFullscreen();
+  if(rq&&rq.then)rq.then(()=>{FS.req=false;try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}}).catch(()=>{FS.req=false;if(!isFS())FS.ours=false});setTimeout(()=>{FS.req=false},1500)}catch(_){FS.req=false;FS.ours=false}}   // full screen and landscape where the browser allows it
+function fsAuto(){if(document.body.classList.contains('touch')&&landQ.matches&&!FS.out&&!standalone)goFull()}
+['pointerup','touchend'].forEach(ev=>addEventListener(ev,e=>{if(ev==='pointerup'&&e.pointerType==='mouse')return;fsAuto()},{capture:true,passive:true}));
+{const onTurn=()=>{if(!landQ.matches)FS.out=false;else fsAuto()};if(landQ.addEventListener)landQ.addEventListener('change',onTurn);else if(landQ.addListener)landQ.addListener(onTurn)}
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{if(isFS())return;if(FS.ours&&landQ.matches)FS.out=true;FS.ours=false;setTimeout(()=>dispatchEvent(new Event('resize')),60)}));
+const IOSW=!FS.api&&!standalone&&/iP(hone|od)|iPad/.test(navigator.userAgent);   // iPhone browsers: no full screen for pages
+document.body.classList.toggle('iosweb',IOSW);document.body.classList.toggle('canFS',(FS.api||IOSW)&&!standalone);
+{const fsCls=()=>{if(FS.api)document.body.classList.toggle('isFS',isFS())};['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,fsCls));addEventListener('resize',()=>setTimeout(fsCls,80));setInterval(fsCls,1000)}
+/* iPhone: the page is made a little taller than the screen, so a swipe up scrolls it and Safari tucks its bars away (what game sites do).
+   The prompt shows on the menu while the bars are out; the full screen button brings it back any time. */
+const SW={off:false,force:false};
+const barsOn=()=>landQ.matches&&innerHeight<Math.min(screen.width,screen.height)*0.94;
+function swUpdate(){if(!IOSW)return;const b=document.body,t=b.classList.contains('touch'),l=landQ.matches;
+  document.documentElement.classList.toggle('fsScroll',t&&l);
+  const bars=barsOn();if(!bars)SW.force=false;b.classList.toggle('isFS',l&&!bars);   // bars tucked away: as good as full screen
+  b.classList.toggle('swipeOn',t&&l&&bars&&(SW.force||(!SW.off&&!b.classList.contains('riding'))))}
+if(IOSW){['resize','scroll','orientationchange'].forEach(ev=>addEventListener(ev,()=>setTimeout(swUpdate,60),{passive:true}));setInterval(swUpdate,900);swUpdate()}
+function fsButton(e){if(e){e.stopPropagation();e.preventDefault()}FS.out=false;if(FS.api)goFull();else if(IOSW){SW.force=true;swUpdate()}}
+$('fsBtn').addEventListener('click',fsButton);$('tFull').addEventListener('click',fsButton);
+$('fsX').addEventListener('click',e=>{e.stopPropagation();SW.off=true;SW.force=false;swUpdate()});
 $('goMob').addEventListener('click',e=>{e.stopPropagation();setTouch(true);goFull();wzGo(2)});
 try{const t=localStorage.getItem('playsurf_touch');setTouch(t===null?isTouchDev:t==='1')}catch(e){setTouch(isTouchDev)}
 let STANCE=0;   /* the stance picked in the menu; the wave's direction follows it except where a spot fixes it */
-function setWaveDir(m){MIRROR=m?1:0;gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR))}   /* which way the wave breaks on screen, without touching who the surfer is */
-function setMirror(m){STANCE=m?1:0;MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else riderG.scale.set(1,1,1);   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));
+function setWaveDir(m){MIRROR=m?1:0;gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));setBack()}   /* which way the wave breaks on screen, without touching who the surfer is */
+/* backside: when the wave breaks the other way from his stance (a goofy at Cloud 9 or Campeche, the other side at Trestles) he rides it with
+   his back to the wave: the rider is mirrored across the stringer and the pose reads the rail from the heels (see poseRider) */
+function setBack(){BACK=STANCE!==MIRROR?1:0}
+function setMirror(m){STANCE=m?1:0;MIRROR=m?1:0;if(m)riderG.scale.set(0.96,1.05,0.9);else riderG.scale.set(1,1,1);   /* the regular: taller and leaner */gradePass.uniforms.uFlip.value=MIRROR;ledMat.uniforms.uFlip.value=MIRROR;LYC.f.value=MIRROR;ALT.value=MIRROR;TXT.forEach(t=>txtFlip(t,MIRROR));BACK=0;
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});
 var WZ={s:1};
@@ -2310,7 +2383,7 @@ function nextCeleb(){if(game.attract)return CELEB[Math.floor(Math.random()*CELEB
   if(game.celebI===undefined){game.celebI=0;try{game.celebI=(parseInt(localStorage.getItem('playsurf_celeb')||'0',10)||0)%CELEB.length}catch(e){}}
   const C=CELEB[game.celebI];game.celebI=(game.celebI+1)%CELEB.length;try{localStorage.setItem('playsurf_celeb',String(game.celebI))}catch(e){}return C}
 const _cd=new THREE.Vector3();
-function celebBody(v,e){_cd.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());   // chest and eyes turn to the camera on the beach
+function celebBody(v,e){_cd.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());if(RB)_cd.z=-_cd.z;   // chest and eyes turn to the camera on the beach
   AT.tw=clamp(Math.atan2(_cd.x,-_cd.z),0.25,1.45);AT.hip=clamp(0.28+(AT.tw-0.75)*0.5,-0.3,0.7);AT.look=clamp(Math.atan2(-_cd.z,_cd.x),-0.6,1.3);const T=2*PI;
   if(v===8){AT.crouch=0.40+0.04*Math.sin(e*T*2.3);AT.hroll=0.10*Math.sin(e*T*1.15)}   // 67
   else if(v===9){const hip=e>2.7;AT.shiftX=(hip?0.06:0.03)*Math.sin(e*T*(hip?2.4:1.9));AT.crouch=0.38+(hip?0.08*Math.abs(Math.sin(e*T*1.2)):0);AT.hroll=0.06*Math.sin(e*T*0.95)}   // macarena: the hips keep time, then the wiggle
@@ -2834,6 +2907,7 @@ function angVel(q0,q1,dt,out){_tbQ.copy(q1).multiply(_tbQ2.copy(q0).invert());if
   const sn=Math.sqrt(Math.max(1e-12,1-_tbQ.w*_tbQ.w)),an=2*Math.acos(clamp(_tbQ.w,-1,1));return out.set(_tbQ.x/sn,_tbQ.y/sn,_tbQ.z/sn).multiplyScalar(dt>1e-4&&an>1e-6?an/dt:0)}
 function extrapQ(q,w,te,out){const a=w.length()*te;if(a<1e-6)return out.copy(q);return out.setFromAxisAngle(_tbA.copy(w).normalize(),a).multiply(q)}   /* q carried on at angular velocity w for an effective time te */
 function placeSurfer(dt,time){
+  RB=BACK&&sf.mode!=='reef'?1:0;riderG.scale.z=Math.abs(riderG.scale.z)*(RB?-1:1);LYC.f.value=MIRROR^RB;   // backside is drawn mirrored (the jersey print flipped back so it reads); walking on the reef he is himself again
   shadowM.visible=false;
   if(!sf.visible){riderG.visible=boardG.visible=false;return}
   {const m=sf.mode,m0=A.lastMode;A.lastMode=m;   /* onto or off a floater: the board and rider ease from the motion they already had into the new pose */
@@ -2994,8 +3068,8 @@ function placeSurfer(dt,time){
   A.flail=damp(A.flail,0,8,dt);A.grab=damp(A.grab,grabT,12,dt);A.air=damp(A.air,airT,9,dt);A.claim=damp(A.claim,AT.claim,7,dt);
   if(dt>1e-4){A.aa=damp(A.aa,clamp((sf.om-A.omPrev)/dt,-30,30),10,dt);A.omPrev=sf.om}
   poseRider(time,dt);
-  if(sf.mode==='ride'&&!sf.laySplash&&(A.lay||0)>0.6){sf.laySplash=true;tL.copy(J.chest).applyQuaternion(riderG.quaternion).add(riderG.position);splash(34,tL,1.0);sfxNoise(0.5,1500,0.3);game.shake=Math.max(game.shake||0,0.15)}   // his back slaps the water
-  if(AT.drag>0.6&&sf.mode==='ride'){accHand+=170*dt;_d.copy(J.haB).applyQuaternion(riderG.quaternion).add(riderG.position);
+  if(sf.mode==='ride'&&!sf.laySplash&&(A.lay||0)>0.6){sf.laySplash=true;tL.copy(J.chest);if(RB)tL.z=-tL.z;tL.applyQuaternion(riderG.quaternion).add(riderG.position);splash(34,tL,1.0);sfxNoise(0.5,1500,0.3);game.shake=Math.max(game.shake||0,0.15)}   // his back slaps the water
+  if(AT.drag>0.6&&sf.mode==='ride'&&!RB){accHand+=170*dt;_d.copy(J.haB).applyQuaternion(riderG.quaternion).add(riderG.position);
     while(accHand>=1){accHand--;emit(_d.x+rnd(-0.05,0.05),_d.y+rnd(-0.03,0.05),_d.z+rnd(-0.05,0.05),-sf.f.x*rnd(1,3)-CP*0.25+rnd(-0.5,0.5),rnd(0.6,2.6),-sf.f.z*rnd(1,3)+rnd(0.2,1.4),rnd(0.3,0.6),0.04,rnd(0.14,0.3),0.34,7,1.2)}}
 }
 function boardSpray(dt){
@@ -3259,11 +3333,11 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
   if(!n){o.remove();return 'off'}
   o.width=innerWidth*2;o.height=innerHeight*2;const x=o.getContext('2d'),rows=Math.ceil(n/cols),cw=o.width/cols,ch=o.height/rows;
   for(let i=0;i<n;i++){if(cb)cb(i);const t1=game.waveAge+dt;let guard=0;while(game.waveAge<t1&&guard++<600&&game.state==='ride')tick(1/60,false);tick(1e-4,true);
-    pv.copy(J.pel).lerp(J.chest,0.5).applyQuaternion(riderG.quaternion).add(riderG.position);pv.project(camera);let sw=c.width/zoom,sh=sw*ch/cw;if(sh>c.height){sh=c.height;sw=sh*cw/ch}
+    pv.copy(J.pel).lerp(J.chest,0.5);if(RB)pv.z=-pv.z;pv.applyQuaternion(riderG.quaternion).add(riderG.position);pv.project(camera);if(MIRROR)pv.x=-pv.x;let sw=c.width/zoom,sh=sw*ch/cw;if(sh>c.height){sh=c.height;sw=sh*cw/ch}
     const cx=clamp((pv.x*.5+.5)*c.width,sw/2,c.width-sw/2),cy=clamp((1-(pv.y*.5+.5))*c.height,sh/2,c.height-sh/2);
     x.drawImage(c,cx-sw/2,cy-sh/2,sw,sh,(i%cols)*cw,Math.floor(i/cols)*ch,cw,ch);
     x.fillStyle='#fff';x.font='22px monospace';x.fillText(i+' '+sf.mode[0]+' th'+sf.th.toFixed(1)+' r'+sf.rail.toFixed(1)+' c'+A.crouch.x.toFixed(2),(i%cols)*cw+8,Math.floor(i/cols)*ch+26)}
-  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB,FAUNA,audio,sfxPlay,DRONE,endRide,CROWD,CNPC,ULU,BOTE,SUN,DAWN,sunL,hemiL,fillL,LYC,DROP,SHOUT,setNpcYaw:v=>{NPCYAW=v}};
+  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB,FAUNA,audio,sfxPlay,DRONE,endRide,CROWD,CNPC,ULU,BOTE,SUN,DAWN,sunL,hemiL,fillL,LYC,DROP,SHOUT,setNpcYaw:v=>{NPCYAW=v},setMirror,setWaveDir,get stance(){return {STANCE,MIRROR,BACK}},FS};
 startAttract();
 requestAnimationFrame(frame);
 </script>
