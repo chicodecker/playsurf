@@ -455,7 +455,7 @@ function makeNoiseTex(){
 const noiseTex=makeNoiseTex();
 
 /* ───────────────────────── sky ───────────────────────── */
-const TOD={value:0};   // 0 = day, 1 = night (shared by every shader)
+const TOD={value:0};const RIM={value:new THREE.Color(0.30,0.36,0.42)};   /* rim light on the surfer: sky and water light wrapping round his edges so he stands off the wave */   // 0 = day, 1 = night (shared by every shader)
 const DAWN={value:0};   /* 1 = first light: Uluwatu and Pipeline */
 const SKY_GLSL=`
 uniform vec3 uSun;uniform float uNight;uniform float uDawn;
@@ -1250,19 +1250,19 @@ function setTOD(n,save){n=n?1:0;TOD.value=n;game.night=n;if(save!==false)try{loc
     scene.fog.color.setRGB(0.030,0.045,0.085);renderer.toneMappingExposure=1.05;bloom.strength=0.62;
     S3(U.uWA,0.002,0.022,0.060);S3(U.uWB,0.006,0.120,0.250);S3(U.uG1,0.0,0.18,0.38);S3(U.uG2,0.22,0.78,1.0);S3(U.uFl,0.10,0.50,0.85);S3(U.uFlL,0.01,0.08,0.18);S3(U.uSpecC,0.85,0.92,1.0);
     S3(U.uFoamA,0.16,0.22,0.36);S3(U.uFoamB,0.62,0.72,0.92);U.uFlK.value=0.75;partMat.uniforms.uTint.value.set(0.40,0.50,0.74);
-    palmMat.color.set(0x1a2026);lampMat.color.setRGB(9,8.4,7.0);BAN.forEach(m=>m.material.color.setRGB(1.5,1.5,1.5));BILL.forEach(m=>m.material.color.setRGB(1.9,1.9,1.9))}
+    RIM.value.setRGB(0.10,0.17,0.32);palmMat.color.set(0x1a2026);lampMat.color.setRGB(9,8.4,7.0);BAN.forEach(m=>m.material.color.setRGB(1.5,1.5,1.5));BILL.forEach(m=>m.material.color.setRGB(1.9,1.9,1.9))}
   else{SUN.set(0.42,0.50,-0.76).normalize();sunL.color.set(0xffdcae);sunL.intensity=3.7;hemiL.color.set(0xd2e6ff);hemiL.groundColor.set(0x2f9ccc);   /* a hot tropical sun, the shade filled by blue sky and turquoise sea */hemiL.intensity=0.62;fillL.color.set(0xffffff);fillL.intensity=0.55;fillL.position.set(0.6,0.5,1);
     scene.fog.color.setRGB(0.56,0.80,1.0);renderer.toneMappingExposure=1.0;bloom.strength=0.30;
     S3(U.uWA,0.0,0.030,0.068);S3(U.uWB,0.003,0.200,0.250);S3(U.uG1,0.01,0.32,0.38);S3(U.uG2,0.16,1.0,0.86);S3(U.uFl,0.36,0.56,0.52);S3(U.uFlL,0.08,0.24,0.27);S3(U.uSpecC,1.1,1.0,0.86);   /* clear Caribbean turquoise where the light comes through, deep blue at the base */
     S3(U.uFoamA,0.68,0.80,0.90);S3(U.uFoamB,1.12,1.10,1.05);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
-    palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
+    RIM.value.setRGB(0.30,0.36,0.42);palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
   if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(!n&&(SPOT.id===2||SPOT.id===3));bakeEnv();const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
 function dawnTint(on){DAWN.value=on?1:0;bloom.threshold=0.9;if(!on)return;const U=waveMat.uniforms,S3=(u,r,g,b)=>u.value.set(r,g,b);   /* first light: the sun just off the horizon out to sea, behind the wave, so the lip glows and a gold road runs across the water */
   SUN.set(0.50,0.25,-0.83).normalize();   /* low over the sea, off to the shoulder side so it shows above the wave */sunL.color.set(0xffa456);sunL.intensity=2.3;hemiL.color.set(0x8f7fb8);hemiL.groundColor.set(0x223654);hemiL.intensity=0.62;fillL.color.set(0x8aa0ff);fillL.intensity=0.55;fillL.position.set(-0.5,0.4,1);
   scene.fog.color.setRGB(0.60,0.36,0.38);renderer.toneMappingExposure=1.0;bloom.strength=0.34;bloom.threshold=1.45;   /* only the sun and the glitter bloom: the bright sky round it must not turn into fog */
   S3(U.uWA,0.0,0.016,0.040);S3(U.uWB,0.006,0.115,0.165);S3(U.uG1,0.02,0.24,0.27);S3(U.uG2,0.42,1.0,0.50);
-  S3(U.uSpecC,2.0,1.15,0.50);S3(U.uFoamA,0.58,0.52,0.66);S3(U.uFoamB,1.10,0.92,0.78);partMat.uniforms.uTint.value.set(1.06,0.86,0.78)}
+  RIM.value.setRGB(0.55,0.30,0.16);S3(U.uSpecC,2.0,1.15,0.50);S3(U.uFoamA,0.58,0.52,0.66);S3(U.uFoamB,1.10,0.92,0.78);partMat.uniforms.uTint.value.set(1.06,0.86,0.78)}
 /* ───────────────────────── spots ───────────────────────── */
 // Teahupo'o: open ocean over a reef, the green peaks of Tahiti behind; the wave is bigger and keeps throwing: barrel after barrel with open wall between for airs
 const tahitiG=new THREE.Group();tahitiG.visible=false;scene.add(tahitiG);
@@ -1795,6 +1795,8 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        float bk=1.-smoothstep(-0.04,-0.018,vMN.x*FSX);vec2 pu=vec2(0.5+mix(vMN.z,-vMN.z,uLycF)/0.15,(vMN.y-0.615)/0.15);
        float pa=bk*step(0.,pu.x)*step(pu.x,1.)*step(0.,pu.y)*step(pu.y,1.)*texture2D(uLycTex,pu).a;fab=mix(fab,uLycT,pa*0.95);
        diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.7*lycK);material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.5,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(material.sheenColor,uLyc*0.6+0.08,lycK);\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
+   {const ob=mesh.material.onBeforeCompile;mesh.material.onBeforeCompile=sh=>{ob(sh);sh.uniforms.uRim=RIM;
+     sh.fragmentShader='uniform vec3 uRim;\n'+sh.fragmentShader.replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g);}\n#include <opaque_fragment>')}}
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
@@ -2147,7 +2149,7 @@ addEventListener('keydown',e=>{
   if(e.code==='BracketRight'||e.code==='KeyT'){musicGo();musStep(1)}if(e.code==='BracketLeft'){musicGo();musStep(-1)}if(e.code==='KeyK')musPause();
   if(e.code==='KeyR'&&game.state!=='menu'&&!game.attract)startWave()});
 addEventListener('keyup',e=>{keys[e.code]=false});
-function setCam(i){game.cam=((i%3)+3)%3;$('camBtn').textContent='CAMERA: '+['CHASE','SIDE','FRONT'][game.cam]+' (C)'}
+function setCam(i){game.cam=((i%3)+3)%3;game.camPicked=true;$('camBtn').textContent='CAMERA: '+['CHASE','SIDE','FRONT'][game.cam]+' (C)'}
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 $('goDesk').addEventListener('click',e=>{e.stopPropagation();setTouch(false);wzGo(2)});
@@ -2309,6 +2311,7 @@ function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classLi
     if(sf.mode==='air')k='air';else if(sf.mode==='float')k='flo';else if(sf.mode!=='ride'||sf.introT>0)k='';
     else if(game.inTube||(S.aEnd>3.3&&sf.s<6))k='tube';
     else if(busy)k='';
+    else if(sf.exitWin>0)k='exit';   /* straight off the spit: the moment for a big move */
     else if(sf.openT>0)k='';
     else if(st>0.3&&rel>0.22)k=fa>0.35?'lipF':'lip';   /* only as he starts up the face for a move; the bottom turn needs no telling */
     else k=''}
@@ -2320,7 +2323,8 @@ function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classLi
     lipF:t?[I('FOAM AHEAD','FLOATER'),I('HIT THE FOAM','SNAP')]:[I('FLOATER','R'),I('SNAP','\u2193')],
     cut:t?[I('BACK TO THE FOAM','CUT BACK')]:[I('CUTBACK','OPTION')],
     flo2:t?[I('FOAM AHEAD','FLOATER')]:[I('FLOATER','R')],
-    carve:t?[I('CARVE','STICK '+bk)]:[I('CARVE',bk),I('CARVE 360','G')],
+    carve:t?[I('CARVE','CARVE')]:[I('CARVE',bk),I('CARVE 360','G')],
+    exit:t?[I('OUT OF THE BARREL · CARVE','CARVE'),I('OUT OF THE BARREL · SNAP','SNAP')]:[I('OUT OF THE BARREL · CARVE',bk),I('OUT OF THE BARREL · SNAP','\u2193'),I('OUT OF THE BARREL · CUTBACK','OPTION')],
     air:t?[I('SPIN','STICK'),I('GRAB','AIR')]:[I('SPIN',bk+' '+fw),I('FLIP','\u2191 \u2193'),I('GRAB','SPACE')],
     flo:t?[I('DROP','STICK \u2193')]:[I('DROP','\u2193')],
     tube:t?[I('DEEPER','BRAKE'),I('STAY ON THE WALL')]:[I('DEEPER','SHIFT'),I('PUMP',fw)]}[k];
@@ -2447,6 +2451,7 @@ function award(name,pts,small){if(/^(Snap|Tail Throw|Roundhouse|Cutback|Off the 
   let tot=pts,mult=1;
   if(!small){const now=game.waveAge;game.marks.push(now);game.combo=now-game.comboT<5.5?game.combo+1:1;game.comboT=now;mult=1+0.25*Math.min(game.combo-1,6)}
   tot=Math.round(pts*mult/10)*10;game.pts+=tot;game.list.push({name,pts:tot,t:game.waveAge,small:!!small});
+  if(!small&&sf.exitWin>0&&!/Barrel|Spit/.test(name)){sf.exitWin=0;const b=Math.round(pts*0.5/10)*10;setTimeout(()=>award('Straight Out of the Barrel',b,true),420)}   /* the move that comes right off the spit is worth half again */
   if(/Barrel/.test(name))giveTro('barrel');if(name==='Huge Barrel')giveTro('huge');if(/^(Air|Backflip|Frontflip|Nose Pick|Alley)/.test(name))giveTro('air');if(/^(Air|Nose Pick).*360|^Alley/.test(name))giveTro('air360');if(game.combo>=5)giveTro('combo5');
   const el=document.createElement('div');el.className='p'+(small?' sm':'');
   el.innerHTML=`<b>${name}</b><span>+${tot}${mult>1?`<i>×${mult}</i>`:''}</span>`;$('pop').appendChild(el);setTimeout(()=>el.remove(),2300);
@@ -2909,14 +2914,15 @@ function stepRide(dt){
   if(sf.mode==='ride'&&sf.p>top-0.02)sf.p=top-0.02;   /* safety: never above the top, tail throw included */   /* on the wave he never rides above its top: through a snap or a hit at the lip the board turns there instead of flying on up */
   // tube
   // under the roof of a throwing lip; a little hysteresis so camera, crouch and clock never flicker at the edge
+  sf.exitWin=Math.max(0,(sf.exitWin||0)-dt);
   const under=S.aEnd>3.3&&sf.s>-0.6&&S.pos.z<S.tipZ-0.2&&game.state==='ride';
-  sf.cov=under?Math.min(sf.cov+dt,0.65):Math.max(sf.cov-dt*(sf.s>4.5?3:1),0);   // deep in the pocket a moment low under the curtain does not count as out
+  sf.cov=under?Math.min(sf.cov+dt,0.65):Math.max(sf.cov-dt*(sf.s>3.2?4:1),0);   // deep in the pocket a moment low under the curtain does not count as out
   const covered=game.state==='ride'&&(game.inTube?sf.cov>0:sf.cov>=0.1);
   if(covered){sf.tube+=dt;sf.tubeMin=Math.min(sf.tubeMin,sf.s);game.inTube=true}
   else{if(sf.tube>0.6){const deep=sf.tubeMin<2.2,nm=sf.tube>3.5?'Huge Barrel':deep?'Deep Barrel':'Barrel',pt=(600+850*Math.min(sf.tube,7))*(deep?1.3:1);award(nm,pt);sfxNoise(0.8,3000,0.3);
       if(game.state==='ride'&&game.list.length)game.list[game.list.length-1].dur=sf.tube;sf.boostV=CP+1.6;sf.boostT=0.7;
       if(sf.tube>1.2){spit(34);award('Spit Out',300,true)}}
-    sf.tube=0;sf.tubeMin=9;game.inTube=false;sf.tubeShot=false}
+    if(sf.tube>0.6){game.tubeOut=game.waveAge;sf.exitWin=1.8}sf.tube=0;sf.tubeMin=9;game.inTube=false;sf.tubeShot=false}
   if(covered&&sf.tube>0.9&&!sf.tubeShot){sf.tubeShot=true;reqShot('Barrel',1200+sf.tube*500,0)}
   // curl / foam
   if(sf.s<-0.7){wipe();return}
@@ -3077,7 +3083,7 @@ function placeSurfer(dt,time){
     if(sf.pivot>0){cT=0.50;pitchT=0.12}
     if(snapT>0.5&&A.snapPrev<=0.5)A.throw=1;A.snapPrev=snapT;AT.slipYaw=slip-rootYaw;cT=Math.max(cT,0.90*AT.rev);
     if(input.stall){sh=-0.09;pitchT=0.09}
-    {const tk=A.tbk=damp(A.tbk||0,game.inTube?1:0,game.inTube?3.2:2.4,dt);cT=lerp(cT,Math.max(cT,0.94),tk);AT.tube=tk;   // eases into the barrel stance and back out, no step
+    {const tk=A.tbk=damp(A.tbk||0,game.inTube?1:0,game.inTube?3.2:(sf.cv||sf.rh||sf.c360||A.throw>0.05?7:2.4),dt);cT=lerp(cT,Math.max(cT,0.94),tk);AT.tube=tk;   // eases into the barrel stance and back out, no step
      if(game.inTube&&input.x>0.3)cT=lerp(cT,0.78+0.16*Math.sin(time*7.5),0.8)}   // pumping for speed inside
     if(sf.introT>0&&!intro)cT=lerp(0.5,0.3,sstep(0.5,0.2,sf.introT));   // stretched out down the face
     else if(sf.openT>0)cT=Math.max(cT,lerp(0.32,0.84,sstep(1.9,1.3,sf.openT))-0.28*sstep(0.7,0,sf.openT));   // compressing into the bottom turn, then rising out of it
@@ -3192,7 +3198,7 @@ function boardSpray(dt){
       rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0)}}
 
 /* ───────────────────────── camera ───────────────────────── */
-const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',blendFrom='',blendDur=1.2,camRP=3.2,camRL=7,camGP=0;const _oT1=new V3,_oT2=new V3;
+const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',camShotT=9,blendFrom='',blendDur=1.2,camRP=3.2,camRL=7,camGP=0;const _oT1=new V3,_oT2=new V3;
 const REPLAY_SHOTS=['follow','tele','drone'];   // replays and the start screen cut between chase and side only
 const SCam=mkS(),_bd=new V3(),_gf=new V3(),_gu=new V3(),_gfS=new V3(1,0,0),_guS=new V3(0,1,0),_gT=new V3();
 function shot(kind,p,tk,ak){
@@ -3236,24 +3242,27 @@ function updateCamera(dt,time){
     else if(game.attract)kind='follow';   /* behind the menu: the chase camera */   // start screen: two wide shots from far off, the whole wave and the place around it
     else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
       {let base=['follow','tele','front'][game.cam];const a=game.waveAge,D=game.waveDur||80;
-       if(game.cam===1&&a>D-Math.max(8,D*0.3)&&a<D-4.5)base='front';   /* the side camera directs the end of the ride: square on from the beach for the last stretch, then back to the side for the arrival */
+       if(game.cam===1&&a>D-Math.max(8,D*0.3)&&a<D-4.5&&!(lastShot!=='front'&&(game.inTube||sf.tubeK>0.05||(S.aEnd>3.3&&sf.s<9)||a-(game.tubeOut||-99)<3||SEC.some(C=>C.fol&&a>C.t0-3.5&&a<C.t0+C.d+2))))base='front';   /* not while a barrel is about to close over him or he is just out of one */   /* the side camera directs the end of the ride: square on from the beach for the last stretch, then back to the side for the arrival */
        kind=sf.openCam?'tele':(sf.straight&&game.cam!==1)?'beach':base}
       if(kind!==lastShot&&(kind==='beach'||lastShot==='beach'||(kind==='front'&&lastShot==='tele')||(kind==='tele'&&lastShot==='front')))camInit=false;   /* a clean cut between the side and the front */
       if(game.cam===1&&kind==='tele'&&game.state==='ride'){const now=game.waveAge;   // the side camera cuts to the chase now and then: on a move, or every so often
-        if(game.marks.length!==(game.mkN||0)){if(game.marks.length>(game.mkN||0)&&(game.chN||0)<2&&now>14&&now-(game.chEnd||-99)>18){game.chEnd=now+4.0;game.chN=(game.chN||0)+1}game.mkN=game.marks.length}
+        if(game.marks.length!==(game.mkN||0)){if(game.marks.length>(game.mkN||0)&&(game.chN||0)<2&&now>14&&now-(game.chEnd||-99)>18&&now-(game.tubeOut||-99)>6&&!game.inTube){game.chEnd=now+4.0;game.chN=(game.chN||0)+1}game.mkN=game.marks.length}
         if(now<game.chEnd)kind='follow'}
       // whatever camera is selected, in the tube the view is from behind him inside the barrel; the other cameras cut in and back out
       if(!sf.openCam&&kind!=='beach'){const fo=lastShot==='follow',bi=Math.floor(colIndex(sf.s-2.3)),open=colAEnd[bi]>(fo?3.0:3.4)&&sf.s>(fo?2.2:3.0);   // the chase sits behind him only where the barrel is still open behind; deeper than that it would be inside the closed-out curtain, so the side camera looks in from the channel
-        if(sf.mode==='wipe'){}else if(lastShot==='gopro'&&(game.inTube||sf.tubeK>0.2))kind='gopro';else if((game.inTube&&sf.tube>0.04)||sf.tubeK>(lastShot==='gopro'?0.35:0.6))kind='gopro'}   // in the barrel the view is the GoPro behind him, from the moment he is covered until he is out   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
+        if(sf.mode==='wipe'){}else if(lastShot==='gopro'&&(game.inTube||sf.tubeK>0.2))kind='gopro';else if((game.inTube&&sf.tube>0.3)||sf.tubeK>(lastShot==='gopro'?0.35:0.6))kind='gopro'}   // in the barrel the view is the GoPro behind him, from the moment he is covered until he is out   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
+      if(game.inTube&&sf.tube>0.3)sf.gpHold=0.9;else sf.gpHold=Math.max(0,(sf.gpHold||0)-dt);
+      if(lastShot==='gopro'&&sf.gpHold>0&&sf.mode!=='wipe')kind='gopro';   /* out of the barrel he rides clear with the spit before the camera leaves it */
+      if(kind!==lastShot&&lastShot&&camShotT<2.4&&sf.mode!=='wipe'&&!game.camPicked&&!(kind==='gopro'&&game.inTube&&sf.tube>0.3))kind=lastShot;   /* every shot stays up at least ~2.4 s: no quick back-and-forth cuts */
       if(kind!==lastShot){const fb=(kind==='follow'&&lastShot==='barrel')||(kind==='barrel'&&lastShot==='follow');   // behind him <-> ahead of him: a clean cut (a glide would fly through him)
-        if(kind==='gopro'){camInit=false;camBlend=0;camGP=1}else if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'||lastShot==='gopro'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot;blendDur=kind==='barrel'||lastShot==='barrel'||lastShot==='gopro'?0.9:1.2}}}   // side <-> chase: a quick glide between the two, not a jump cut
+        if(kind==='gopro'){camInit=false;camBlend=0;camGP=1}else if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'||lastShot==='gopro'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot;blendDur=lastShot==='gopro'?1.5:kind==='barrel'||lastShot==='barrel'?0.9:1.2}}}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
     if(camBlend>0&&blendFrom&&blendFrom!==kind&&blendFrom!=='beach'){const of=shot(blendFrom,p,sf.tubeK,sf.airK);_oT1.copy(cT1);_oT2.copy(cT2);fov=shot(kind,p,sf.tubeK,sf.airK);   // a glide: both shots keep tracking him and the frame eases from one to the other
       const e=1-camBlend,sm=u=>{u=clamp(u,0,1);return u*u*u*(u*(u*6-15)+10)},k=sm(e);let kx=k,kz=k;
       if(kind==='barrel'){kx=sm(e*1.7);kz=sm((e-0.2)/0.8)}else if(blendFrom==='barrel'||blendFrom==='gopro'){kz=sm(e*1.6);kx=sm((e-0.35)/0.65)}   // into the barrel: along the wave first, then in through the mouth under the lip (never through the curtain)
       cT1.set(lerp(_oT1.x,cT1.x,kx),lerp(_oT1.y,cT1.y,kz),lerp(_oT1.z,cT1.z,kz));cT2.lerpVectors(_oT2,cT2,k);fov=lerp(of,fov,k)}
     else fov=shot(kind,p,sf.tubeK,sf.airK);if(kind==='follow'){rp=lerp(5,2.6,sf.tubeK);rl=lerp(8.5,3.6,sf.tubeK)}else if(kind==='barrel'){rp=2.4;rl=5}else if(kind==='gopro'){rp=10;rl=12}}   // in the barrel the camera floats along with him
-  if((game.replay||game.attract)&&kind!==lastShot)camInit=false;lastShot=kind;
+  if((game.replay||game.attract)&&kind!==lastShot)camInit=false;camShotT=kind!==lastShot?0:camShotT+dt;lastShot=kind;game.camPicked=false;
   if(game.dbgCam){const q=game.dbgCam;cT1.set(sf.pos.x+q[0],sf.pos.y+q[1],sf.pos.z+q[2]);cT2.set(sf.pos.x+(q[5]||0),sf.pos.y+(q[4]||0.65),sf.pos.z+(q[6]||0));fov=q[3];camP.copy(cT1);camL.copy(cT2);camFov=fov}
   if(!camInit){camP.copy(cT1);camL.copy(cT2);camFov=fov;camInit=true;camRP=rp;camRL=rl}
   camBlend=Math.max(0,camBlend-dt/blendDur);const bk=1;camRP=damp(camRP,rp,4,dt);camRL=damp(camRL,rl,4,dt);rp=camRP;rl=camRL;   // the follow rates ease too, so a change of shot never jolts the camera's speed   // during a glide the camera eases across, then locks back on
@@ -3287,9 +3296,9 @@ const bloom=new UnrealBloomPass(new THREE.Vector2(4,4),0.36,0.75,0.9);composer.a
 const drops=[];for(let i=0;i<6;i++)drops.push(new THREE.Vector4(0.5,0.5,0.05,0));
 function spawnDrops(n){for(const d of drops){if(n<=0)break;if(d.w<0.05){const ex=Math.random()<0.5?rnd(0.04,0.26):rnd(0.74,0.96);d.set(ex,rnd(0.2,0.85),rnd(0.015,0.04),1);n--}}}
 function updateDrops(dt){for(const d of drops)if(d.w>0){d.w=Math.max(0,d.w-dt*0.26);d.y-=dt*0.012*(1+d.z*30)}}
-const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0},uWarm:{value:0},uExp:{value:1}},
+const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0},uWarm:{value:0},uExp:{value:1},uTexel:{value:new THREE.Vector2(1e-3,1e-3)}},
   vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uWarm;uniform float uSunK;uniform float uFlip;uniform float uFish;uniform float uExp;varying vec2 vUv;
+  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uWarm;uniform float uSunK;uniform float uFlip;uniform float uFish;uniform float uExp;uniform vec2 uTexel;varying vec2 vUv;
     vec3 tm(vec3 c){c*=uExp/0.6;c=mat3(0.59719,0.07600,0.02840,0.35458,0.90834,0.13383,0.04823,0.01566,0.83777)*c;   /* the output pass folded in here: ACES filmic tone mapping, then sRGB (one full-screen pass less) */
       c=(c*(c+0.0245786)-0.000090537)/(c*(0.983729*c+0.4329510)+0.238081);c=clamp(mat3(1.60475,-0.10208,-0.00327,-0.53108,1.10813,-0.07276,-0.07367,-0.00605,1.07602)*c,0.,1.);
       return mix(pow(c,vec3(0.41666))*1.055-0.055,c*12.92,vec3(lessThanEqual(c,vec3(0.0031308))));}
@@ -3298,7 +3307,10 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
         if(d.w>0.002&&r<1.){float k=sqrt(1.-r*r)*min(d.w*3.,1.);uv-=(fUv-d.xy)*k*k*0.7;}}
       if(uFish>0.001){vec2 fc=uv-.5,fa=fc*vec2(uAspect,1.);float fr=dot(fa,fa);uv=.5+fc*(1.+uFish*fr)/(1.+uFish*0.62);}   // fisheye: the middle swells, the edges bend
       vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*(0.014+0.03*uFish);
-      vec3 col=tm(vec3(texture2D(tDiffuse,uv+o).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-o).b));
+      vec3 c0=texture2D(tDiffuse,uv).rgb;
+      vec3 col=tm(vec3(texture2D(tDiffuse,uv+o).r,c0.g,texture2D(tDiffuse,uv-o).b));
+      {vec2 tx=uTexel*1.3;vec3 nb=tm((texture2D(tDiffuse,uv+vec2(tx.x,0.)).rgb+texture2D(tDiffuse,uv-vec2(tx.x,0.)).rgb+texture2D(tDiffuse,uv+vec2(0.,tx.y)).rgb+texture2D(tDiffuse,uv-vec2(0.,tx.y)).rgb)*0.25);
+       col=max(col+clamp(tm(c0)-nb,-0.08,0.08)*0.6,0.);}   /* a light unsharp mask: crisp edges on the lip, the spray and the rider */
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.16);
       {float mx=max(col.r,max(col.g,col.b)),mn=min(col.r,min(col.g,col.b));col=max(mix(vec3(l),col,1.+0.36*(1.-clamp((mx-mn)/(mx+1e-3),0.,1.))*(1.-uWarm)),0.);}   /* vibrance: washed-out colours (hazy sky, pale water) gain the most, skin and strong colours stay put */
@@ -3323,7 +3335,7 @@ composer.addPass(gradePass);
 game.nightPref=(()=>{try{return +(localStorage.getItem('surfpool_night')||0)}catch(e){return 0}})();setTOD(SPOT.id===1?game.nightPref:0,false);   /* night only at the pool */
 setBoard(PROG.board);setSpot(spotOpen(SPOTS.find(o=>o.id===PROG.spot)||SPOTS[0])?PROG.spot:1);game.pickSpot=SPOT.id;
 function resize(){const w=Math.max(innerWidth,16),h=Math.max(innerHeight,16);renderer.setSize(w,h,false);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);
-  camera.aspect=w/h;camera.updateProjectionMatrix();gradePass.uniforms.uAspect.value=w/h;
+  camera.aspect=w/h;camera.updateProjectionMatrix();gradePass.uniforms.uAspect.value=w/h;gradePass.uniforms.uTexel.value.set(1/(w*renderer.getPixelRatio()),1/(h*renderer.getPixelRatio()));
   document.documentElement.style.setProperty('--bar',clamp((h-w/2.2)/2,h*0.045,h*0.115).toFixed(0)+'px')}
 addEventListener('resize',resize);resize();
 // Steady frames matter more than sharp ones: resolution follows what the machine can hold at a locked cadence.
