@@ -1,0 +1,15 @@
+{
+  "name": "PlaySurf: The Ultimate Surfing Game",
+  "short_name": "PlaySurf",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#0c3e52",
+  "theme_color": "#0b3d63",
+  "icons": [
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png"}
+  ]
+}
