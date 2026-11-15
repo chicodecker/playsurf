@@ -48,6 +48,8 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block}
 #combo{font-size:20px;font-style:italic;font-weight:800;color:#ffd94a;height:24px;margin-top:4px}
 #wavebar{position:absolute;left:50%;top:calc(var(--bar,5.5vh) + 2.7vh);width:180px;height:3px;margin-left:-90px;background:rgba(255,255,255,.22);border-radius:2px;opacity:0;transition:opacity .6s}
 #wavebar.on{opacity:1}#wavebar i{display:block;height:100%;width:100%;background:#fff;border-radius:2px;transform-origin:left}
+#tip{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 2.4vh);transform:translateX(-50%);display:none;gap:14px;align-items:center;white-space:nowrap;padding:7px 16px;border-radius:999px;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.16);font-size:12px;font-weight:700;letter-spacing:.16em;color:#fff;transition:opacity .25s;opacity:0;pointer-events:none}
+body.riding #tip{display:flex}#tip.on{opacity:.92}#tip kbd{font:inherit;font-weight:800;color:#0b1520;background:#ffd94a;border-radius:5px;padding:1px 7px;margin-left:6px;letter-spacing:.06em}body.touch #tip{font-size:10px;padding:5px 12px;gap:10px;bottom:calc(var(--bar,5.5vh) + 1.2vh)}
 #pop{position:absolute;left:4vw;bottom:calc(var(--bar,5.5vh) + 9vh);display:flex;flex-direction:column-reverse;gap:6px}
 #pop .p{animation:pop 2.3s cubic-bezier(.2,.9,.2,1) forwards;text-shadow:0 3px 22px rgba(0,0,0,.5)}
 #pop .p b{display:block;font-size:clamp(34px,5.2vw,74px);font-style:italic;font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
@@ -173,7 +175,8 @@ body.touch.riding #touch{display:block}
 #tHint{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 1vh);transform:translateX(-50%);font-size:11px;letter-spacing:.16em;text-align:center;opacity:0;transition:opacity 1s;text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap;pointer-events:none}
 #tHint.on{opacity:.9}
 body.touch #keys,body.touch #camBtn{display:none}
-body.touch #music{display:none}
+body.touch #music{display:none}body.touch:not(.riding) #music{display:flex;top:auto;right:auto;left:max(3vw,env(safe-area-inset-left,0px));bottom:calc(var(--bar,5.5vh) + 1.2vh);transform:scale(.82);transform-origin:left bottom}body.touch #music button{font-size:19px;padding:6px 9px}
+#music.hold .mInfo{opacity:.5}#music #mPlay{font-size:12px}
 body.touch #pop{bottom:auto;top:calc(var(--bar,5.5vh) + 11vh)}
 body.touch #tube{bottom:auto;top:calc(var(--bar,5.5vh) + 10vh)}
 .thelp{display:none;margin:10px 0 0 4px;font-size:12px;letter-spacing:.14em;line-height:1.6;opacity:.85;max-width:620px}
@@ -192,7 +195,7 @@ body.touch.canFS:not(.riding):not(.isFS) #fsBtn{display:flex}
 #fsSwipe{position:absolute;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(5,22,30,.66);color:#fff;pointer-events:auto;touch-action:pan-y}
 body.swipeOn #fsSwipe{display:flex}
 #fsSwipe b{font-size:20px;letter-spacing:.24em;font-weight:800;margin-top:16px}
-#fsSwipe span{font-size:11px;letter-spacing:.2em;opacity:.72;margin-top:10px}
+#fsSwipe span{max-width:78vw;line-height:1.5;font-size:11px;letter-spacing:.2em;opacity:.72;margin-top:10px}
 .fsHand svg{width:48px;height:48px;fill:none;stroke:#9ff5dc;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;animation:fsUp 1.6s ease-in-out infinite}
 @keyframes fsUp{0%{transform:translateY(24px);opacity:0}25%{opacity:1}80%{transform:translateY(-22px);opacity:1}100%{transform:translateY(-26px);opacity:0}}
 #fsX{position:absolute;top:calc(var(--bar,5.5vh) + 10px);right:max(14px,env(safe-area-inset-right,0px));width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(0,0,0,.3);color:#fff;font-size:15px;cursor:pointer}
@@ -316,14 +319,16 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   <div id="wavebar"><i></i></div>
   <button id="camBtn">CAMERA: SIDE (C)</button><button id="waveBtn">&#127754; CHANGE WAVE</button><button id="muteBtn" aria-label="Sound on">&#128266; SOUND ON</button>
   <div id="pop"></div>
+  <div id="tip"></div>
   <div id="tube">BARREL<b>0.0s</b></div>
   <div id="keys">
     <k>←</k><k>↑</k><k>↓</k><k>→</k> STEER ON THE WALL<br>
+    <k>←</k> CARVE · <k>OPTION</k> CUTBACK · <k>G</k> CARVE 360 · <k>R</k> FLOATER · <k>F</k> NOSE PICK<br>
     <k>↓</k> AT THE TOP: TAP = SNAP · HOLD = TAIL THROW · <k>SHIFT</k> = LAYBACK<br>
-    IN THE AIR: <k>←</k><k>→</k> SPIN · <k>↑</k><k>↓</k> FLIP · <k>N</k> DAY/NIGHT<br>
+    IN THE AIR: <k>←</k><k>→</k> SPIN · <k>↑</k><k>↓</k> FLIP · <k>SPACE</k>+<k>←</k> ALLEY-OOP<br>
     <k>SPACE</k> CROUCH · AIR AT THE LIP · GRAB<br>
     <k>SHIFT</k> BRAKE (WAIT FOR THE BARREL)<br>
-    <k>C</k> CAMERA &nbsp; <k>P</k> PAUSE &nbsp; <k>M</k> SOUND &nbsp; <k>[</k><k>]</k> MUSIC
+    <k>C</k> CAMERA &nbsp; <k>P</k> PAUSE &nbsp; <k>M</k> SOUND &nbsp; <k>[</k><k>]</k> MUSIC &nbsp; <k>K</k> PAUSE MUSIC
   </div>
   <div id="menu" class="panel"><h1 class="srh">PlaySurf: Free Online Surf Game</h1>
     <div class="wz">
@@ -333,7 +338,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
         <div class="pbtns"><button id="goDesk" class="pbtn big">DESKTOP<i>KEYBOARD · GAMEPAD</i></button><button id="goMob" class="pbtn big wv">MOBILE<i>TOUCH SCREEN</i></button></div>
         <p class="cred">3D surfer: made with Magnific (Tripo) · Music: original tracks made with Suno</p></section>
       <section class="wzS" data-s="2"><h2 class="wzH">STANCE</h2>
-        <div class="playRow"><span class="playLbl">STANCE</span>
+        <div class="playRow">
         <div class="pbtns"><button id="goRight" class="pbtn wv big">REGULAR<i>LEFT FOOT FORWARD · RIGHTS</i></button><button id="goLeft" class="pbtn wv big sel">GOOFY<i>RIGHT FOOT FORWARD · LEFTS</i></button></div></div>
         <p class="wzNote">Your stance sets the wave's direction at SurfPool, Uluwatu and Pipeline. Cloud 9 and Campeche are rights; at Trestles you pick a side.</p></section>
       <section class="wzS" data-s="3"><h2 class="wzH">CHOOSE YOUR WAVE</h2>
@@ -372,9 +377,9 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   <div id="ld"><b>LOADING</b><i><u id="ldU"></u></i></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <button id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
-  <div id="fsSwipe"><div class="fsHand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><b>SWIPE UP FOR FULL SCREEN</b><span>OR SHARE &#9656; ADD TO HOME SCREEN</span><button id="fsX" aria-label="Close">&#10005;</button></div>
+  <div id="fsSwipe"><div class="fsHand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><b>SWIPE UP TO HIDE THE BROWSER BAR</b><span>REAL FULL SCREEN ON IPHONE: SHARE &#9656; ADD TO HOME SCREEN, THEN OPEN PLAYSURF FROM THE ICON</span><button id="fsX" aria-label="Close">&#10005;</button></div>
   <div id="rep">REPLAY</div>
-  <div id="music"><button id="mPrev" aria-label="Previous track">&#9198;</button><div class="mInfo"><small>&#9835; NOW PLAYING</small><b id="mTitle"></b><span id="mBand"></span></div><button id="mNext" aria-label="Next track">&#9197;</button></div>
+  <div id="music"><button id="mPrev" aria-label="Previous track">&#9198;</button><div class="mInfo"><small>&#9835; NOW PLAYING</small><b id="mTitle"></b><span id="mBand"></span></div><button id="mPlay" aria-label="Pause music">&#10074;&#10074;</button><button id="mNext" aria-label="Next track">&#9197;</button></div>
   <div id="pause">PAUSED</div>
   <div id="err"></div>
 </div>
@@ -2052,11 +2057,11 @@ function dropTick(dt){
     if(D.done||!D.ready||game.waveAge<Math.max(10,game.waveDur*0.35)||game.waveAge>game.waveDur-8)return;   /* never so late that the wave ends with him still on it */
     if(sf.mode!=='ride'||sf.rh||sf.tt||sf.pivot>0||game.inTube||sf.introT>0||sf.s<9||sf.s>40)return;
     const s0=sf.s+12;if(colFoam[Math.round(colIndex(s0))]>0.08||colFoam[Math.round(colIndex(sf.s+5))]>0.08)return;   // open wall only
-    sampleSurf(s0,0,npcS);Object.assign(D,{on:true,ph:'pad',t:0,s:s0,p:0.30*npcS.top,th:-1.0,splashed:false});npcG.visible=npcBoard.visible=true;
+    sampleSurf(s0,0,npcS);Object.assign(D,{on:true,ph:'pad',t:0,s:s0,p:0.78*npcS.top,th:-1.0,splashed:false});npcG.visible=npcBoard.visible=true;
     npcG.scale.setScalar(1);return}
   if((sf.straight||sf.endCl||sf.mode!=='ride')&&D.ph!=='fall'){D.ph='fall';D.t=0;D.w.set(0,0,0)}   /* the ride is over or he went down: the local loses it on his own */
   D.t+=dt;sampleSurf(D.s,Math.max(D.p,0),npcS);const top=npcS.top,pT=Math.min(sf.p+0.5,top-0.35);
-  if(D.ph==='pad'){D.s-=2.6*dt;D.p=damp(D.p,0.42*top,1.5,dt);D.th=damp(D.th,-0.7,2,dt);   // paddling in; the wave picks him up and brings him back toward the rider
+  if(D.ph==='pad'){D.s-=2.6*dt;D.p=damp(D.p,0.86*top,1.5,dt);D.th=damp(D.th,-0.7,2,dt);   // paddling in; the wave picks him up and brings him back toward the rider
     const u=((D.t*9.5)%(2*PI))/(2*PI)*12,i0=Math.floor(u)%12;npcApply(NPCP.pad[i0],NPCP.pad[(i0+1)%12],u-Math.floor(u));
     if(D.t>1.5){D.ph='pop';D.t=0;hudMsg('DROP-IN!','get off my wave!')}}
   else if(D.ph==='pop'){D.s-=2.0*dt;D.th=damp(D.th,-0.15,4,dt);D.p=damp(D.p,pT,2,dt);const u=clamp(D.t/0.5,0,1)*4,i0=Math.min(3,Math.floor(u));npcApply(NPCP.pop[i0],NPCP.pop[i0+1],u-i0);
@@ -2128,7 +2133,7 @@ addEventListener('keydown',e=>{
   if(e.code==='Escape'&&game.state==='end'&&!game.attract){toMenu();return}
   if(e.code==='KeyP'||e.code==='Escape'){if(game.state==='ride'&&!game.attract){game.paused=!game.paused;$('pause').style.display=game.paused?'flex':'none'}}
   if(e.code==='KeyM')setMuted(!audio.muted)
-  if(e.code==='BracketRight'||e.code==='KeyT'){musicGo();musicSet(MUS.i+1)}if(e.code==='BracketLeft'){musicGo();musicSet(MUS.i-1)}
+  if(e.code==='BracketRight'||e.code==='KeyT'){musicGo();musStep(1)}if(e.code==='BracketLeft'){musicGo();musStep(-1)}if(e.code==='KeyK')musPause();
   if(e.code==='KeyR'&&game.state!=='menu'&&!game.attract)startWave()});
 addEventListener('keyup',e=>{keys[e.code]=false});
 function setCam(i){game.cam=((i%3)+3)%3;$('camBtn').textContent='CAMERA: '+['CHASE','SIDE','FRONT'][game.cam]+' (C)'}
@@ -2178,14 +2183,15 @@ document.body.classList.toggle('iosweb',IOSW);document.body.classList.toggle('ca
 {const fsCls=()=>{if(FS.api)document.body.classList.toggle('isFS',isFS())};['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,fsCls));addEventListener('resize',()=>setTimeout(fsCls,80));setInterval(fsCls,1000)}
 /* iPhone: the page is made a little taller than the screen, so a swipe up scrolls it and Safari tucks its bars away (what game sites do).
    The prompt shows on the menu while the bars are out; the full screen button brings it back any time. */
-const SW={off:false,force:false};
+const SW={off:false,force:false,h0:0,done:false};
 const barsOn=()=>landQ.matches&&innerHeight<Math.min(screen.width,screen.height)*0.94;
 function swUpdate(){if(!IOSW)return;const b=document.body,t=b.classList.contains('touch'),l=landQ.matches;
   document.documentElement.classList.toggle('fsScroll',t&&l);
-  const bars=barsOn();if(!bars)SW.force=false;b.classList.toggle('isFS',l&&!bars);   // bars tucked away: as good as full screen
+  if(l){if(!SW.h0)SW.h0=innerHeight;if(innerHeight>SW.h0+12||(window.scrollY||0)>24){SW.done=true;SW.force=false}}else{SW.h0=0;SW.done=false}   /* the page moved or the screen grew: the swipe did what it can do on this iPhone */
+  const bars=barsOn()&&!SW.done;if(!bars)SW.force=false;b.classList.toggle('isFS',l&&!bars);   // bars tucked away: as good as full screen
   b.classList.toggle('swipeOn',t&&l&&bars&&(SW.force||(!SW.off&&!b.classList.contains('riding'))))}
 if(IOSW){['resize','scroll','orientationchange'].forEach(ev=>addEventListener(ev,()=>setTimeout(swUpdate,60),{passive:true}));setInterval(swUpdate,900);swUpdate()}
-function fsButton(e){if(e){e.stopPropagation();e.preventDefault()}FS.out=false;if(FS.api)goFull();else if(IOSW){SW.force=true;swUpdate()}}
+function fsButton(e){if(e){e.stopPropagation();e.preventDefault()}FS.out=false;if(FS.api)goFull();else if(IOSW){SW.done=false;SW.h0=0;try{scrollTo(0,0)}catch(_){}SW.force=true;swUpdate()}}
 $('fsBtn').addEventListener('click',fsButton);$('tFull').addEventListener('click',fsButton);
 $('fsX').addEventListener('click',e=>{e.stopPropagation();SW.off=true;SW.force=false;swUpdate()});
 $('goMob').addEventListener('click',e=>{e.stopPropagation();setTouch(true);goFull();wzGo(2)});
@@ -2283,6 +2289,33 @@ document.addEventListener('mouseout',e=>{if(!e.relatedTarget&&e.clientY<=6&&$('s
 $('spX').addEventListener('click',e=>{e.stopPropagation();spHide()});$('spNo').addEventListener('click',e=>{e.stopPropagation();spHide()});
 $('spPop').addEventListener('click',e=>{if(e.target.id==='spPop')spHide()});$('spGo').addEventListener('click',e=>{e.stopPropagation();setTimeout(spHide,300)});
 addEventListener('pointerdown',()=>{if(game.state==='end'&&game.hl&&game.showCard)game.showCard()});
+/* what to do right now: a small line at the bottom of the ride with the move that fits this moment and what to press for it */
+const TIPS={cur:'',cand:'',n:0};
+function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classList.contains('touch');let k='';
+  if(game.state==='ride'&&!game.attract&&!game.replay&&!game.paused&&!sf.straight&&!sf.endCl&&!sf.exV){
+    const top=Math.max(S.top||1,0.1),rel=sf.p/top,st=Math.sin(sf.th),busy=sf.rh||sf.cv||sf.c360||sf.tt||sf.pivot>0||sf.layT>0;
+    const fa=colFoam[Math.round(colIndex(clamp(sf.s+3.5,1,64)))]||0;
+    if(sf.mode==='air')k='air';else if(sf.mode==='float')k='flo';else if(sf.mode!=='ride'||sf.introT>0)k='';
+    else if(game.inTube||(S.aEnd>3.3&&sf.s<6))k='tube';
+    else if(busy)k='';
+    else if(sf.openT>0||rel<0.3)k='bt';
+    else if(st>0.35&&rel>0.45)k=fa>0.35?'lipF':'lip';
+    else if(sf.s>26)k='cut';
+    else if(fa>0.4&&rel>0.4)k='flo2';
+    else if(sf.V>5)k='carve'}
+  if(k===TIPS.cand)TIPS.n++;else{TIPS.cand=k;TIPS.n=0}
+  if(TIPS.n<2||k===TIPS.cur)return;TIPS.cur=k;
+  const bk=MIRROR?'\u2192':'\u2190',fw=MIRROR?'\u2190':'\u2192',I=(n,key)=>`<span>${n}${key?`<kbd>${key}</kbd>`:''}</span>`;
+  const L={bt:t?[I('BOTTOM TURN','STICK \u2191')]:[I('BOTTOM TURN','\u2191')],
+    lip:t?[I('AT THE LIP'),I('','SNAP'),I('','AIR')]:[I('SNAP','\u2193'),I('AIR','SPACE'),I('NOSE PICK','F')],
+    lipF:t?[I('FOAM AHEAD'),I('','FLOATER'),I('','SNAP')]:[I('FLOATER','R'),I('SNAP','\u2193')],
+    cut:t?[I('BACK TO THE FOAM','CUT BACK')]:[I('CUTBACK','OPTION')],
+    flo2:t?[I('FOAM AHEAD','FLOATER')]:[I('FLOATER','R')],
+    carve:t?[I('CARVE','STICK '+bk)]:[I('CARVE',bk),I('CARVE 360','G')],
+    air:t?[I('SPIN','STICK'),I('GRAB','AIR')]:[I('SPIN',bk+' '+fw),I('FLIP','\u2191 \u2193'),I('GRAB','SPACE')],
+    flo:t?[I('DROP','STICK \u2193')]:[I('DROP','\u2193')],
+    tube:t?[I('STAY ON THE WALL'),I('DEEPER','BRAKE')]:[I('DEEPER','SHIFT'),I('PUMP',fw)]}[k];
+  if(L){el.innerHTML=L.join('');el.classList.add('on')}else el.classList.remove('on')}
 function readInput(){
   let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
   let cr=!!keys.Space,stl=!!(keys.ShiftLeft||keys.ShiftRight),cut=!!(keys.AltLeft||keys.AltRight);if(keys.KeyR)y=1;   /* OPTION: the cutback; R: the floater */
@@ -2339,7 +2372,7 @@ function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
-  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false});
+  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
@@ -2360,11 +2393,15 @@ $('pkR').addEventListener('click',e=>{e.stopPropagation();pickDone(1)});$('pkL')
 const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Riptide Riot'},{f:'music/02-summer-never-ends.mp3',t:'Summer Never Ends',b:'Sandbar Kids'},
   {f:'music/03-low-tide-love.mp3',t:'Low Tide Love',b:'Salt Lagoon Sound System'},{f:'music/04-offshore.mp3',t:'Offshore',b:'Coral Spies'},
   {f:'music/05-barrel-vision.mp3',t:'Barrel Vision',b:'Wax Riot'},{f:'music/06-sunburn-sunday.mp3',t:'Sunburn Sunday',b:'The Skanking Gulls'},{f:'music/07-glassy-morning.mp3',t:'Glassy Morning',b:'Dawn Patrol Dub'}];
-const MUS={el:new Audio(),i:Math.max(0,TRACKS.findIndex(t=>t.t==='Barrel Vision')),on:false};   /* the game opens to Barrel Vision */MUS.el.preload='auto';MUS.el.volume=0.5;
-MUS.el.addEventListener('ended',()=>musicSet(MUS.i+1));
+const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0};   /* the songs play shuffled, from the very first one, a new order every time round */
+function musShuffle(not){const o=TRACKS.map((_,i)=>i);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}if(o.length>1&&o[0]===not){const j=1+Math.floor(Math.random()*(o.length-1));[o[0],o[j]]=[o[j],o[0]]}MUS.order=o;MUS.k=0}
+musShuffle(-1);MUS.i=MUS.order[0];
+function musStep(d){const n=MUS.order.length;if(d>0&&MUS.k>=n-1)musShuffle(MUS.i);else MUS.k=((MUS.k+d)%n+n)%n;musicSet(MUS.order[MUS.k])}
+function musPause(h){MUS.hold=h===undefined?!MUS.hold:!!h;const b=$('mPlay');if(b){b.innerHTML=MUS.hold?'&#9654;':'&#10074;&#10074;';b.setAttribute('aria-label',MUS.hold?'Play music':'Pause music')}$('music').classList.toggle('hold',MUS.hold);if(MUS.hold)MUS.el.pause();else{MUS.on=false;musicGo()}}   /* the player's own pause: nothing restarts the music until he presses play */MUS.el.preload='auto';MUS.el.volume=0.5;
+MUS.el.addEventListener('ended',()=>musStep(1));
 function musicSet(i,first){MUS.i=((i%TRACKS.length)+TRACKS.length)%TRACKS.length;const T=TRACKS[MUS.i];MUS.el.src=T.f;$('mTitle').textContent=T.t;$('mBand').textContent=T.b;
-  const w=$('music');w.classList.add('flash');clearTimeout(MUS.ft);MUS.ft=setTimeout(()=>w.classList.remove('flash'),3200);if(MUS.on){const p=MUS.el.play();if(p&&p.catch)p.catch(()=>{if(first){MUS.on=false;$('music').classList.remove('on')}})}}
-function musicGo(){if(MUS.on&&!MUS.el.paused)return;MUS.on=true;MUS.el.muted=!!audio.muted;if(!MUS.el.src)musicSet(MUS.i,1);else{const p=MUS.el.play();if(p&&p.catch)p.catch(()=>{MUS.on=false;$('music').classList.remove('on')})}$('music').classList.add('on')}   // if the browser refuses sound before a tap, it tries again on the first tap
+  const w=$('music');w.classList.add('flash');clearTimeout(MUS.ft);MUS.ft=setTimeout(()=>w.classList.remove('flash'),3200);if(MUS.on&&!MUS.hold){const p=MUS.el.play();if(p&&p.catch)p.catch(()=>{if(first){MUS.on=false;$('music').classList.remove('on')}})}}
+function musicGo(){if(MUS.hold){$('music').classList.add('on');return}if(MUS.on&&!MUS.el.paused)return;MUS.on=true;MUS.el.muted=!!audio.muted;if(!MUS.el.src)musicSet(MUS.i,1);else{const p=MUS.el.play();if(p&&p.catch)p.catch(()=>{MUS.on=false;$('music').classList.remove('on')})}$('music').classList.add('on')}   // if the browser refuses sound before a tap, it tries again on the first tap
 /* H5 Games Ads: an ad break is offered when the player moves between the choice screens (the menu steps, the end-of-wave buttons, the wave
    picker). Google decides whether an ad actually shows; the frequency hint keeps it to about one a minute at most. While one is on screen the
    game is paused and silent. If the ad script is blocked or slow, the game simply carries on. */
@@ -2384,7 +2421,7 @@ $('muteBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.bl
 try{if(!/[?&]mute\b/.test(location.search)&&localStorage.getItem('playsurf_muted')==='1')audio.muted=true}catch(e){}setMuted(audio.muted,true);   /* the player's choice, remembered */
 musicGo();   // the song starts with the opening vignette, straight away where the browser allows sound
 addEventListener('pointerdown',()=>{if(!MUS.on||MUS.el.paused){initAudio();musicGo()}},{capture:true});['touchstart','mousedown','wheel'].forEach(t=>addEventListener(t,()=>{if(!MUS.on||MUS.el.paused){initAudio();musicGo()}},{capture:true,passive:true}));   /* whatever the first touch is, the music comes in */addEventListener('keydown',()=>{if(!MUS.on||MUS.el.paused){initAudio();musicGo()}},{capture:true});
-$('mPrev').addEventListener('click',e=>{e.stopPropagation();musicGo();musicSet(MUS.i-1)});$('mNext').addEventListener('click',e=>{e.stopPropagation();musicGo();musicSet(MUS.i+1)});
+$('mPrev').addEventListener('click',e=>{e.stopPropagation();musicGo();musStep(-1)});$('mNext').addEventListener('click',e=>{e.stopPropagation();musicGo();musStep(1)});$('mPlay').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();musPause()});
 {const T=TRACKS[MUS.i];$('mTitle').textContent=T.t;$('mBand').textContent=T.b}
 /* autopilot for the start screen: clean snaps only, the prettiest move: glide down, bottom turn up the face, a quick tap at the top, down again; away from the curl and the foam */
 const AP={t:0,k:'',ph:'glide',up:0},S_AP=mkS();
@@ -2568,7 +2605,7 @@ function cnpcFree(C){if(C.N){C.N.g.visible=C.N.bd.visible=false;C.N.busy=null;C.
 function crowdPose(C,t){const g=C.g,T=C.torso,H=C.head,[aL,aR]=C.arms,bob=Math.sin(t*1.3+C.ph)*0.06;g.position.set(C.x,0.06+bob,C.z);
   if(C.mode==='sit'){g.rotation.set(0,C.yaw,0.04*Math.sin(t*1.1+C.ph));T.position.set(-0.15,0.32,0);T.rotation.set(0,0,0.08);H.position.set(-0.12,0.72,0);aL.position.set(-0.15,0.55,0.2);aL.rotation.set(0.25,0,0.1);aR.position.set(-0.15,0.55,-0.2);aR.rotation.set(-0.25,0,0.1)}
   else{g.rotation.set(0,C.yaw,0);const p=t*4.2+C.ph;T.position.set(-0.05,0.16,0);T.rotation.set(0,0,PI/2-0.12);H.position.set(0.36,0.27,0);aL.position.set(0.22,0.2,0.21);aL.rotation.set(0,0,PI/2-(p%(2*PI)));aR.position.set(0.22,0.2,-0.21);aR.rotation.set(0,0,PI/2-((p+PI)%(2*PI)));g.position.y+=0.02*Math.sin(p*2)}}
-function crowdTick(dt,time){const on=SPOT.id===6&&(game.state==='ride'||game.state==='end'||game.attract);const L=CROWD.list;if(!on){L.forEach(C=>{C.g.visible=false;C.on=false;cnpcFree(C)});CROWD.ready=false;return}
+function crowdTick(dt,time){const on=SPOT.id!==1&&(game.state==='ride'||game.state==='end'||game.attract);const L=CROWD.list;if(!on){L.forEach(C=>{C.g.visible=false;C.on=false;cnpcFree(C)});CROWD.ready=false;return}
   cnpcMake();const padOK=CNPC.length&&NPCP.pad.every(x=>x);
   if(!CROWD.ready){CROWD.ready=true;for(let k=0;k<8;k++){const C=L[k];C.on=true;C.mode='sit';C.x=sf.pos.x+rnd(-20,70);C.z=rnd(-30,-16);C.yaw=rnd(-0.5,0.5)+PI*0.5;C.vx=0}}   /* the lineup outside */
   if(ULU.boats)ULU.boats.forEach((b,k)=>{b.position.y=0.35+0.05*Math.sin(time*1.05+k*2.1);b.rotation.x=0.025*Math.sin(time*0.85+k*1.3);b.rotation.z=0.018*Math.sin(time*1.2+k)});   /* the boats at anchor rock on the swell */
@@ -2823,7 +2860,7 @@ function stepRide(dt){
     if((ct<-0.6&&st<0)||C.t1>1.5){const pt=C.pt||1000+sf.V*60;sf.cv=null;sf.rhLock=true;sf.rhHold=now+0.9;sf.lastTop=now;sf.cb=null;sf.upT=0;award('Carve',pt)}}
   if(sf.c360&&!sf.c360.up){sf.burst=Math.max(sf.burst,1.5);sf.c360.sp=(sf.c360.sp||0)+dt;if(sf.c360.sp>0.08){sf.c360.sp=0;splash(8,S.pos,1.0)}}
   if(sf.bsHit&&sf.pivot<=0)sf.bsHit=0;{const mv=(sf.rh&&sf.rh.ph===1)||sf.bsHit?sstep(0.34,0.06,sf.pivot):sf.c360&&!sf.c360.up?0.42:1;   /* the 360 turns at the top of the wave, almost on the spot */   // the rebound pivots on the foam before it drops
-   sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;{const dpp=sf.V*st*mv*dt;sf.p+=dpp>0?dpp*clamp((top-0.02-sf.p)/0.12,0.2,1):dpp}}   /* full speed up the face all the way to the lip (where the hit happens); only the last hand's breadth eases off, so nothing flies over the top */
+   sf.s+=(sf.V*ct*mv-CP*(0.62+0.38*Math.max(0,ct)))*dt;{const dpp=sf.V*st*mv*dt;sf.p+=dpp>0&&!(sf.pivot>0)?dpp*clamp((top-0.02-sf.p)/0.10,0.3,1):dpp}}   /* full speed up the face all the way to the lip (where the hit happens); only the last hand's breadth eases off, so nothing flies over the top */
      // deep in the pocket, then out through the mouth
   if(sf.p>0&&top>0.5){const fi=colIndex(sf.s),i0=Math.floor(fi),t1=lerp(colTop[i0],colTop[Math.min(i0+1,NS-1)],fi-i0);if(t1>0.5)sf.p*=clamp(t1/top,0.985,1.015)}
   {const drop=(sf.prevTop||top)-top;if(sf.mode==='ride'&&drop>0.2&&S.foam>0.4&&sf.p>top-0.1&&!sf.pivot)sf.p=Math.max(top-0.1,sf.p-drop*1.05);sf.prevTop=top}   // the white water collapsed under him: he goes down with it instead of being left hanging over the lip
@@ -2858,7 +2895,7 @@ function stepRide(dt){
       sf.p=Math.min(sf.p,top);sf.th=damp(sf.th,ct>=0?0:PI*Math.sign(sf.th||1),5,dt);
       if(inp.y>0.3&&S.aMax<0.6){sf.crestT+=dt;if(sf.crestT>0.9){endRide('kick');return}}else sf.crestT=0}
   }else sf.crestT=Math.max(0,sf.crestT-dt);
-  if(sf.mode==='ride'&&sf.p>top-0.05)sf.p=top-0.05;   /* safety: never above the top, tail throw included */   /* on the wave he never rides above its top: through a snap or a hit at the lip the board turns there instead of flying on up */
+  if(sf.mode==='ride'&&sf.p>top-0.02)sf.p=top-0.02;   /* safety: never above the top, tail throw included */   /* on the wave he never rides above its top: through a snap or a hit at the lip the board turns there instead of flying on up */
   // tube
   // under the roof of a throwing lip; a little hysteresis so camera, crouch and clock never flicker at the edge
   const under=S.aEnd>3.3&&sf.s>-0.6&&S.pos.z<S.tipZ-0.2&&game.state==='ride';
@@ -2996,6 +3033,9 @@ function placeSurfer(dt,time){
     reefDraw(t);return}
   if(sf.mode==='ride'){
     sampleSurf(sf.s,sf.p,S);
+    {const relL=clamp(sf.p/Math.max(S.top,0.1),0,1),room=Math.max(0,S.L-S.top),nearT=sstep(0.72,0.94,relL);   /* the top third of the wave is the lip itself, standing past vertical: a hit, a 360 and the paddle in all go up into it */
+     const kT=Math.max((sf.hit||0)*nearT*(sf.cv?0:1),sf.c360&&!sf.c360.up?0.55*nearT:0,sf.introT>0.5?0.6:0);sf.lipK=damp(sf.lipK||0,kT,kT>(sf.lipK||0)?12:5,dt);
+     if(sf.lipK>0.005&&room>0.05)sampleSurf(sf.s,sf.p+sf.lipK*Math.min(0.62*room,2.2),S)}
     const c=Math.cos(sf.th),sn=Math.sin(sf.th);
     bX.copy(S.ts).multiplyScalar(c).addScaledVector(S.tp,sn).normalize();
     {const bank=sf.cv&&sf.cv.ph===1?-1.02*sstep(0,0.22,sf.cv.t1):Math.sign(sf.rail)*Math.min((sf.c360&&!sf.c360.up)||(sf.rh&&sf.rh.ph===0)?0.82:1.0,0.46*Math.abs(sf.rail)+0.46*Math.atan(sf.V*Math.abs(sf.om)/9.8));sf.lam=damp(sf.lam,bank,14,dt)}   // lean angle follows speed × turn rate, like any carving turn
@@ -3004,7 +3044,7 @@ function placeSurfer(dt,time){
     if(ul>0.05){_x.multiplyScalar(1/ul);_y.crossVectors(S.n,_x);lg=-Math.atan2(_y.dot(bX),S.n.dot(_x))*0.62*ul}
     sf.lamG=damp(sf.lamG||0,clamp(lg,-0.85,0.85)*(1-A.prone),8,dt);
     const lt=clamp(sf.lam+sf.lamG-0.15*(A.proj||0)*(sf.om<0||sf.slip<0?1:0),-1.05,1.2);
-    {const hk=0.75*sf.hit*sstep(0.35,0.85,1-Math.abs(S.n.y));_b.copy(S.n);if(hk>0.01){_b.lerp(_c.set(0,0.85,0.5),hk).normalize();tL.crossVectors(_b,bX).normalize()}
+    {const hk=Math.max(0.75*sf.hit,0.85*(sf.lipK||0))*sstep(0.35,0.85,1-Math.abs(S.n.y));_b.copy(S.n);if(hk>0.01){_b.lerp(_c.set(0,0.85,0.5),hk).normalize();tL.crossVectors(_b,bX).normalize()}
      bY.copy(_b).multiplyScalar(Math.cos(lt)).addScaledVector(tL,Math.sin(lt)).normalize()}
     bP.copy(S.pos).addScaledVector(S.n,0.055);
     sf.spinVis=damp(sf.spinVis,0,(sf.revSlow>0?(sf.revSlow-=dt,3.4):4.6),dt);spin=sf.spinVis;   // after a nose pick the revert is a slower slide round on the water
@@ -3373,7 +3413,7 @@ function tick(dtR,draw){
   if(sf.wantAirShot){sf.wantAirShot=false;sf.airShot=grab()}
   if(game.shotReq){game.shotReq.delay-=dtR;if(game.shotReq.delay<=0){addPhoto(game.shotReq.name,game.shotReq.pts,grab());game.shotReq=null}}
   updateAudio();
-  if(hudAcc>0.08){hudAcc=0;document.body.classList.toggle('riding',game.state==='ride'&&!game.attract&&!game.replay);
+  if(hudAcc>0.08){hudAcc=0;document.body.classList.toggle('riding',game.state==='ride'&&!game.attract&&!game.replay);tipTick();
     elScore.textContent=game.pts.toLocaleString('en-US');elSpeed.textContent=Math.round(sf.V*3.6);
     elCombo.textContent=game.combo>1&&game.waveAge-game.comboT<5.5?'COMBO ×'+(1+0.25*Math.min(game.combo-1,6)):'';
     $('rep').classList.toggle('on',!!game.replay&&!game.attract);
@@ -3390,7 +3430,7 @@ window.__g={BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,np
     const cx=clamp((pv.x*.5+.5)*c.width,sw/2,c.width-sw/2),cy=clamp((1-(pv.y*.5+.5))*c.height,sh/2,c.height-sh/2);
     x.drawImage(c,cx-sw/2,cy-sh/2,sw,sh,(i%cols)*cw,Math.floor(i/cols)*ch,cw,ch);
     x.fillStyle='#fff';x.font='22px monospace';x.fillText(i+' '+sf.mode[0]+' th'+sf.th.toFixed(1)+' r'+sf.rail.toFixed(1)+' c'+A.crouch.x.toFixed(2),(i%cols)*cw+8,Math.floor(i/cols)*ch+26)}
-  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB,FAUNA,audio,sfxPlay,DRONE,endRide,CROWD,CNPC,ULU,BOTE,SUN,DAWN,sunL,hemiL,fillL,LYC,DROP,SHOUT,setNpcYaw:v=>{NPCYAW=v},setMirror,setWaveDir,get stance(){return {STANCE,MIRROR,BACK}},FS};
+  return 'ok'},run(sec){window.__manual=true;const n=Math.round(sec*60);for(let i=0;i<n;i++)tick(1/60,i===n-1)},game,sf,input,keys,startWave,tipTick,S,sampleSurf,parts,camera,camP,camL,wakeMesh,riderG,boardG,setQuality,renderer,composer,bloom,bokeh,waveMesh,scene,frame,get rafD(){return rafD},get qLock(){return qLock},get qFloor(){return qFloor},get cadN(){return cadN},get quality(){return qLevel},tick,get shot(){return lastShot},get camFov(){return camFov},cT1,cT2,get camBlend(){return camBlend},get camRP(){return camRP},PROG,SPOTS,setSpot,setBoard,progUI,spShow,spHide,TB,FAUNA,audio,sfxPlay,DRONE,endRide,CROWD,CNPC,ULU,BOTE,SUN,DAWN,sunL,hemiL,fillL,LYC,DROP,SHOUT,setNpcYaw:v=>{NPCYAW=v},setMirror,setWaveDir,get stance(){return {STANCE,MIRROR,BACK}},FS};
 startAttract();
 requestAnimationFrame(frame);
 </script>
