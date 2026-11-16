@@ -392,7 +392,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
 <!-- Google H5 Games Ads (Ad Placement API): interstitials between the choice screens -->
 <script async data-ad-frequency-hint="60s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9543654204689824" crossorigin="anonymous"></script>
 <script>window.adsbygoogle=window.adsbygoogle||[];var adBreak=adConfig=function(o){adsbygoogle.push(o);};</script>
-<style>#seoNav{position:fixed;left:0;right:0;bottom:calc(6px + env(safe-area-inset-bottom,0px));padding:0 12px;text-align:center;font:600 10.5px/1.7 inherit;font-family:inherit;letter-spacing:.06em;opacity:.55;z-index:5;pointer-events:auto}#seoNav a{color:#fff;text-decoration:none;margin:0 5px;white-space:nowrap}#seoNav a:hover{text-decoration:underline;opacity:1}#seoNav span{color:#ffd94a;margin:0 4px}@media (max-height:420px){#seoNav{display:none}}</style>
+<style>#seoNav{position:fixed;left:0;right:0;bottom:calc(6px + env(safe-area-inset-bottom,0px));padding:0 12px;text-align:center;font:600 10.5px/1.7 inherit;font-family:inherit;letter-spacing:.06em;opacity:1;z-index:5;pointer-events:auto}#seoNav a{color:#22272b;text-decoration:none;margin:0 5px;white-space:nowrap}   /* fine print: almost black, there for whoever looks for it */#seoNav a:hover{text-decoration:underline;color:#4a5258}#seoNav span{color:#2c3136;margin:0 4px}@media (max-height:420px){#seoNav{display:none}}</style>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -693,7 +693,7 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
 const PS_LOGO=new Image();PS_LOGO.src='playsurf-logo.webp';   /* the wordmark, painted on the beach banners */
 const SCRIPT='Saira,"Avenir Next",Arial,sans-serif',CONDF='Saira,"Avenir Next","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('italic 800 40px Saira'),document.fonts.load('800 40px Saira')]).then(()=>fn(),()=>{})}catch(e){}}
-const KIDU={value:0},KIDSKIN={value:new THREE.Color('#e2ac88')};   /* 1 = the little surfer: the softboard's rider is a kid of seven or eight, skinny, shirtless, pixel-print boardshorts */
+const SUIT={value:0},KIDU={value:0},KIDSKIN={value:new THREE.Color('#e2ac88')};   /* 1 = the little surfer: the softboard's rider is a kid of seven or eight, skinny, shirtless, pixel-print boardshorts */
 const FACE_SIGN=(()=>{try{return new URLSearchParams(location.search).get('fs')==='-1'?-1:1}catch(e){return 1}})();const ALT={value:0},LYC={c:{value:new THREE.Vector3(0.60,0.10,0.09)},k:{value:1},t:{value:new THREE.Vector3(0.93,0.93,0.92)},f:{value:0},tex:{value:null}};
 LYC.tex.value=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.anisotropy=4;
   const paint=()=>{x.clearRect(0,0,256,256);x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';try{x.fontStretch='expanded'}catch(e){}
@@ -1028,7 +1028,8 @@ const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st
   {id:3,ll:[21.665,-158.05],loc:'OAHU · HAWAII',dy:7,name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · PIPE & BACKDOOR',hK:1.35,eL:2.0,dur:28,req:{spot:4,nota:6.5}},
   {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',dy:-7,short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
   {id:6,ll:[-27.67,-48.47],loc:'FLORIANÓPOLIS · BRAZIL',lean:38,st:9,short:'CAMPECHE',name:'CAMPECHE RIGHTS',full:'CAMPECHE RIGHTS',sub:'FLORIANÓPOLIS · LONG RIGHT',hK:0.86,eL:0.8,dur:30,req:{spot:5,nota:7}},
-  {id:7,ll:[-1.68,-47.77],loc:'PARÁ · AMAZON, BRAZIL',name:'POROROCA',full:'POROROCA',sub:'AMAZON · RIVER BORE',hK:1.3,eL:0.6,dur:85,crumble:1,fat:1}];   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
+  {id:7,ll:[-1.68,-47.77],loc:'PARÁ · AMAZON, BRAZIL',name:'POROROCA',full:'POROROCA',sub:'AMAZON · RIVER BORE',hK:1.3,eL:0.6,dur:85,crumble:1,fat:1},
+  {id:8,ll:[63.83,-21.37],loc:'ÞORLÁKSHÖFN · ICELAND',name:'ÞORLÁKSHÖFN',full:'ÞORLÁKSHÖFN',sub:'ICELAND · ARCTIC RIGHT',what:'ARCTIC RIGHT · 4 °C WATER · FULL RUBBER',hK:1.15,eL:1.6,dur:30,req:{spot:6,nota:7}}];   /* Iceland's best-known wave: a heavy right off the harbour wall near Reykjavík, snow on the black mountains behind, surfed in hood, gloves and boots */   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
 let SPOT=SPOTS[0];
 function wallLen(X){return 48+5*(Math.sin(X*0.043+1.3)*0.6+Math.sin(X*0.105+4.1)*0.4)}
 function wOf(s,Lw){if(s<=4.5)return 1;if(s<9)return lerp(1,0.64,sstep(4.5,9,s));return lerp(0.64,0.56,sstep(9,36,s))*(1-0.62*sstep(55,115,s))}   /* far down the line, past where anyone rides, the wall lies back into a soft shoulder: no endless cliff of water */   // no fading shoulder: the wall keeps its shape all the way down the line
@@ -1039,9 +1040,9 @@ function wOf(s,Lw){if(s<=4.5)return 1;if(s<9)return lerp(1,0.64,sstep(4.5,9,s));
 // the whole wave turning to white water.
 const SEC=[{t0:9,c0:46,v:2.0,h:9.0,k:0,d:10,fol:1},{t0:25,c0:64,v:4.6,h:7.0,k:1},{t0:30.5,c0:44,v:2.0,h:6.5,k:0,d:4.5,fol:1},   /* the wall that stood up without breaking now throws: a barrel in the middle of the ride */
            {t0:39,c0:40,v:2.0,h:6.0,k:0,d:7,fol:1},{t0:47.5,c0:46,v:2.6,h:7.5,k:2},{t0:49.6,c0:40,v:2.0,h:6.5,k:0,d:3.6,fol:1}];   /* the tall wall near the end throws once more: a last short barrel before it all goes white */   /* about a minute, like the longest pool waves (45 s published, riders timing 50-60 s) */
-const END_FOAM=70;function endFoam(s,age){if(SPOT.id===3||SPOT.id===4){const T=game.waveDur-3.7+0.006*Math.max(s,0);return age>T?sstep(T,T+1.3,age):0}   /* Pipeline: no white water running down the line; the whole wall goes white at once, right after it closes out */
+const END_FOAM=70;function endFoam(s,age){if(SPOT.id===3||SPOT.id===4||SPOT.id===8){const T=game.waveDur-3.7+0.006*Math.max(s,0);return age>T?sstep(T,T+1.3,age):0}   /* Pipeline: no white water running down the line; the whole wall goes white at once, right after it closes out */
   const E=game.waveDur-clamp(game.waveDur*0.125,4,10);return age>E?sstep(-5,5,(age-E)*7.5-s):0}
-function closeK(s,age){if((SPOT.id!==3&&SPOT.id!==4)||age<0)return 0;const T=game.waveDur-4.6+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T,T+1.1,age)*(1-sstep(60,95,s))}   /* Pipeline's closeout: near the end the whole wall stands up and pitches at once, from the curl to far down the line, one block of lip coming down */   /* 4 to 10 s before the end of the ride, by its length */   // from the curl down the line, everything goes white
+function closeK(s,age){if((SPOT.id!==3&&SPOT.id!==4&&SPOT.id!==8)||age<0)return 0;const T=game.waveDur-4.6+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T,T+1.1,age)*(1-sstep(60,95,s))}   /* Pipeline's closeout: near the end the whole wall stands up and pitches at once, from the curl to far down the line, one block of lip coming down */   /* 4 to 10 s before the end of the ride, by its length */   // from the curl down the line, everything goes white
 SEC.forEach(C=>C.c00=C.c0);   // fol: a barrel that lines up on the rider when it starts, so it pitches over him instead of waiting ahead like a tunnel
 let secClose=0,secFoam=0,secJct=0;
 function secUpdate(age){
@@ -1121,12 +1122,12 @@ waveGeo.setAttribute('aInfo',new THREE.BufferAttribute(gInf,4).setUsage(THREE.Dy
  waveGeo.setIndex(new THREE.BufferAttribute(idx,1));waveGeo.addGroup(0,n0,0);waveGeo.addGroup(n0,k-n0,1)}
 const waveDef={
   uniforms:{uSun:{value:SUN},uNight:TOD,uDawn:DAWN,uDusk:DUSK,uRain:RAIN,uNoise:{value:noiseTex},uTime:{value:0},uX:{value:0},uPool:{value:new THREE.Vector4(62,0.866,0.5,0)},
-    uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uBR:{value:0.11},uRR:{value:0},uRU:{value:new V3(0,1,0)}},
+    uWDk:{value:0},uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uBR:{value:0.11},uRR:{value:0},uRU:{value:new V3(0,1,0)}},
   vertexShader:`attribute vec4 aInfo;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     void main(){vP=position;vN=normal;vI=aInfo;gl_Position=projectionMatrix*viewMatrix*vec4(position,1.);}`,
   fragmentShader:`precision highp float;
     uniform sampler2D uNoise;uniform float uTime;uniform float uX;uniform vec4 uPool;varying vec3 vP;varying vec3 vN;varying vec4 vI;
-    uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef,uShdK;uniform vec4 uShd;
+    uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef,uShdK,uWDk;uniform vec4 uShd;
     ${SKY_GLSL}
     uniform vec3 uRA;uniform vec3 uRB;uniform vec3 uBA;uniform vec3 uBB;uniform float uRR;uniform float uBR;uniform vec3 uRU;
     float capD(vec3 p,vec3 a,vec3 b){vec3 ab=b-a;float t=clamp(dot(p-a,ab)/max(dot(ab,ab),1e-5),0.,1.);return length(p-a-ab*t);}
@@ -1208,6 +1209,7 @@ const waveDef={
       vec3 foamC=mix(uFoamA,uFoamB,clamp(-0.26+nlf*0.85+fsh*0.50+fp*0.50+0.15*back,0.,1.))*min(lit,1.0)*(0.80+0.20*smoothstep(0.15,0.75,f2))*(0.86+0.14*smoothstep(0.22,0.60,f1));
       foamC*=mix(1.,0.42,occ);
       if(hk>0.){foamC=mix(foamC,uFoamB*min(lit+0.30,1.05)*mix(1.,0.42,occ),0.50*hk);foamC*=mix(vec3(1.),mix(vec3(0.60,0.68,0.76),vec3(1.06),smoothstep(0.28,0.64,hgt)),hk)*(1.+0.42*bmp*hk);}   /* white like the foot of the foam all the way up: lit tops of the lumps, only a cool grey in the hollows */
+      if(uWDk>0.)col=mix(col,vec3(dot(col,vec3(.3,.59,.11)))*vec3(0.80,0.94,1.0),0.35*uWDk)*(1.-0.45*uWDk);   /* the arctic: dark slate water under a grey sky, the foam left white */
       col=mix(col,foamC,fm);
       vec3 fogC=skyC(normalize(vec3(-V.x,0.03,-V.z)));
       col=mix(col,fogC,(1.-exp(-dist*0.0010))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
@@ -1460,9 +1462,9 @@ function setTOD(n,save){n=n?1:0;TOD.value=n;game.night=n;if(save!==false)try{loc
   if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(false);goldenTint(!n&&SPOT.id===2);coverTint(n);weatherTint(n);bakeEnv();   /* Pipeline: the same sunny day as the pool */const d=document.getElementById('todD'),e=document.getElementById('todN');if(d){d.classList.toggle('on',!n);e.classList.toggle('on',!!n)}}
 
 /* the PlaySurf cover palette, laid over every wave once its own look is set: deep navy water, cobalt-teal face, cyan-blue light through the lip, lavender shade in the foam, a rose glint */
-function coverTint(n){const U=waveMat.uniforms,k=n?0.22:SPOT.id===2?0.2:SPOT.id===7?0.04:0.55,M=(u,r,g,b,kk)=>u.value.lerp(_tintV.set(r,g,b),kk===undefined?k:kk);
+function coverTint(n){const U=waveMat.uniforms,k=n?0.22:SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.06:0.55,M=(u,r,g,b,kk)=>u.value.lerp(_tintV.set(r,g,b),kk===undefined?k:kk);
   if(n){M(U.uWA,0.004,0.020,0.075);M(U.uWB,0.010,0.090,0.250);M(U.uFoamA,0.20,0.20,0.40);return}
-  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===2?0.2:SPOT.id===7?0.04:C.k;
+  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.05:C.k;   /* Iceland keeps its dark arctic water */
   M(U.uWA,...C.wa,kd);M(U.uWB,...C.wb,kd);M(U.uG1,...C.g1,kd);M(U.uG2,...C.g2,kd);M(U.uFl,...C.fl,kd);M(U.uFlL,...C.fll,kd);
   M(U.uFoamA,...C.fa,kd);M(U.uFoamB,...C.fb,kd);M(U.uSpecC,1.15,0.98,0.92,kd*0.6);
   const f=scene.fog.color;f.lerp(_fogC.setRGB(...C.fog),kd*0.7)}
@@ -1470,7 +1472,7 @@ const _fogC=new THREE.Color();
 /* weather: now and then a ride at the open-ocean spots comes with rain. 'rain' = a grey lid, flat light, heavy drops; 'shower' = a passing sun shower:
    the sun drops low behind the camera, a light rain falls and a rainbow stands over the line, opposite the sun, where it really would be */
 const _wxC=new THREE.Color(),_bowF=new THREE.Vector3();
-function weatherTint(n){const w=(n||game.attract)?'':(game.wx||'');RAIN.value=w==='rain'?0.9:w==='shower'?0.34:(SPOT.id===7&&!n?0.42:0);   /* the Amazon: a humid, milky sky even on a dry day, so the river shows brown instead of mirroring blue */BOW.value=w==='shower'?1:0;
+function weatherTint(n){const w=(n||game.attract)?'':(game.wx||'');RAIN.value=w==='rain'?0.9:w==='shower'?0.34:(SPOT.id===7&&!n?0.42:SPOT.id===8&&!n?0.55:0);   /* Iceland: a low grey sky */   /* the Amazon: a humid, milky sky even on a dry day, so the river shows brown instead of mirroring blue */BOW.value=w==='shower'?1:0;
   if(typeof RAINM!=='undefined'){RAINM.visible=!!w;RAINM.material.uniforms.uA.value=w==='rain'?0.58:0.32;RAINM.material.uniforms.uS.value=w==='rain'?1:0.8}
   if(!w)return;const U=waveMat.uniforms,k=w==='rain'?1:0.35;
   if(w==='shower'){SUN.set(0.26,0.30,0.92).normalize();game.bowT=0;sunL.color.set(0xffe2b8)}   /* low sun behind the viewer, the bow round the point opposite it */
@@ -1510,6 +1512,30 @@ const tahitiG=new THREE.Group();tahitiG.visible=false;scene.add(tahitiG);
      const rid=1+0.30*Math.sin(an*3+i*1.7)+0.17*Math.sin(an*7+i*0.9)+0.09*Math.sin(an*13+i*2.3)+0.12*Math.sin(u*9+an*4+i);   // ridges and gullies
      P.setXYZ(k,x*rid,y+h*0.05*Math.sin(an*5+i)*u*(1-u)*4,z*rid)}
    g.computeVertexNormals();const m=new THREE.Mesh(g,mat);const th=a*DEG;m.position.set(26+R*Math.cos(th),h*0.5-4,5+R*Math.sin(th));m.rotation.y=i*1.3;m.scale.set(1.3,1,1.1);tahitiG.add(m)})}
+/* Þorlákshöfn: black volcanic mountains under snow along the shore, and icebergs drifting out on the grey sea */
+const iceG=new THREE.Group();iceG.visible=false;scene.add(iceG);
+{const ROCK=new THREE.Color(0x202326),ROCK2=new THREE.Color(0x34383c),SNOWC=new THREE.Color(0xe9eff6),SHADE=new THREE.Color(0xb9c6d4),c=new THREE.Color(),mat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.92,flatShading:true});
+ const PK=[[-128,520,300],[-114,560,380],[-100,520,320],[-86,600,460],[-72,560,360],[-58,620,430],[-44,560,330],[-30,600,400],[-16,560,320],[-2,620,420],[12,580,300],[150,580,300],[166,620,380],[182,580,320]];
+ PK.forEach(([a,R0,h0],i)=>{const h=h0*0.42,R=R0*1.15,g=new THREE.ConeGeometry(h*1.5,h,40,16,true),P=g.attributes.position,col=new Float32Array(P.count*3);
+   for(let k=0;k<P.count;k++){const x=P.getX(k),y=P.getY(k),z=P.getZ(k),an=Math.atan2(z,x),u=y/h+0.5;
+     const rid=1+0.34*Math.sin(an*3+i*1.7)+0.20*Math.sin(an*7+i*0.9)+0.11*Math.sin(an*15+i*2.3)+0.14*Math.sin(u*10+an*5+i);   /* sharp ridges and deep gullies */
+     P.setXYZ(k,x*rid,y+h*0.06*Math.sin(an*5+i)*u*(1-u)*4,z*rid);
+     const nz=0.5+0.5*Math.sin(an*9+i*3.1)*Math.sin(u*14+i),line=0.46+0.20*nz-0.14*(rid-1);   /* the snow line, ragged; snow lies deeper in the gullies */
+     const sn=sstep(line,line+0.06,u);c.copy(nz>0.5?ROCK:ROCK2).lerp(Math.sin(an*2+i)>0?SNOWC:SHADE,sn);col[k*3]=c.r;col[k*3+1]=c.g;col[k*3+2]=c.b}
+   g.setAttribute('color',new THREE.BufferAttribute(col,3));g.computeVertexNormals();const m=new THREE.Mesh(g,mat);const th=a*DEG;m.position.set(26+R*Math.cos(th),h*0.5-5,5+R*Math.sin(th));m.rotation.y=i*1.3;m.scale.set(1.35,1,1.15);iceG.add(m)});
+ const im=new THREE.MeshStandardMaterial({color:0xe6f4ff,emissive:0x2f7aa3,emissiveIntensity:0.22,roughness:0.28,metalness:0,flatShading:true});
+ let sd=7;const rn=()=>(sd=(sd*16807)%2147483647)/2147483647;
+ for(let i=0;i<16;i++){const g=new THREE.IcosahedronGeometry(1,1),P=g.attributes.position;for(let k=0;k<P.count;k++){const x=P.getX(k),y=P.getY(k),z=P.getZ(k),j=0.75+0.5*rn();P.setXYZ(k,x*j,Math.max(y,-0.35)*(0.6+0.5*rn())*(y>0.55?0.8:1),z*j)}g.computeVertexNormals();   /* lumps of old glacier ice, flat on the water line */
+   const m=new THREE.Mesh(g,im),a=(-150+105*rn())*DEG,R=240+200*rn(),sc=2.5+(i%4===0?11:5)*rn();m.position.set(26+R*Math.cos(a),sc*0.15-0.4,5+R*Math.sin(a));m.scale.set(sc*(1+rn()),sc,sc*(1+rn()));m.rotation.y=rn()*6.3;iceG.add(m)}}
+/* falling snow round the camera, only at the arctic spot */
+const SNOW=(()=>{const N=1500,g=new THREE.BufferGeometry(),p=new Float32Array(N*3),a=new Float32Array(N);for(let i=0;i<N;i++){p[i*3]=Math.random()*60-30;p[i*3+1]=Math.random()*24;p[i*3+2]=Math.random()*60-30;a[i]=Math.random()}
+  g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('aS',new THREE.BufferAttribute(a,1));
+  const m=new THREE.ShaderMaterial({uniforms:{uT:{value:0},uC:{value:new THREE.Vector3()},uScale:{value:500}},transparent:true,depthWrite:false,
+    vertexShader:`attribute float aS;uniform float uT;uniform vec3 uC;uniform float uScale;varying float vA;
+      void main(){vec3 p=position;p.y=mod(p.y-uT*(0.8+0.7*aS),24.)-1.5;p.x=mod(p.x+uT*(0.9+0.4*aS)+0.7*sin(uT*0.8+aS*31.)-uC.x+30.,60.)-30.+uC.x;p.z=mod(p.z+0.5*cos(uT*0.6+aS*17.)-uC.z+30.,60.)-30.+uC.z;
+        vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(uScale*(0.030+0.035*aS)/-mv.z,1.,10.);vA=clamp(1.3-(-mv.z)/38.,0.,1.);}`,
+    fragmentShader:`varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=smoothstep(0.5,0.15,d)*vA*0.8;if(a<0.02)discard;gl_FragColor=vec4(0.94,0.96,1.,a);}`});
+  const pts=new THREE.Points(g,m);pts.frustumCulled=false;pts.visible=false;pts.renderOrder=5;scene.add(pts);return {pts,m}})();
 // Uluwatu: pale limestone cliffs along the shore and a headland running out to sea behind the break; warungs and bars on top, people at the edge watching
 const uluG=new THREE.Group(),_UP=new V3(0,1,0);uluG.visible=false;scene.add(uluG);const ULU={};
 {/* Uluwatu: a bay ringed by limestone cliffs, the far side of it standing behind the wave. Strata and erosion grooves, the wave-cut notch and caves
@@ -1645,6 +1671,7 @@ const SEC_BY={1:SEC.map(C=>({...C})),
   2:[{t0:7,c0:46,v:2.0,h:10.5,k:0,d:4.5,fol:1},{t0:15,c0:34,v:4.6,h:8,k:1},{t0:20,c0:36,v:4.4,h:7.5,k:1},{t0:25,c0:34,v:4.6,h:7.5,k:1},{t0:29.5,c0:44,v:2.2,h:9.5,k:0,d:6,fol:1},{t0:37,c0:42,v:2.6,h:7.5,k:2}],   /* Uluwatu: a long left, about 45 s: a short pit off the Peak, the fast Outside Corner walls with three sections to turn on, the hollow Racetracks barrel near the end, the junction, then the shallow reef */
   3:[{t0:6,c0:46,v:1.4,h:11.5,k:0,d:8.5,fol:1},{t0:16,c0:30,v:4.8,h:8.5,k:1},{t0:20.8,c0:26,v:2.6,h:8,k:2}],   /* Pipeline: one long, thick, dry barrel spitting all the way, then a ramp for an air and the junction */
   4:[{t0:6.2,c0:46,v:2.0,h:9,k:0,d:5,fol:1},{t0:11.6,c0:27,v:4.9,h:9.2,k:1},{t0:20.0,c0:38,v:2.6,h:8.6,k:2}],   /* Cloud 9: a right, ~30 s: the barrel off the drop, one clean ramp for an air, then an open wall with no sections for two or three turns, the junction for one big last hit, and it all closes out in one block of white water */
+  8:[{t0:6.4,c0:46,v:2.0,h:9.5,k:0,d:5,fol:1},{t0:11.8,c0:28,v:4.8,h:9.2,k:1},{t0:15.6,c0:30,v:4.6,h:7.8,k:1},{t0:19.4,c0:34,v:4.4,h:7.4,k:1},{t0:21.6,c0:40,v:2.6,h:8.8,k:2}],   /* Þorlákshöfn: a dark, cold right, ~30 s: the barrel off the drop, a ramp, foam sections one after the other, the junction, and it all closes out white */
   5:[{t0:6.5,c0:24,v:4.6,h:7,k:1},{t0:9.5,c0:24,v:4.4,h:7,k:1},{t0:12.5,c0:24,v:4.4,h:6.5,k:1},{t0:14.5,c0:20,v:2.6,h:7,k:2}],
   6:[{t0:7.5,c0:34,v:4.6,h:7,k:1},{t0:14,c0:36,v:4.4,h:6.8,k:1},{t0:19.5,c0:46,v:1.5,h:10.5,k:0,d:7.5,fol:1}],
   7:[{t0:7,c0:2,v:-1.5,h:7,k:1,d:8},{t0:17,c0:2,v:-1.8,h:8,k:1,d:8},{t0:27,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:37,c0:2,v:-1.9,h:8,k:1,d:8},{t0:47,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:57,c0:2,v:-1.8,h:8,k:1,d:8},{t0:67,c0:2,v:-1.7,h:8,k:1,d:8}]};   /* surges of heavy white water rolling out from the curl and chasing him down the line, one every ten seconds */   /* Campeche Rights: open walls to turn on, two sections to hit, the dry barrel only at the end */   /* Campeche Rights: a long right, five sections to turn on down the wall, and the dry barrel only at the end */   /* Trestles: a 20 s crumbling peak, no barrel at any point: sections to hit and float, the junction to finish */
@@ -1723,16 +1750,19 @@ const SPOT_LOOK={2:{wa:[0.0,0.034,0.080],wb:[0.0,0.190,0.300],g1:[0.0,0.28,0.38]
   4:{wa:[0.0,0.040,0.070],wb:[0.0,0.240,0.300],g1:[0.0,0.32,0.38],g2:[0.15,0.98,0.85],fl:[0.22,0.56,0.50],fll:[0.05,0.18,0.20],flk:0.86,fog:[0.60,0.78,0.92],hill:0x4c8a44,hy:0.38,rot:-0.4},
   7:{wa:[0.030,0.022,0.010],wb:[0.20,0.15,0.07],g1:[0.30,0.24,0.11],g2:[0.82,0.68,0.36],fl:[0.24,0.19,0.10],fll:[0.09,0.07,0.035],flk:0.45,fog:[0.64,0.70,0.62],hill:0x2f5a2a,hy:0.5,rot:0,amz:1},   /* Pororoca: café-com-leite water, the light through the lip a muddy gold, humid green haze */
   6:{wa:[0.0,0.036,0.060],wb:[0.0,0.205,0.250],g1:[0.0,0.30,0.34],g2:[0.14,0.95,0.80],fl:[0.52,0.50,0.40],fll:[0.30,0.29,0.22],flk:0.9,fog:[0.66,0.80,0.93],hill:0x3f7a3a,hy:0.5,rot:0.2,camp:1},   /* Campeche: South Atlantic green-blue over sand */
+  8:{wa:[0.0,0.008,0.016],wb:[0.004,0.050,0.068],g1:[0.01,0.095,0.115],g2:[0.10,0.40,0.44],fl:[0.05,0.065,0.075],fll:[0.015,0.022,0.028],flk:0.45,fog:[0.58,0.63,0.69],hill:0x24272b,hy:1,rot:0,ice:1,dark:1,suit:1},   /* Þorlákshöfn: near-black North Atlantic water, the light through the lip a cold dark green, grey arctic air */
   5:{wa:[0.003,0.040,0.055],wb:[0.020,0.180,0.200],g1:[0.02,0.26,0.28],g2:[0.25,0.85,0.70],fl:[0.30,0.32,0.28],fll:[0.12,0.13,0.12],flk:0.7,fog:[0.64,0.74,0.84],hill:0x9a8a62,hy:0.5,rot:0.9}};
 function spotTint(n){const on=SPOT.id!==1,U=waveMat.uniforms,S3=(u,v,k)=>u.value.set(v[0]*k,v[1]*k,v[2]*k);
-  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;uluG.visible=false;campG.visible=false;amzG.visible=false;U.uReef.value=on?1:0;scene.fog.density=SPOT.id===6?0.0007:SPOT.id===7?0.0017:0.0011;   /* clear tropical air: the far hills keep their colour */
+  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;uluG.visible=false;campG.visible=false;amzG.visible=false;iceG.visible=false;SNOW.pts.visible=false;SUIT.value=0;U.uWDk.value=0;if(typeof RIG!=='undefined'&&RIG.kNeck){RIG.kNeck.material.color.set(0xe4ae8c);RIG.kNeck.material.emissive.set(0xe4ae8c)}U.uReef.value=on?1:0;scene.fog.density=SPOT.id===6?0.0007:SPOT.id===7?0.0017:SPOT.id===8?0.0019:0.0011;   /* clear tropical air: the far hills keep their colour */
   if(!on)return;
-  const L=SPOT_LOOK[SPOT.id]||SPOT_LOOK[2];tahitiG.visible=!L.cliffs&&!L.camp&&!L.amz;uluG.visible=!!L.cliffs;campG.visible=!!L.camp;amzG.visible=!!L.amz;ULU.lights.emissiveIntensity=n?2.4:0.25;ULU.lights.color.set(n?0xffd9a0:0x9a8f80);
+  const L=SPOT_LOOK[SPOT.id]||SPOT_LOOK[2];tahitiG.visible=!L.cliffs&&!L.camp&&!L.amz&&!L.ice;uluG.visible=!!L.cliffs;campG.visible=!!L.camp;amzG.visible=!!L.amz;iceG.visible=!!L.ice;SNOW.pts.visible=!!L.ice;
+  U.uWDk.value=L.dark?1:0;if(L.suit){SUIT.value=1;if(typeof RIG!=='undefined'&&RIG.kNeck){RIG.kNeck.material.color.set(0x070708);RIG.kNeck.material.emissive.set(0x000000)}}   /* the arctic: a black hooded wetsuit, gloves and boots */ULU.lights.emissiveIntensity=n?2.4:0.25;ULU.lights.color.set(n?0xffd9a0:0x9a8f80);
   tahitiG.children.forEach(m=>m.material.color.set(L.hill));tahitiG.scale.set(1,L.hy,1);tahitiG.rotation.y=L.rot;
   /* every wave keeps the finish of the first one (the pool's emerald water, glow and foam, just set by setTOD): the spot only tints it a little, and the reef floor a bit more */
   const M3=(u,v,sc,k)=>u.value.lerp(_tintV.set(v[0]*sc,v[1]*sc,v[2]*sc),k);
   if(n){M3(U.uWA,L.wa,0.5,0.25);M3(U.uWB,L.wb,0.6,0.25);M3(U.uFl,L.fl,0.35,0.55);M3(U.uFlL,L.fll,0.4,0.55);U.uFlK.value=lerp(U.uFlK.value,0.55,0.3)}
-  else{const kw=L.amz?0.88:0.25,kf=L.amz?0.9:0.55;M3(U.uWA,L.wa,1,kw);M3(U.uWB,L.wb,1,kw);M3(U.uG1,L.g1,1,kw);M3(U.uG2,L.g2,1,kw);M3(U.uFl,L.fl,1,kf);M3(U.uFlL,L.fll,1,kf);if(L.amz){U.uFoamA.value.lerp(_tintV.set(0.66,0.61,0.50),0.7);U.uFoamB.value.lerp(_tintV.set(1.04,1.0,0.92),0.6)}U.uFlK.value=lerp(U.uFlK.value,L.flk,0.3);scene.fog.color.setRGB(L.fog[0],L.fog[1],L.fog[2])}}
+  else{const kw=L.amz?0.88:L.dark?0.86:0.25,kf=L.amz?0.9:L.dark?0.85:0.55;M3(U.uWA,L.wa,1,kw);M3(U.uWB,L.wb,1,kw);M3(U.uG1,L.g1,1,kw);M3(U.uG2,L.g2,1,kw);M3(U.uFl,L.fl,1,kf);M3(U.uFlL,L.fll,1,kf);if(L.amz){U.uFoamA.value.lerp(_tintV.set(0.66,0.61,0.50),0.7);U.uFoamB.value.lerp(_tintV.set(1.04,1.0,0.92),0.6)}
+    if(L.ice){U.uFoamA.value.lerp(_tintV.set(0.60,0.66,0.72),0.75);U.uFoamB.value.lerp(_tintV.set(1.0,1.02,1.05),0.7);U.uSpecC.value.multiplyScalar(0.55);sunL.intensity*=0.52;sunL.color.set(0xe2e9f2);hemiL.color.set(0xb6c2ce);hemiL.groundColor.set(0x1a2830);hemiL.intensity*=1.1;fillL.intensity*=0.8;renderer.toneMappingExposure*=0.94;bloom.strength*=0.8;RIM.value.setRGB(0.22,0.27,0.32)}   /* a low, grey arctic light: no hot sun, soft cold shadows */U.uFlK.value=lerp(U.uFlK.value,L.flk,0.3);scene.fog.color.setRGB(L.fog[0],L.fog[1],L.fog[2])}}
 const _tintV=new THREE.Vector3();const _qRelB=new THREE.Quaternion();const _qFF=new THREE.Quaternion(),_qFF2=new THREE.Quaternion();
 
 /* ───────────────────────── progression ───────────────────────── */
@@ -1999,7 +2029,7 @@ function kidHeadBuild(){const A0=RIG.b.head.A0,fwd=RIG.fwd||new V3(0,0,1),up=new
     const k=KHG.h/(bb.max.y-bb.min.y);m.scale.setScalar(k);m.rotation.y=-PI/2;m.position.set(c.z*k,KHG.y-c.y*k,KHG.z-c.x*k);m.castShadow=true;m.frustumCulled=false;
     G.children.forEach(o=>{if(o.isMesh)o.visible=false});G.add(m);RIG.kGLB=m;
     const nm=new THREE.MeshStandardMaterial({color:0xe4ae8c,emissive:0xe4ae8c,emissiveIntensity:0.16,roughness:0.6,metalness:0});   /* a neck, a boy's, so the head doesn't sit on the shoulders */
-    const neck=new THREE.Mesh(new THREE.CylinderGeometry(KHG.nr,KHG.nr*1.18,KHG.nl,20,1,true),nm);neck.position.set(0,KHG.y-0.07-KHG.nl/2,KHG.nz);neck.castShadow=true;neck.frustumCulled=false;G.add(neck);RIG.kNeck=neck});
+    const neck=new THREE.Mesh(new THREE.CylinderGeometry(KHG.nr,KHG.nr*1.18,KHG.nl,20,1,true),nm);neck.position.set(0,KHG.y-0.07-KHG.nl/2,KHG.nz);neck.castShadow=true;neck.frustumCulled=false;G.add(neck);RIG.kNeck=neck;if(SUIT.value){nm.color.set(0x070708);nm.emissive.set(0x000000)}});
   return G}
 /* the Magnific head, retouched in the shader (positions in the model's own frame: nose toward +x, up +y, ears along z, about -0.5..0.5):
    the hair is a light brown with fair, sun-bleached strands mixed all through it instead of a few orange-and-blond locks; at the back it comes
@@ -2323,16 +2353,16 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        c2.putImageData(id,0,0);const t=new THREE.CanvasTexture(cv);t.flipY=map.flipY;t.colorSpace=map.colorSpace;t.wrapS=map.wrapS;t.wrapT=map.wrapT;t.anisotropy=4;map=t;RIG.fix={hair:nh,grey:ng,skin:[sr|0,sg|0,sb|0]};RIG.kidSrc={cv,W,H,hi,A0:nA.clone(),fwd:fwd.clone(),pos,uv,si,sw,idx:mesh.geometry.index,flipY:map.flipY,cs:map.colorSpace,ws:map.wrapS,wt:map.wrapT}}}catch(e){console.warn('surfista 3D textura:',e)}
    si.needsUpdate=sw.needsUpdate=true;
    mesh.material=new THREE.MeshPhysicalMaterial({map,side:m0.side,roughness:0.46,metalness:0,clearcoat:0.55,clearcoatRoughness:0.22,sheen:0.35,sheenRoughness:0.5,sheenColor:new THREE.Color(0xffb489),envMapIntensity:1.25});   // wet skin and boardshorts
-   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.uniforms.uKid=KIDU;sh.uniforms.uKidSkin=KIDSKIN;sh.uniforms.uLyc=LYC.c;sh.uniforms.uLycK=LYC.k;sh.uniforms.uLycT=LYC.t;sh.uniforms.uLycF=LYC.f;sh.uniforms.uLycTex=LYC.tex;
-     sh.vertexShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uLycK;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;{float ed;float m=uLycK*smoothstep(0.,0.004,lycD(position,ed));transformed+=normal*m*(0.0026+0.0012*(1.-smoothstep(0.55,0.64,position.y)))*(1.-0.75*smoothstep(0.80,0.85,position.y));}');
-     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\n#define SH_Y (0.385)\nuniform float uKid;uniform vec3 uKidSkin;uniform float uAlt;uniform vec3 uLyc;uniform float uLycK;uniform vec3 uLycT;uniform float uLycF;uniform sampler2D uLycTex;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+   mesh.material.onBeforeCompile=sh=>{sh.uniforms.uAlt=ALT;sh.uniforms.uSuit=SUIT;sh.uniforms.uKid=KIDU;sh.uniforms.uKidSkin=KIDSKIN;sh.uniforms.uLyc=LYC.c;sh.uniforms.uLycK=LYC.k;sh.uniforms.uLycT=LYC.t;sh.uniforms.uLycF=LYC.f;sh.uniforms.uLycTex=LYC.tex;
+     sh.vertexShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\nuniform float uLycK;uniform float uSuit;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vMY=position.y;vMN=position;{float ed;float m=uLycK*(1.-uSuit)*smoothstep(0.,0.004,lycD(position,ed));transformed+=normal*m*(0.0026+0.0012*(1.-smoothstep(0.55,0.64,position.y)))*(1.-0.75*smoothstep(0.80,0.85,position.y));}');
+     sh.fragmentShader='#define FSX ('+FACE_SIGN.toFixed(1)+')\n#define SH_Y (0.385)\nuniform float uSuit;uniform float uKid;uniform vec3 uKidSkin;uniform float uAlt;uniform vec3 uLyc;uniform float uLycK;uniform vec3 uLycT;uniform float uLycF;uniform sampler2D uLycTex;varying float vMY;varying vec3 vMN;\n'+LYC_GLSL+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
      float material_eyeK=0.;float neckK=smoothstep(0.8,0.83,vMY)*(1.-smoothstep(0.91,0.93,vMY));float faceK=smoothstep(FSX*0.02,FSX*0.05,vMN.x)*smoothstep(0.85,0.875,vMY)*(1.-smoothstep(0.955,0.975,vMY));   // the face: texture softened so the blotches melt together
      if(faceK>0.01){vec2 o=vec2(0.0024,0.);vec3 av=(texture2D(map,vMapUv+o).rgb+texture2D(map,vMapUv-o).rgb+texture2D(map,vMapUv+o.yx).rgb+texture2D(map,vMapUv-o.yx).rgb+diffuseColor.rgb*2.)/6.;
        float la=dot(av,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,av,0.7*faceK);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.62,0.36,0.20)*(la/0.38),0.18*faceK*smoothstep(0.7,0.45,la));float lc=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb*=mix(1.,min(1.,0.3/max(lc,0.01)),faceK*smoothstep(0.28,0.42,lc));material_eyeK=faceK;}
      {vec3 c0=diffuseColor.rgb;float cool0=max(c0.g,c0.b)-c0.r,neck=smoothstep(0.74,0.77,vMY)*(1.-smoothstep(0.915,0.93,vMY));   // a blue collar left in the model's texture at the base of the neck: painted over in skin
       float l0=dot(c0,vec3(.3,.59,.11));float tealK=smoothstep(0.0,0.035,c0.g-c0.r)*smoothstep(0.0,0.03,c0.b-c0.r*0.9);diffuseColor.rgb=mix(c0,vec3(0.62,0.36,0.20)*clamp(l0/0.3,0.7,1.4),neck*tealK);}
      vec3 cOrig=diffuseColor.rgb;
-     float lycE;float lycK=uLycK*(1.-uKid)*smoothstep(0.0,0.0025,lycD(vMN,lycE));   /* the competition jersey */
+     float lycE;float lycK=uLycK*(1.-uKid)*(1.-uSuit)*smoothstep(0.0,0.0025,lycD(vMN,lycE));float suitK=0.;   /* the competition jersey */
      if(uAlt>0.5){vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.3,.59,.11));float cool=max(c.g,c.b)-c.r;
        c=mix(c,vec3(1.0,0.36,0.08)*l*3.6,smoothstep(0.008,0.024,cool)*step(vMY,0.6));   // regular: orange boardshorts
        float face=smoothstep(FSX*0.015,FSX*0.045,vMN.x)*(1.-smoothstep(0.955,0.975,vMY));   // the front of the head (face, brows, beard) is left alone
@@ -2350,9 +2380,13 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
           /* no contrast binding: the dyed lycra runs straight to the skin at the neck and the sleeves */
        float bk=1.-smoothstep(-0.04,-0.018,vMN.x*FSX);vec2 pu=vec2(0.5+mix(vMN.z,-vMN.z,uLycF)/0.15,(vMN.y-0.615)/0.15);
        float pa=bk*step(0.,pu.x)*step(pu.x,1.)*step(0.,pu.y)*step(pu.y,1.)*texture2D(uLycTex,pu).a;fab=mix(fab,uLycT,pa*0.95);
-       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*max(lycK,kidK));totalEmissiveRadiance+=uKidSkin*0.10*kidK;material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(mix(material.sheenColor,uLyc*0.22+0.03,lycK),vec3(0.0),kidK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
+       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}
+     if(uSuit>0.5){float fo=smoothstep(FSX*0.018,FSX*0.040,vMN.x)*smoothstep(0.862,0.884,vMY)*(1.-smoothstep(0.944,0.960,vMY))*(1.-uKid);   /* the hood leaves only the face */
+       float lu=dot(cOrig,vec3(.3,.59,.11));vec3 neo=vec3(0.011,0.0115,0.013);
+       float sm=(1.-smoothstep(0.0,0.0035,abs(vMN.z)))*step(0.30,vMY)*(1.-step(0.80,vMY))*smoothstep(-0.01,0.01,-vMN.x*FSX);neo=mix(neo,vec3(0.075,0.078,0.085),sm*0.7);   /* the zip seam down the back */
+       suitK=1.-fo;diffuseColor.rgb=mix(diffuseColor.rgb,neo,suitK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*max(lycK,kidK));material.roughness=mix(material.roughness,0.80,suitK);material.clearcoat=mix(material.clearcoat,0.0,suitK);material.specularColor*=mix(1.,0.10,suitK);totalEmissiveRadiance+=uKidSkin*0.10*kidK;totalEmissiveRadiance*=1.-0.94*suitK;material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(mix(mix(material.sheenColor,uLyc*0.22+0.03,lycK),vec3(0.0),kidK),vec3(0.0),suitK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
    {const ob=mesh.material.onBeforeCompile;mesh.material.onBeforeCompile=sh=>{ob(sh);sh.uniforms.uRim=RIM;
-     sh.fragmentShader='uniform vec3 uRim;\n'+sh.fragmentShader.replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g);}\n#include <opaque_fragment>')}}
+     sh.fragmentShader='uniform vec3 uRim;\n'+sh.fragmentShader.replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g)*(1.-0.55*suitK);}\n#include <opaque_fragment>')}}
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
@@ -2663,7 +2697,7 @@ function dropTick(dt){
   if(game.state!=='ride'||game.replay||!RIG.on){if(DROP.on)dropEnd();return}
   const D=DROP;
   if(!D.on){
-    if(D.done||!D.ready||game.waveAge<Math.max(10,game.waveDur*0.35)||game.waveAge>game.waveDur-8)return;   /* never so late that the wave ends with him still on it */
+    if(D.done||!D.ready||SPOT.id===8||game.waveAge<Math.max(10,game.waveDur*0.35)||game.waveAge>game.waveDur-8)return;   /* no boardshorts local in the arctic */   /* never so late that the wave ends with him still on it */
     if(sf.mode!=='ride'||sf.rh||sf.tt||sf.pivot>0||game.inTube||sf.introT>0||sf.s<9||sf.s>40)return;
     const s0=sf.s+22;if(colFoam[Math.round(colIndex(s0))]>0.08||colFoam[Math.round(colIndex(sf.s+12))]>0.08||colFoam[Math.round(colIndex(sf.s+5))]>0.08)return;   // open wall only
     sampleSurf(s0,0,npcS);Object.assign(D,{on:true,ph:'pad',t:0,s:s0,p:0.30*npcS.top,th:-1.0,splashed:false,spl:0,klutz:Math.random()<0.4});   /* 4 times in 10 he blows the take-off on his own */   /* he comes from further down the line, low on the face, paddling flat out to get into it */npcG.visible=npcBoard.visible=true;
@@ -3035,9 +3069,9 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
   tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
-function startWave(att){qQuiet=performance.now()+2000;if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
+function startWave(att){qQuiet=performance.now()+2000;if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6||SPOT.id===8?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
-  {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
+  {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&SPOT.id!==8&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.fin='';game.finale=0;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
@@ -3397,7 +3431,7 @@ function softBreakTick(dt){if(SBRK.t<0||!SBRK.parts)return;SBRK.t+=dt;SBRK.parts
 function wipe(){
   if(sf.mode==='wipe')return;
   if(game.state!=='ride'){sf.visible=false;return}
-  if((SPOT.id===3||SPOT.id===4)&&!game.attract&&!game.finale&&game.waveAge>game.waveDur-4.8){game.finale=1;if(!game.fin){game.fin='eat';game.finAt=game.waveAge}}   /* taken by Pipeline's closeout: that is the end of the wave, not a fall (the full ride still counts) */
+  if((SPOT.id===3||SPOT.id===4||SPOT.id===8)&&!game.attract&&!game.finale&&game.waveAge>game.waveDur-4.8){game.finale=1;if(!game.fin){game.fin='eat';game.finAt=game.waveAge}}   /* taken by Pipeline's closeout: that is the end of the wave, not a fall (the full ride still counts) */
   sf.tt=null;sf.slip=0;
   sf.mode='wipe';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sf.splashed=false;sf.bSplash=false;sf.wB=0;if(!game.finale&&sf.s>0.5&&sf.p>0.45*(S.top||1))lipBurst(0.5,sf.s);   /* going over with the lip tears it as well */
   sf.wVel.set(clamp(sf.V*Math.cos(sf.th)-CP,-5,3),2.6,1.6);
@@ -4162,7 +4196,7 @@ function reelCut(){const ids=SPOTS.filter(spotOpen).map(o=>o.id);if(ids.length<1
   const ff=0.9+((REEL.i*0.7)%1);TR.ffN=Math.round(ff*20);   /* straight into the middle of the ride, a few ticks per frame while the foam covers the screen */
   const cam=['tele','follow','drone','front','tele','follow'][REEL.i%6];TR.after=()=>{REEL.cam=cam;camInit=false}}
 function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
-  clockT+=dtR;if(game.lipQ&&game.lipQ.length&&game.waveAge>=game.lipQ[0].at){const q=game.lipQ.shift();if(game.state==='ride'||game.attract)lipBurst(q.k,q.s)}if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
+  clockT+=dtR;if(game.lipQ&&game.lipQ.length&&game.waveAge>=game.lipQ[0].at){const q=game.lipQ.shift();if(game.state==='ride'||game.attract)lipBurst(q.k,q.s)}if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(SNOW.pts.visible){SNOW.m.uniforms.uT.value=clockT;SNOW.m.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
   let dt;const rp=game.replay;
   if(rp){
     const R=game.rec;let rate=1;
