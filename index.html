@@ -2044,7 +2044,8 @@ function kidHeadBuild(){const A0=RIG.b.head.A0,fwd=RIG.fwd||new V3(0,0,1),up=new
     const k=KHG.h/(bb.max.y-bb.min.y);m.scale.setScalar(k);m.rotation.y=-PI/2;m.position.set(c.z*k,KHG.y-c.y*k,KHG.z-c.x*k);m.castShadow=true;m.frustumCulled=false;
     G.children.forEach(o=>{if(o.isMesh)o.visible=false});G.add(m);RIG.kGLB=m;
     const nm=new THREE.MeshStandardMaterial({color:0xe4ae8c,emissive:0xe4ae8c,emissiveIntensity:0.16,roughness:0.6,metalness:0});   /* a neck, a boy's, so the head doesn't sit on the shoulders */
-    const neck=new THREE.Mesh(new THREE.CylinderGeometry(KHG.nr,KHG.nr*1.18,KHG.nl,20,1,true),nm);neck.position.set(0,KHG.y-0.07-KHG.nl/2,KHG.nz);neck.castShadow=true;neck.frustumCulled=false;G.add(neck);RIG.kNeck=neck;if(SUIT.value){nm.color.set(0x070708);nm.emissive.set(0x000000)}});
+    const neck=new THREE.Mesh(new THREE.CylinderGeometry(KHG.nr,KHG.nr*1.18,KHG.nl,20,1,true),nm);neck.position.set(0,KHG.y-0.07-KHG.nl/2,KHG.nz);neck.castShadow=true;neck.frustumCulled=false;G.add(neck);RIG.kNeck=neck;if(SUIT.value){nm.color.set(0x070708);nm.emissive.set(0x000000)}
+    try{kidLocks(G,m,ge)}catch(e){console.warn('locks',e)}});
   return G}
 /* the Magnific head, retouched in the shader (positions in the model's own frame: nose toward +x, up +y, ears along z, about -0.5..0.5):
    the hair is a light brown with fair, sun-bleached strands mixed all through it instead of a few orange-and-blond locks; at the back it comes
@@ -2067,18 +2068,35 @@ function kidHeadMod(mat){mat.onBeforeCompile=sh=>{
      float hm=(1.-smoothstep(0.54,0.60,br))*smoothstep(0.10,0.18,L)*pos;
      hm=max(hm,khNape(p));
      if(hm>0.){float n1=khn(vec3(p.z*30.,p.y*4.5,p.x*30.)),n2=khn(p*5.+3.1),n3=khn(vec3(p.z*70.,p.y*9.,p.x*70.));
-       float m=clamp(smoothstep(0.46,0.86,0.50*n1+0.30*n2+0.20*n3)*0.88+0.12*smoothstep(0.05,0.40,p.y),0.,1.);   /* fair strands everywhere, a little more of them on top */
-       vec3 hc=mix(vec3(0.52,0.38,0.25),vec3(0.85,0.73,0.51),m)*clamp(0.84+0.45*(L-0.36)+0.10*(n3-0.5),0.74,1.10);
+       float m=clamp(smoothstep(0.44,0.84,0.50*n1+0.30*n2+0.20*n3)*0.85+0.22*smoothstep(0.05,0.38,p.y)+0.14*smoothstep(0.15,0.32,p.x)*smoothstep(-0.02,0.12,p.y),0.,1.);   /* golden streaks through it, most of them on top and in the fringe */   /* fair strands everywhere, a little more of them on top */
+       vec3 hc=mix(vec3(0.46,0.33,0.21),vec3(0.86,0.72,0.47),m)*clamp(0.84+0.45*(L-0.36)+0.10*(n3-0.5),0.74,1.10);
        diffuseColor.rgb=mix(diffuseColor.rgb,pow(hc,vec3(2.2)),hm);}
      {vec3 p=vKs,SK=vec3(0.571,0.283,0.202);   /* a calmer face for riding: mouth closed in a small smile, eyes open */
       float e=pow((p.y+0.335)/0.14,2.)+pow(p.z/0.25,2.),mk=(1.-smoothstep(0.78,1.0,e))*step(0.08,p.x);
       if(mk>0.){vec3 c=SK;float yl=-0.322+1.1*p.z*p.z,d=abs(p.y-yl),zk=1.-smoothstep(0.085,0.115,abs(p.z));
-        c=mix(c,vec3(0.62,0.22,0.18),(1.-smoothstep(0.012,0.034,d))*zk*0.5);c=mix(c,vec3(0.20,0.05,0.04),(1.-smoothstep(0.0035,0.008,d))*zk);diffuseColor.rgb=mix(diffuseColor.rgb,c,mk);}
+        c=mix(c,vec3(0.62,0.22,0.18),(1.-smoothstep(0.012,0.034,d))*zk*0.5);
+        float tz=abs(p.z),th=step(yl-0.020,p.y)*step(p.y,yl-0.002)*(1.-smoothstep(0.060,0.072,tz));c=mix(c,vec3(0.80,0.77,0.71),th*(1.-smoothstep(0.004,0.0075,abs(tz-0.0)))*0.0+th);c=mix(c,vec3(0.16,0.05,0.04),th*(1.-smoothstep(0.004,0.008,tz)));   /* a light smile showing the front teeth, with the gap between them */
+        c=mix(c,vec3(0.20,0.05,0.04),(1.-smoothstep(0.0035,0.008,d))*zk);diffuseColor.rgb=mix(diffuseColor.rgb,c,mk);}
       for(int i=0;i<2;i++){float zc=i==0?-0.145:0.145;vec2 q=vec2((p.z-zc)/0.072,(p.y+0.072)/0.040);float r=length(q),box=step(0.12,p.x)*(1.-smoothstep(1.3,1.6,max(abs(q.x),abs(q.y))));
         if(box>0.){vec3 c=SK;float wh=1.-smoothstep(0.90,1.0,r);c=mix(c,vec3(0.91,0.88,0.84),wh);
           vec2 qi=q-vec2(0.,-0.08);float ri=length(qi*vec2(1./0.44,1./0.80));c=mix(c,vec3(0.16,0.07,0.025),(1.-smoothstep(0.88,1.0,ri))*wh);c=mix(c,vec3(0.01),(1.-smoothstep(0.40,0.50,ri))*wh);
           c=mix(c,vec3(1.),(1.-smoothstep(0.10,0.16,length((qi-vec2(-0.13,0.28))*vec2(1.,0.6))))*wh);float lid=(1.-smoothstep(0.04,0.11,abs(r-1.)))*smoothstep(-0.2,0.3,q.y);c=mix(c,vec3(0.06,0.03,0.02),lid);
           diffuseColor.rgb=mix(diffuseColor.rgb,c,box);}}}}`).replace('#include <emissivemap_fragment>','totalEmissiveRadiance=emissive*diffuseColor.rgb;');}}
+/* the boy's hair a little longer and wispy, as in his photos: thin locks rooted on the hair of the 3D head (each root found on the model's own surface,
+   so none floats): a fringe swept to one side over the forehead, wisps over the ears, the nape ending in uneven tips; brown with golden streaks */
+function kidLocks(G,m,ge){const P=ge.attributes.position,N=P.count,k=m.scale.x,M=m.position,toG=(x,y,z)=>new V3(M.x-z*k,M.y+y*k,M.z+x*k);
+  const surf=(y,z,front)=>{let best=front?-9:9;for(let i=0;i<N;i++){const vy=P.getY(i),vz=P.getZ(i);if(Math.abs(vy-y)<0.03&&Math.abs(vz-z)<0.03){const vx=P.getX(i);if(front?vx>best:vx<best)best=vx}}return Math.abs(best)>5?null:best};
+  const COL=[0x5e4128,0x6e4c30,0x80593a,0xa98450,0xc6a066,0xd9bb80],mats=COL.map(c=>new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:0.10,roughness:0.85,metalness:0,side:THREE.DoubleSide}));
+  let sd=31;const rn=()=>(sd=(sd*16807)%2147483647)/2147483647,grp=new THREE.Group();grp.name='kidLocks';const _n=new V3(),_d=new V3();
+  const add=(x,y,z,dx,dy,dz,len,w,bl)=>{_n.set(x,y-0.04,z).normalize();_d.set(dx,dy,dz).normalize();_d.addScaledVector(_n,-0.92*_d.dot(_n)).addScaledVector(_n,0.10).normalize();   /* laid along the hair, not sticking out */
+    const g=new THREE.ConeGeometry(w*k,len*k,4,1,true);g.translate(0,-len*k/2,0);g.scale(1,1,0.22);
+    const me=new THREE.Mesh(g,mats[Math.min(5,Math.floor(rn()*3)+(rn()<bl?3:0))]),p=toG(x,y,z);me.position.copy(p);const d=toG(x+_d.x,y+_d.y,z+_d.z).sub(p).normalize();
+    me.quaternion.setFromUnitVectors(new V3(0,-1,0),d);const nG=toG(x+_n.x,y+_n.y,z+_n.z).sub(p).normalize();me.updateMatrixWorld();
+    const flat=new V3(0,0,1).applyQuaternion(me.quaternion);me.rotateOnAxis(new V3(0,1,0),Math.atan2(flat.clone().cross(nG).dot(d),flat.dot(nG)));me.frustumCulled=false;grp.add(me)};   /* the flat side of the lock against the head */
+  for(let i=0;i<40;i++){const z=-0.26+0.52*(i/39)+(rn()-0.5)*0.025,y=0.12+0.05*rn(),x=surf(y,z,true);if(x===null)continue;   /* the fringe, longer and wispy, swept to one side over the forehead */
+    add(x*0.99,y,z,0.10,-1,-0.65-0.25*rn(),0.09+0.06*rn(),0.009+0.006*rn(),0.55)}
+  for(let i=0;i<26;i++){const z=-0.27+0.54*(i/25)+(rn()-0.5)*0.025,y=-0.28-0.05*rn(),x=surf(y,z,false);if(x===null||x>-0.15)continue;add(x*0.99,y,z,-0.10,-1,(rn()-0.5)*0.3,0.07+0.05*rn(),0.009+0.006*rn(),0.30)}   /* the nape ending in uneven tips */
+  G.add(grp);RIG.kLocks=grp}
 const KHG={h:0.265,y:0.010,z:0.004,glow:0.22,nr:0.047,nl:0.19,nz:-0.014};   /* the Magnific head: total height (neck to the tips of the hair), and how far it sits up and forward on the head joint */
 /* a child's build, not a small grown-up: thin arms and legs, a slim neck, narrow shoulders and a flat chest, a body that is straight up and down */
 function kidBones(){const b=RIG.b;if(RIG.kB||!b||!b.chest||!RIG.arm.length)return;RIG.kB=1;
