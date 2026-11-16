@@ -51,8 +51,8 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block}
 #combo{font-size:20px;font-style:italic;font-weight:800;color:var(--ps-acc);height:24px;margin-top:4px}
 #wavebar{position:absolute;left:50%;top:calc(var(--bar,5.5vh) + 2.7vh);width:180px;height:3px;margin-left:-90px;background:rgba(255,255,255,.22);border-radius:2px;opacity:0;transition:opacity .6s}
 #wavebar.on{opacity:1}#wavebar i{display:block;height:100%;width:100%;background:#fff;border-radius:2px;transform-origin:left}
-#tip{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 2.4vh);transform:translateX(-50%);display:none;gap:14px;align-items:center;white-space:nowrap;padding:7px 16px;border-radius:999px;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.16);font-size:12px;font-weight:700;letter-spacing:.16em;color:#fff;transition:opacity .25s;opacity:0;pointer-events:none}
-body.riding #tip{display:flex}#tip.on{opacity:.92}#tip kbd{font:inherit;font-weight:800;color:var(--ps-navy);background:var(--ps-grad);border-radius:5px;padding:1px 7px;margin-left:6px;letter-spacing:.06em}body.touch #tip{font-size:10px;padding:5px 12px;gap:10px;bottom:calc(var(--bar,5.5vh) + 1.2vh)}
+#tip{position:absolute;left:50%;bottom:calc(var(--bar,5.5vh) + 2.4vh);transform:translateX(-50%);display:none;gap:14px;align-items:center;white-space:nowrap;padding:10px 22px;border-radius:999px;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.22);font-size:15px;font-weight:700;letter-spacing:.16em;box-shadow:0 6px 22px rgba(0,0,0,.30);color:#fff;transition:opacity .25s;opacity:0;pointer-events:none}
+body.riding #tip{display:flex}#tip.on{opacity:.92}#tip kbd{font:inherit;font-weight:800;color:var(--ps-navy);background:var(--ps-grad);border-radius:6px;padding:2px 9px;margin-left:7px;letter-spacing:.06em}body.touch #tip{font-size:12px;padding:6px 14px;gap:10px;bottom:calc(var(--bar,5.5vh) + 1.2vh)}
 #pop{position:absolute;left:4vw;bottom:calc(var(--bar,5.5vh) + 12vh);display:flex;flex-direction:column-reverse;gap:6px}
 #pop .p{animation:pop 2.3s cubic-bezier(.2,.9,.2,1) forwards;text-shadow:0 3px 22px rgba(0,0,0,.5)}
 #pop .p b{display:block;font-size:clamp(34px,5.2vw,74px);font-style:italic;font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
@@ -1774,7 +1774,7 @@ const BOARDS=[   /* the PRO MODEL comes first and is open from the start: every 
   {id:'pro',name:'PRO MODEL',sub:"6'0 · SQUASH TAIL",L:1.84,W:0.49,pal:[0x14171b,0xffd94a,0x14171b],pat:'fade',fins:3,spd:1.05,trn:1.05},
   {id:'classic',spr:1.2,name:'CLASSIC',sub:"6'0 THRUSTER · FISH TAIL",tail:'fish',notch:0.09,L:1.86,W:0.49,pal:[0xf6f2e8,0x12b5a6,0x1b1f24],pat:'nose',fins:3,spd:1,trn:1},
   {id:'fish',spr:1.1,name:'FISH',sub:"5'6 TWIN · FISH TAIL",tail:'fish',notch:0.15,L:1.72,W:0.53,pal:[0xffd94a,0xff6b3d,0x1b1f24],pat:'rails',fins:2,spd:1.05,trn:0.97,req:{xp:20000}},
-  {id:'drd',spr:1.55,name:'DRD',sub:"5'11 · ROUND TAIL",tw:0.66,L:1.80,W:0.52,nf:1,pal:[0xffffff,0x0e1838,0x0e1838],pat:'nose',fins:3,spd:1.03,trn:1.03,req:{nota:8}},
+  {id:'drd',spr:1.55,name:'TRD',sub:"5'11 · ROUND TAIL",tw:0.66,L:1.80,W:0.52,nf:1,pal:[0xffffff,0x0e1838,0x0e1838],pat:'nose',fins:3,spd:1.03,trn:1.03,req:{nota:8}},
   {id:'gun',name:'BIG WAVE GUN',sub:"6'8 · PIN TAIL",tw:0.84,L:2.02,W:0.46,pal:[0x0e2a3b,0x22d3c5,0x0a0d10],pat:'full',fins:3,spd:1.07,trn:0.95,req:{tro:'bigwave'}},
   {id:'soft',spr:1.0,name:'SOFTBOARD',sub:"7'0 SOFT TOP · ROUND TAIL",tw:0.72,L:2.05,W:0.56,nf:1,pal:[0xfbfbf7,0x2a8fd6,0x2a8fd6],pat:'nose',fins:3,spd:0.97,trn:0.98}];   /* the soft top, with the little surfer painted on it */
 let BOARD=BOARDS[0];
@@ -1808,7 +1808,7 @@ const boardG=new THREE.Group();scene.add(boardG);
 const BART={
   classic:{deck:'#f6f2e8',rail:'#12b5a6',pad:'#1b1f24',ink:'#0e1838',logo:'PLAYSURF',model:"CLASSIC 6'0",bot:['fade','#f6f2e8','#12b5a6'],blogo:'PS',stk:[['SALTLINE','#0e1838','#ffffff'],['KAI WAX','#ffd94a','#1b1f24'],['TIDEWATER FINS','#ffffff','#0e1838']]},
   fish:{deck:'#d42a2a',rail:'#8e1616',pad:'#1b1f24',ink:'#ffd23a',logo:'KAI CRAFT',model:"FISH 5'6",bolt:'#ffd23a',bot:['bolt','#d42a2a','#ffd23a'],blogo:'',stk:[['KAI WAX','#1b1f24','#ffd23a'],['OFFSHORE CO.','#ffffff','#d42a2a'],['SEABREAK','#1b1f24','#ffffff']]},   /* the classic Hawaiian fish: red, a yellow lightning bolt down the middle */
-  drd:{deck:'#ffffff',rail:'#0e1838',pad:'#0e1838',ink:'#0e1838',logo:'DRD',model:"DRD 5'11 · FULL NOSE",bot:['spray','#0e1838','#ff4f9e','#ffab3d'],blogo:'DRD',stk:[['PLAYSURF','grad','#0e1838'],['SALTLINE','#ffffff','#0e1838'],['OFFSHORE CO.','#ff4f9e','#ffffff']]},
+  drd:{deck:'#ffffff',rail:'#0e1838',pad:'#0e1838',ink:'#0e1838',logo:'TRD',model:"TRD 5'11 · FULL NOSE",bot:['spray','#0e1838','#ff4f9e','#ffab3d'],blogo:'TRD',stk:[['PLAYSURF','grad','#0e1838'],['SALTLINE','#ffffff','#0e1838'],['OFFSHORE CO.','#ff4f9e','#ffffff']]},
   gun:{deck:'#eef2f5',rail:'#0e2a3b',pad:'#0a0d10',ink:'#0e2a3b',logo:'DEEPWATER',model:"GUN 6'8",bot:['stripes','#0e2a3b','#22d3c5'],blogo:'GUN',stk:[['TIDEWATER FINS','#22d3c5','#0e2a3b'],['SEABREAK','#ffffff','#0e2a3b'],['KAI WAX','#ffd94a','#0e2a3b']]},
   soft:{deck:'#fbfbf7',rail:'#2a8fd6',pad:null,ink:'#2a8fd6',logo:'PLAYSURF',model:"SOFT 7'0",soft:1,bot:['fade','#2a8fd6','#7fd3ff'],blogo:'',stk:[['KAI WAX','#ffd94a','#1b1f24'],['SALTLINE','#ffffff','#2a8fd6'],['PLAYSURF','grad','#ffffff']]},
   pro:{deck:'#f7f7f4',rail:'#14171b',pad:'#14171b',ink:'#14171b',logo:'PLAYSURF PRO',model:'#67 PRO MODEL',thinRail:1,dstk:[['SALTLINE','#d6262a','#ffffff'],['KAI WAX','#14171b','#ffd23a'],['OFFSHORE CO.','#1f4fd6','#ffffff'],['TIDEWATER FINS','#ffd23a','#14171b']],bot:['pro','#f7f7f4','#d6262a'],blogo:'67',stk:[['SALTLINE','#d6262a','#ffffff'],['KAI WAX','#14171b','#ffd23a'],['SEABREAK','#1f4fd6','#ffffff']]}};   /* a competition white board: clean, thin dark rails, sponsors stacked on the nose */
@@ -1934,7 +1934,7 @@ function buildBoard(B,tgt=boardG){
   const tw=B.tw||0.56,nt=B.tail==='fish'?(B.notch||0.1):0,bw=u=>u<0.5?W/2*(1-Math.pow(1-2*u,2.6)*tw):W/2*Math.pow(Math.max(0,1-Math.pow(2*u-1,2.3+2.0*nf)),0.82-0.22*nf);   // outline; a fuller nose with nf
   for(let i=0;i<=NL;i++){const u=i/NL,x=(u-0.5)*L,w=bw(u);
     const rock=(0.11-0.02*nf)*Math.pow(Math.max(0,(u-0.55)/0.45),2.3)+0.03*Math.pow(Math.max(0,(0.25-u)/0.25),2);
-    const th=T*Math.pow(Math.sin(PI*(0.07+0.88*u)),0.55)*(1+0.55*nf*sstep(0.55,0.95,u));   // more foam up front on the DRD
+    const th=T*Math.pow(Math.sin(PI*(0.07+0.88*u)),0.55)*(1+0.55*nf*sstep(0.55,0.95,u));   // more foam up front on the TRD
     for(let k=0;k<NRg;k++){const ph=2*PI*k/NRg,sn=Math.sin(ph),cs=Math.cos(ph),z=cs*w,xn=nt?x+nt*Math.pow(1-Math.abs(cs),1.4)*Math.max(0,1-u*L/(nt*1.6)):x;   /* a fish tail: the middle of the tail pulled forward into a swallow notch */
       pos.push(xn,rock+(sn>0?sn*th*0.55:sn*th*0.45),z);uvD.push(u,0.5-0.5*z/(W/2));uvB.push(u,0.5+0.5*z/(W/2))}}
   const half=NRg/2;
@@ -2040,10 +2040,12 @@ function kidHeadMod(mat){mat.onBeforeCompile=sh=>{
     float khn(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(mix(mix(khh(i),khh(i+vec3(1,0,0)),f.x),mix(khh(i+vec3(0,1,0)),khh(i+vec3(1,1,0)),f.x),f.y),mix(mix(khh(i+vec3(0,0,1)),khh(i+vec3(1,0,1)),f.x),mix(khh(i+vec3(0,1,1)),khh(i+vec3(1,1,1)),f.x),f.y),f.z);}
     float khNape(vec3 p){float bk=smoothstep(-0.04,-0.20,p.x)*smoothstep(0.42,0.30,abs(p.z));float edge=0.035*(khn(vec3(p.z*40.,0.,p.x*40.))-0.5);return bk*smoothstep(-0.475,-0.42,p.y+edge)*(1.-smoothstep(-0.10,0.02,p.y));}
   `;
-  sh.vertexShader=fn+sh.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+  sh.vertexShader=fn+sh.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
+    {float e=pow((position.y+0.335)/0.14,2.)+pow(position.z/0.25,2.),mk=(1.-smoothstep(0.65,1.0,e))*step(0.08,position.x);objectNormal=normalize(mix(objectNormal,vec3(0.94,-0.10,position.z*1.7),mk));}   /* the closed mouth is lit like smooth skin */`).replace('#include <begin_vertex>',`#include <begin_vertex>
     vKs=position;
     {float fr=smoothstep(0.02,0.26,position.x),lo=smoothstep(0.02,-0.26,position.y)*(1.-0.45*smoothstep(-0.36,-0.49,position.y));transformed.z*=1.-0.17*fr*lo;}   /* slimmer cheeks */
-    transformed+=objectNormal*0.016*khNape(position);   /* the hair at the back has some body */`);
+    transformed+=objectNormal*0.016*khNape(position);   /* the hair at the back has some body */
+    {float e=pow((position.y+0.335)/0.13,2.)+pow(position.z/0.23,2.),mk=(1.-smoothstep(0.70,1.0,e))*step(0.10,position.x),xs=0.362*sqrt(max(0.,1.-pow(position.z/0.42,2.)))-0.25*pow(position.y+0.34,2.);transformed.x=mix(transformed.x,max(transformed.x,xs-0.006),mk);}   /* the big open grin closed: the mouth cavity and teeth brought up flush with the face */`);
   sh.fragmentShader=fn+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
     {vec3 p=vKs,sc=pow(max(diffuseColor.rgb,0.),vec3(1./2.2));float L=dot(sc,vec3(.299,.587,.114)),br=sc.b/max(sc.r,0.02);
      float pos=max(smoothstep(-0.03,0.04,p.y),smoothstep(0.12,-0.06,p.x)*smoothstep(-0.32,-0.20,p.y));   /* above the brows at the front, anywhere round the back */
@@ -2052,8 +2054,17 @@ function kidHeadMod(mat){mat.onBeforeCompile=sh=>{
      if(hm>0.){float n1=khn(vec3(p.z*30.,p.y*4.5,p.x*30.)),n2=khn(p*5.+3.1),n3=khn(vec3(p.z*70.,p.y*9.,p.x*70.));
        float m=clamp(smoothstep(0.46,0.86,0.50*n1+0.30*n2+0.20*n3)*0.88+0.12*smoothstep(0.05,0.40,p.y),0.,1.);   /* fair strands everywhere, a little more of them on top */
        vec3 hc=mix(vec3(0.52,0.38,0.25),vec3(0.85,0.73,0.51),m)*clamp(0.84+0.45*(L-0.36)+0.10*(n3-0.5),0.74,1.10);
-       diffuseColor.rgb=mix(diffuseColor.rgb,pow(hc,vec3(2.2)),hm);}}`).replace('#include <emissivemap_fragment>','totalEmissiveRadiance=emissive*diffuseColor.rgb;');}}
-const KHG={h:0.30,y:0.016,z:0.004,glow:0.22,nr:0.047,nl:0.19,nz:-0.014};   /* the Magnific head: total height (neck to the tips of the hair), and how far it sits up and forward on the head joint */
+       diffuseColor.rgb=mix(diffuseColor.rgb,pow(hc,vec3(2.2)),hm);}
+     {vec3 p=vKs,SK=vec3(0.571,0.283,0.202);   /* a calmer face for riding: mouth closed in a small smile, eyes open */
+      float e=pow((p.y+0.335)/0.14,2.)+pow(p.z/0.25,2.),mk=(1.-smoothstep(0.78,1.0,e))*step(0.08,p.x);
+      if(mk>0.){vec3 c=SK;float yl=-0.322+1.1*p.z*p.z,d=abs(p.y-yl),zk=1.-smoothstep(0.085,0.115,abs(p.z));
+        c=mix(c,vec3(0.62,0.22,0.18),(1.-smoothstep(0.012,0.034,d))*zk*0.5);c=mix(c,vec3(0.20,0.05,0.04),(1.-smoothstep(0.0035,0.008,d))*zk);diffuseColor.rgb=mix(diffuseColor.rgb,c,mk);}
+      for(int i=0;i<2;i++){float zc=i==0?-0.145:0.145;vec2 q=vec2((p.z-zc)/0.072,(p.y+0.072)/0.040);float r=length(q),box=step(0.12,p.x)*(1.-smoothstep(1.3,1.6,max(abs(q.x),abs(q.y))));
+        if(box>0.){vec3 c=SK;float wh=1.-smoothstep(0.90,1.0,r);c=mix(c,vec3(0.91,0.88,0.84),wh);
+          vec2 qi=q-vec2(0.,-0.08);float ri=length(qi*vec2(1./0.44,1./0.80));c=mix(c,vec3(0.16,0.07,0.025),(1.-smoothstep(0.88,1.0,ri))*wh);c=mix(c,vec3(0.01),(1.-smoothstep(0.40,0.50,ri))*wh);
+          c=mix(c,vec3(1.),(1.-smoothstep(0.10,0.16,length((qi-vec2(-0.13,0.28))*vec2(1.,0.6))))*wh);float lid=(1.-smoothstep(0.04,0.11,abs(r-1.)))*smoothstep(-0.2,0.3,q.y);c=mix(c,vec3(0.06,0.03,0.02),lid);
+          diffuseColor.rgb=mix(diffuseColor.rgb,c,box);}}}}`).replace('#include <emissivemap_fragment>','totalEmissiveRadiance=emissive*diffuseColor.rgb;');}}
+const KHG={h:0.265,y:0.010,z:0.004,glow:0.22,nr:0.047,nl:0.19,nz:-0.014};   /* the Magnific head: total height (neck to the tips of the hair), and how far it sits up and forward on the head joint */
 /* a child's build, not a small grown-up: thin arms and legs, a slim neck, narrow shoulders and a flat chest, a body that is straight up and down */
 function kidBones(){const b=RIG.b;if(RIG.kB||!b||!b.chest||!RIG.arm.length)return;RIG.kB=1;
   const P=(r,kx,kz)=>{const A=r.A0;r.kP=new THREE.Matrix4().makeTranslation(A.x,A.y,A.z).multiply(new THREE.Matrix4().makeScale(kx,1,kz)).multiply(new THREE.Matrix4().makeTranslation(-A.x,-A.y,-A.z))};   /* model rest axes: x forward, z across */
@@ -2427,7 +2438,10 @@ function poseRider(time,dt){
   {const ride=sf.mode==='ride'&&!AT.claim,rel=clamp(sf.p/Math.max(S.top||1,0.1),0,1),hitT=ride&&sf.pivot>0&&(sf.bsHit||(sf.rh&&sf.rh.ph===1))?1:0,
     btT=ride&&sf.pivot<=0&&!sf.cv&&!sf.c360&&!sf.tt&&!game.inTube?sstep(0.20,0.60,k0.rail||0)*(1-sstep(0.40,0.75,rel)):0,
     bt=A.bsBT=damp(A.bsBT||0,btT,btT>(A.bsBT||0)?6:2.6,dt),hk=A.bsHK=damp(A.bsHK||0,hitT,hitT?11:3.2,dt);A.bsArm=bt;A.bsJoin=hk;
-   if(bt>0.01){AT.gz=lerp(AT.gz,0.32,bt*(1-hk));AT.look=lerp(AT.look,BSL.bt,bt*(1-hk))}   /* eyes up the face at the wall */
+   {const cr=A.bsCR=damp(A.bsCR||0,dt>0?(rel-(A.bsRP===undefined?rel:A.bsRP))/dt:0,6,dt);A.bsRP=rel;   /* how fast he is climbing the face */
+    const upT=ride&&sf.pivot<=0&&!sf.cv&&!sf.c360&&!sf.tt&&!game.inTube?sstep(0.15,0.50,k0.rail||0)*sstep(0.34,0.55,rel)*(1-sstep(0.88,1,rel))*sstep(0.04,0.22,cr):0;
+    A.bsUp=damp(A.bsUp||0,upT,upT>(A.bsUp||0)?5:2.4,dt)}   /* off the bottom and on the way up: the arms swing round the other way */
+   if(bt>0.01){AT.gz=lerp(AT.gz,0.32,bt*(1-hk));AT.look=lerp(AT.look,BSL.bt,bt*(1-hk));AT.crouch=Math.max(AT.crouch||0,0.70*bt*(1-hk))}   /* eyes up the face at the wall, low and compressed so the front hand can reach the water */
    if(hk>0.01){AT.gz=lerp(AT.gz,-0.85,hk);AT.look=lerp(AT.look,BSL.hit,hk);AT.hroll=(AT.hroll||0)+BSL.roll*hk;AT.hipBack=Math.max(AT.hipBack||0,0.95*hk);AT.shiftX=(AT.shiftX||0)-0.08*hk;AT.crouch=Math.max(AT.crouch||0,0.74*hk)}}
   const dg=AT.drag||0;if(dg>0.01){A.grab=Math.max(g0,0.80*dg);AT.drag=0}
   poseRider0(time,dt);
@@ -2565,9 +2579,11 @@ function poseRider0(time,dt){
   if(bh>0.01){_c.set(0,0,-1).addScaledVector(WU,WU.z).normalize();
     _a.copy(_c).multiplyScalar(0.75).addScaledVector(WU,-0.45).addScaledVector(XV,0.35).normalize().multiplyScalar(0.47).add(J.shF);J.hFt.lerp(_a,bh);   // lead hand reaching down the face ahead, elbow soft
     _b.copy(_c).multiplyScalar(0.45).addScaledVector(WU,-0.25).addScaledVector(XV,-0.50).normalize().multiplyScalar(0.50).add(J.shB);J.hBt.lerp(_b,bh*0.9)}   // trail hand back along the tail, balancing the throw
-  {const bt=(A.bsArm||0)*(1-Math.min(1,cl))*(1-air)*(1-pr),hj=(A.bsJoin||0)*(1-Math.min(1,cl))*(1-air)*(1-pr);   /* backside bottom turn and hit (set by the backside wrapper) */
-   if(bt>0.01){const ins=lamN>=0?-1:1;_c.copy(XV).multiplyScalar(-0.40).addScaledVector(WU,-0.80).addScaledVector(ZV,0.42*ins).normalize().multiplyScalar(0.63).add(J.shB);J.hBt.lerp(_c,bt*(1-hj));   /* the hand on the wave side down in the water */
-     _b.copy(XV).multiplyScalar(0.45).addScaledVector(WU,0.20).addScaledVector(ZV,-0.75*ins).normalize().multiplyScalar(0.68).add(J.shF);J.hFt.lerp(_b,bt*(1-hj))}   /* the other arm out the other way and up, straight, as the counterweight */
+  {const bt=(A.bsArm||0)*(1-Math.min(1,cl))*(1-air)*(1-pr),hj=(A.bsJoin||0)*(1-Math.min(1,cl))*(1-air)*(1-pr),bu=(A.bsUp||0)*(1-Math.min(1,cl))*(1-air)*(1-pr);   /* backside bottom turn, the climb and the hit (set by the backside wrapper) */
+   if(bt>0.01){const ins=lamN>=0?-1:1,w=bt*(1-hj)*(1-0.85*bu);_b.copy(XV).multiplyScalar(0.12).addScaledVector(WU,-0.86).addScaledVector(ZV,0.46*ins).normalize().multiplyScalar(0.66).add(J.shF);J.hFt.lerp(_b,w);   /* the front hand reaches down to the water on the wave side, as if to touch it */
+     _c.copy(XV).multiplyScalar(-0.50).addScaledVector(WU,0.52).addScaledVector(ZV,-0.55*ins).normalize().multiplyScalar(0.66).add(J.shB);J.hBt.lerp(_c,w)}   /* the back arm stretched up and out the other way, the counterweight */
+   if(bu>0.01){const ins=lamN>=0?-1:1,w=bu*(1-hj);_b.copy(XV).multiplyScalar(0.55).addScaledVector(WU,0.55).addScaledVector(ZV,-0.30*ins).normalize().multiplyScalar(0.64).add(J.shF);J.hFt.lerp(_b,w);   /* climbing to the lip: the front arm swings up toward it */
+     _c.copy(XV).multiplyScalar(-0.45).addScaledVector(WU,-0.45).addScaledVector(ZV,0.40*ins).normalize().multiplyScalar(0.60).add(J.shB);J.hBt.lerp(_c,w)}   /* and the back arm goes down behind, the other way round */
    if(hj>0.01){const ins=lamN>=0?-1:1;_c.copy(XV).multiplyScalar(-0.15).addScaledVector(WU,-0.55).addScaledVector(ZV,0.30*ins).normalize().multiplyScalar(0.52).add(J.shB);J.hBt.lerp(_c,hj);
      _b.copy(XV).multiplyScalar(-0.05).addScaledVector(WU,-0.60).addScaledVector(ZV,0.22*ins).normalize().multiplyScalar(0.50).add(J.shF);J.hFt.lerp(_b,hj*0.9)}}   /* at the hit the front arm goes soft and swings in beside the other: both carried round with the turn */
   if(pu>0.01){_a.subVectors(DROP.hand,J.shF);const l=_a.length();if(l>0.62)_a.multiplyScalar(0.62/l);_a.add(J.shF);J.hFt.lerp(_a,pu);   // lead hand on the intruder's tail
@@ -3075,7 +3091,7 @@ function startWave(att){qQuiet=performance.now()+2000;if(!att&&game.pickSpot&&SP
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.fin='';game.finale=0;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
-  Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,bsRec:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false,ffU:0,ffArm:0,koVy:0,koDive:0,snapRet:0,pivPrev:0});
+  Object.assign(sf,{pmS:0,pmN:0,pmT:-9,pumpK:0,layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,bsRec:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false,ffU:0,ffArm:0,koVy:0,koDive:0,snapRet:0,pivPrev:0});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
   A.prone=1;A.flail=0;A.grab=0;A.air=0;A.impact=0;A.claim=0;sf.claimT=0;A.crouch.x=0.6;A.crouch.v=0;A.hF.init=false;A.hB.init=false;AT.paddle=0;AT.drag=0;
   riderG.visible=boardG.visible=true;
@@ -3100,7 +3116,7 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/11-wipeout-weekend.mp3',t:'Wipeout Weekend',b:'Kook Patrol'},{f:'music/12-tube-ride.mp3',t:'Tube Ride',b:'The Reverb Reef'},
   {f:'music/14-dawn-patrol-dub.mp3',t:'Dawn Patrol Dub',b:'Low Tide Lions'},
   {f:'music/15-boardwalk-bounce.mp3',t:'Boardwalk Bounce',b:'Pier Pressure'},{f:'music/16-tide-chart-serenade.mp3',t:'Tide Chart Serenade',b:'Sandal Sound System'},
-  {f:'music/17-shred-till-sundown.mp3',t:'Shred Till Sundown',b:'Skeg Breakers'},{f:'music/18-closeout.mp3',t:'Closeout',b:'Bail Out Brigade'},{f:'music/19-same-crew.mp3',t:'Same Crew',b:'Reef Rash'}];
+  {f:'music/17-shred-till-sundown.mp3',t:'Shred Till Sundown',b:'Skeg Breakers'},{f:'music/18-closeout.mp3',t:'Closeout',b:'Bail Out Brigade'}];
 const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0};   /* the songs play shuffled, from the very first one, a new order every time round */
 function musShuffle(not){const o=TRACKS.map((_,i)=>i);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}if(o.length>1&&o[0]===not){const j=1+Math.floor(Math.random()*(o.length-1));[o[0],o[j]]=[o[j],o[0]]}MUS.order=o;MUS.k=0}
 musShuffle(-1);MUS.i=MUS.order[0];
@@ -3586,6 +3602,11 @@ function stepRide(dt){
   if(sf.openT>0&&sf.introT<=0)acc+=Math.max(0,CP+3.2-sf.V)*2.5;   // and carries the speed through the bottom turn
   if(sf.boostT>0){sf.boostT-=dt;acc+=Math.max(0,sf.boostV-sf.V)*3.2}   // the spit-out speed comes on over a moment, not in one frame
   if(game.inTube&&inp.x>0.3&&!sf.rh)acc+=2.4*(0.6+0.4*Math.sin(game.waveAge*7.5));   // pumping in the barrel
+  {const ys=inp.y>0.35?1:inp.y<-0.35?-1:0;   /* pumping: short up-and-down taps in the middle of the face build speed, for an air or a big turn */
+   if(ys!==0&&ys!==(sf.pmS||0)){sf.pmN=(sf.pmS&&now-(sf.pmT||-9)<0.75)?(sf.pmN||0)+1:1;sf.pmS=ys;sf.pmT=now;
+     if(sf.pmN>=2&&sf.mode==='ride'&&!piv&&!game.inTube&&!sf.rh&&!sf.cv&&!sf.c360&&rel>0.14&&rel<0.93){sf.pumpK=Math.min(1.6,(sf.pumpK||0)+0.8);A.crouch.v+=ys<0?1.3:-1.1;sf.burst=Math.max(sf.burst,0.35)}}
+   if(now-(sf.pmT||-9)>0.9)sf.pmN=0;
+   if(sf.pumpK>0){acc+=sf.pumpK*Math.max(0,14.2-sf.V)*1.3;sf.pumpK=Math.max(0,sf.pumpK-dt*1.4)}}
   const ao=Math.abs(sf.om);
   acc+=ao*(2.75*sinA-0.055*sf.V)*(1-sstep(0.2,0.9,Math.abs(Math.sin(sf.slip))));
   if(inp.stall&&!sf.rh)acc-=7.5;
