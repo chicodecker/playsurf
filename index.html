@@ -364,6 +364,20 @@ h1,.wzH,#pop .p b,#hud b,.tutCard b,#end .nota,.pkBox b,.wpBox h3,.spBox h3,#pau
 .wmTip .wmGo{margin-top:10px}
 #wpMap{margin:0 auto 18px;width:min(700px,84vw,calc((100svh - 250px)*2.46))}
 @media (max-height:540px){.wmap{width:min(66vw,calc((100svh - 140px)*2.46))}#wpMap{width:min(78vw,calc((100svh - 150px)*2.46))}.wlab{font-size:9px;padding:4px 7px 4px 6px;gap:5px;border-width:1px;box-shadow:none}.wlab b{font-size:8.5px}.wlab::before{width:7px}.wdot{width:8px;height:8px;margin:-4px 0 0 -4px}.wmTip{max-width:210px;padding:7px 10px 8px 13px}.wmTip b{font-size:17px}.wmTip span{font-size:9px}.wmTip em{display:none}}
+/* the judges' card: a quick flash of the five scores, a flag by each, the top and bottom thrown out, and the wave score */
+#jcard{position:absolute;left:50%;top:16%;transform:translateX(-50%);z-index:46;padding:14px 22px 16px;border-radius:14px;background:rgba(4,14,22,.84);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 50px rgba(0,0,0,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:center;pointer-events:none;animation:jIn .34s cubic-bezier(.2,.9,.2,1);transition:opacity .35s}
+#jcard.off{display:none}#jcard.out{opacity:0}
+@keyframes jIn{from{opacity:0;transform:translateX(-50%) translateY(-14px) scale(.96)}to{opacity:1;transform:translateX(-50%)}}
+#jcard .jt{font:800 11px/1 var(--ps-f);letter-spacing:.32em;color:var(--ps-acc)}
+#jcard .jrow{display:flex;gap:10px;justify-content:center;margin:12px 0 10px}
+#jcard .jrow b{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:60px;padding:8px 8px 7px;border-radius:8px;background:rgba(255,255,255,.07);font:900 23px/1 var(--ps-f);font-style:italic;font-variant-numeric:tabular-nums;color:#fff;animation:jPop .32s both}
+#jcard .jrow b svg{width:32px;height:21px;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.28);display:block}
+#jcard .jrow b small{font:700 9px/1 var(--ps-f);letter-spacing:.18em;opacity:.65;font-style:normal}
+#jcard .jrow b.x{opacity:.42}#jcard .jrow b.x span{text-decoration:line-through}
+@keyframes jPop{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
+#jcard .javg{font:900 56px/1 var(--ps-f);font-style:italic;font-variant-numeric:tabular-nums;background:var(--ps-grad);-webkit-background-clip:text;background-clip:text;color:transparent;animation:jPop .4s .45s both}
+#jcard .javg small{display:block;font:800 10px/1 var(--ps-f);font-style:normal;letter-spacing:.3em;color:#fff;-webkit-text-fill-color:#fff;opacity:.75;margin-top:6px}
+@media (max-height:540px){#jcard{top:10%;padding:9px 14px 10px}#jcard .jrow{gap:6px;margin:8px 0 6px}#jcard .jrow b{min-width:44px;font-size:16px;padding:5px 6px}#jcard .jrow b svg{width:24px;height:16px}#jcard .javg{font-size:36px}}
 .srh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 <script type="importmap">
@@ -392,7 +406,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
 <!-- Google H5 Games Ads (Ad Placement API): interstitials between the choice screens -->
 <script async data-ad-frequency-hint="60s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9543654204689824" crossorigin="anonymous"></script>
 <script>window.adsbygoogle=window.adsbygoogle||[];var adBreak=adConfig=function(o){adsbygoogle.push(o);};</script>
-<style>#seoNav{position:fixed;left:0;right:0;bottom:calc(6px + env(safe-area-inset-bottom,0px));padding:0 12px;text-align:center;font:600 10.5px/1.7 inherit;font-family:inherit;letter-spacing:.06em;opacity:1;z-index:5;pointer-events:auto}#seoNav a{color:#22272b;text-decoration:none;margin:0 5px;white-space:nowrap}   /* fine print: almost black, there for whoever looks for it */#seoNav a:hover{text-decoration:underline;color:#4a5258}#seoNav span{color:#2c3136;margin:0 4px}@media (max-height:420px){#seoNav{display:none}}</style>
+<style>#seoNav{position:fixed;left:0;right:0;bottom:calc(1px + env(safe-area-inset-bottom,0px));padding:0 12px;text-align:center;font-weight:600;font-size:8px;line-height:1.5;font-family:inherit;letter-spacing:.06em;opacity:1;z-index:5;pointer-events:auto}#seoNav a{color:#15181b;text-decoration:none;margin:0 5px;white-space:nowrap}   /* fine print: almost black, there for whoever looks for it */#seoNav a:hover{text-decoration:underline;color:#3a4147}#seoNav span{color:#1a1d20;margin:0 4px}@media (max-height:420px){#seoNav{display:none}}</style>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -456,6 +470,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     </div>
   </div>
   <div id="end" class="panel off"></div>
+  <div id="jcard" class="off" aria-live="polite"></div>
   <div id="trophies" class="off"><div class="trBox"><h3>TROPHIES</h3><p id="trSub"></p><div id="trGrid"></div><button id="trClose" class="pbtn sm">CLOSE</button></div></div>
   <div id="wavePick" class="off" role="dialog" aria-modal="true" aria-labelledby="wpT"><div class="trBox wpBox"><h3 id="wpT">CHANGE WAVE</h3><p class="wpSub">Pick a spot on the map: a new wave starts there right away</p>
     <div class="wmap" id="wpMap"></div><button id="wpClose" class="pbtn sm">&#9664; BACK TO THE WAVE</button></div></div>
@@ -1029,7 +1044,7 @@ const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st
   {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',dy:-7,short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
   {id:6,ll:[-27.67,-48.47],loc:'FLORIANÓPOLIS · BRAZIL',lean:38,st:9,short:'CAMPECHE',name:'CAMPECHE RIGHTS',full:'CAMPECHE RIGHTS',sub:'FLORIANÓPOLIS · LONG RIGHT',hK:0.86,eL:0.8,dur:30,req:{spot:5,nota:7}},
   {id:7,ll:[-1.68,-47.77],loc:'PARÁ · AMAZON, BRAZIL',name:'POROROCA',full:'POROROCA',sub:'AMAZON · RIVER BORE',hK:1.3,eL:0.6,dur:85,crumble:1,fat:1},
-  {id:8,ll:[63.83,-21.37],loc:'ÞORLÁKSHÖFN · ICELAND',name:'ÞORLÁKSHÖFN',full:'ÞORLÁKSHÖFN',sub:'ICELAND · ARCTIC RIGHT',what:'ARCTIC RIGHT · 4 °C WATER · FULL RUBBER',hK:1.15,eL:1.6,dur:30,req:{spot:6,nota:7}}];   /* Iceland's best-known wave: a heavy right off the harbour wall near Reykjavík, snow on the black mountains behind, surfed in hood, gloves and boots */   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
+  {id:8,ll:[63.83,-21.37],loc:'ÞORLÁKSHÖFN · ICELAND',name:'ÞORLÁKSHÖFN',full:'ÞORLÁKSHÖFN',sub:'ICELAND · LEFTS & RIGHTS',what:'ARCTIC PEAK · LEFTS & RIGHTS · 4 °C WATER · FULL RUBBER',hK:1.15,eL:1.6,dur:30,req:{spot:6,nota:7}}];   /* Iceland's best-known wave: a heavy right off the harbour wall near Reykjavík, snow on the black mountains behind, surfed in hood, gloves and boots */   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
 let SPOT=SPOTS[0];
 function wallLen(X){return 48+5*(Math.sin(X*0.043+1.3)*0.6+Math.sin(X*0.105+4.1)*0.4)}
 function wOf(s,Lw){if(s<=4.5)return 1;if(s<9)return lerp(1,0.64,sstep(4.5,9,s));return lerp(0.64,0.56,sstep(9,36,s))*(1-0.62*sstep(55,115,s))}   /* far down the line, past where anyone rides, the wall lies back into a soft shoulder: no endless cliff of water */   // no fading shoulder: the wall keeps its shape all the way down the line
@@ -2802,7 +2817,7 @@ addEventListener('keydown',e=>{
   if(e.code==='KeyP'||e.code==='Escape'){if(game.state==='ride'&&!game.attract){game.paused=!game.paused;$('pause').style.display=game.paused?'flex':'none'}}
   if(e.code==='KeyM')setMuted(!audio.muted)
   if(e.code==='BracketRight'||e.code==='KeyT'){musicGo();musStep(1)}if(e.code==='BracketLeft'){musicGo();musStep(-1)}if(e.code==='KeyK')musPause();
-  if(e.code==='KeyR'&&game.state!=='menu'&&!game.attract)startWave()});
+  if(e.code==='KeyR'&&game.state==='end'&&!game.attract)startWave()});   /* R restarts only once the wave is over: while riding, R is the floater */
 addEventListener('keyup',e=>{keys[e.code]=false});
 function setCam(i){game.cam=((i%3)+3)%3;game.camPicked=true;$('camMode').textContent=['CHASE','SIDE','FRONT'][game.cam]}
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
@@ -3085,10 +3100,10 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
   tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
-function startWave(att){qQuiet=performance.now()+2000;if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6||SPOT.id===8?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
+function startWave(att){qQuiet=performance.now()+2000;if(typeof judgeHide==='function')judgeHide();if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&SPOT.id!==8&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
-  try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
+  try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}else if(!game.attract&&qLevel>3){setQuality(3);qLock=false;qFloor=QL.length-1}   /* every wave starts sharp again */}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.fin='';game.finale=0;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
   Object.assign(sf,{pmS:0,pmN:0,pmT:-9,pumpK:0,layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,bsRec:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false,ffU:0,ffArm:0,koVy:0,koDive:0,snapRet:0,pivPrev:0});
@@ -3097,12 +3112,12 @@ function startWave(att){qQuiet=performance.now()+2000;if(!att&&game.pickSpot&&SP
   riderG.visible=boardG.visible=true;
   $('menu').classList.add('off');$('end').classList.add('off');$('hud').classList.add('on');$('wavebar').classList.add('on');$('camBtn').classList.add('on');$('waveBtn').classList.add('on');keysRoll(!att);$('pop').innerHTML='';
   if(game.attract){$('menu').classList.remove('off');progUI();return}   // behind the start screen
-  sfxNoise(1.2,900,0.25);if((SPOT.id===5||SPOT.id===3||SPOT.id===1)&&!window.__manual)pickOpen()}   /* the pool, Lower Trestles and Pipeline break both ways: pick a side before the drop */
+  sfxNoise(1.2,900,0.25);if((SPOT.id===5||SPOT.id===3||SPOT.id===1||SPOT.id===8)&&!window.__manual)pickOpen()}   /* the pool, Lower Trestles and Pipeline break both ways: pick a side before the drop */
 function startAttract(){startWave(true)}
 function beginPlay(){trCancel();ADS.rode=true;initAudio();game.ts=1;startWave();musicGo()}
 /* Trestles: an A-frame. At the start of each ride the wave holds while he picks a side */
 let pkTm=0;
-function pickOpen(){$('pkS').textContent=SPOT.id===3?'PIPELINE · PIPE OR BACKDOOR':SPOT.id===1?'PLAYSURF POOL · LEFTS & RIGHTS':'LOWER TRESTLES · A-FRAME PEAK';$('pkRs').textContent=STANCE===1?'FRONTSIDE':'BACKSIDE';$('pkLs').textContent=STANCE===0?'FRONTSIDE':'BACKSIDE';   /* backside = the wave breaks the other way from his stance */
+function pickOpen(){$('pkS').textContent=SPOT.id===3?'PIPELINE · PIPE OR BACKDOOR':SPOT.id===1?'PLAYSURF POOL · LEFTS & RIGHTS':SPOT.id===8?'ÞORLÁKSHÖFN · LEFTS & RIGHTS':'LOWER TRESTLES · A-FRAME PEAK';$('pkRs').textContent=STANCE===1?'FRONTSIDE':'BACKSIDE';$('pkLs').textContent=STANCE===0?'FRONTSIDE':'BACKSIDE';   /* backside = the wave breaks the other way from his stance */
   $('pick').classList.remove('off');setTimeout(()=>{if(!$('pick').classList.contains('off'))game.paused=true},90);   /* a few frames first, so the new wave is on screen behind the box */clearTimeout(pkTm);pkTm=setTimeout(()=>pickDone(STANCE),6000)}
 function pickDone(m){clearTimeout(pkTm);if($('pick').classList.contains('off'))return;setWaveDir(m);$('pick').classList.add('off');game.paused=false;$('pause').style.display='none'}
 $('pkR').addEventListener('click',e=>{e.stopPropagation();pickDone(1)});$('pkL').addEventListener('click',e=>{e.stopPropagation();pickDone(0)});
@@ -3115,7 +3130,7 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/08-duck-dive.mp3',t:'Duck Dive',b:'The Duck Divers'},{f:'music/09-salt-in-my-hair.mp3',t:'Salt in My Hair',b:'Tidepool Saints'},
   {f:'music/11-wipeout-weekend.mp3',t:'Wipeout Weekend',b:'Kook Patrol'},{f:'music/12-tube-ride.mp3',t:'Tube Ride',b:'The Reverb Reef'},
   {f:'music/14-dawn-patrol-dub.mp3',t:'Dawn Patrol Dub',b:'Low Tide Lions'},
-  {f:'music/15-boardwalk-bounce.mp3',t:'Boardwalk Bounce',b:'Pier Pressure'},{f:'music/16-tide-chart-serenade.mp3',t:'Tide Chart Serenade',b:'Sandal Sound System'},
+  {f:'music/15-boardwalk-bounce.mp3',t:'Boardwalk Bounce',b:'Pier Pressure'},
   {f:'music/17-shred-till-sundown.mp3',t:'Shred Till Sundown',b:'Skeg Breakers'},{f:'music/18-closeout.mp3',t:'Closeout',b:'Bail Out Brigade'}];
 const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0};   /* the songs play shuffled, from the very first one, a new order every time round */
 function musShuffle(not){const o=TRACKS.map((_,i)=>i);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}if(o.length>1&&o[0]===not){const j=1+Math.floor(Math.random()*(o.length-1));[o[0],o[j]]=[o[j],o[0]]}MUS.order=o;MUS.k=0}
@@ -3264,12 +3279,16 @@ function dolphinGeo(){const pts=[],L=2.3,prof=u=>u<0.05?0.035+0.4*u:u<0.16?0.055
     if(I)for(let i=0;i<I.length;i++)ix.push(I[i]+base);base+=P.count}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));g.setIndex(ix);g.computeVertexNormals();return g}
 {const geo=dolphinGeo();
- for(let k=0;k<3;k++){const u={uPh:{value:0},uAmp:{value:0.07},uUnder:{value:1},uWater:{value:new V3(0.02,0.25,0.30)},uSun:{value:SUN},uT:{value:0}};
-   const mat=new THREE.ShaderMaterial({uniforms:u,vertexColors:true,side:THREE.DoubleSide,transparent:true,depthWrite:false,depthTest:false,
-     vertexShader:`uniform float uPh,uAmp;varying vec3 vC;varying vec3 vN;varying vec3 vW;void main(){vec3 p=position;float t=clamp(0.5-p.x/2.3,0.,1.);p.y+=uAmp*sin(uPh-t*3.2)*t*t*1.6;vC=color;vN=normalize(mat3(modelMatrix)*normal);vec4 w=modelMatrix*vec4(p,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
+ for(let k=0;k<3;k++){const u={uPh:{value:0},uAmp:{value:0.07},uUnder:{value:1},uDepth:{value:1},uWater:{value:new V3(0.02,0.25,0.30)},uSun:{value:SUN},uT:{value:0}};
+   const mat=new THREE.ShaderMaterial({uniforms:u,vertexColors:true,side:THREE.DoubleSide,transparent:true,depthWrite:false,depthTest:true,
+     vertexShader:`uniform float uPh,uAmp,uUnder,uDepth,uT;varying vec3 vC;varying vec3 vN;varying vec3 vW;void main(){vec3 p=position;float t=clamp(0.5-p.x/2.3,0.,1.);p.y+=uAmp*sin(uPh-t*3.2)*t*t*1.6;vC=color;vN=normalize(mat3(modelMatrix)*normal);vec4 w=modelMatrix*vec4(p,1.);
+       if(uUnder>0.5)w.xyz+=vec3(0.06*sin(uT*2.6+w.z*1.7+w.x*0.9),0.035*sin(uT*3.1+w.x*1.3),0.06*sin(uT*2.2+w.x*1.1+w.y));   /* seen through moving water: the outline wobbles */
+       vW=w.xyz;vec4 c=projectionMatrix*viewMatrix*w;
+       if(uUnder>0.5){vec4 cn=projectionMatrix*viewMatrix*vec4(w.xyz+normalize(cameraPosition-w.xyz)*uDepth,1.);c.z=cn.z/cn.w*c.w;}   /* drawn at the depth of the water surface in front of it: it shows through the water, but the surfer and the lip stay in front */
+       gl_Position=c;}`,
      fragmentShader:`uniform float uUnder,uT;uniform vec3 uWater,uSun;varying vec3 vC;varying vec3 vN;varying vec3 vW;void main(){vec3 N=normalize(vN);float d=max(dot(N,uSun),0.)*0.75+0.35;vec3 V=normalize(cameraPosition-vW);float spec=pow(max(dot(reflect(-uSun,N),V),0.),40.)*0.5;
        vec3 col=vC*d+spec*(1.-uUnder);float cau=0.5+0.5*sin(vW.x*3.1+uT*2.3)*sin(vW.z*2.7-uT*1.9);
-       col=mix(col*mix(1.,0.55,uUnder),uWater*(0.9+0.3*cau),uUnder*0.45);gl_FragColor=vec4(col,mix(1.,0.78,uUnder));}`});
+       col=mix(col*mix(1.,0.55,uUnder),uWater*(0.9+0.3*cau),uUnder*0.64);float fr=abs(dot(N,V));gl_FragColor=vec4(col,mix(1.,0.40*smoothstep(0.05,0.6,fr)*(0.85+0.15*cau),uUnder));}`});   /* under water: a soft, blurred shape, its edges melting into the green */
    const m=new THREE.Mesh(geo,mat);m.visible=false;m.renderOrder=4;m.frustumCulled=false;scene.add(m);FAUNA.dol.push({m,u,mat,s:0,p:0,ph:rnd(0,6),jump:-1,splash0:false,splash1:false})}}
 function sfxGull(vol){if(!audio.ctx||game.attract||vol<0.02)return;if(sfxPlay('gull',{vol:Math.min(1,vol*1.2),off:rnd(0,2.8),dur:1.4,rate:rnd(0.92,1.08),fo:0.3}))return;const C=audio.ctx,t=C.currentTime,n=1+Math.floor(Math.random()*3);   /* a gull's "kee-ow": a harsh buzz swooping up then falling away */
   for(let k=0;k<n;k++){const t0=t+k*rnd(0.2,0.34),d=rnd(0.24,0.4),f0=rnd(900,1300),o=C.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(f0*0.8,t0);o.frequency.linearRampToValueAtTime(f0*1.38,t0+d*0.22);o.frequency.exponentialRampToValueAtTime(f0*0.68,t0+d);
@@ -3294,15 +3313,16 @@ function faunaTick(dt,time){const F=FAUNA,riding=game.state==='ride'||game.state
   /* dolphins: on the ocean spots, once in a while a pod rides inside the face ahead of him, shadows under the green, and one jumps */
   const ocean=SPOT.id!==1;
   if(!F.dolOn){if(game.state==='ride'&&!game.attract&&ocean&&sf.mode==='ride'&&!game.inTube){if(F.dolT<0)F.dolT=rnd(10,Math.max(14,game.waveDur*0.6));F.dolT-=dt;
-      if(F.dolT<=0){F.dolOn=true;F.dolAge=0;const n=Math.random()<0.55?1:2;F.dol.forEach((D,k)=>{D.on=k<n;D.m.visible=false;D.off=rnd(3.6,5.5)+k*rnd(1.8,2.6);D.s=sf.s+D.off;D.pk=rnd(0.24,0.42);D.dp=rnd(0.75,1.1);D.vs=0;D.jump=k===0&&Math.random()<0.4?rnd(2.4,4.4):-1;   /* discreet: one or two, deep in the face, a jump only now and then */D.splash0=D.splash1=false})}}
+      if(F.dolT<=0){F.dolOn=true;F.dolAge=0;const n=Math.random()<0.55?1:2;F.dol.forEach((D,k)=>{D.on=k<n;D.m.visible=false;D.dir=Math.random()<0.5?1:-1;D.rv=rnd(1.4,2.6);D.off0=D.dir>0?-rnd(4,7)-k*rnd(1.5,2.5):rnd(8,12)+k*rnd(1.5,2.5);D.off=D.off0;D.s=sf.s+D.off;D.pk=rnd(0.24,0.42);   /* some overtake him, some swim the other way past him */D.dp=rnd(0.75,1.1);D.vs=0;D.jump=k===0&&Math.random()<0.4?rnd(2.4,4.4):-1;   /* discreet: one or two, deep in the face, a jump only now and then */D.splash0=D.splash1=false})}}
     else if(game.state!=='ride')F.dolT=-1}
   else{F.dolAge+=dt;const fade=sstep(0,1.2,F.dolAge)*(1-sstep(7.5,9,F.dolAge));const wc=waveMat.uniforms.uWB.value;
-    F.dol.forEach((D,k)=>{if(!D.on){D.m.visible=false;return}D.s=damp(D.s,sf.s+D.off+0.6*Math.sin(F.dolAge*0.5+k*2),1.6,dt);D.ph+=dt*7.5;sampleSurf(D.s,1e6,S2);const top=S2.top;const pp=top*(D.pk+0.08*Math.sin(F.dolAge*0.9+k));sampleSurf(D.s,pp,S2);
+    F.dol.forEach((D,k)=>{if(!D.on){D.m.visible=false;return}D.off=(D.off0===undefined?D.off:D.off0+D.dir*D.rv*F.dolAge);D.s=damp(D.s,sf.s+D.off+0.6*Math.sin(F.dolAge*0.5+k*2),1.6,dt);D.ph+=dt*7.5;sampleSurf(D.s,1e6,S2);const top=S2.top;const pp=top*clamp(D.pk+0.14*Math.sin(F.dolAge*0.7+k*1.7),0.12,0.6);sampleSurf(D.s,pp,S2);
       let out=-D.dp*(0.4+0.6*fade)-(1-fade)*1.2,pitch=0;const jt=D.jump>=0?F.dolAge-D.jump:-1;
       if(jt>=0&&jt<1.05){const u=jt/1.05;out=-D.dp+(D.dp+0.85)*Math.sin(PI*u);pitch=0.85*Math.cos(PI*u);if(!D.splash0&&out>0){D.splash0=true;_fv.copy(S2.pos);splash(16,_fv,0.8);sfxDolphin()}if(D.splash0&&!D.splash1&&u>0.75&&out<0.1){D.splash1=true;_fv.copy(S2.pos);splash(20,_fv,0.9)}}
-      _fx.copy(S2.ts).normalize();_fy.copy(S2.n).normalize();_fx.addScaledVector(_fy,-_fx.dot(_fy)).normalize();if(pitch)_fx.applyAxisAngle(_fz.crossVectors(_fx,_fy).normalize(),pitch);_fz.crossVectors(_fx,_fy).normalize();_fy.crossVectors(_fz,_fx);
+      _fx.copy(S2.ts).normalize();if(D.dir<0)_fx.negate();_fy.copy(S2.n).normalize();_fx.addScaledVector(_fy,-_fx.dot(_fy)).normalize();if(pitch)_fx.applyAxisAngle(_fz.crossVectors(_fx,_fy).normalize(),pitch);_fz.crossVectors(_fx,_fy).normalize();_fy.crossVectors(_fz,_fx);
       _fm.makeBasis(_fx,_fy,_fz);D.m.quaternion.setFromRotationMatrix(_fm);D.m.position.copy(S2.pos).addScaledVector(S2.n,out);D.m.visible=fade>0.02;
-      const under=out<0.05?1:0;if(D.u.uUnder.value!==under){D.u.uUnder.value=under;D.mat.depthTest=!under;D.mat.depthWrite=!under;D.mat.transparent=!!under;D.mat.needsUpdate=true}
+      const under=out<0.05?1:0;if(D.u.uUnder.value!==under){D.u.uUnder.value=under;D.mat.depthWrite=!under;D.mat.transparent=!!under;D.mat.needsUpdate=true}
+      if(under){_fv.subVectors(camera.position,D.m.position).normalize();const ca=Math.abs(_fv.dot(S2.n));D.u.uDepth.value=clamp((0.35-out)/Math.max(0.25,ca),0.35,6)}
       D.u.uPh.value=D.ph;D.u.uT.value=time;D.u.uWater.value.copy(wc).multiplyScalar(1.3)});
     if(F.dolAge>9||game.state==='menu'){F.dolOn=false;F.dolT=1e9;F.dol.forEach(D=>D.m.visible=false)}}}
 /* the Campeche crowd: surfers sat in the lineup outside, and groups paddling back to the peak along the inside, passing in front of the shot */
@@ -3370,7 +3390,7 @@ magLoad('gull',src=>{const geo=src.geometry,map=src.material.map;   /* wings alo
 magLoad('dolphin',src=>{const g=src.geometry.clone();g.rotateY(-PI/2);g.scale(2.1,2.1,2.1);g.computeBoundingSphere();const map=src.material.map;   /* nose to +x and 2.3 m long, like the drawn one, so the swim beat and the jump read the same */
   FAUNA.dol.forEach(D=>{D.m.geometry=g;D.u.uMap={value:map};D.mat.vertexColors=false;
     D.mat.vertexShader=D.mat.vertexShader.replace('varying vec3 vC;','varying vec3 vC;varying vec2 vU;').replace('vC=color;','vC=vec3(1.);vU=uv;');
-    D.mat.fragmentShader=D.mat.fragmentShader.replace('varying vec3 vC;','varying vec3 vC;varying vec2 vU;uniform sampler2D uMap;').replace('vec3 col=vC*d','vec3 col=texture2D(uMap,vU).rgb*mix(1.25,2.1,uUnder)*d').replace('uWater*(0.9+0.3*cau),uUnder*0.45);gl_FragColor=vec4(col,mix(1.,0.78,uUnder));','uWater*(1.15+0.35*cau),uUnder*0.72);gl_FragColor=vec4(col,mix(1.,0.42,uUnder));');D.mat.needsUpdate=true})});
+    D.mat.fragmentShader=D.mat.fragmentShader.replace('varying vec3 vC;','varying vec3 vC;varying vec2 vU;uniform sampler2D uMap;').replace('vec3 col=vC*d','vec3 col=texture2D(uMap,vU).rgb*mix(1.25,2.1,uUnder)*d').replace('uWater*(0.9+0.3*cau),uUnder*0.64);','uWater*(1.12+0.35*cau),uUnder*0.74);');D.mat.needsUpdate=true})});
 magLoad('drone',src=>{const g=DRONE.g;g.children.forEach(c=>c.visible=false);   /* camera gimbal toward +x, like the drawn one; a blur disc spins over each propeller */
   const m=new THREE.Mesh(src.geometry,new THREE.MeshStandardMaterial({map:src.material.map,roughness:0.45,metalness:0.1}));m.scale.setScalar(0.75);g.add(m);
   const dm=new THREE.MeshBasicMaterial({color:0xd0d6dc,transparent:true,opacity:0.2,depthWrite:false,side:THREE.DoubleSide});
@@ -3419,7 +3439,7 @@ function addPhoto(name,pts,cv){game.photos.push({name,pts,cv});game.photos.sort(
 const _lbP=new V3();
 const _lbS=mkS();
 /* he hits the lip: a beat later, once the board has gone up through it, the tip of the lip bursts and that bit of it comes apart */
-function lipBreak(k,sAt){k=Math.min(1,k*1.1025);   /* a hit takes a little more of the lip with it (5% more, twice over) */if(sAt===undefined)sf.snapRet=1;game.lipQ=game.lipQ||[];game.lipQ.push({at:game.waveAge+(sAt===undefined?0.09:0),k,s:sAt===undefined?sf.s:sAt})}
+function lipBreak(k,sAt){k=Math.min(1,k*1.268);   /* a hit takes more of the lip with it (15% more again on 2026-11-16) */if(sAt===undefined)sf.snapRet=1;game.lipQ=game.lipQ||[];game.lipQ.push({at:game.waveAge+(sAt===undefined?0.09:0),k,s:sAt===undefined?sf.s:sAt})}
 function lipBurst(k,sH){const X=sH+CP*game.t+game.xOff;game.lipHits=game.lipHits||[];game.lipHits.push({X,t:game.t,k});if(game.lipHits.length>24)game.lipHits.shift();
   sampleSurf(sH,0,_lbS);sampleSurf(sH,_lbS.top-0.04,_lbS);_lbP.copy(_lbS.pos).addScaledVector(_lbS.n,0.15);const P=_lbP,n=Math.round(26+30*k);
   for(let i=0;i<n;i++){const a=rnd(PI*2),r=rnd(0.5,3.0)*k,up=rnd(2.0,6.0)*(0.6+0.4*k);   /* the tip of the lip thrown every way */
@@ -3454,6 +3474,28 @@ function wipe(){
   splash(70,sf.pos,1.2);if(sfxPlay('splash',{vol:1}))sfxNoise(1.0,900,0.16);else sfxNoise(1.4,1400,0.5);game.slowT=0.5;game.shake=1;game.marks.push(game.waveAge+0.3);spawnDrops(4);reqShot('Wipeout',1,0.12);
   if(sf.tube>0.5)award(sf.tubeMin<2?'Deep Barrel':'Barrel',Math.round((600+850*Math.min(sf.tube,7))*0.5));
   sf.tube=0;game.inTube=false}
+/* the judges: five flags on the panel, one of them always from the country of the wave */
+const JFLAG={BRA:'<rect width="30" height="20" fill="#009c3b"/><polygon points="15,2.2 27.6,10 15,17.8 2.4,10" fill="#ffdf00"/><circle cx="15" cy="10" r="4.4" fill="#002776"/>',
+  USA:'<rect width="30" height="20" fill="#fff"/>'+[0,2,4,6,8,10,12].map(i=>`<rect y="${(i*20/13).toFixed(2)}" width="30" height="1.54" fill="#b22234"/>`).join('')+'<rect width="12.5" height="10.8" fill="#3c3b6e"/>',
+  JPN:'<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#bc002d"/>',
+  FRA:'<rect width="10" height="20" fill="#0055a4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ef4135"/>',
+  ITA:'<rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/>',
+  PER:'<rect width="10" height="20" fill="#d91023"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#d91023"/>',
+  MEX:'<rect width="10" height="20" fill="#006847"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce1126"/><circle cx="15" cy="10" r="2.2" fill="#8c5a2b"/>',
+  POR:'<rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#ff0000"/><circle cx="12" cy="10" r="3.6" fill="#ffcc00"/>',
+  IDN:'<rect width="30" height="10" fill="#ce1126"/><rect y="10" width="30" height="10" fill="#fff"/>',
+  ESP:'<rect width="30" height="20" fill="#aa151b"/><rect y="5" width="30" height="10" fill="#f1bf00"/>',
+  ISL:'<rect width="30" height="20" fill="#02529c"/><rect x="8" width="5" height="20" fill="#fff"/><rect y="7.5" width="30" height="5" fill="#fff"/><rect x="9.25" width="2.5" height="20" fill="#dc1e35"/><rect y="8.75" width="30" height="2.5" fill="#dc1e35"/>',
+  PHL:'<rect width="30" height="10" fill="#0038a8"/><rect y="10" width="30" height="10" fill="#ce1126"/><polygon points="0,0 17,10 0,20" fill="#fff"/><circle cx="5.5" cy="10" r="2.2" fill="#fcd116"/>',
+  AUS:'<rect width="30" height="20" fill="#00247d"/><rect width="15" height="10" fill="#00247d"/><path d="M0,0L15,10M15,0L0,10" stroke="#fff" stroke-width="2"/><path d="M7.5,0V10M0,5H15" stroke="#fff" stroke-width="3"/><path d="M7.5,0V10M0,5H15" stroke="#cf142b" stroke-width="1.6"/><circle cx="7.5" cy="15" r="1.6" fill="#fff"/><circle cx="23" cy="5" r="1" fill="#fff"/><circle cx="20" cy="10" r="1" fill="#fff"/><circle cx="26" cy="9" r="1" fill="#fff"/><circle cx="23" cy="16" r="1.1" fill="#fff"/>'};
+const SPOT_FLAG={1:'BRA',2:'IDN',3:'USA',4:'PHL',5:'USA',6:'BRA',7:'BRA',8:'ISL'};
+const jFlag=c=>`<svg viewBox="0 0 30 20" aria-hidden="true">${JFLAG[c]||JFLAG.BRA}</svg>`;
+function judgeCard(js,lo,hi,fin){const el=$('jcard');if(!el)return;const home=SPOT_FLAG[SPOT.id]||'BRA',pool=Object.keys(JFLAG).filter(c=>c!==home);
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}const panel=pool.slice(0,4);panel.splice(Math.floor(Math.random()*5),0,home);
+  el.innerHTML=`<div class="jt">JUDGES</div><div class="jrow">${js.map((v,i)=>`<b class="${i===lo||i===hi?'x':''}" style="animation-delay:${(i*0.07).toFixed(2)}s">${jFlag(panel[i])}<span>${v.toFixed(1)}</span><small>${panel[i]}</small></b>`).join('')}</div><div class="javg">${fin.toFixed(2)}<small>WAVE SCORE</small></div>`;
+  el.classList.remove('off','out');void el.offsetWidth;const w=game.waveId;clearTimeout(el._t1);clearTimeout(el._t2);
+  el._t1=setTimeout(()=>{if(game.waveId===w)el.classList.add('out')},2250);el._t2=setTimeout(()=>{el.classList.add('off');el.classList.remove('out')},2650)}
+function judgeHide(){const el=$('jcard');if(el){clearTimeout(el._t1);clearTimeout(el._t2);el.classList.add('off');el.classList.remove('out')}}
 function endRide(kind){
   if(game.attract){washCut(()=>{const ids=SPOTS.filter(spotOpen).map(o=>o.id),i=ids.indexOf(SPOT.id);if(ids.length>1){setSpot(ids[(i+1)%ids.length]);PROG.spot=game.pickSpot||PROG.spot;progSave()}startAttract()});return}   /* the menu loop moves on to the next wave */
   if(game.state!=='ride')return;
@@ -3465,7 +3507,7 @@ function endRide(kind){
   const nota=Math.min(9.9,10*(1-Math.exp(-eff/17000)));
   const js=[];for(let i=0;i<5;i++)js.push(clamp(nota+rnd(-0.4,0.4)*(nota>0.3?1:0),0,10));
   const srt=[...js].sort((a,b)=>a-b),fin=(srt[1]+srt[2]+srt[3])/3;
-  const lo=js.indexOf(srt[0]),hi=js.lastIndexOf(srt[4]);
+  const lo=js.indexOf(srt[0]),hi=js.lastIndexOf(srt[4]);judgeCard(js,lo,hi,fin);   /* the five scores flash up the moment the wave is over */
   game.heat.push(fin);const top2=[...game.heat].sort((a,b)=>b-a).slice(0,2),sum=top2.reduce((a,b)=>a+b,0);
   if(fin>game.best){game.best=fin;try{localStorage.setItem('surfpool_best',fin.toFixed(2))}catch(e){}}
   const o0=openState(),lv0=lvlOf(PROG.xp),gain=Math.round(game.pts*({2:1.25,3:1.35,4:1.1,5:1.05,6:1.15}[SPOT.id]||1));PROG.xp+=gain;PROG.waves++;if(fin>bestAt(SPOT.id))PROG.best[SPOT.id]=+fin.toFixed(2);progSave();
@@ -3502,7 +3544,7 @@ function endRide(kind){
       {let k=Math.floor(Math.random()*2);clips.forEach(c=>{c.cam=REPLAY_SHOTS[k++%2]});const dc=clips.filter(c=>!c.tube);if(dc.length)dc[Math.min(1,dc.length-1)].cam='drone'}   /* and one take from the drone */   // clip to clip it alternates chase / side
       game.replay={rt:clips.length?clips[0].a:a0,i:0,rate:clips.length?0.8:1,clips:clips.length?clips:null,ci:0};camInit=false;wake.length=0;A.hF.init=false;A.hB.init=false;
       if(clips.length){game.hl=true;return}}
-    game.showCard()},kind==='wipe'?900:500)}
+    game.showCard()},kind==='wipe'?2600:2450)}   /* the replay waits for the judges' card */
 
 function stepRide(dt){
   const mk=clamp(sf.V/8.5,0.5,1.1)*0.9,mkT=clamp(sf.V/8.5,0.62,1.08)*0.9;   /* every move another 10% slower */   /* maneuver tempo: the turn rate follows the speed he comes in with, as if the rail held one radius */
@@ -4164,6 +4206,7 @@ function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.vis
   if(!slow&&!qProbe&&cadN>nMin&&cadHold<=0&&cadOk&&qLevel<=6){   // a faster cadence only while the picture stays sharp
    cadN--;cadHold=4;qCool=Math.max(qCool,3);return}
   if(slow&&!qProbe&&(qLevel>=5||qLevel>=qFloor)&&(cadN+1)*rafD<=21.5){cadN++;cadHold=cadBack;cadBack=Math.min(cadBack*2,40);qLock=false;qFloor=QL.length-1;qFloorT=0;qCool=2;qBack=3;return}
+  if(slow&&game.state==='ride'&&!game.attract){qUp=0;return}   /* while a wave is being ridden the picture is never made softer: the resolution only changes between waves */
   if(slow){if(qUp){qLock=true;qLockT=40}const l0=qLevel;if(qLevel<qFloor&&qStepDown()){qProbe={l:l0,avg};qBack=Math.min(qBack*2,16);qCool=qBack}qUp=0}   // dropping frames: step down, then check it helped
   else if(avg<T*1.03){qUp=0;if(!qLock&&qLevel>0&&--qCool<0){qUp=setQuality(qLevel-1)?1:0;qCool=qBack}}}  // holding the cadence comfortably: try one step up
 
