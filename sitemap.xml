@@ -2,23 +2,164 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://playsurfgame.com/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image><image:loc>https://playsurfgame.com/og-image.jpg</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://playsurfgame.com/jogo-de-surf</loc>
-    <lastmod>2026-11-13</lastmod>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
-    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://playsurfgame.com/free-surf-game</loc>
-    <lastmod>2026-11-13</lastmod>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <lastmod>2026-11-16</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/jogo-de-surf</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/juego-de-surf</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/jeu-de-surf</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/surf-spiel</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/gioco-di-surf</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/ja</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/game-selancar</loc>
+    <lastmod>2026-11-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://playsurfgame.com/free-surf-game"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://playsurfgame.com/jogo-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://playsurfgame.com/juego-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://playsurfgame.com/jeu-de-surf"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://playsurfgame.com/surf-spiel"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://playsurfgame.com/gioco-di-surf"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://playsurfgame.com/ja"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://playsurfgame.com/game-selancar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://playsurfgame.com/free-surf-game"/>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://playsurfgame.com/og-playsurf-v3.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/wave-pool-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/uluwatu-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/cloud-9-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/pipeline-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/trestles-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/campeche-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/pororoca-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
