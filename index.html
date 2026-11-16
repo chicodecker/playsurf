@@ -849,9 +849,35 @@ function updateNeon(dt,time){
   NEON.fl-=dt;if(NEON.fl<-rnd(2.5,7))NEON.fl=rnd(0.25,0.6);   // now and then the slogan stutters like an old transformer
   const sub=NEON.fl>0?(Math.sin(time*63)>0.1?0.25:1):1;
   neonWord.material.color.setScalar(k*(0.97+0.03*Math.sin(time*7.3)));neonWave.material.color.setScalar(k*0.95*(0.94+0.06*Math.sin(time*2.1)));ledMat.uniforms.uK.value=lerp(1.35,1.2,night)*(0.985+0.015*Math.sin(time*5.3));ledMat.uniforms.uT.value=time;AD.t.value=time;neonSub.material.color.setScalar(k*0.9*sub)}
+/* "THIS IS THE END": a yellow warning sign up on posts on the near deck of the pool (the side every camera looks across to, over the wave), a pictogram of a man falling off a cliff crossed out with a red X.
+   It rides with the scrolling scenery and is placed so it comes past a few seconds before the end of the ride */
+const ENDS=(()=>{const W=1024,H=640,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;TXT.push(t);txtFlip(t,MIRROR);   /* mirrored back when the screen is flipped, so it always reads */
+  const rr=(X,Y,w,h,r)=>{x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()};
+  const paint=()=>{x.clearRect(0,0,W,H);x.fillStyle='#111';rr(0,0,W,H,46);x.fill();x.fillStyle='#ffd21a';rr(16,16,W-32,H-32,36);x.fill();
+    const X0=52,Y0=70,S=500;x.fillStyle='#fff';rr(X0,Y0,S,S,30);x.fill();x.lineWidth=14;x.strokeStyle='#111';rr(X0,Y0,S,S,30);x.stroke();
+    x.save();rr(X0+7,Y0+7,S-14,S-14,24);x.clip();x.translate(X0,Y0);
+    x.fillStyle='#111';x.beginPath();x.moveTo(290,190);x.lineTo(520,190);x.lineTo(520,520);x.lineTo(390,520);x.lineTo(372,430);x.lineTo(346,372);x.lineTo(318,300);x.lineTo(300,240);x.closePath();x.fill();   /* the cliff */
+    x.strokeStyle='#1f7fc4';x.lineWidth=10;x.lineCap='round';for(let k=0;k<3;k++){x.beginPath();for(let i=0;i<=10;i++){const px=10+i*36,py=440+k*28+8*Math.sin(i*1.4+k);i?x.lineTo(px,py):x.moveTo(px,py)}x.stroke()}   /* the sea far below */
+    x.strokeStyle='#111';x.fillStyle='#111';x.lineWidth=22;x.lineCap='round';x.lineJoin='round';
+    x.beginPath();x.arc(196,214,26,0,2*PI);x.fill();   /* head */
+    x.beginPath();x.moveTo(204,248);x.lineTo(160,322);x.stroke();   /* body, tipping backwards off the edge */
+    x.beginPath();x.moveTo(196,262);x.lineTo(250,226);x.moveTo(196,262);x.lineTo(138,236);x.stroke();   /* arms flung up */
+    x.beginPath();x.moveTo(160,322);x.lineTo(214,370);x.moveTo(160,322);x.lineTo(112,378);x.stroke();   /* legs */
+    x.lineWidth=8;for(const [a0,a1] of [[262,188],[276,212],[270,238]]){x.beginPath();x.moveTo(a0,a1);x.lineTo(a0+26,a1-10);x.stroke()}   /* motion lines off the edge */
+    x.restore();
+    x.save();x.globalAlpha=0.9;x.strokeStyle='#e01a1a';x.lineWidth=46;x.lineCap='round';x.beginPath();x.moveTo(X0+60,Y0+60);x.lineTo(X0+S-60,Y0+S-60);x.moveTo(X0+S-60,Y0+60);x.lineTo(X0+60,Y0+S-60);x.stroke();x.restore();   /* the big red X */
+    x.fillStyle='#111';x.textAlign='center';x.textBaseline='alphabetic';const cx=(X0+S+W-24)/2+8,mw=W-24-(X0+S)-40;
+    x.font='italic 900 150px '+CONDF;x.fillText('THIS',cx,230,mw);x.font='italic 900 118px '+CONDF;x.fillText('IS THE',cx,380,mw);x.font='italic 900 196px '+CONDF;x.fillText('END',cx,575,mw);t.needsUpdate=true};
+  paint();whenFonts(paint);
+  const g=new THREE.Group(),SW=7.6,SH=SW*H/W,post=new THREE.MeshStandardMaterial({color:0x2a2d30,roughness:0.6,metalness:0.4});
+  const board=new THREE.Mesh(new THREE.PlaneGeometry(SW,SH),new THREE.MeshStandardMaterial({map:t,roughness:0.65,emissive:0xffffff,emissiveMap:t,emissiveIntensity:0.12}));board.position.set(0,8.8,0.08);g.add(board);
+  const back=new THREE.Mesh(new THREE.BoxGeometry(SW+0.15,SH+0.15,0.12),post);back.position.set(0,8.8,0);g.add(back);
+  for(const sx of[-2.6,2.6]){const p=new THREE.Mesh(new THREE.BoxGeometry(0.26,8.8,0.26),post);p.position.set(sx,4.4,-0.1);g.add(p)}
+  g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.frustumCulled=false}});envG.add(g);return {g,a:0,paint}})();
+function endSignPlace(){ENDS.a=POOL.U*(game.t+Math.max(6,(game.waveDur||80)-8))+POOL.span*0.62-25}   /* about 8 s before the end of the ride it is just ahead of him, then slides past */
 const _em=new THREE.Matrix4(),_eq=new THREE.Quaternion(),_es=new V3,_ep=new V3;
 function updateEnv(){
-  const sc=POOL.U*game.t;envU.uScroll.value=sc;
+  const sc=POOL.U*game.t;envU.uScroll.value=sc;ENDS.g.position.set(wrapA(ENDS.a,sc),0,-3);
   BOX.forEach((b,i)=>{_em.compose(_ep.set(wrapA(b.a,sc),b.y,b.w),_eq.identity(),_es.set(b.sx,b.sy,b.sz));boxI.setMatrixAt(i,_em)});boxI.instanceMatrix.needsUpdate=true;
   LAMP.forEach((b,i)=>{_em.compose(_ep.set(wrapA(b.a,sc),b.y,b.w),_eq.identity(),_es.set(b.sx,b.sy,b.sz));lampI.setMatrixAt(i,_em)});lampI.instanceMatrix.needsUpdate=true;
   PALM.forEach((b,i)=>{_em.compose(_ep.set(wrapA(b.a,sc),b.w<0?1.0:0.3,b.w),_eq.setFromAxisAngle(UPV,b.r),_es.setScalar(b.sc));palmI.setMatrixAt(i,_em)});palmI.instanceMatrix.needsUpdate=true;
@@ -2825,7 +2851,7 @@ function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
-  game.state='ride';game.waveAge=0;game.chEnd=-99;game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.fin='';game.finale=0;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
+  game.state='ride';game.waveAge=0;game.chEnd=-99;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.fin='';game.finale=0;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
   Object.assign(sf,{layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,bsRec:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false,ffU:0,ffArm:0,koVy:0,koDive:0,snapRet:0,pivPrev:0});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
@@ -3852,7 +3878,7 @@ addEventListener('resize',resize);resize();
 // Steady frames matter more than sharp ones: resolution follows what the machine can hold at a locked cadence.
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
-const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return c?Math.min(devicePixelRatio,2.25):Math.min(Math.max(devicePixelRatio,1.25),1.75)})();   /* a computer with a plain 1x screen draws at 1.5x and scales down (clean edges); a phone uses up to 2.5x of its own pixels */
+const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return c?Math.min(devicePixelRatio,2.25):Math.min(Math.max(devicePixelRatio,1.5),2.0)})();   /* sharper ceiling: a computer with a plain 1x screen draws at up to 1.5x and scales down (clean edges), a Retina screen at its full 2x; a phone uses up to 2.25x of its own pixels. The controller below still only climbs there while the frame rate holds */
 const QL=[[2.5,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
 function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=scenePass.ms.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0){scenePass.ms.samples=sm;scenePass.ms.dispose()}
@@ -3901,7 +3927,7 @@ function frame(nowMs){
   if(game.paused||window.__manual||innerWidth<16){return}
   autoQuality(dtRaw*1000,cadN*rafD,nMin);
   tick(dtR,true)}
-const GSPD=0.9;   /* game speed: everything runs at 90% of real time */
+const GSPD=0.85;   /* game speed: everything runs at 85% of real time (calmer, and each frame moves less, so motion reads smoother) */
 /* the intro reel: while the player picks a stance, the demo behind the menu cuts every few seconds to another wave, another camera and other weather,
    dropped straight into the middle of a ride, with a quick dip to black on each cut */
 const REEL={t:0,i:0,cam:'',fade:false};
