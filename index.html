@@ -1729,39 +1729,68 @@ const BART={
   gun:{deck:'#eef2f5',rail:'#0e2a3b',pad:'#0a0d10',ink:'#0e2a3b',logo:'DEEPWATER',model:"GUN 6'8",bot:['stripes','#0e2a3b','#22d3c5'],blogo:'GUN',stk:[['TIDEWATER FINS','#22d3c5','#0e2a3b'],['SEABREAK','#ffffff','#0e2a3b'],['KAI WAX','#ffd94a','#0e2a3b']]},
   soft:{deck:'#fbfbf7',rail:'#2a8fd6',pad:null,ink:'#2a8fd6',logo:'PLAYSURF',model:"SOFT 7'0",soft:1,bot:['fade','#2a8fd6','#7fd3ff'],blogo:'',stk:[['KAI WAX','#ffd94a','#1b1f24'],['SALTLINE','#ffffff','#2a8fd6'],['PLAYSURF','grad','#ffffff']]},
   pro:{deck:'#f7f7f4',rail:'#14171b',pad:'#14171b',ink:'#14171b',logo:'PLAYSURF PRO',model:'#67 PRO MODEL',thinRail:1,dstk:[['SALTLINE','#d6262a','#ffffff'],['KAI WAX','#14171b','#ffd23a'],['OFFSHORE CO.','#1f4fd6','#ffffff'],['TIDEWATER FINS','#ffd23a','#14171b']],bot:['pro','#f7f7f4','#d6262a'],blogo:'67',stk:[['SALTLINE','#d6262a','#ffffff'],['KAI WAX','#14171b','#ffd23a'],['SEABREAK','#1f4fd6','#ffffff']]}};   /* a competition white board: clean, thin dark rails, sponsors stacked on the nose */
-/* the little surfer on the softboard: a painted portrait (messy sun-bleached brown hair, a huge gap-toothed grin, a tanned kid with his arms crossed), drawn stroke by stroke */
+/* the little surfer on the softboard: Theo painted in a round frame (short straight brown hair with a fringe and wisps at the sides, big brown eyes,
+   a wide grin with big front teeth, fair skin, no shirt, arms crossed), drawn stroke by stroke */
 function kidPortrait(x,cx,cy,r,rot){x.save();x.translate(cx,cy);x.rotate(rot||0);x.beginPath();x.arc(0,0,r,0,2*PI);x.clip();let sd=7;const rn=()=>(sd=(sd*16807)%2147483647)/2147483647;
   {const g=x.createLinearGradient(0,-r,0,r);g.addColorStop(0,'#7fd3ff');g.addColorStop(0.55,'#c8ecff');g.addColorStop(1,'#2a8fd6');x.fillStyle=g;x.fillRect(-r,-r,2*r,2*r)}
   for(let i=0;i<70;i++){x.strokeStyle=['#ffffff','#9fe0ff','#5ab8ef','#ffe9a8'][i%4];x.globalAlpha=0.18+0.2*rn();x.lineWidth=r*(0.04+0.05*rn());x.lineCap='round';const a=rn()*2*PI,d=r*(0.4+0.6*rn());x.beginPath();x.moveTo(Math.cos(a)*d,Math.sin(a)*d);x.lineTo(Math.cos(a)*d+r*0.18*(rn()-0.5),Math.sin(a)*d+r*0.12*(rn()-0.5));x.stroke()}x.globalAlpha=1;   /* a painted sky behind him */
-  const skin='#d99a6c',skinD='#b9764c',skinL='#f0bb8c',hair='#6a4529',hairL='#a7784a',hairD='#3e2817';
-  x.fillStyle=skin;x.beginPath();x.ellipse(0,r*0.95,r*0.78,r*0.52,0,0,2*PI);x.fill();   /* shoulders */
-  x.fillStyle=skinD;x.beginPath();x.ellipse(0,r*0.86,r*0.62,r*0.16,0.05,0,2*PI);x.fill();x.fillStyle=skin;x.beginPath();x.ellipse(-r*0.05,r*0.80,r*0.58,r*0.12,-0.08,0,2*PI);x.fill();   /* arms crossed over the chest */
-  x.fillStyle=skinD;x.fillRect(-r*0.12,r*0.22,r*0.24,r*0.28);   /* neck */
-  x.fillStyle=skin;x.beginPath();x.ellipse(-r*0.34,-r*0.02,r*0.07,r*0.11,0,0,2*PI);x.ellipse(r*0.34,-r*0.02,r*0.07,r*0.11,0,0,2*PI);x.fill();   /* ears */
-  {const g=x.createRadialGradient(-r*0.08,-r*0.12,r*0.05,0,-r*0.02,r*0.42);g.addColorStop(0,skinL);g.addColorStop(1,skin);x.fillStyle=g;x.beginPath();x.ellipse(0,-r*0.02,r*0.31,r*0.37,0,0,2*PI);x.fill()}   /* the face */
-  x.fillStyle='rgba(230,110,90,0.28)';x.beginPath();x.ellipse(-r*0.17,r*0.08,r*0.07,r*0.045,0,0,2*PI);x.ellipse(r*0.17,r*0.08,r*0.07,r*0.045,0,0,2*PI);x.fill();   /* cheeks */
-  x.fillStyle=hair;x.beginPath();x.ellipse(0,-r*0.25,r*0.41,r*0.27,0,PI,2*PI);x.fill();x.beginPath();x.ellipse(0,-r*0.25,r*0.40,r*0.12,0,0,PI);x.fill();
-  x.beginPath();x.ellipse(-r*0.31,-r*0.13,r*0.11,r*0.17,0.2,0,2*PI);x.ellipse(r*0.31,-r*0.13,r*0.11,r*0.17,-0.2,0,2*PI);x.fill();   /* a full, soft mop of hair with volume over the ears */
-  x.lineCap='round';for(let i=0;i<90;i++){const u=rn()*2-1,bx=u*r*0.36,by=-r*0.47+Math.abs(u)*r*0.12+rn()*r*0.05,len=r*(0.16+0.16*rn()),sw=(u+0.25*(rn()-0.5))*r*0.10;   /* wavy locks falling over the forehead every which way, tips flicking up */
-    x.strokeStyle=[hair,hair,hairL,hairD,'#8a5f38'][i%5];x.globalAlpha=0.85;x.lineWidth=r*(0.016+0.022*rn());x.beginPath();x.moveTo(bx,by);x.bezierCurveTo(bx+sw,by+len*0.4,bx+sw*1.8,by+len*0.75,bx+sw*1.2+r*0.03*(rn()-0.5),by+len);x.stroke()}
-  for(let i=0;i<34;i++){const a=PI*1.05+rn()*PI*0.9,d=r*(0.30+0.08*rn());x.strokeStyle=i%2?'#c89a62':hairL;x.globalAlpha=0.7;x.lineWidth=r*0.014;x.beginPath();x.moveTo(Math.cos(a)*d*0.55,-r*0.25+Math.sin(a)*r*0.16);x.quadraticCurveTo(Math.cos(a)*d*0.9,-r*0.25+Math.sin(a)*r*0.30,Math.cos(a)*d*1.05,-r*0.22+Math.sin(a)*r*0.27);x.stroke()}x.globalAlpha=1;   /* sun-bleached streaks on top */
-  for(let i=0;i<10;i++){const a=PI*1.1+rn()*PI*0.8,d=r*0.40;x.strokeStyle=hair;x.lineWidth=r*0.022;x.beginPath();x.moveTo(Math.cos(a)*d*0.85,-r*0.24+Math.sin(a)*r*0.24);x.quadraticCurveTo(Math.cos(a)*d*1.1,-r*0.26+Math.sin(a)*r*0.30,Math.cos(a)*d*1.12,-r*0.20+Math.sin(a)*r*0.33);x.stroke()}   /* a few tufts sticking out */
-  x.strokeStyle=hairD;x.lineWidth=r*0.028;x.beginPath();x.arc(-r*0.13,-r*0.10,r*0.07,PI*1.15,PI*1.85);x.stroke();x.beginPath();x.arc(r*0.13,-r*0.10,r*0.07,PI*1.15,PI*1.85);x.stroke();   /* eyebrows */
-  x.strokeStyle='#2b1a10';x.lineWidth=r*0.03;x.beginPath();x.arc(-r*0.13,-r*0.015,r*0.055,PI*1.1,PI*1.9);x.stroke();x.beginPath();x.arc(r*0.13,-r*0.015,r*0.055,PI*1.1,PI*1.9);x.stroke();   /* eyes squeezed by the grin */
-  x.strokeStyle=skinD;x.lineWidth=r*0.022;x.beginPath();x.moveTo(-r*0.02,r*0.02);x.quadraticCurveTo(r*0.03,r*0.09,-r*0.035,r*0.105);x.stroke();   /* nose */
-  x.fillStyle='#7a2a22';x.beginPath();x.moveTo(-r*0.17,r*0.15);x.quadraticCurveTo(0,r*0.34,r*0.17,r*0.15);x.quadraticCurveTo(0,r*0.20,-r*0.17,r*0.15);x.fill();   /* the big open smile */
-  x.fillStyle='#fffaf0';x.beginPath();x.moveTo(-r*0.15,r*0.165);x.quadraticCurveTo(0,r*0.215,r*0.15,r*0.165);x.lineTo(r*0.13,r*0.205);x.quadraticCurveTo(0,r*0.24,-r*0.13,r*0.205);x.closePath();x.fill();
-  x.fillStyle='#7a2a22';x.fillRect(-r*0.012,r*0.17,r*0.03,r*0.05);   /* the gap in his teeth */
+  const skin='#f1c29c',skinD='#d99b74',skinL='#fcdcc0',hair='#5e3e24',hairL='#8a6038',hairD='#3e2817';
+  x.fillStyle=skin;x.beginPath();x.ellipse(0,r*1.0,r*0.62,r*0.50,0,0,2*PI);x.fill();   /* narrow shoulders, no shirt */
+  x.fillStyle=skinD;x.beginPath();x.ellipse(0,r*0.88,r*0.50,r*0.13,0.05,0,2*PI);x.fill();x.fillStyle=skin;x.beginPath();x.ellipse(-r*0.04,r*0.83,r*0.47,r*0.10,-0.08,0,2*PI);x.fill();   /* thin arms crossed over the chest */
+  x.fillStyle=skinD;x.fillRect(-r*0.09,r*0.24,r*0.18,r*0.24);   /* a slim neck */
+  x.fillStyle=skin;x.beginPath();x.ellipse(-r*0.335,0,r*0.065,r*0.10,0,0,2*PI);x.ellipse(r*0.335,0,r*0.065,r*0.10,0,0,2*PI);x.fill();   /* ears, out in the open */
+  {const g=x.createRadialGradient(-r*0.08,-r*0.10,r*0.05,0,-r*0.02,r*0.42);g.addColorStop(0,skinL);g.addColorStop(1,skin);x.fillStyle=g;x.beginPath();x.ellipse(0,-r*0.02,r*0.32,r*0.36,0,0,2*PI);x.fill()}   /* a round face */
+  x.fillStyle='rgba(235,110,95,0.30)';x.beginPath();x.ellipse(-r*0.18,r*0.09,r*0.07,r*0.045,0,0,2*PI);x.ellipse(r*0.18,r*0.09,r*0.07,r*0.045,0,0,2*PI);x.fill();   /* rosy cheeks */
+  x.fillStyle=hair;x.beginPath();x.ellipse(0,-r*0.21,r*0.37,r*0.23,0,PI,2*PI);x.fill();x.beginPath();x.ellipse(0,-r*0.21,r*0.36,r*0.08,0,0,PI);x.fill();   /* short straight hair: a neat cap */
+  x.beginPath();x.ellipse(-r*0.305,-r*0.14,r*0.07,r*0.10,0.15,0,2*PI);x.ellipse(r*0.305,-r*0.14,r*0.07,r*0.10,-0.15,0,2*PI);x.fill();   /* down to just above the ears */
+  x.lineCap='round';for(let i=0;i<70;i++){const u=rn()*2-1,bx=u*r*0.32;x.strokeStyle=[hair,hairL,hairD,'#74502f'][i%4];x.globalAlpha=0.55;x.lineWidth=r*(0.010+0.012*rn());x.beginPath();x.moveTo(bx*0.4,-r*0.43);x.quadraticCurveTo(bx*0.85,-r*0.38,bx,-r*0.24);x.stroke()}x.globalAlpha=1;   /* combed straight down from the crown */
+  for(let i=0;i<=26;i++){const u=-1+2*i/26,bx=u*r*0.30,top=-r*0.34+Math.abs(u)*r*0.07,len=r*(0.09+0.06*rn()),sw=r*0.045,tip=bx+u*r*0.05;   /* the fringe: straight locks, cut a little uneven, tips swept out */
+    x.fillStyle=[hair,'#664428',hairD,'#74502f'][i%4];x.beginPath();x.moveTo(bx-sw,top);x.lineTo(bx+sw,top);x.lineTo(tip,top+len);x.closePath();x.fill()}
+  x.strokeStyle=hair;x.lineWidth=r*0.012;for(const sg of[-1,1])for(let i=0;i<6;i++){const y0=-r*(0.20-0.02*i);x.beginPath();x.moveTo(sg*r*0.30,y0);x.quadraticCurveTo(sg*r*(0.35+0.02*rn()),y0+r*0.03,sg*r*(0.37+0.04*rn()),y0+r*(0.05+0.05*rn()));x.stroke()}   /* wisps straying out at the sides */
+  x.strokeStyle='#5a3a22';x.lineWidth=r*0.022;for(const sg of[-1,1]){x.beginPath();x.moveTo(sg*r*0.07,-r*0.105);x.quadraticCurveTo(sg*r*0.13,-r*0.135,sg*r*0.195,-r*0.11);x.stroke()}   /* brows */
+  for(const sg of[-1,1]){const ex=sg*r*0.13,ey=-r*0.035;x.fillStyle='#fbf6f0';x.beginPath();x.ellipse(ex,ey,r*0.062,r*0.048,0,0,2*PI);x.fill();   /* big brown eyes, wide open */
+    x.save();x.beginPath();x.ellipse(ex,ey,r*0.062,r*0.048,0,0,2*PI);x.clip();x.fillStyle='#6b4426';x.beginPath();x.arc(ex,ey,r*0.037,0,2*PI);x.fill();x.fillStyle='#140b05';x.beginPath();x.arc(ex,ey,r*0.018,0,2*PI);x.fill();
+    x.fillStyle='#fff';x.beginPath();x.arc(ex-r*0.013,ey-r*0.015,r*0.012,0,2*PI);x.fill();x.restore();
+    x.strokeStyle='#2b1a10';x.lineWidth=r*0.016;x.beginPath();x.ellipse(ex,ey,r*0.064,r*0.05,0,PI*1.05,PI*1.95);x.stroke()}
+  x.strokeStyle=skinD;x.lineWidth=r*0.02;x.beginPath();x.moveTo(-r*0.015,r*0.03);x.quadraticCurveTo(r*0.03,r*0.09,-r*0.03,r*0.10);x.stroke();   /* nose */
+  x.fillStyle='#7a2a22';x.beginPath();x.moveTo(-r*0.165,r*0.14);x.quadraticCurveTo(0,r*0.35,r*0.165,r*0.14);x.quadraticCurveTo(0,r*0.19,-r*0.165,r*0.14);x.fill();   /* the big open grin */
+  x.fillStyle='#d9666a';x.beginPath();x.ellipse(0,r*0.255,r*0.07,r*0.03,0,0,2*PI);x.fill();
+  x.fillStyle='#fffaf0';x.beginPath();x.moveTo(-r*0.145,r*0.155);x.quadraticCurveTo(0,r*0.205,r*0.145,r*0.155);x.lineTo(r*0.12,r*0.19);x.quadraticCurveTo(0,r*0.225,-r*0.12,r*0.19);x.closePath();x.fill();
+  x.fillRect(-r*0.045,r*0.17,r*0.088,r*0.07);x.strokeStyle='rgba(122,42,34,0.7)';x.lineWidth=r*0.008;x.beginPath();x.moveTo(0,r*0.175);x.lineTo(0,r*0.24);x.stroke();   /* his two big front teeth */
   for(let i=0;i<120;i++){x.globalAlpha=0.06;x.fillStyle=i%2?'#ffffff':'#3a2414';x.beginPath();x.arc((rn()*2-1)*r,(rn()*2-1)*r,r*0.05*rn(),0,2*PI);x.fill()}x.globalAlpha=1;   /* a little paint texture over it all */
   x.restore();x.save();x.translate(cx,cy);x.lineWidth=r*0.07;x.strokeStyle='#ffffff';x.beginPath();x.arc(0,0,r*0.97,0,2*PI);x.stroke();
   const g=x.createLinearGradient(-r,0,r,0);g.addColorStop(0,'#e3368f');g.addColorStop(0.5,'#f75a78');g.addColorStop(1,'#ffab3d');x.lineWidth=r*0.035;x.strokeStyle=g;x.beginPath();x.arc(0,0,r*1.0,0,2*PI);x.stroke();x.restore()}
+/* THEO, written on his board by hand in felt-tip: wobbly capitals, each a bit off its line, gone over twice where the pen ran dry */
+function theoTag(x,cx,cy,hgt,rot){let sd=29;const rn=()=>(sd=(sd*16807)%2147483647)/2147483647;
+  const L={T:[[[0,0.03],[0.74,0]],[[0.38,0.02],[0.35,1]]],H:[[[0.03,0],[0,1]],[[0.62,0.02],[0.65,1]],[[0.01,0.53],[0.64,0.47]]],E:[[[0.58,0.03],[0.03,0],[0,1],[0.62,0.97]],[[0.02,0.50],[0.48,0.47]]],
+    O:[Array.from({length:21},(_,i)=>{const a=-PI/2-0.3+i/20*2*PI*1.07;return[0.37+0.37*Math.cos(a),0.5+0.5*Math.sin(a)]})]};
+  const word=['T','H','E','O'],adv=[0.88,0.84,0.76,0.86],tot=adv.reduce((p,q)=>p+q,0),strokes=[];let ox=-tot*hgt/2;
+  word.forEach((ch,k)=>{const sc=hgt*(0.90+0.18*rn()),by=(rn()-0.5)*0.12*hgt,ang=(rn()-0.5)*0.14,ca=Math.cos(ang),sa=Math.sin(ang);
+    L[ch].forEach(st=>strokes.push(st.map(([u,v])=>{const lx=(u+(rn()-0.5)*0.05)*sc,ly=(v-0.5+(rn()-0.5)*0.05)*sc;return[ox+lx*ca-ly*sa,by+lx*sa+ly*ca]})));ox+=adv[k]*hgt});
+  x.save();x.translate(cx,cy);x.rotate(rot||0);x.lineCap='round';x.lineJoin='round';
+  const draw=(w,col,al,dx,dy)=>{x.strokeStyle=col;x.globalAlpha=al;x.lineWidth=w;strokes.forEach(s=>{x.beginPath();s.forEach(([u,v],i)=>{i?x.lineTo(u+dx,v+dy):x.moveTo(u+dx,v+dy)});x.stroke()})};
+  draw(hgt*0.13,'#1b2350',0.92,0,0);draw(hgt*0.05,'#0b0f28',0.45,hgt*0.02,hgt*0.015);   /* the felt tip, and the darker line where it went over twice */
+  {const sx=tot*hgt/2+hgt*0.32,sy=-hgt*0.28,R=hgt*0.2;x.globalAlpha=0.9;x.strokeStyle='#1b2350';x.lineWidth=hgt*0.07;x.beginPath();for(let i=0;i<=5;i++){const a=-PI/2+i*4*PI/5;i?x.lineTo(sx+R*Math.cos(a),sy+R*Math.sin(a)):x.moveTo(sx+R*Math.cos(a),sy+R*Math.sin(a))}x.stroke()}   /* and a little star */
+  x.globalAlpha=1;x.restore()}
+/* the "THIS IS THE END" sign as a board sticker, stuck down along the rail: white die-cut edge, the yellow sign, the crossed-out cliff fall */
+function endSticker(x,cx,cy,w,rot){const h=w*0.25,b=h*0.09;x.save();x.translate(cx,cy);x.rotate(rot||0);
+  const rr=(X,Y,W,H,R)=>{x.beginPath();x.roundRect?x.roundRect(X,Y,W,H,R):x.rect(X,Y,W,H)};
+  x.fillStyle='rgba(0,0,0,0.18)';rr(-w/2+2,-h/2+2,w,h,h*0.22);x.fill();x.fillStyle='#ffffff';rr(-w/2,-h/2,w,h,h*0.22);x.fill();
+  x.fillStyle='#111';rr(-w/2+b,-h/2+b,w-2*b,h-2*b,h*0.16);x.fill();x.fillStyle='#ffd21a';rr(-w/2+b*1.8,-h/2+b*1.8,w-3.6*b,h-3.6*b,h*0.12);x.fill();
+  const s=h-5.2*b,px=-w/2+b*2.8,py=-s/2;x.fillStyle='#fff';rr(px,py,s,s,s*0.12);x.fill();
+  x.save();rr(px,py,s,s,s*0.12);x.clip();x.translate(px,py);x.scale(s/500,s/500);x.fillStyle='#111';x.beginPath();[[290,190],[520,190],[520,520],[390,520],[372,430],[346,372],[318,300],[300,240]].forEach(([u,v],i)=>i?x.lineTo(u,v):x.moveTo(u,v));x.closePath();x.fill();
+  x.strokeStyle='#111';x.lineWidth=30;x.lineCap='round';x.beginPath();x.arc(196,214,30,0,2*PI);x.fillStyle='#111';x.fill();x.beginPath();x.moveTo(204,248);x.lineTo(160,322);x.moveTo(196,262);x.lineTo(250,226);x.moveTo(196,262);x.lineTo(138,236);x.moveTo(160,322);x.lineTo(214,370);x.moveTo(160,322);x.lineTo(112,378);x.stroke();
+  x.strokeStyle='#e01a1a';x.lineWidth=60;x.beginPath();x.moveTo(70,70);x.lineTo(430,430);x.moveTo(430,70);x.lineTo(70,430);x.stroke();x.restore();
+  const t0=px+s+b*1.2,t1=w/2-b*2.6;x.fillStyle='#111';x.font=`italic 900 ${Math.round(h*0.50)}px ${CONDF}`;x.textAlign='center';x.textBaseline='middle';x.fillText('THIS IS THE END',(t0+t1)/2,h*0.04,t1-t0);
+  {const g=x.createLinearGradient(0,-h/2,0,h/2);g.addColorStop(0,'rgba(255,255,255,0.22)');g.addColorStop(0.5,'rgba(255,255,255,0)');x.fillStyle=g;rr(-w/2,-h/2,w,h,h*0.22);x.fill()}   /* a little gloss */
+  x.restore()}
 /* the softboard's doodles: little blocky pixel sprites in the spirit of a kid's block-building games (our own, not anyone's characters) and a scatter of 67s */
 const PIX={heart:['.RR.RR.','RRRRRRR','RRRRRRR','.RRRRR.','..RRR..','...R...'],gem:['..CCC..','.CWCCC.','CCCCCCC','.CCCCC.','..CCC..','...C...'],sword:['......W','.....WW','....WW.','.G.WW..','..GW...','.BGG...','B.B....'],
   block:['GGGGGG','GGGGGG','DDDDDD','DBDDBD','DDDDDD','DDBDDD'],smile:['YYYYYY','YKYYKY','YYYYYY','KYYYYK','YKKKKY','YYYYYY'],pick:['.CCCC.','C.BB.C','...B..','...B..','...B..','...B..']};
 const PIXC={R:'#e8463c',C:'#3ad7e8',W:'#ffffff',G:'#5bbf3a',B:'#7a5230',D:'#8a5a3a',Y:'#ffd23a',K:'#1b1f24'};
 function pixSprite(x,name,cx,cy,sz,rot){const P=PIX[name];if(!P)return;const h=P.length,w=P[0].length;x.save();x.translate(cx,cy);x.rotate(rot||0);x.fillStyle='rgba(0,0,0,0.22)';x.fillRect(-w*sz/2+sz*0.25,-h*sz/2+sz*0.25,w*sz,h*sz);
   for(let r=0;r<h;r++)for(let c=0;c<w;c++){const ch=P[r][c];if(ch==='.')continue;x.fillStyle=PIXC[ch];x.fillRect(-w*sz/2+c*sz,-h*sz/2+r*sz,sz+0.5,sz+0.5)}x.restore()}
-function softDoodles(x,X,deck){const items=deck?[['heart',0.12,74],['gem',0.17,182],['block',0.50,70],['sword',0.55,186],['smile',0.62,124],['pick',0.92,128],['heart',0.95,84],['gem',0.47,128]]:[['block',0.18,78],['smile',0.22,178],['heart',0.78,72],['gem',0.82,184],['sword',0.30,128],['pick',0.70,128]];
+function softDoodles(x,X,deck){const items=deck?[['heart',0.12,74],['gem',0.17,182],['block',0.50,70],['sword',0.55,186],['smile',0.62,124],['pick',0.92,128],['heart',0.95,84]]:[['block',0.18,78],['smile',0.22,178],['heart',0.78,72],['gem',0.82,184],['sword',0.30,128],['pick',0.70,128]];
   items.forEach(([n,u,y],i)=>pixSprite(x,n,X(u),y,deck?5:6,(i%3-1)*0.25));
   const sevens=deck?[[0.25,60,-0.2],[0.42,196,0.15],[0.86,182,-0.1]]:[[0.36,62,0.2],[0.64,196,-0.2],[0.90,128,0]];x.textAlign='center';x.textBaseline='middle';
   sevens.forEach(([u,y,r])=>{x.save();x.translate(X(u),y);x.rotate(PI/2+r);x.font=`italic 900 34px ${CONDF}`;x.lineWidth=6;x.strokeStyle='#ffffff';x.strokeText('67',0,0);const g=x.createLinearGradient(-30,0,30,0);g.addColorStop(0,'#e3368f');g.addColorStop(1,'#ffab3d');x.fillStyle=g;x.fillText('67',0,0);x.restore()})}
@@ -1781,7 +1810,7 @@ function boardArt(B,bw,side,fins){const A=BART[B.id]||BART.classic,cv=document.c
       x.strokeStyle=A.rail;(A.thinRail?[[22,0.18],[14,0.32],[8,0.55]]:[[60,0.16],[44,0.22],[30,0.30],[18,0.42]]).forEach(([w,a])=>{x.globalAlpha=a;x.lineWidth=w;outline();x.stroke()});x.globalAlpha=1;
       const bolt=(col,u0,u1,amp,w)=>{x.save();x.lineJoin='miter';x.miterLimit=6;const P=[0.1,-1,0.55,-0.65,0.45,-0.1].map((a,i)=>[u0+(u1-u0)*i/5,a]);x.beginPath();P.forEach(([u,a],i)=>{const px=X(u),py=128+a*amp;i?x.lineTo(px,py):x.moveTo(px,py)});x.strokeStyle='rgba(20,10,10,0.85)';x.lineWidth=w+8;x.stroke();x.strokeStyle=col;x.lineWidth=w;x.stroke();x.restore()};   /* the lightning bolt down the stringer */
       if(A.bolt)bolt(A.bolt,0.25,0.68,44,28);   // rails sprayed in from the edge
-      if(A.soft){x.strokeStyle='rgba(42,143,214,0.10)';x.lineWidth=2;for(let k=-300;k<1300;k+=26){x.beginPath();x.moveTo(k,0);x.lineTo(k+256,256);x.stroke();x.beginPath();x.moveTo(k+256,0);x.lineTo(k,256);x.stroke()}softDoodles(x,X,true);kidPortrait(x,X(0.33),128,104,PI/2)}   /* the soft top's diamond grip, the doodles and the 67s, and him, painted on the tail half */
+      if(A.soft){x.strokeStyle='rgba(42,143,214,0.10)';x.lineWidth=2;for(let k=-300;k<1300;k+=26){x.beginPath();x.moveTo(k,0);x.lineTo(k+256,256);x.stroke();x.beginPath();x.moveTo(k+256,0);x.lineTo(k,256);x.stroke()}softDoodles(x,X,true);kidPortrait(x,X(0.33),128,104,PI/2);theoTag(x,X(0.50),108,50,-0.05);endSticker(x,X(0.63),128-HW(0.63)+24,150,0.015)}   /* the soft top's diamond grip, the doodles and the 67s, and him, painted on the tail half */
       else x.fillStyle='rgba(150,118,74,0.6)',x.fillRect(X(0.02),127,X(0.97)-X(0.02),2);   // the stringer
       if(A.pad){const u0=0.018,u1=0.245;x.fillStyle=A.pad;x.beginPath();for(let i=0;i<=20;i++){const u=u0+(u1-u0)*i/20;x.lineTo(X(u),128-HW(u)*0.84)}for(let i=20;i>=0;i--){const u=u0+(u1-u0)*i/20;x.lineTo(X(u),128+HW(u)*0.84)}x.closePath();x.fill();
        x.strokeStyle='rgba(255,255,255,0.10)';x.lineWidth=2;for(let px=X(u0)+10;px<X(u1)-4;px+=9){x.beginPath();x.moveTo(px,0);x.lineTo(px,256);x.stroke()}
@@ -1853,7 +1882,7 @@ function kidTexBuild(){const K=RIG.kidSrc;if(!K||!RIG.fix)return null;const {cv,
   for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2],l=0.3*r+0.59*g+0.11*b;if(r>g&&g>=b-6&&l<95&&l>6){const k=0.78+0.2*(l/95);d[i]=FAIR[0]*k;d[i+1]=FAIR[1]*k;d[i+2]=FAIR[2]*k;continue}   /* beard, hair and stubble left on the neck: skin */
     if(r>g&&g>=b-4&&r-b>30&&l>40){d[i]=Math.min(255,r*gR);d[i+1]=Math.min(255,g*gG);d[i+2]=Math.min(255,b*gB)}}
   ox.putImageData(id,0,0);const t=new THREE.CanvasTexture(out);t.flipY=K.flipY;t.colorSpace=K.cs;t.wrapS=K.ws;t.wrapT=K.wt;t.anisotropy=4;return t}
-/* the kid's head, painted after the photos of the boy: a round seven-year-old face, big brown eyes, a wide toothy grin, rosy cheeks, fair lightly tanned skin
+/* the kid's head, painted after the photos of the boy: a round eight-year-old face, big brown eyes, a wide toothy grin, rosy cheeks, fair lightly tanned skin
    and a mop of medium-brown hair with a messy fringe swept to one side. It rides on the head bone (the grown-up head folds away into the neck). */
 function kidHeadBuild(){const A0=RIG.b.head.A0,fwd=RIG.fwd||new V3(0,0,1),up=new V3(0,1,0),xa=new V3().crossVectors(up,fwd).normalize(),s=RIG.s;
   const RX=0.088,RY=0.112,RZ=0.098,FX=256,W=1024,H=512;let sd=11;const rn=()=>(sd=(sd*16807)%2147483647)/2147483647;
@@ -1877,29 +1906,38 @@ function kidHeadBuild(){const A0=RIG.b.head.A0,fwd=RIG.fwd||new V3(0,0,1),up=new
   x.strokeStyle='#c4706a';x.lineWidth=3.8;x.lineCap='round';x.beginPath();x.moveTo(FX-56,334);x.quadraticCurveTo(FX,400,FX+56,334);x.stroke();x.lineWidth=2.4;x.beginPath();x.moveTo(FX-56,334);x.quadraticCurveTo(FX,352,FX+56,334);x.stroke();
   x.strokeStyle='rgba(170,95,70,0.5)';x.lineWidth=2.2;for(const sg of[-1,1]){x.beginPath();x.moveTo(FX+sg*60,324);x.quadraticCurveTo(FX+sg*68,334,FX+sg*60,344);x.stroke()}   /* smile creases */
   /* hair (alpha: cut away over the face) */
-  const hc=document.createElement('canvas');hc.width=W;hc.height=H;const y=hc.getContext('2d');const hl=u=>{const d=Math.min(Math.abs(u-0.25),1-Math.abs(u-0.25)),t=d/0.5;return 196+226*sstep(0.12,1,t)+(t>0.2&&t<0.45?18:0)};
-  y.fillStyle='#5e3e24';y.beginPath();y.moveTo(0,0);for(let px=0;px<=W;px+=4)y.lineTo(px,hl(px/W));y.lineTo(W,0);y.closePath();y.fill();
-  for(let i=0;i<900;i++){const px=rn()*W,ln=40+rn()*140,cl=['#4a2f1a','#6e4a2c','#7d5533','#9a6c43','#b88a58'][Math.floor(rn()*5)];y.strokeStyle=cl;y.globalAlpha=0.5+0.4*rn();y.lineWidth=1.5+rn()*3;const y0=rn()*60,y1=Math.min(hl(px/W)-4,y0+ln);if(y1<=y0)continue;y.beginPath();y.moveTo(px,y0);y.quadraticCurveTo(px+(rn()-0.5)*30,(y0+y1)/2,px+(rn()-0.3)*26,y1);y.stroke()}y.globalAlpha=1;
-  for(let i=0;i<40;i++){const u=0.09+0.32*i/39+(rn()-0.5)*0.012,px=u*W,top=hl(u)-34,len=26+rn()*30,sw=10+rn()*16;   /* the fringe: messy locks swept to one side over the forehead */
-    y.fillStyle=['#5e3e24','#6e4a2c','#7d5533','#8d6038'][i%4];y.beginPath();y.moveTo(px-sw*0.5,top);y.quadraticCurveTo(px+sw*0.6,top+len*0.5,px+sw*0.9,top+len);y.quadraticCurveTo(px+sw*0.2,top+len*0.45,px+sw*0.5,top);y.closePath();y.fill()}
+  const hc=document.createElement('canvas');hc.width=W;hc.height=H;const y=hc.getContext('2d');const hl=u=>{const d=Math.min(Math.abs(u-0.25),1-Math.abs(u-0.25)),t=d/0.5;return 182+62*sstep(0.08,0.5,t)+104*sstep(0.5,1,t)};   /* short: the fringe, above the ears, a short nape */
+  y.fillStyle='#5a3b22';y.beginPath();y.moveTo(0,0);for(let px=0;px<=W;px+=4)y.lineTo(px,hl(px/W));y.lineTo(W,0);y.closePath();y.fill();
+  for(let i=0;i<1300;i++){const px=rn()*W,cl=['#4a2f1a','#5a3b22','#664428','#74502f','#8c623b'][Math.floor(rn()*5)];y.strokeStyle=cl;y.globalAlpha=0.35+0.4*rn();y.lineWidth=1.2+rn()*2.2;const y0=rn()*40,y1=hl(px/W)-3;if(y1<=y0+8)continue;   /* straight, smooth strands combed down from the crown */
+    y.beginPath();y.moveTo(px,y0);y.quadraticCurveTo(px+(rn()-0.5)*6,(y0+y1)/2,px+(rn()-0.5)*8,y1);y.stroke()}y.globalAlpha=1;
+  for(let i=0;i<46;i++){const u=0.08+0.34*i/45+(rn()-0.5)*0.008,px=u*W,top=hl(u)-30,len=14+rn()*22,sw=8+rn()*10,out=(u-0.25)*W*0.10;   /* the fringe: straight locks cut a little uneven, tips swept out toward the sides */
+    y.fillStyle=['#5a3b22','#664428','#74502f','#5a3b22'][i%4];y.beginPath();y.moveTo(px-sw*0.5,top);y.lineTo(px+sw*0.5,top);y.quadraticCurveTo(px+sw*0.3+out*0.5,top+len*0.7,px+out,top+30+len);y.quadraticCurveTo(px-sw*0.25+out*0.4,top+len*0.6,px-sw*0.5,top);y.closePath();y.fill()}
+  for(const c0 of[0.0,0.5]){for(let i=0;i<22;i++){const u=c0+(rn()-0.5)*0.22,uu=(u+1)%1,px=uu*W,top=hl(uu)-14,len=10+rn()*22,sw=3+rn()*4,ang=(rn()-0.5)*14;   /* wisps straying over the ears */
+    y.fillStyle=['#5a3b22','#664428','#74502f'][i%3];y.beginPath();y.moveTo(px-sw,top);y.lineTo(px+sw,top);y.lineTo(px+ang,top+14+len);y.closePath();y.fill()}}
   const mt=t=>{const tx=new THREE.CanvasTexture(t);tx.colorSpace=THREE.SRGBColorSpace;tx.anisotropy=4;return tx};
   const G=new THREE.Group();G.matrixAutoUpdate=false;G.visible=false;
   const hg=new THREE.SphereGeometry(1,64,40),hp=hg.attributes.position;for(let i=0;i<hp.count;i++){let vx=hp.getX(i),vy=hp.getY(i),vz=hp.getZ(i);if(vy<0){const k=1-0.2*vy*vy;vx*=k;vz*=k}if(vz>0&&vy<-0.2)vz*=1+0.06*(-vy-0.2);hp.setXYZ(i,vx*RX,vy*RY,vz*RZ)}hg.computeVertexNormals();
   const ft=mt(fc),skinM=new THREE.MeshStandardMaterial({map:ft,emissive:0xffffff,emissiveMap:ft,emissiveIntensity:0.24,roughness:0.62,metalness:0});   /* a little glow of its own so the chin never sinks into shadow */const face=new THREE.Mesh(hg,skinM);
-  const hairG=new THREE.SphereGeometry(1,64,40);hairG.scale(RX*1.085,RY*1.06,RZ*1.085);hairG.translate(0,0.004,-0.002);
+  const hairG=new THREE.SphereGeometry(1,64,40);hairG.scale(RX*1.065,RY*1.05,RZ*1.065);hairG.translate(0,0.004,-0.002);
   const htx=mt(hc),hairM=new THREE.MeshStandardMaterial({map:htx,emissive:0xffffff,emissiveMap:htx,emissiveIntensity:0.10,alphaTest:0.5,roughness:0.78,metalness:0,side:THREE.DoubleSide});const hair=new THREE.Mesh(hairG,hairM);
   const earM=new THREE.MeshStandardMaterial({color:0xe9b996,emissive:0xe9b996,emissiveIntensity:0.18,roughness:0.65});for(const sg of[-1,1]){const e=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),earM);e.scale.set(0.011,0.024,0.017);e.position.set(sg*RX*0.97,-0.006,-0.006);G.add(e)}
   const nose=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),new THREE.MeshStandardMaterial({color:0xf0c6a6,emissive:0xf0c6a6,emissiveIntensity:0.2,roughness:0.6}));nose.scale.set(0.0075,0.0085,0.0085);nose.position.set(0,-0.022,RZ*0.975);G.add(nose);
-  const tuftM=new THREE.MeshStandardMaterial({color:0x5e3e24,roughness:0.8});for(let i=0;i<4;i++){const tg=new THREE.ConeGeometry(0.010+0.005*rn(),0.030+0.018*rn(),6);tg.translate(0,0.025,0);const t=new THREE.Mesh(tg,tuftM);   /* a few tufts sticking up, the way his hair does */
-    const a=(rn()-0.5)*2.4,el=0.25+0.5*rn();t.position.set(Math.sin(a)*Math.sin(el)*RX*0.98,Math.cos(el)*RY*1.0,-Math.abs(Math.cos(a))*Math.sin(el)*RZ*0.9+0.01);t.rotation.set(-0.5-0.6*rn(),0,(rn()-0.5)*1.2);G.add(t)}
+  const tuftM=new THREE.MeshStandardMaterial({color:0x5a3b22,emissive:0x5a3b22,emissiveIntensity:0.12,roughness:0.8});for(const sg of[-1,1])for(let i=0;i<6;i++){const hh=0.026+0.016*rn(),tg=new THREE.ConeGeometry(0.0028+0.0015*rn(),hh,4);tg.rotateX(PI);tg.translate(0,-hh/2,0);const t=new THREE.Mesh(tg,tuftM);   /* a few fine wisps sticking out at the sides, above and behind the ears */
+    const lon=sg*(1.30+0.55*rn()),lat=0.10+0.28*rn();t.position.set(Math.sin(lon)*Math.cos(lat)*RX*1.05,Math.sin(lat)*RY*1.04,Math.cos(lon)*Math.cos(lat)*RZ*1.05);t.rotation.set(-0.35*rn(),0,sg*(0.55+0.45*rn()));G.add(t)}
   G.add(face,hair);G.traverse(o=>{if(o.isMesh){o.castShadow=o!==hair;o.frustumCulled=false}});
-  const off=new V3(0,0.080,0.010),HS=1.2;RIG.kHeadL=new THREE.Matrix4().makeTranslation(A0.x,A0.y,A0.z).multiply(new THREE.Matrix4().makeBasis(xa,up,fwd)).multiply(new THREE.Matrix4().makeScale(HS/s,HS/s,HS/s)).multiply(new THREE.Matrix4().makeTranslation(off.x,off.y,off.z));
+  const off=new V3(0,0.068,0.012),HS=1.45;RIG.kTop=A0.y*s+(off.y+RY*1.05)*HS;RIG.kHeadL=new THREE.Matrix4().makeTranslation(A0.x,A0.y,A0.z).multiply(new THREE.Matrix4().makeBasis(xa,up,fwd)).multiply(new THREE.Matrix4().makeScale(HS/s,HS/s,HS/s)).multiply(new THREE.Matrix4().makeTranslation(off.x,off.y,off.z));
   const k=0.34;RIG.kHeadK=new THREE.Matrix4().set(k,0,0,A0.x*(1-k),0,k,0,A0.y*(1-k),0,0,k,A0.z*(1-k),0,0,0,1);
   riderG.add(G);RIG.kHead=G;return G}
-function kidApply0(){const k=typeof BOARD!=='undefined'&&BOARD&&BOARD.id==='soft'?1:0;KIDU.value=k;RIG.kid=k;
+/* a child's build, not a small grown-up: thin arms and legs, a slim neck, narrow shoulders and a flat chest, a body that is straight up and down */
+function kidBones(){const b=RIG.b;if(RIG.kB||!b||!b.chest||!RIG.arm.length)return;RIG.kB=1;
+  const P=(r,kx,kz)=>{const A=r.A0;r.kP=new THREE.Matrix4().makeTranslation(A.x,A.y,A.z).multiply(new THREE.Matrix4().makeScale(kx,1,kz)).multiply(new THREE.Matrix4().makeTranslation(-A.x,-A.y,-A.z))};   /* model rest axes: x forward, z across */
+  b.pel.kS=0.88;RIG.spine.forEach((r,i)=>{const top=i===RIG.spine.length-1;r.kS=0.90;P(r,top?0.88:0.97,top?0.84:0.95)});b.chest.kS=0.84;P(b.chest,0.88,0.80);if(b.neck)b.neck.kS=0.72;
+  RIG.arm.forEach(a=>{a.cl.kS=0.78;a.up.kS=0.72;a.fo.kS=0.72;a.tw.forEach(r=>r.kS=0.72);a.ha.kS=0.80});RIG.leg.forEach(l=>{l.th.kS=0.76;l.sh.kS=0.74;l.ft.kS=0.82})}
+function kidApply0(){const k=typeof BOARD!=='undefined'&&BOARD&&BOARD.id==='soft'?1:0;KIDU.value=k;RIG.kid=k;if(k)kidBones();
   if(RIG.mesh){const mt=RIG.mesh.material;if(!RIG.baseMap)RIG.baseMap=mt.map;if(k&&!RIG.kidMap)RIG.kidMap=kidTexBuild();const want=k&&RIG.kidMap?RIG.kidMap:RIG.baseMap;if(mt.map!==want){mt.map=want}
-    if(k&&!RIG.kHead&&RIG.b.head)kidHeadBuild();if(RIG.kHead)RIG.kHead.visible=!!k}
-  const sc=k?0.72:1;riderG.scale.set(sc,sc,sc*(riderG.scale.z<0?-1:1))}   /* the softboard is ridden by a kid of seven or eight: same surfer, same style, about 1.3 m tall */
+    if(k&&!RIG.kHead&&RIG.b.head)kidHeadBuild();if(RIG.kHead)RIG.kHead.visible=!!k;
+    if(RIG.mesh.receiveShadow!==!k){RIG.mesh.receiveShadow=!k;mt.needsUpdate=true}}   /* the kid takes no shadows on himself (like his head): at his size the shadow map only left dark blotches under the arms */
+  const sc=k?1.30/(RIG.kTop||1.9):1;riderG.scale.set(sc,sc,sc*(riderG.scale.z<0?-1:1))}   /* the softboard is ridden by Theo, eight years old and 1.30 m tall, top of his hair included */
 softColor();buildBoard(BOARD);
 
 /* ───────────────────────── rider ───────────────────────── */
@@ -2082,13 +2120,14 @@ const torso=new Tube(46,36,bodyMat,u=>prof(KTx,u),u=>prof(KTf,u),u=>prof(KTb,u),
    along its length so both ends land on the procedural joints. Forearm pronation is spread over three helper bones. ── */
 const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
 {const n1=new V3,n2=new V3,n3=new V3,n4=new V3,nt=new V3,nx=new V3,ny=new V3,nz=new V3,nq=new THREE.Quaternion,nq2=new THREE.Quaternion,nF=new THREE.Quaternion,nm=new THREE.Matrix4,ns=new THREE.Matrix4;
+ const _kM=new V3,_kF=new V3,_kB=new V3,_kEF=new V3,_kEB=new V3,_kD=new V3;
  const perp=(v,a)=>{v.addScaledVector(a,-v.dot(a));if(v.lengthSq()<1e-10){v.set(a.y,a.z,a.x);v.addScaledVector(a,-v.dot(a))}return v.normalize()};
  const fY=(q,y,xh)=>{ny.copy(y).normalize();perp(nx.copy(xh),ny);nz.crossVectors(nx,ny);return q.setFromRotationMatrix(nm.makeBasis(nx,ny,nz))};   // y = bone axis, x = hint
  const fZ=(q,z,yh)=>{nz.copy(z).normalize();perp(ny.copy(yh),nz);nx.crossVectors(ny,nz);return q.setFromRotationMatrix(nm.makeBasis(nx,ny,nz))};   // same convention as placeHand / placeFoot
- const drive=(r,T,F,ell,tw)=>{const hd=RIG.kid&&r===RIG.b.head,kh=hd&&RIG.kHead,s=RIG.s*(hd&&!kh?1.22:1),sp=RIG.kid&&!hd?s*0.82:s,a=r.a0,k=ell*s-sp,e=ns.elements;   /* the kid: a bigger head on a skinny frame (bones thinner across, same length) */
+ const drive=(r,T,F,ell,tw)=>{const hd=RIG.kid&&r===RIG.b.head,kh=hd&&RIG.kHead,s=RIG.s*(hd&&!kh?1.22:1),sp=RIG.kid&&!hd?s*(r.kS||0.82):s,a=r.a0,k=ell*s-sp,e=ns.elements;   /* the kid: a bigger head on a skinny frame (bones thinner across, same length) */
    nq.copy(F).multiply(r.F0i);if(tw)nq.multiply(nq2.setFromAxisAngle(a,tw));
    e[0]=sp+k*a.x*a.x;e[1]=k*a.x*a.y;e[2]=k*a.x*a.z;e[4]=e[1];e[5]=sp+k*a.y*a.y;e[6]=k*a.y*a.z;e[8]=e[2];e[9]=e[6];e[10]=sp+k*a.z*a.z;
-   const M=r.M.makeRotationFromQuaternion(nq).multiply(ns);n4.copy(r.A0).applyMatrix4(M);M.setPosition(T.x-n4.x,T.y-n4.y,T.z-n4.z);
+   const M=r.M.makeRotationFromQuaternion(nq).multiply(ns);if(RIG.kid&&r.kP)M.multiply(r.kP);n4.copy(r.A0).applyMatrix4(M);M.setPosition(T.x-n4.x,T.y-n4.y,T.z-n4.z);
    r.bone.matrix.multiplyMatrices(M,r.B0);r.bone.matrixWorldNeedsUpdate=true;
    if(kh){RIG.kHead.matrix.multiplyMatrices(M,RIG.kHeadL);RIG.kHead.matrixWorldNeedsUpdate=true;r.bone.matrix.multiplyMatrices(M,RIG.kHeadK).multiply(r.B0)}};   /* the kid wears his own head: the grown-up one is folded away into the neck */
  const cen=(v,o)=>{const R=torso.R,f=clamp(v,0,1)*0.84*(R-1),i=Math.min(f|0,R-2);return o.lerpVectors(torso.C[i],torso.C[i+1],f-i)};   // spine = centreline of the torso skin
@@ -2099,7 +2138,9 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
    n1.copy(J.chest).addScaledVector(J.spine,0.014);tan(0.93,n2);drive(b.chest,n1,fY(nF,n2,J.axis),1);
    if(b.neck){n1.copy(b.neck.A0).applyMatrix4(b.chest.M);n2.subVectors(J.hbase,n1);n3.set(-1,0,0).applyQuaternion(RP.head.quaternion).add(J.axis);drive(b.neck,n1,fY(nF,n2,n3),n2.length()/b.neck.len0)}
    drive(b.head,J.hbase,RP.head.quaternion,1);
-   for(let i=0;i<2;i++){const a=RIG.arm[i],sh=i?J.shB:J.shF,el=i?J.elB:J.elF,ha=i?J.haB:J.haF,hq=(i?RP.haB:RP.haF).quaternion;
+   let sF=J.shF,sB=J.shB,eF=J.elF,eB=J.elB;if(RIG.kid){const k=0.82;_kM.addVectors(J.shF,J.shB).multiplyScalar(0.5);_kF.lerpVectors(_kM,J.shF,k);_kB.lerpVectors(_kM,J.shB,k);   /* the kid: narrow shoulders (the elbows follow part of the way, the hands stay on their marks) */
+     _kEF.copy(J.elF).addScaledVector(_kD.subVectors(_kF,J.shF),0.6);_kEB.copy(J.elB).addScaledVector(_kD.subVectors(_kB,J.shB),0.6);sF=_kF;sB=_kB;eF=_kEF;eB=_kEB}
+   for(let i=0;i<2;i++){const a=RIG.arm[i],sh=i?sB:sF,el=i?eB:eF,ha=i?J.haB:J.haF,hq=(i?RP.haB:RP.haF).quaternion;
      n1.copy(a.cl.A0).applyMatrix4(b.chest.M);n2.subVectors(sh,n1);tan(0.93,n3);drive(a.cl,n1,fY(nF,n2,n3),n2.length()/a.cl.len0);
      n1.subVectors(el,sh);n2.subVectors(ha,el);n3.crossVectors(n1,n2);drive(a.up,sh,fY(nF,n1,n3),n1.length()/a.up.len0);
      // forearm: hinge at the elbow, then the twist needed to reach the hand, unwrapped in the pronation sense and spread along its length
@@ -2202,8 +2243,8 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        float hy=mix(0.925,0.86,smoothstep(-FSX*0.01,-FSX*0.02,vMN.x));   // down to the neck at the back, only the crown at the front
        c=mix(c,vec3(0.86,0.60,0.24)*(0.55+1.4*l),smoothstep(0.2,0.07,l)*smoothstep(hy,hy+0.025,vMY)*(1.-face));   // only the dark hair turns sun-bleached golden
        diffuseColor.rgb=c;}
-     float kidK=0.;if(uKid>0.5){float le;float kk=smoothstep(0.0,0.0025,lycD(vMN,le));kidK=kk;float lu2=dot(cOrig,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,uKidSkin*clamp(0.8+0.35*(lu2-0.55),0.7,1.05),kk);   /* bare chest: no jersey */
-       float cool2=max(cOrig.g,cOrig.b)-cOrig.r,orn=step(0.29,lu2)*step(0.32,cOrig.r-cOrig.b)*step(0.30,vMY),sk2=max(smoothstep(-0.07,-0.02,cool2),orn)*(1.-smoothstep(0.56,0.58,vMY))*step(0.265,vMY)*(1.-kk);float rem=smoothstep(-0.03,0.01,cool2)*step(0.57,vMY)*(1.-step(0.90,vMY))*(1.-kk);diffuseColor.rgb=mix(diffuseColor.rgb,uKidSkin*0.9,rem);kidK=max(kidK,rem);vec2 cell=floor(vec2(vMY*70.,(vMN.z+vMN.x*FSX*0.6)*70.));float hh=fract(sin(dot(cell,vec2(12.9898,78.233)))*43758.5453);
+     float kidK=0.;if(uKid>0.5){float le;float kk=smoothstep(0.0,0.0025,lycD(vMN,le));float lu2=dot(cOrig,vec3(.3,.59,.11));
+       float cool2=max(cOrig.g,cOrig.b)-cOrig.r,orn=step(0.29,lu2)*step(0.32,cOrig.r-cOrig.b)*step(0.30,vMY),sk2=max(smoothstep(-0.07,-0.02,cool2),orn)*(1.-smoothstep(0.56,0.58,vMY))*step(0.265,vMY)*(1.-kk);vec3 cB=texture2D(map,vMapUv,2.0).rgb;float lb=dot(cB,vec3(.3,.59,.11));diffuseColor.rgb=uKidSkin*clamp(mix(1.0,lb/0.46,0.20),0.88,1.04);kidK=1.-sk2;   /* bare skin everywhere: one even, soft child's skin, so no jersey edge and none of the grown-up's painted muscles show */vec2 cell=floor(vec2(vMY*70.,(vMN.z+vMN.x*FSX*0.6)*70.));float hh=fract(sin(dot(cell,vec2(12.9898,78.233)))*43758.5453);
        vec3 pc=hh<0.42?vec3(0.33,0.62,0.20):hh<0.72?vec3(0.22,0.46,0.13):hh<0.88?vec3(0.46,0.31,0.17):vec3(0.58,0.78,0.30);diffuseColor.rgb=mix(diffuseColor.rgb,pc*clamp(0.75+1.6*lu2,0.75,1.2),sk2);}   /* blocky pixel-print boardshorts */
      else{float cool=max(cOrig.g,cOrig.b)-cOrig.r,shK=smoothstep(-0.07,-0.02,cool)*(1.-smoothstep(0.56,0.58,vMY))*step(0.30,vMY)*smoothstep(0.004,0.014,vMN.z);   /* two stripes round one leg of the boardshorts, slanting down to the back */
       float y=vMY+vMN.x*FSX*0.30,b1=smoothstep(SH_Y,SH_Y+0.002,y)*(1.-smoothstep(SH_Y+0.016,SH_Y+0.018,y)),b2=smoothstep(SH_Y+0.026,SH_Y+0.028,y)*(1.-smoothstep(SH_Y+0.034,SH_Y+0.036,y));
@@ -2213,7 +2254,7 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
           /* no contrast binding: the dyed lycra runs straight to the skin at the neck and the sleeves */
        float bk=1.-smoothstep(-0.04,-0.018,vMN.x*FSX);vec2 pu=vec2(0.5+mix(vMN.z,-vMN.z,uLycF)/0.15,(vMN.y-0.615)/0.15);
        float pa=bk*step(0.,pu.x)*step(pu.x,1.)*step(0.,pu.y)*step(pu.y,1.)*texture2D(uLycTex,pu).a;fab=mix(fab,uLycT,pa*0.95);
-       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*max(lycK,kidK));material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(mix(material.sheenColor,uLyc*0.22+0.03,lycK),vec3(0.0),kidK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
+       diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);}`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*max(lycK,kidK));totalEmissiveRadiance+=uKidSkin*0.10*kidK;material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(mix(material.sheenColor,uLyc*0.22+0.03,lycK),vec3(0.0),kidK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
    {const ob=mesh.material.onBeforeCompile;mesh.material.onBeforeCompile=sh=>{ob(sh);sh.uniforms.uRim=RIM;
      sh.fragmentShader='uniform vec3 uRim;\n'+sh.fragmentShader.replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g);}\n#include <opaque_fragment>')}}
    RIG.mesh=mesh;RIG.ready=true;let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
