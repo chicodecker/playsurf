@@ -40,10 +40,21 @@ a{color:var(--acc)}
 <button data-d="0">Hoje</button><button data-d="7" class="on">7 dias</button><button data-d="30">30 dias</button><button data-d="all">Tudo</button>
 </div>
 <div class="kpis">
-<div class="kpi"><div class="l">Visitantes únicos</div><div class="v" id="uniq">–</div><div class="n">pessoas diferentes</div></div>
+<div class="kpi"><div class="l">Visitantes únicos</div><div class="v" id="uniq">–</div><div class="n">quem volta em outro dia conta de novo</div></div>
 <div class="kpi"><div class="l">Visitas</div><div class="v" id="views">–</div><div class="n">vezes que o jogo foi aberto</div></div>
 <div class="kpi"><div class="l">Tempo médio</div><div class="v" id="avg">–</div><div class="n">estimado, com a aba visível</div></div>
 <div class="kpi"><div class="l">Ficaram 5 min ou mais</div><div class="v" id="p5">–</div><div class="n">das visitas</div></div>
+</div>
+<div class="card">
+<h2>Quem voltou a jogar</h2>
+<div class="kpis">
+<div class="kpi"><div class="l">Sessões jogadas</div><div class="v" id="sTot">–</div><div class="n">vezes que alguém começou a surfar</div></div>
+<div class="kpi"><div class="l">Jogadores</div><div class="v" id="sPpl">–</div><div class="n">aparelhos diferentes que jogaram</div></div>
+<div class="kpi"><div class="l">Voltaram a jogar</div><div class="v" id="sBack">–</div><div class="n" id="sBackN">jogaram 2 vezes ou mais</div></div>
+<div class="kpi"><div class="l">O mais fiel</div><div class="v" id="sMax">–</div><div class="n">sessões no mesmo aparelho</div></div>
+</div>
+<div id="sRows"></div>
+<p class="note">Contado por aparelho, não por IP: o GoatCounter não guarda IPs. O jogo lembra no próprio navegador quantas vezes já foi jogado ali, então a mesma pessoa no celular e no computador conta como duas, e quem limpa os dados do navegador recomeça do zero. Uma sessão começa na primeira onda; voltar em menos de 30 minutos é a mesma sessão. Contado a partir de 16/11/2026; quem já tinha jogado antes entra direto como 2ª sessão.</p>
 </div>
 <div class="card">
 <h2>Quanto tempo as pessoas ficam</h2>
@@ -72,11 +83,20 @@ function loadCountries(qs){Promise.all(CC.map(function(c){return get('pais-'+c,q
   list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});var tot=list.reduce(function(a,b){return a+b.n},0),el=document.getElementById('countries');
   if(!tot){el.innerHTML='<p class="note">Ainda sem acessos contados neste período.</p>';return}
   el.innerHTML=list.slice(0,15).map(function(x){var f=x.n/tot;return '<div class="row"><span>'+flag(x.c)+' '+cname(x.c)+'</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+x.n+')</span></div>'}).join('')})}
+var SK=['antigo','1','2','3','4','5','6-9','10+'];
+function loadSess(qs){Promise.all(SK.map(function(k){return get('sessao-'+k,qs)})).then(function(r){var c={};SK.forEach(function(k,i){c[k]=r[i].c});
+  var tot=SK.slice(1).reduce(function(a,k){return a+c[k]},0),ppl=c['1']+c.antigo,back=c['2'],el=document.getElementById('sRows'),t=function(id,v){document.getElementById(id).textContent=v};
+  t('sTot',tot.toLocaleString('pt-BR'));t('sPpl',ppl.toLocaleString('pt-BR'));t('sBack',back.toLocaleString('pt-BR'));
+  t('sBackN',ppl?Math.round(Math.min(1,back/ppl)*100)+'% dos jogadores jogaram 2 vezes ou mais':'jogaram 2 vezes ou mais');
+  t('sMax',c['10+']?'10+':c['6-9']?'6 a 9':c['5']?'5':c['4']?'4':c['3']?'3':c['2']?'2':ppl?'1':'–');
+  if(!tot){el.innerHTML='<p class="note">Ainda sem sessões contadas neste período. A contagem começa quando a versão do jogo com ela estiver no ar.</p>';return}
+  var L=[['Jogaram 1 vez',ppl-c['2']],['2 vezes',c['2']-c['3']],['3 vezes',c['3']-c['4']],['4 vezes',c['4']-c['5']],['5 vezes ou mais',c['5']]],base=Math.max(ppl,1);
+  el.innerHTML=L.map(function(x){var n=Math.max(0,x[1]),f=n/base;return '<div class="row"><span>'+x[0]+'</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+n+')</span></div>'}).join('')})}
 function fmt(sec){if(!sec)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);return m?(m+' min '+(s?s+' s':'')).trim():s+' s'}
 function load(d){
   var qs='';
   if(d!=='all'){var s=new Date();s.setDate(s.getDate()-(+d));qs='?start='+ymd(s)}
-  document.getElementById('status').textContent='Carregando…';loadCountries(qs);
+  document.getElementById('status').textContent='Carregando…';loadCountries(qs);loadSess(qs);
   Promise.all([get('/',qs)].concat(M.map(function(m){return get('tempo-'+m[0],qs)}))).then(function(r){
     var v=r[0],ev=r.slice(1).map(function(x){return x.c});
     document.getElementById('uniq').textContent=v.u.toLocaleString('pt-BR');
