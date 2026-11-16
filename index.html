@@ -334,36 +334,36 @@ h1,.wzH,#pop .p b,#hud b,.tutCard b,#end .nota,.pkBox b,.wpBox h3,.spBox h3,#pau
   .bdInfo{font-size:9px;line-height:1.3}.thelp{font-size:9px;line-height:1.4;margin-top:3px;max-width:88vw}.prog{margin-top:4px}
   #menu.panel{padding-block:calc(var(--bar,5.5vh) + 4px)}
 }
-/* the wave picker is a world map: a dot for every patch of land, a pin on every wave, a card with the place when the pointer is on it */
-.wmap{position:relative;width:min(780px,62vw,calc((100svh - 300px)*2.46));min-width:min(300px,88vw);pointer-events:auto;padding:12px 14px;border-radius:16px;background:radial-gradient(120% 130% at 50% 38%,rgba(14,48,62,.64),rgba(2,12,18,.74));border:1px solid rgba(255,255,255,.13);box-shadow:0 18px 50px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);margin:0 0 4px}
+/* the wave picker is a world map: a dot for every patch of land, a glowing marker on every wave and its name on a tag cut like the menu buttons; a card with the place when the pointer is on it */
+.wmap{position:relative;width:min(800px,64vw,calc((100svh - 290px)*2.46));min-width:min(300px,88vw);pointer-events:auto;margin:2px 0 8px -4px}
+.wmap::before{content:'';position:absolute;inset:-8% -5%;background:radial-gradient(ellipse 56% 60% at 50% 50%,rgba(2,12,18,.60),rgba(2,12,18,.30) 60%,rgba(2,12,18,0) 80%);pointer-events:none}
 .wmIn{position:relative;aspect-ratio:150/61}
-.wmDots{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
-.wmLand{fill:none;stroke:rgba(196,232,242,.5);stroke-width:.5;stroke-linecap:round;stroke-dasharray:0 1}
-.wmEq{fill:none;stroke:rgba(255,255,255,.16);stroke-width:.12;stroke-dasharray:.7 .9}.wmEqT{fill:rgba(255,255,255,.32);font:700 1.25px/1 var(--ps-f);letter-spacing:.12px}
+.wmDots{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.wmLand{fill:none;stroke:rgba(255,255,255,.38);stroke-width:.52;stroke-linecap:round;stroke-dasharray:0 1}
+.wmEq{fill:none;stroke-width:.14;stroke-dasharray:.6 .8;opacity:.6}.wmEqT{fill:rgba(255,255,255,.5);font:800 1.3px/1 var(--ps-f);font-style:italic;letter-spacing:.22px}
 .wmPins{position:absolute;inset:0}
-.wpin{position:absolute;width:30px;height:40px;margin:-40px 0 0 calc(-15px + var(--dx,0px));padding:0;border:0;background:none;cursor:pointer;color:#fff;font:inherit;-webkit-tap-highlight-color:transparent;outline:none}
-.wpin::before{content:'';position:absolute;left:calc(12px - var(--dx,0px));bottom:-3px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(2,12,18,.55)}
-.wpin s{position:absolute;left:calc(15px - var(--dx,0px));bottom:0;width:0;height:0;transform:rotate(var(--lean,0deg))}
-.wpin s::before{content:'';position:absolute;left:-1px;bottom:0;width:2px;height:calc(8px + var(--st,0px));background:rgba(255,255,255,.75);border-radius:1px}
-.wpin s i{position:absolute;left:-11px;bottom:calc(7px + var(--st,0px));width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--ps-grad);box-shadow:0 4px 12px rgba(0,0,0,.45);transition:transform .15s,background .15s}
-.wpin s b{display:block;transform:rotate(calc(45deg - var(--lean,0deg)));font:900 11px/22px var(--ps-f);font-style:italic;text-align:center;color:var(--ps-navy)}
-.wpin:hover s i,.wpin:focus-visible s i,.wpin.tip s i{transform:rotate(-45deg) scale(1.22)}
-.wpin.sel s i{background:#fff}
-.wpin.sel::after{content:'';position:absolute;left:calc(15px - var(--dx,0px));bottom:0;width:20px;height:20px;margin:0 0 -10px -10px;border-radius:50%;border:2px solid var(--ps-acc);animation:wmPulse 1.8s ease-out infinite;pointer-events:none}
-@keyframes wmPulse{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.7);opacity:0}}
-.wpin.lock s i{background:rgba(14,30,40,.85);border:1.5px dashed rgba(255,255,255,.65)}.wpin.lock s b{color:#fff;opacity:.8}
-.wpin em{position:absolute;bottom:13px;left:29px;white-space:nowrap;font:800 10px/1 var(--ps-f);font-style:italic;letter-spacing:.12em;opacity:.8;text-shadow:0 1px 6px rgba(0,0,0,.85);pointer-events:none;transition:opacity .15s}
-.wpin.lab-l em{left:auto;right:29px}.wpin:hover em,.wpin.tip em,.wpin.sel em{opacity:1}
-.wmTip{position:absolute;z-index:3;width:max-content;max-width:250px;padding:10px 14px 11px;border-radius:12px;background:rgba(4,14,22,.93);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 34px rgba(0,0,0,.5);text-align:left;animation:wmTipIn .16s ease-out;pointer-events:auto}
+.wdot{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--ps-grad);box-shadow:0 0 0 2px #fff,0 0 16px 4px rgba(247,90,120,.55);pointer-events:none}
+.wdot::after{content:'';position:absolute;inset:-7px;border-radius:50%;border:1.5px solid rgba(255,179,71,.85);animation:wmPulse 2.6s ease-out infinite;opacity:0}
+.wdot.sel{width:14px;height:14px;margin:-7px 0 0 -7px;background:#fff;box-shadow:0 0 0 3px var(--ps-pink),0 0 22px 6px rgba(255,171,61,.6)}.wdot.sel::after{animation-duration:1.5s;border-color:#fff}
+@keyframes wmPulse{0%{transform:scale(.5);opacity:.95}100%{transform:scale(2.1);opacity:0}}
+.wlab{position:absolute;display:flex;align-items:center;gap:7px;white-space:nowrap;padding:6px 11px 6px 9px;border-radius:6px;border:1.5px solid rgba(255,255,255,.62);background:rgba(4,14,22,.64);color:#fff;font:800 12px/1 var(--ps-f);font-style:italic;letter-spacing:.06em;cursor:pointer;transform:translate(16px,calc(-50% + var(--dy,0px))) skewX(-9deg);transition:background .15s,color .15s,border-color .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent;outline:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.wlab.l{transform:translate(calc(-100% - 16px),calc(-50% + var(--dy,0px))) skewX(-9deg)}
+.wlab::before{content:'';position:absolute;top:50%;right:100%;width:10px;height:1.5px;background:rgba(255,255,255,.75)}.wlab.l::before{right:auto;left:100%}
+.wlab b{font:900 11px/1 var(--ps-f);font-style:italic;background:var(--ps-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wlab:hover,.wlab:focus-visible,.wlab.tip{background:#fff;color:#0b1520;border-color:#fff;box-shadow:0 10px 26px rgba(247,90,120,.38)}
+.wlab.sel{background:var(--ps-grad);color:var(--ps-navy);border-color:transparent}.wlab.sel b{background:none;color:var(--ps-navy)}
+.wlab.lock{border-style:dashed;opacity:.62}
+.wmTip{position:absolute;z-index:3;width:max-content;max-width:260px;padding:11px 16px 12px 19px;border-radius:10px;background:rgba(4,14,22,.95);border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 40px rgba(0,0,0,.55);text-align:left;animation:wmTipIn .16s ease-out;pointer-events:auto;overflow:hidden}
+.wmTip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ps-grad)}
 @keyframes wmTipIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .wmTip small{display:block;font:800 10px/1.2 var(--ps-f);letter-spacing:.2em;color:var(--ps-acc)}
-.wmTip b{display:block;font:900 22px/1.05 var(--ps-f);font-style:italic;margin:5px 0 3px;letter-spacing:-.005em}
-.wmTip span{display:block;font:600 11px/1.3 var(--ps-f);letter-spacing:.16em;opacity:.85}
-.wmTip em{display:block;font:500 10px/1.3 ui-monospace,Menlo,Consolas,monospace;font-style:normal;opacity:.55;margin-top:5px;letter-spacing:.03em}
-.wmTip i{display:block;margin-top:8px;font:800 10px/1.2 var(--ps-f);font-style:normal;letter-spacing:.2em;opacity:.7}.wmTip i.req{color:var(--ps-acc);opacity:1}
+.wmTip b{display:block;font:900 24px/1.05 var(--ps-f);font-style:italic;margin:5px 0 3px;letter-spacing:-.005em}
+.wmTip span{display:block;font:700 11px/1.3 var(--ps-f);font-style:italic;letter-spacing:.14em;opacity:.88}
+.wmTip em{display:block;font:500 10px/1.3 ui-monospace,Menlo,Consolas,monospace;font-style:normal;opacity:.5;margin-top:6px;letter-spacing:.03em}
+.wmTip i{display:block;margin-top:9px;font:800 10px/1.2 var(--ps-f);font-style:italic;letter-spacing:.2em;opacity:.75}.wmTip i.req{color:var(--ps-acc);opacity:1}
 .wmTip .wmGo{margin-top:10px}
 #wpMap{margin:0 auto 18px;width:min(700px,84vw,calc((100svh - 250px)*2.46))}
-@media (max-height:540px){.wmap{width:min(66vw,calc((100svh - 140px)*2.46));padding:6px 8px;border-radius:12px}#wpMap{width:min(78vw,calc((100svh - 150px)*2.46))}.wpin em{font-size:8px;letter-spacing:.06em}.wpin s i{width:18px;height:18px;left:-9px}.wpin s::before{height:calc(6px + var(--st,0px))}.wpin s b{font-size:9px;line-height:18px}.wmTip{max-width:210px;padding:7px 10px 8px}.wmTip b{font-size:17px}.wmTip span{font-size:9px}.wmTip em{display:none}}
+@media (max-height:540px){.wmap{width:min(66vw,calc((100svh - 140px)*2.46))}#wpMap{width:min(78vw,calc((100svh - 150px)*2.46))}.wlab{font-size:9px;padding:4px 7px 4px 6px;gap:5px;border-width:1px;box-shadow:none}.wlab b{font-size:8.5px}.wlab::before{width:7px}.wdot{width:8px;height:8px;margin:-4px 0 0 -4px}.wmTip{max-width:210px;padding:7px 10px 8px 13px}.wmTip b{font-size:17px}.wmTip span{font-size:9px}.wmTip em{display:none}}
 .srh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 <script type="importmap">
@@ -1024,9 +1024,9 @@ const game={hl:false,showCard:null,waveId:0,cardAt:0,night:0,inTube:false,secAge
 // spots: each one its own wave and scenery; the next one opens when the score at the one before is good enough (more can be added to the list)
 const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st:9,lab:'l',what:'WAVE POOL · ALL ROUND · DAY OR NIGHT',name:'PLAYSURF POOL',full:'PLAYSURF POOL',sub:'WAVE POOL · ALL ROUND',hK:1,eL:1,dur:60},
   {id:2,ll:[-8.815,115.088],loc:'BALI · INDONESIA',lab:'l',name:'ULUWATU',full:'ULUWATU',sub:'BALI · LONG LEFT WALLS',hK:1.25,eL:1.75,dur:46,req:{spot:1,nota:5}},
-  {id:4,ll:[9.80,126.17],loc:'SIARGAO · PHILIPPINES',name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.2,dur:25,req:{spot:2,nota:6}},
-  {id:3,ll:[21.665,-158.05],loc:'OAHU · HAWAII',name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · PIPE & BACKDOOR',hK:1.35,eL:2.0,dur:28,req:{spot:4,nota:6.5}},
-  {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
+  {id:4,ll:[9.80,126.17],loc:'SIARGAO · PHILIPPINES',name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.2,dur:30,req:{spot:2,nota:6}},
+  {id:3,ll:[21.665,-158.05],loc:'OAHU · HAWAII',dy:7,name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · PIPE & BACKDOOR',hK:1.35,eL:2.0,dur:28,req:{spot:4,nota:6.5}},
+  {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',dy:-7,short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
   {id:6,ll:[-27.67,-48.47],loc:'FLORIANÓPOLIS · BRAZIL',lean:38,st:9,short:'CAMPECHE',name:'CAMPECHE RIGHTS',full:'CAMPECHE RIGHTS',sub:'FLORIANÓPOLIS · LONG RIGHT',hK:0.86,eL:0.8,dur:30,req:{spot:5,nota:7}},
   {id:7,ll:[-1.68,-47.77],loc:'PARÁ · AMAZON, BRAZIL',name:'POROROCA',full:'POROROCA',sub:'AMAZON · RIVER BORE',hK:1.3,eL:0.6,dur:85,crumble:1,fat:1}];   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
 let SPOT=SPOTS[0];
@@ -1039,9 +1039,9 @@ function wOf(s,Lw){if(s<=4.5)return 1;if(s<9)return lerp(1,0.64,sstep(4.5,9,s));
 // the whole wave turning to white water.
 const SEC=[{t0:9,c0:46,v:2.0,h:9.0,k:0,d:10,fol:1},{t0:25,c0:64,v:4.6,h:7.0,k:1},{t0:30.5,c0:44,v:2.0,h:6.5,k:0,d:4.5,fol:1},   /* the wall that stood up without breaking now throws: a barrel in the middle of the ride */
            {t0:39,c0:40,v:2.0,h:6.0,k:0,d:7,fol:1},{t0:47.5,c0:46,v:2.6,h:7.5,k:2},{t0:49.6,c0:40,v:2.0,h:6.5,k:0,d:3.6,fol:1}];   /* the tall wall near the end throws once more: a last short barrel before it all goes white */   /* about a minute, like the longest pool waves (45 s published, riders timing 50-60 s) */
-const END_FOAM=70;function endFoam(s,age){if(SPOT.id===3){const T=game.waveDur-3.7+0.006*Math.max(s,0);return age>T?sstep(T,T+1.3,age):0}   /* Pipeline: no white water running down the line; the whole wall goes white at once, right after it closes out */
+const END_FOAM=70;function endFoam(s,age){if(SPOT.id===3||SPOT.id===4){const T=game.waveDur-3.7+0.006*Math.max(s,0);return age>T?sstep(T,T+1.3,age):0}   /* Pipeline: no white water running down the line; the whole wall goes white at once, right after it closes out */
   const E=game.waveDur-clamp(game.waveDur*0.125,4,10);return age>E?sstep(-5,5,(age-E)*7.5-s):0}
-function closeK(s,age){if(SPOT.id!==3||age<0)return 0;const T=game.waveDur-4.6+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T,T+1.1,age)*(1-sstep(60,95,s))}   /* Pipeline's closeout: near the end the whole wall stands up and pitches at once, from the curl to far down the line, one block of lip coming down */   /* 4 to 10 s before the end of the ride, by its length */   // from the curl down the line, everything goes white
+function closeK(s,age){if((SPOT.id!==3&&SPOT.id!==4)||age<0)return 0;const T=game.waveDur-4.6+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T,T+1.1,age)*(1-sstep(60,95,s))}   /* Pipeline's closeout: near the end the whole wall stands up and pitches at once, from the curl to far down the line, one block of lip coming down */   /* 4 to 10 s before the end of the ride, by its length */   // from the curl down the line, everything goes white
 SEC.forEach(C=>C.c00=C.c0);   // fol: a barrel that lines up on the rider when it starts, so it pitches over him instead of waiting ahead like a tunnel
 let secClose=0,secFoam=0,secJct=0;
 function secUpdate(age){
@@ -1644,7 +1644,7 @@ const campG=new THREE.Group();campG.visible=false;scene.add(campG);
 const SEC_BY={1:SEC.map(C=>({...C})),
   2:[{t0:7,c0:46,v:2.0,h:10.5,k:0,d:4.5,fol:1},{t0:15,c0:34,v:4.6,h:8,k:1},{t0:20,c0:36,v:4.4,h:7.5,k:1},{t0:25,c0:34,v:4.6,h:7.5,k:1},{t0:29.5,c0:44,v:2.2,h:9.5,k:0,d:6,fol:1},{t0:37,c0:42,v:2.6,h:7.5,k:2}],   /* Uluwatu: a long left, about 45 s: a short pit off the Peak, the fast Outside Corner walls with three sections to turn on, the hollow Racetracks barrel near the end, the junction, then the shallow reef */
   3:[{t0:6,c0:46,v:1.4,h:11.5,k:0,d:8.5,fol:1},{t0:16,c0:30,v:4.8,h:8.5,k:1},{t0:20.8,c0:26,v:2.6,h:8,k:2}],   /* Pipeline: one long, thick, dry barrel spitting all the way, then a ramp for an air and the junction */
-  4:[{t0:6.2,c0:46,v:2.0,h:9,k:0,d:5,fol:1},{t0:11.8,c0:26,v:4.8,h:8.5,k:1},{t0:13.8,c0:27,v:4.4,h:7,k:1},{t0:15.6,c0:26,v:4.3,h:6.8,k:1},{t0:17.4,c0:26,v:4.2,h:6.6,k:1},{t0:19.2,c0:20,v:2.6,h:7.5,k:2}],   /* Cloud 9: a short right, ~25 s: the barrel off the drop, a ramp for an air, sections to turn on, the junction to finish */
+  4:[{t0:6.2,c0:46,v:2.0,h:9,k:0,d:5,fol:1},{t0:11.6,c0:27,v:4.9,h:9.2,k:1},{t0:20.0,c0:38,v:2.6,h:8.6,k:2}],   /* Cloud 9: a right, ~30 s: the barrel off the drop, one clean ramp for an air, then an open wall with no sections for two or three turns, the junction for one big last hit, and it all closes out in one block of white water */
   5:[{t0:6.5,c0:24,v:4.6,h:7,k:1},{t0:9.5,c0:24,v:4.4,h:7,k:1},{t0:12.5,c0:24,v:4.4,h:6.5,k:1},{t0:14.5,c0:20,v:2.6,h:7,k:2}],
   6:[{t0:7.5,c0:34,v:4.6,h:7,k:1},{t0:14,c0:36,v:4.4,h:6.8,k:1},{t0:19.5,c0:46,v:1.5,h:10.5,k:0,d:7.5,fol:1}],
   7:[{t0:7,c0:2,v:-1.5,h:7,k:1,d:8},{t0:17,c0:2,v:-1.8,h:8,k:1,d:8},{t0:27,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:37,c0:2,v:-1.9,h:8,k:1,d:8},{t0:47,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:57,c0:2,v:-1.8,h:8,k:1,d:8},{t0:67,c0:2,v:-1.7,h:8,k:1,d:8}]};   /* surges of heavy white water rolling out from the curl and chasing him down the line, one every ten seconds */   /* Campeche Rights: open walls to turn on, two sections to hit, the dry barrel only at the end */   /* Campeche Rights: a long right, five sections to turn on down the wall, and the dry barrel only at the end */   /* Trestles: a 20 s crumbling peak, no barrel at any point: sections to hit and float, the junction to finish */
@@ -2873,25 +2873,25 @@ function wmXY(lat,lon){const R=Math.PI/180,l=lon*R,p=lat*R,p2=p*p,p4=p2*p2,x=l*(
 const wmLL=(a,b)=>Math.abs(a).toFixed(2)+'°'+(a<0?'S':'N')+'  '+Math.abs(b).toFixed(2)+'°'+(b<0?'W':'E');
 function mapRender(root,sel){if(!root)return;
   if(!root.dataset.built){const eq=(WMAP.ytop/WMAP.cell).toFixed(2);root.dataset.built=1;
-    root.innerHTML=`<div class="wmIn"><svg class="wmDots" viewBox="0 0 ${WMAP.cols} ${WMAP.rows}" aria-hidden="true"><path class="wmEq" d="M0 ${eq}H${WMAP.cols}"/><text class="wmEqT" x="0.6" y="${(+eq-0.6).toFixed(2)}">EQUATOR</text><path class="wmLand" transform="translate(.5 .5)" d="${WMAP.d}"/></svg><div class="wmPins"></div></div><div class="wmTip" hidden></div>`;mapWire(root)}
-  root._sel=sel;root.querySelector('.wmPins').innerHTML=SPOTS.map((o,ix)=>{const op=spotOpen(o),[x,y]=wmXY(o.ll[0],o.ll[1]),ln=o.lean||0,st=o.st||0,dx=Math.sin(ln*Math.PI/180)*(17+st);
-    return `<button class="wpin${o.id===sel?' sel':''}${op?'':' lock'}${o.lab==='l'?' lab-l':''}${root._tip===o.id?' tip':''}" data-spot="${o.id}" data-note="${ix}" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--lean:${ln}deg;--dx:${dx.toFixed(1)}px;--st:${st}px" aria-label="${o.name} · ${o.loc}"><s><i><b>${ix+1}</b></i></s><em>${o.short||o.name}</em></button>`}).join('');
+    root.innerHTML=`<div class="wmIn"><svg class="wmDots" viewBox="0 0 ${WMAP.cols} ${WMAP.rows}" aria-hidden="true"><defs><linearGradient id="wmGr" x1="0" x2="1"><stop offset="0" stop-color="#e3368f"/><stop offset="1" stop-color="#ffab3d"/></linearGradient></defs><path class="wmEq" stroke="url(#wmGr)" d="M0 ${eq}H${WMAP.cols}"/><text class="wmEqT" x="9.5" y="${(+eq-0.6).toFixed(2)}">EQUATOR</text><path class="wmLand" transform="translate(.5 .5)" d="${WMAP.d}"/></svg><div class="wmPins"></div></div><div class="wmTip" hidden></div>`;mapWire(root)}
+  root._sel=sel;root.querySelector('.wmPins').innerHTML=SPOTS.map((o,ix)=>{const op=spotOpen(o),[x,y]=wmXY(o.ll[0],o.ll[1]),st=`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%`;
+    return `<i class="wdot${o.id===sel?' sel':''}" style="${st}"></i><button class="wlab${o.lab==='l'?' l':''}${o.id===sel?' sel':''}${op?'':' lock'}${root._tip===o.id?' tip':''}" data-spot="${o.id}" data-note="${ix}" style="${st};--dy:${o.dy||0}px" aria-label="${o.name} · ${o.loc}"><b>${ix+1}</b>${o.short||o.name}</button>`}).join('');
   if(root._tip)mapTip(root,SPOTS.find(o=>o.id===root._tip),root._tipT)}
-function mapTip(root,o,touch){const tip=root.querySelector('.wmTip');root.querySelectorAll('.wpin.tip').forEach(b=>b.classList.remove('tip'));
+function mapTip(root,o,touch){const tip=root.querySelector('.wmTip');root.querySelectorAll('.wlab.tip').forEach(b=>b.classList.remove('tip'));
   if(!o){tip.hidden=true;root._tip=0;return}
   const op=spotOpen(o),ix=SPOTS.indexOf(o),ps=o.sub.split(' · '),what=o.what||ps.slice(1).join(' · ')||ps[0];
   tip.innerHTML=`<small>${ix+1} · ${o.loc}</small><b>${o.name}</b><span>${what}</span><em>${wmLL(o.ll[0],o.ll[1])}</em>`+(op?(touch?`<button class="pbtn sm wmGo" data-spot="${o.id}">SURF HERE &#9654;</button>`:(o.id===root._sel?'<i>YOUR WAVE · CLICK TO SURF</i>':'<i>CLICK TO SURF HERE</i>')):`<i class="req">&#128274; ${reqText(o.req)}</i>`);
   tip.hidden=false;root._tip=o.id;root._tipT=!!touch;
-  const pin=root.querySelector(`.wpin[data-spot="${o.id}"]`);if(!pin)return;pin.classList.add('tip');
-  const R=root.getBoundingClientRect(),P=pin.querySelector('i').getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;
+  const pin=root.querySelector(`.wlab[data-spot="${o.id}"]`);if(!pin)return;pin.classList.add('tip');
+  const R=root.getBoundingClientRect(),P=pin.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;
   const x=Math.max(6,Math.min(R.width-w-6,P.left+P.width/2-R.left-w/2));let y=P.top-R.top-h-10;if(y<4)y=P.bottom-R.top+14;
   tip.style.left=x.toFixed(0)+'px';tip.style.top=y.toFixed(0)+'px'}
 function mapWire(root){let pt='mouse';
   root.addEventListener('pointerdown',e=>{pt=e.pointerType||'mouse'});
-  root.addEventListener('pointerover',e=>{if(e.pointerType==='touch')return;const b=e.target.closest('.wpin');if(b){if(root._tip!==+b.dataset.spot)mapTip(root,SPOTS.find(o=>o.id===+b.dataset.spot),false)}else if(!e.target.closest('.wmTip'))mapTip(root,null)});
+  root.addEventListener('pointerover',e=>{if(e.pointerType==='touch')return;const b=e.target.closest('.wlab');if(b){if(root._tip!==+b.dataset.spot)mapTip(root,SPOTS.find(o=>o.id===+b.dataset.spot),false)}else if(!e.target.closest('.wmTip'))mapTip(root,null)});
   root.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')mapTip(root,null)});
-  root.addEventListener('focusin',e=>{const b=e.target.closest('.wpin');if(b&&root._tip!==+b.dataset.spot)mapTip(root,SPOTS.find(o=>o.id===+b.dataset.spot),false)});
-  root.addEventListener('click',e=>{const g=e.target.closest('.wmGo'),b=e.target.closest('.wpin');e.stopPropagation();if(!g&&!b){if(!e.target.closest('.wmTip'))mapTip(root,null);return}
+  root.addEventListener('focusin',e=>{const b=e.target.closest('.wlab');if(b&&root._tip!==+b.dataset.spot)mapTip(root,SPOTS.find(o=>o.id===+b.dataset.spot),false)});
+  root.addEventListener('click',e=>{const g=e.target.closest('.wmGo'),b=e.target.closest('.wlab');e.stopPropagation();if(!g&&!b){if(!e.target.closest('.wmTip'))mapTip(root,null);return}
     const el=g||b;el.blur();const o=SPOTS.find(x=>x.id===+el.dataset.spot);if(!o)return;
     if(b&&pt==='touch'&&root._tip!==o.id){mapTip(root,o,true);return}   /* on a touch screen the first tap shows where it is; the second tap, or SURF HERE, picks it */
     mapTip(root,null);if(root._pick)root._pick(o)})}
@@ -3035,7 +3035,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
   tube:0,tubeMin:9,pivot:0,pivotTh:0,introT:0,crestT:0,upT:0,upV:0,dnT:0,lastTop:-9,cb:null,fT:0,wT:0,burst:0,tubeK:0,airK:0,tubeKv:0,airKv:0,
   pos:new V3,f:new V3(1,0,0),up:new V3(0,1,0),right:new V3(0,0,1),wPos:new V3,wVel:new V3,wQ:new THREE.Quaternion,wantAirShot:false,airShot:null,splashed:false};
 
-function startWave(att){if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
+function startWave(att){qQuiet=performance.now()+2000;if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
@@ -3064,7 +3064,7 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/05-barrel-vision.mp3',t:'Barrel Vision',b:'Wax Riot'},{f:'music/06-sunburn-sunday.mp3',t:'Sunburn Sunday',b:'The Skanking Gulls'},{f:'music/07-glassy-morning.mp3',t:'Glassy Morning',b:'Dawn Patrol Dub'},
   {f:'music/08-duck-dive.mp3',t:'Duck Dive',b:'The Duck Divers'},{f:'music/09-salt-in-my-hair.mp3',t:'Salt in My Hair',b:'Tidepool Saints'},
   {f:'music/11-wipeout-weekend.mp3',t:'Wipeout Weekend',b:'Kook Patrol'},{f:'music/12-tube-ride.mp3',t:'Tube Ride',b:'The Reverb Reef'},
-  {f:'music/13-golden-lineup.mp3',t:'Golden Lineup',b:'Velvet Offshore'},{f:'music/14-dawn-patrol-dub.mp3',t:'Dawn Patrol Dub',b:'Low Tide Lions'},
+  {f:'music/14-dawn-patrol-dub.mp3',t:'Dawn Patrol Dub',b:'Low Tide Lions'},
   {f:'music/15-boardwalk-bounce.mp3',t:'Boardwalk Bounce',b:'Pier Pressure'},{f:'music/16-tide-chart-serenade.mp3',t:'Tide Chart Serenade',b:'Sandal Sound System'},
   {f:'music/17-shred-till-sundown.mp3',t:'Shred Till Sundown',b:'Skeg Breakers'},{f:'music/18-closeout.mp3',t:'Closeout',b:'Bail Out Brigade'},{f:'music/19-same-crew.mp3',t:'Same Crew',b:'Reef Rash'}];
 const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0};   /* the songs play shuffled, from the very first one, a new order every time round */
@@ -3397,7 +3397,7 @@ function softBreakTick(dt){if(SBRK.t<0||!SBRK.parts)return;SBRK.t+=dt;SBRK.parts
 function wipe(){
   if(sf.mode==='wipe')return;
   if(game.state!=='ride'){sf.visible=false;return}
-  if(SPOT.id===3&&!game.attract&&!game.finale&&game.waveAge>game.waveDur-4.8){game.finale=1;if(!game.fin){game.fin='eat';game.finAt=game.waveAge}}   /* taken by Pipeline's closeout: that is the end of the wave, not a fall (the full ride still counts) */
+  if((SPOT.id===3||SPOT.id===4)&&!game.attract&&!game.finale&&game.waveAge>game.waveDur-4.8){game.finale=1;if(!game.fin){game.fin='eat';game.finAt=game.waveAge}}   /* taken by Pipeline's closeout: that is the end of the wave, not a fall (the full ride still counts) */
   sf.tt=null;sf.slip=0;
   sf.mode='wipe';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sf.splashed=false;sf.bSplash=false;sf.wB=0;if(!game.finale&&sf.s>0.5&&sf.p>0.45*(S.top||1))lipBurst(0.5,sf.s);   /* going over with the lip tears it as well */
   sf.wVel.set(clamp(sf.V*Math.cos(sf.th)-CP,-5,3),2.6,1.6);
@@ -4062,23 +4062,19 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       vec2 cv=fUv-.5;col*=1.-dot(cv,cv)*(0.9+1.4*uFish);
       float g=fract(sin(dot(gl_FragCoord.xy+fract(uTime)*91.7,vec2(12.9898,78.233)))*43758.5453);
       col+=(g-.5)*0.032;
-      if(uTrK>0.){   /* the cut from one wave to the next: a sheet of white water rolls across the live picture; once it covers the screen the wave changes behind it, and it rolls on, leaving the new shot under a lace of foam */
+      if(uTrK>0.){   /* the cut from one wave to the next: a quick sheet of sea water sweeps across the lens (the picture bent through it, tinted like the game's water, light rippling in it); the wave changes in the instant it covers the screen */
         vec2 sq=vec2((vUv.x-.5)*uAspect,vUv.y-.5),dir=normalize(vec2(uTrDir,-0.30)),ns=vUv*vec2(uAspect,1.);
         float x=dot(sq,dir)/(abs(dir.x)*0.5*uAspect+abs(dir.y)*0.5),y=dot(sq,vec2(-dir.y,dir.x));
-        float wob=0.16*(texture2D(uNoise,vec2(y*0.55,0.37+uTime*0.03)).b-.5)+0.035*sin(y*9.+uTime*5.)+0.02*sin(y*23.-uTime*8.);   /* the edges are ragged, never a straight line */
+        float wob=0.10*(texture2D(uNoise,vec2(y*0.55,0.37+uTime*0.05)).b-.5)+0.03*sin(y*8.+uTime*7.);
         float ka=smoothstep(0.,0.5,uTrK),kb=smoothstep(0.5,1.,uTrK);
-        float da=x-(mix(-1.35,1.45,ka)+wob);   /* > 0: the leading edge has not got there yet */
-        float db=x-(mix(-1.62,1.38,kb)+1.6*wob);   /* < 0: the foam has rolled past, the water is clear again */
-        float bub=texture2D(uNoise,ns*2.6+vec2(-uTrDir*uTime*0.25,uTime*0.05)).a,bub2=texture2D(uNoise,ns*6.5+vec2(uTime*0.15,-uTime*0.1)).a;
-        float ahead=step(0.,da)*exp(-da*6.);col*=1.-0.16*ahead;   /* the shadow of the wall of foam just ahead of it */
-        float behind=smoothstep(0.012,-0.012,da);
-        float dens=smoothstep(-0.28,0.42,db);
-        float lace=smoothstep(0.30,0.62,bub*0.55+bub2*0.45+1.05*dens-0.42),solid=smoothstep(0.30,0.62,db)*smoothstep(0.,-0.22,da);
-        vec3 fc=mix(vec3(0.62,0.82,0.86),vec3(0.97,0.985,1.),smoothstep(0.15,0.75,bub*0.6+bub2*0.4+0.25*dens));   /* white water: bright froth, a little sea green in its hollows */
-        col=mix(col,fc,clamp(max(lace,solid)*behind,0.,1.));
-        col=mix(col,vec3(0.98,0.99,1.),exp(-abs(da)*42.)*0.75);   /* the bright lip of the leading edge */
-        float sp=smoothstep(0.80,0.93,texture2D(uNoise,ns*9.+vec2(uTime*0.6*uTrDir,uTime*0.35)).a)*smoothstep(0.22,0.,da)*step(0.,da);   /* spray thrown ahead of it */
-        col=mix(col,vec3(1.),sp*0.75);}
+        float da=x-(mix(-1.25,1.30,ka)+wob),db=x-(mix(-1.30,1.25,kb)+wob);   /* da < 0: the water has reached here; db > 0: it has not yet passed */
+        float inW=smoothstep(0.015,-0.015,da)*smoothstep(-0.02,0.02,db);
+        if(inW>0.){vec2 n1=texture2D(uNoise,ns*0.55+vec2(uTime*0.45*uTrDir,-uTime*0.25)).rg-.5,n2=texture2D(uNoise,ns*1.7+vec2(-uTime*0.6,uTime*0.35)).rg-.5,off=n1*0.11+n2*0.04;
+          vec3 sc=texture2D(tDiffuse,clamp(vUv+off,0.002,0.998)).rgb;
+          sc=mix(sc,vec3(0.02,0.30,0.44)+sc*0.25,0.62);   /* sea green-blue, like the water in the game */
+          float ca=texture2D(uNoise,ns*1.25+off*2.5+vec2(uTime*0.5*uTrDir,0.)).a;sc+=vec3(0.50,0.85,0.95)*smoothstep(0.58,0.72,ca)*(1.-smoothstep(0.72,0.86,ca))*0.40;   /* light rippling through it */
+          col=mix(col,sc,inW);}
+        col=mix(col,vec3(0.86,0.95,1.),(exp(-abs(da)*70.)*0.55+exp(-abs(db)*60.)*0.30)*(0.6+0.4*texture2D(uNoise,ns*5.+uTime).a));}   /* a thin bright edge where the water meets the air */
       gl_FragColor=vec4(col,1.);}`});
 try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}   /* the stance he picked last time */
 composer.addPass(gradePass);
@@ -4092,18 +4088,19 @@ addEventListener('resize',resize);resize();
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
 const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return c?Math.min(devicePixelRatio,2.25):Math.min(Math.max(devicePixelRatio,1.5),2.0)})();   /* sharper ceiling: a computer with a plain 1x screen draws at up to 1.5x and scales down (clean edges), a Retina screen at its full 2x; a phone uses up to 2.25x of its own pixels. The controller below still only climbs there while the frame rate holds */
-const QL=[[2.5,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
+const QL=[[2.5,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qQuiet=0,qLockT=0,qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2;const qBuf=[];
 function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=scenePass.ms.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0){scenePass.ms.samples=sm;scenePass.ms.dispose()}
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
 setQuality((()=>{try{return matchMedia('(pointer:coarse)').matches?4:3}catch(e){return 3}})());   /* start light and climb: frames first, sharpness when there is room */
 // one step down that really changes something (on a 1x screen several levels share the same resolution)
 function qStepDown(){const l0=qLevel;for(let l=l0+1;l<=qFloor;l++)if(setQuality(l))return true;setQuality(l0);return false}
-function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.visibilityState!=='visible'){qBuf.length=0;qWin=0;return}
+function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.visibilityState!=='visible'||TR.on||performance.now()<qQuiet){qBuf.length=0;qWin=0;return}   /* a wave starting or a cut between waves is not the machine being slow */
   qBuf.push(ms);qWin+=ms;if(qWin<(qProbe?3000:1500))return;
   qBuf.sort((a,b)=>a-b);const k=Math.max(1,Math.floor(qBuf.length*0.9));let sum=0;for(let i=0;i<k;i++)sum+=qBuf[i];const avg=sum/k;qBuf.length=0;qWin=0;   // the slowest 10% (a wave starting, a burst of spray) would make every judgement noisy
   if(qWarm>0){qWarm--;return}                                // the first seconds compile shaders and fill buffers
   if(qFloorT>0&&--qFloorT===0)qFloor=QL.length-1;            // every ~30 s, allow one more try at going lower
+  if(qLock&&--qLockT<=0){qLock=false;qBack=3;qCool=3}   /* the lock on going sharper wears off after about a minute: the picture no longer only ever gets softer the longer one plays */
   const slow=avg>T*1.10;
   if(qProbe){const p=qProbe;qProbe=null;                    // the last step down: did it actually buy anything?
     if(slow&&avg>p.avg*0.96){setQuality(p.l);qFloor=p.l;qFloorT=20;qCool=qBack;qUp=0;return}}   // no: resolution is not what limits this machine, so take the sharpness back and stop lowering
@@ -4112,7 +4109,7 @@ function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.vis
   if(!slow&&!qProbe&&cadN>nMin&&cadHold<=0&&cadOk&&qLevel<=6){   // a faster cadence only while the picture stays sharp
    cadN--;cadHold=4;qCool=Math.max(qCool,3);return}
   if(slow&&!qProbe&&(qLevel>=5||qLevel>=qFloor)&&(cadN+1)*rafD<=21.5){cadN++;cadHold=cadBack;cadBack=Math.min(cadBack*2,40);qLock=false;qFloor=QL.length-1;qFloorT=0;qCool=2;qBack=3;return}
-  if(slow){if(qUp)qLock=true;const l0=qLevel;if(qLevel<qFloor&&qStepDown()){qProbe={l:l0,avg};qBack=Math.min(qBack*2,40);qCool=qBack}qUp=0}   // dropping frames: step down, then check it helped
+  if(slow){if(qUp){qLock=true;qLockT=40}const l0=qLevel;if(qLevel<qFloor&&qStepDown()){qProbe={l:l0,avg};qBack=Math.min(qBack*2,16);qCool=qBack}qUp=0}   // dropping frames: step down, then check it helped
   else if(avg<T*1.03){qUp=0;if(!qLock&&qLevel>0&&--qCool<0){qUp=setQuality(qLevel-1)?1:0;qCool=qBack}}}  // holding the cadence comfortably: try one step up
 
 const shotPool=[],pv=new V3;
@@ -4148,22 +4145,21 @@ function reelTick(dtR){if(!game.attract||WZ.s!==2||game.state!=='ride'||document
   REEL.t+=dtR;if(REEL.t<3.6||TR.on)return;REEL.t=0;washCut(reelCut)}
 /* the cut: the white water rolls in over the live scene (nothing stops), the wave changes once the screen is covered, the fast-forward into the
    middle of the new ride runs a few ticks per frame while it stays covered, and then the foam rolls on and clears */
-const TR={on:false,t:0,ph:0,dir:1,fn:null,ffN:0,after:null,TA:0.62,TB:0.78};
+const TR={on:false,t:0,ph:0,dir:1,fn:null,ffN:0,after:null,TA:0.17,TB:0.30};
 function washCut(fn,user){if(TR.on&&TR.ph===0){if(user||!TR.fn)TR.fn=fn;return}   /* already rolling in: the player's pick wins over the menu loop */
   TR.dir=-TR.dir;gradePass.uniforms.uTrDir.value=TR.dir;TR.t=0;TR.ph=0;TR.fn=fn;TR.ffN=0;TR.after=null;TR.on=true;gradePass.uniforms.uTrK.value=1e-4}
 function trCancel(){TR.on=false;TR.fn=null;TR.ffN=0;TR.after=null;gradePass.uniforms.uTrK.value=0}
 function trStep(dtR){if(!TR.on)return;const U=gradePass.uniforms.uTrK;TR.t+=dtR;
   if(TR.ph===0){if(TR.t<TR.TA){U.value=Math.max(1e-4,0.5*TR.t/TR.TA);return}
-    U.value=0.5;TR.ph=1;TR.t=0;const f=TR.fn;TR.fn=null;if(f)try{f()}catch(e){console.error(e)}return}
-  if(TR.ph===1){U.value=0.5;
-    if(TR.ffN>0){const t0=performance.now();while(TR.ffN>0&&performance.now()-t0<14){if(game.state!=='ride'||!game.attract){TR.ffN=0;break}tick(1/20,false);TR.ffN--}return}
+    U.value=0.5;const f=TR.fn;TR.fn=null;if(f)try{f()}catch(e){console.error(e)}   /* the screen is covered: the wave changes now, and the fast-forward runs in this same frame */
+    let n=0;while(TR.ffN>0&&n<200){if(game.state!=='ride'||!game.attract)break;tick(1/20,false);TR.ffN--;n++}TR.ffN=0;
     if(TR.after){const a=TR.after;TR.after=null;a()}
-    if(TR.t<0.06)return;TR.ph=2;TR.t=0;return}
+    TR.ph=2;TR.t=0;return}
   const p=TR.t/TR.TB;if(p>=1){TR.on=false;U.value=0}else U.value=0.5+0.5*p}
 function reelCut(){const ids=SPOTS.filter(spotOpen).map(o=>o.id);if(ids.length<1)return;const nx=ids[(ids.indexOf(SPOT.id)+1)%ids.length];REEL.i++;
   if(nx!==SPOT.id)setSpot(nx);startAttract();
   const WX=['','rain','shower','','shower','rain'],wx=nx!==1&&nx!==2?WX[REEL.i%WX.length]:'';if(wx!==(game.wx||'')){game.wx=wx;setTOD(game.night,false)}
-  const ff=1.5+((REEL.i*1.3)%2);TR.ffN=Math.round(ff*20);   /* straight into the middle of the ride, a few ticks per frame while the foam covers the screen */
+  const ff=0.9+((REEL.i*0.7)%1);TR.ffN=Math.round(ff*20);   /* straight into the middle of the ride, a few ticks per frame while the foam covers the screen */
   const cam=['tele','follow','drone','front','tele','follow'][REEL.i%6];TR.after=()=>{REEL.cam=cam;camInit=false}}
 function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
   clockT+=dtR;if(game.lipQ&&game.lipQ.length&&game.waveAge>=game.lipQ[0].at){const q=game.lipQ.shift();if(game.state==='ride'||game.attract)lipBurst(q.k,q.s)}if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
