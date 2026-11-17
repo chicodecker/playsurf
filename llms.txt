@@ -1,0 +1,34 @@
+# PlaySurf
+
+> PlaySurf is a free 3D surfing game that runs in the web browser: surf eight real waves, from Pipeline to the Amazon river bore, with no download and no sign-up.
+
+PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by Decker Games. It is free, needs no account and no download, and runs in Chrome, Safari, Edge and Firefox on computers, phones and tablets. Players ride real surf spots like a surfer: speed from the bottom turn, snaps, cutbacks, floaters, laybacks, carve 360s, airs and barrels, linked into combos, and five judges score every wave. Rain, sun showers, dawn and night sessions change the conditions. There are seven boards, a soundtrack of 15 songs and 12 trophies. Controls: keyboard (arrows, Space for airs, Shift to brake in the barrel), gamepad or touch.
+
+## Play
+- [PlaySurf](https://playsurfgame.com/): the game, free in the browser
+- [Free surf game guide](https://playsurfgame.com/free-surf-game): what PlaySurf is, the waves, boards, moves, controls and FAQ
+
+## Waves
+- [PlaySurf Pool](https://playsurfgame.com/wave-pool-surf-game): A perfect left, every time. Surf a perfect wave pool left for free in your browser.
+- [Uluwatu](https://playsurfgame.com/uluwatu-surf-game): Bali · long left walls. Surf Uluwatu, Bali, in a free 3D surf game.
+- [Cloud 9](https://playsurfgame.com/cloud-9-surf-game): Siargao · the right-hand barrel. Surf Cloud 9, Siargao, in a free 3D surf game.
+- [Pipeline](https://playsurfgame.com/pipeline-surf-game): Hawaii · Pipe and Backdoor. Surf Pipeline in a free 3D surf game.
+- [Lower Trestles](https://playsurfgame.com/trestles-surf-game): California · lefts and rights. Surf Lower Trestles, California, in a free 3D surf game.
+- [Campeche](https://playsurfgame.com/campeche-surf-game): Florianópolis · the long right. Surf Campeche, Florianópolis, Brazil, in a free 3D surf game.
+- [Pororoca](https://playsurfgame.com/pororoca-surf-game): Amazon · the endless river wave. Surf the Pororoca, the Amazon tidal bore, in a free 3D surf game.
+- [Þorlákshöfn](https://playsurfgame.com/thorlakshofn-surf-game): Iceland · lefts and rights. Surf Þorlákshöfn (Thorlakshofn), Iceland, in a free 3D surf game.
+
+## Guides in other languages
+- [Português](https://playsurfgame.com/jogo-de-surf): Jogo de surf online grátis
+- [Español](https://playsurfgame.com/juego-de-surf): Juego de surf online gratis
+- [Français](https://playsurfgame.com/jeu-de-surf): Jeu de surf en ligne gratuit
+- [Deutsch](https://playsurfgame.com/surf-spiel): Surf Spiel online kostenlos
+- [Italiano](https://playsurfgame.com/gioco-di-surf): Gioco di surf online gratis
+- [日本語](https://playsurfgame.com/ja): 無料のオンライン・サーフィンゲーム
+- [Bahasa Indonesia](https://playsurfgame.com/game-selancar): Game selancar online gratis
+
+## Press
+- [Press kit](https://playsurfgame.com/press): fact sheet, descriptions, screenshots and logo
+
+## Optional
+- [Sitemap](https://playsurfgame.com/sitemap.xml)

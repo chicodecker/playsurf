@@ -231,4 +231,18 @@
     <image:image><image:loc>https://playsurfgame.com/img/pororoca-snap-1920.webp</image:loc></image:image>
     <image:image><image:loc>https://playsurfgame.com/img/pororoca-foam-1920.webp</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://playsurfgame.com/thorlakshofn-surf-game</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/img/thorlakshofn-hero-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/thorlakshofn-barrel-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/thorlakshofn-air-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/thorlakshofn-turn-1920.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/press</loc>
+    <lastmod>2026-11-16</lastmod>
+    <priority>0.5</priority>
+  </url>
 </urlset>
