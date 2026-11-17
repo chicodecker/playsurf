@@ -622,6 +622,11 @@ body.touch .kbOnly{display:none}
 #ld .psChip{opacity:1;color:rgba(255,255,255,.8);letter-spacing:.26em}   /* not the LOADING label's look (#ld b) */
 @media (prefers-reduced-motion:reduce){.psChip::before{animation:none}}
 </style>
+<style id="perf">   /* 2026-11-17 the frosted glass on the small cards that sit over the moving picture (the move hints, the two corner controls, the judges' card): the browser had to blur the 3D scene under each of them on every frame. A slightly darker plain panel instead; the look is the same at a glance and nothing is paid for it */
+#keys,#camBtn.hb,#waveBtn.hb,#manBtn,#riderBtn,#jcard{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#keys{background:linear-gradient(180deg,rgba(12,22,48,.68),rgba(2,6,16,.60))}
+#camBtn.hb,#waveBtn.hb,#manBtn,#riderBtn{background:linear-gradient(180deg,rgba(12,22,48,.74),rgba(2,6,16,.66))}
+</style>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -786,7 +791,7 @@ function makeNoiseTex(){
     d[i*4]=clamp(128+dx*26*127,0,255);d[i*4+1]=clamp(128+dy*26*127,0,255);d[i*4+2]=H[i]*255;d[i*4+3]=F[i]*255}
   const t=new THREE.DataTexture(d,N,N,THREE.RGBAFormat);
   t.wrapS=t.wrapT=THREE.RepeatWrapping;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;
-  t.generateMipmaps=true;t.anisotropy=16;t.needsUpdate=true;return t;
+  t.generateMipmaps=true;t.anisotropy=2;   /* 2026-11-17 was 16: the water reads this texture about twenty times a pixel, and at 16 samples each that was more than half of the whole frame; at 2 the picture is the same to the eye */t.needsUpdate=true;return t;
 }
 const noiseTex=makeNoiseTex();
 
@@ -1170,11 +1175,11 @@ function updateEnv(){
 /* ───────────────────────── wave geometry ───────────────────────── */
 const NF=15,NQ=60,NC=12,NR=18,NB=14,NXR=2;
 const R_FACE=NF,R_CUR=NF+NQ+1,R_RET=R_CUR+NC,R_BACK=R_RET+NR,R_FAR=R_BACK+NB,NV=R_FAR+NXR;
-const NS=280;
+const ND=(()=>{try{return matchMedia('(pointer:coarse)').matches?160:230}catch(e){return 230}})(),NS=14+ND+36;   /* 2026-11-17 the columns of the wave mesh where the riding happens: one every 36 cm on a computer, every 52 cm on a phone or tablet (a third less to build and draw each frame, not visible on a small screen) */
 const FD=[1800,700,300,140,70,36,18,10,6.5,4.6,3.3,2.3,1.5,0.85,0.35];
 const colS=new Float32Array(NS);
 {let k=0;for(let i=0;i<14;i++){const u=i/14;colS[k++]=-12-700*Math.pow(1-u,3)}
- for(let i=0;i<230;i++)colS[k++]=-12+84*i/230;   // denser wave mesh where the riding happens
+ for(let i=0;i<ND;i++)colS[k++]=-12+84*i/ND;   // denser wave mesh where the riding happens
  for(let i=0;i<36;i++){const u=i/35;colS[k++]=72+800*Math.pow(u,2.2)}}
 const PZ=new Float32Array(NS*NV),PY=new Float32Array(NS*NV),FA=new Float32Array(NS*(NQ+1));
 const HZ=new Float32Array(NS*(NQ+1)),HY=new Float32Array(NS*(NQ+1)),HZt=new Float32Array(NQ+1),HYt=new Float32Array(NQ+1);   /* how much the foam heaps lift the face: they are drawn, but the board rides the smooth surface underneath, as it did before them */
@@ -1194,49 +1199,63 @@ function lipDamage(i,d,X,t){const b=i*NV,jt=NF+NQ,j0=NF+Math.floor(NQ*0.77),y0=P
   for(let r=R_RET;r<R_BACK;r++){const k=b+r;cut(k,clamp((PY[k]-y0)/hh,0,1))}}
 
 const SQ=new Float32Array(NQ+1),PQ=new Float32Array(NQ+1);for(let j=0;j<=NQ;j++){const q=j/NQ;SQ[j]=Math.sin(PI*q);PQ[j]=0.35*q+0.65*Math.pow(q,2.2)}
+/* 2026-11-17 everything in the wave's profile that depends only on the place up the face (not on the wave) is worked out once, here: the profile is built ~300 times a frame */
+const TRN=8192,TRM=TRN-1,TRQ=TRN>>2,TRK=TRN/(2*PI),SINT=new Float64Array(TRN+1);for(let i=0;i<=TRN;i++)SINT[i]=Math.sin(i/TRK);   /* sines from a table, read with a straight line between entries: off by less than one part in ten million, and about four times quicker than Math.sin for the tens of thousands the wave takes each frame */
+const fsin=x=>{let f=x*TRK;const i=Math.floor(f);f-=i;const k=i&TRM;return SINT[k]+(SINT[k+1]-SINT[k])*f},fcos=x=>{let f=x*TRK;const i=Math.floor(f);f-=i;const k=(i+TRQ)&TRM;return SINT[k]+(SINT[k+1]-SINT[k])*f};
+const PU12=new Float64Array(NC+1);for(let c=0;c<=NC;c++)PU12[c]=Math.pow(c/NC,1.2);
+const F64=n=>new Float64Array(n),T82=F64(NQ+1),T84=F64(NQ+1),T08=F64(NQ+1),TC1=F64(NQ+1),TC2=F64(NQ+1),T03=F64(NQ+1),TENV=F64(NQ+1),S7=F64(NQ+1),C7=F64(NQ+1),S8=F64(NQ+1),C8=F64(NQ+1),S9=F64(NQ+1),C9=F64(NQ+1),S14=F64(NQ+1),C14=F64(NQ+1),SPI=F64(NQ+1),
+  TF9=F64(NF),TF3=F64(NF),SF11=F64(NF),CF11=F64(NF),SF04=F64(NF),CF04=F64(NF),HB0=F64(NB),HB1=F64(NB),HB2=F64(NB),HB3=F64(NB),SB7=F64(NB),CB7=F64(NB);
+for(let j=0;j<=NQ;j++){const q=j/NQ;T82[j]=sstep(0.82,1,q);T84[j]=sstep(0.84,1,q);T08[j]=0.75+0.25*sstep(0.08,0.4,q);TC1[j]=1.20-0.28*sstep(0.62,1,q);TC2[j]=sstep(0.40,0.62,q);T03[j]=sstep(0.03,0.20,q);TENV[j]=sstep(0.05,0.35,q)*(1-0.35*sstep(0.85,1,q));
+  S7[j]=Math.sin(q*7);C7[j]=Math.cos(q*7);S8[j]=Math.sin(q*8);C8[j]=Math.cos(q*8);S9[j]=Math.sin(q*9);C9[j]=Math.cos(q*9);S14[j]=Math.sin(q*14);C14[j]=Math.cos(q*14);SPI[j]=Math.sin(PI*q)}
+for(let j=0;j<NF;j++){TF9[j]=sstep(9,0.5,FD[j]);TF3[j]=sstep(3.2,0.3,FD[j]);SF11[j]=Math.sin(FD[j]*1.1);CF11[j]=Math.cos(FD[j]*1.1);SF04[j]=Math.sin(FD[j]*0.4);CF04[j]=Math.cos(FD[j]*0.4)}
+for(let k=0;k<NB;k++){const u=(k+1)/NB,u2=u*u,u3=u2*u;HB0[k]=2*u3-3*u2+1;HB1[k]=u3-2*u2+u;HB2[k]=-2*u3+3*u2;HB3[k]=u3-u2;SB7[k]=Math.sin(u*7);CB7[k]=Math.cos(u*7)}
 
 function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
   const a=o.a,z=o.z,y=o.y,inf=o.info;let aMax=0;fo=fo||0;
+  const crumb=clamp(0.45+0.55*Math.sin(X*2.3+tt*2.9)*Math.sin(X*0.71-tt*1.6)+0.35*Math.sin(X*5.9-tt*4.1),0,1);   /* the same along the whole column */
   {const k1=(1-w)*As,k2=w*Ab;for(let j=0;j<=NQ;j++){const v=k1*SQ[j]+k2*PQ[j];a[j]=v;if(v>aMax)aMax=v}}
   // foam section: the top no longer stands up and throws, it leans back into a rideable roll
-  if(fo>0.01){aMax=0;for(let j=0;j<=NQ;j++){const q=j/NQ,cap=1.20-0.28*sstep(0.62,1,q);if(a[j]>cap)a[j]=lerp(a[j],cap,fo*sstep(0.40,0.62,q));if(a[j]>aMax)aMax=a[j]}}
+  if(fo>0.01){aMax=0;for(let j=0;j<=NQ;j++){const cap=TC1[j];if(a[j]>cap)a[j]=lerp(a[j],cap,fo*TC2[j]);if(a[j]>aMax)aMax=a[j]}}
   let cz=0,cy=0,ym=0,zm=0;z[NF]=0;y[NF]=0;
-  for(let j=1;j<=NQ;j++){const am=.5*(a[j-1]+a[j]);cz-=Math.cos(am)/NQ;cy+=Math.sin(am)/NQ;z[NF+j]=cz;y[NF+j]=cy;if(cy>ym){ym=cy;zm=cz}}
+  for(let j=1;j<=NQ;j++){let f=.5*(a[j-1]+a[j])*TRK;const i=Math.floor(f);f-=i;const ks=i&TRM,kc=(i+TRQ)&TRM;cz-=(SINT[kc]+(SINT[kc+1]-SINT[kc])*f)/NQ;cy+=(SINT[ks]+(SINT[ks+1]-SINT[ks])*f)/NQ;z[NF+j]=cz;y[NF+j]=cy;if(cy>ym){ym=cy;zm=cz}}
   const L=Ht/Math.max(ym,0.03),zs=zA-zm*L,aEnd=a[NQ];
   const occC=isFoam?0:sstep(2.6,3.5,aEnd);
-  let arc=0;
-  for(let j=0;j<=NQ;j++){const k=NF+j;z[k]=zs+z[k]*L;y[k]*=L;
-    if(j>0)arc+=L/NQ*(1-0.5*sstep(0.2,1.2,a[j]));
-    const q=j/NQ,yr=y[k]/Ht;let foam,sss,occ;const crumb=clamp(0.45+0.55*Math.sin(X*2.3+tt*2.9)*Math.sin(X*0.71-tt*1.6)+0.35*Math.sin(X*5.9-tt*4.1),0,1);
+  let arc=0;const dA=L/NQ,fA=isFoam||aEnd>=2.3?0:0.42*(0.45+0.55*crumb)*sstep(0.25,0.7,w),fB=isFoam||aEnd<2.3?0:(0.30+0.55*crumb)*sstep(2.3,2.9,aEnd)*0.85;
+  for(let j=0;j<=NQ;j++){const k=NF+j,aj=a[j];z[k]=zs+z[k]*L;y[k]*=L;
+    if(j>0)arc+=dA*(aj>0.2?1-0.5*sstep(0.2,1.2,aj):1);
+    let foam,sss,occ;
     if(isFoam){foam=1;sss=0.10;occ=0}
-    else{const stp=sstep(0.25,1.1,a[j]);
-      sss=clamp(sstep(0.12,0.95,yr)*stp+sstep(1.6,2.6,a[j])*0.4,0,1);
-      foam=sstep(3.5,4.7,a[j])*0.8+sstep(0.82,1,q)*0.42*(0.45+0.55*crumb)*sstep(0.25,0.7,w)*(aEnd<2.3?1:0)+(aEnd>=2.3?sstep(0.84,1,q)*(0.30+0.55*crumb)*sstep(2.3,2.9,aEnd)*0.85:0);   /* a pitching lip crumbles white along its edge, in broken patches; spread soft over the last part of the lip, so the edge is no thin white thread */
-      occ=occC*(0.75+0.25*sstep(0.08,0.4,q))}   /* the lip's shade carries on from the flat into the foot of the face: no bright seam, no step at the base of the barrel */
+    else{
+      sss=clamp((aj>0.25?sstep(0.12,0.95,y[k]/Ht)*sstep(0.25,1.1,aj):0)+(aj>1.6?sstep(1.6,2.6,aj)*0.4:0),0,1);
+      foam=(aj>3.5?sstep(3.5,4.7,aj)*0.8:0)+T82[j]*fA+T84[j]*fB;   /* a pitching lip crumbles white along its edge, in broken patches; spread soft over the last part of the lip, so the edge is no thin white thread */
+      occ=occC*T08[j]}   /* the lip's shade carries on from the flat into the foot of the face: no bright seam, no step at the base of the barrel */
 
     inf[k*4]=arc;inf[k*4+1]=foam;inf[k*4+2]=sss;inf[k*4+3]=occ}
   if(!isFoam&&TUBE_W!==1){let jv=0;for(let j=1;j<=NQ;j++)if(a[j]>=PI/2){jv=j;break}   /* the barrel's width: past the vertical the lip throws further out (wide) or tucks in, more the more it overhangs, so there is no kink */
     if(jv>0){const zv=z[NF+jv];for(let j=jv+1;j<=NQ;j++){const k=NF+j;z[k]=zv+(z[k]-zv)*(1+(TUBE_W-1)*sstep(PI/2,PI,a[j]))}}}
-  if(fo>0.01&&!isFoam){const hk=sstep(0.3,1,Ht);for(let j=Math.floor(NQ*0.08);j<=NQ;j++){const k=NF+j,q=j/NQ,q0=0.44+0.07*Math.sin(X*1.3+tt*0.9)+0.035*Math.sin(X*3.7-tt*1.5),t1=sstep(q0-0.15,q0+0.15,q),lump=0.5+0.5*Math.sin(q*7+X*0.8+tt*1.3)*Math.sin(X*0.5-tt*0.9),b=fo*t1*(0.55+0.26*lump)*hk;   // a fat roll of foam, about twice as thick; the ramp onto it is as gentle as before
-      z[k]+=Math.sin(a[j])*b;y[k]+=Math.cos(a[j])*b*0.7;
-      const up_=sstep(q0-0.30,q0-0.06,q);inf[k*4+1]=Math.max(inf[k*4+1],fo*(0.97*up_+0.84*sstep(0.03,0.20,q)*(1-up_)));inf[k*4+2]*=1-0.6*fo*Math.max(t1,0.75*sstep(0.03,0.2,q))}}   /* a foam section is white over most of the face: the wave breaks high on itself and the white water piles down the face, like the foam at the bottom */
-  if(isFoam){HZt.fill(0);HYt.fill(0);const hk=sstep(0.3,1.2,Ht)*clamp(foamK,0,1);if(hk>0.01)for(let j=Math.floor(NQ*0.05);j<=NQ;j++){const k=NF+j,q=j/NQ,   /* the white water is no flat sheet: a dune of foam, piled up in heaps that roll down the face toward the beach */
-     heap=clamp(0.5+0.5*Math.sin(X*1.7+q*9-tt*2.4)*Math.sin(X*0.63+tt*0.8)+0.25*Math.sin(X*4.3-q*14+tt*3.1),0,1.2),env=sstep(0.05,0.35,q)*(1-0.35*sstep(0.85,1,q)),b=hk*env*(0.30+0.55*heap)*Ht*0.22;
-     const dz=Math.sin(a[j])*b,dy=Math.cos(a[j])*b*0.8;z[k]+=dz;y[k]+=dy;HZt[j]=dz;HYt[j]=dy}}
+  if(fo>0.01&&!isFoam){const hk=sstep(0.3,1,Ht),q0=0.44+0.07*Math.sin(X*1.3+tt*0.9)+0.035*Math.sin(X*3.7-tt*1.5),lA=X*0.8+tt*1.3,lS=Math.sin(lA),lC=Math.cos(lA),lB=Math.sin(X*0.5-tt*0.9);
+    for(let j=Math.floor(NQ*0.08);j<=NQ;j++){const k=NF+j,q=j/NQ,t1=sstep(q0-0.15,q0+0.15,q);   // a fat roll of foam, about twice as thick; the ramp onto it is as gentle as before
+      if(t1>0){const lump=0.5+0.5*(S7[j]*lC+C7[j]*lS)*lB,b=fo*t1*(0.55+0.26*lump)*hk;z[k]+=fsin(a[j])*b;y[k]+=fcos(a[j])*b*0.7}
+      const up_=sstep(q0-0.30,q0-0.06,q),s3=T03[j];inf[k*4+1]=Math.max(inf[k*4+1],fo*(0.97*up_+0.84*s3*(1-up_)));inf[k*4+2]*=1-0.6*fo*Math.max(t1,0.75*s3)}}   /* a foam section is white over most of the face: the wave breaks high on itself and the white water piles down the face, like the foam at the bottom */
+  if(isFoam){HZt.fill(0);HYt.fill(0);const hk=sstep(0.3,1.2,Ht)*clamp(foamK,0,1);if(hk>0.01){const hA=X*1.7-tt*2.4,hS=Math.sin(hA),hC=Math.cos(hA),hB=Math.sin(X*0.63+tt*0.8),gA=X*4.3+tt*3.1,gS=Math.sin(gA),gC=Math.cos(gA);
+    for(let j=Math.floor(NQ*0.05);j<=NQ;j++){const k=NF+j,   /* the white water is no flat sheet: a dune of foam, piled up in heaps that roll down the face toward the beach */
+     heap=clamp(0.5+0.5*(hS*C9[j]+hC*S9[j])*hB+0.25*(gS*C14[j]-gC*S14[j]),0,1.2),b=hk*TENV[j]*(0.30+0.55*heap)*Ht*0.22;
+     const dz=fsin(a[j])*b,dy=fcos(a[j])*b*0.8;z[k]+=dz;y[k]+=dy;HZt[j]=dz;HYt[j]=dy}}}
   const fH=isFoam?sstep(0.3,1.2,Ht)*clamp(foamK,0,1)*Ht*0.16:0;   /* and out in front, the spent foam stands in heaps that keep marching to the beach */
-  for(let j=0;j<NF;j++){z[j]=zs+FD[j];y[j]=fH>0?fH*sstep(9,0.5,FD[j])*(0.12+0.40*clamp(0.5+0.5*Math.sin(FD[j]*1.1-tt*2.2+X*0.9)*Math.sin(X*0.55+FD[j]*0.4),0,1)):0;inf[j*4]=-FD[j];
-    inf[j*4+1]=isFoam?sstep(9,0.5,FD[j])*0.97:0;inf[j*4+2]=0;inf[j*4+3]=occC*sstep(3.2,0.3,FD[j])*0.75}
+  {let pS=0,pC=0,rS=0,rC=0;if(fH>0){const pA=X*0.9-tt*2.2,rA=X*0.55;pS=Math.sin(pA);pC=Math.cos(pA);rS=Math.sin(rA);rC=Math.cos(rA)}
+  for(let j=0;j<NF;j++){z[j]=zs+FD[j];y[j]=fH>0?fH*TF9[j]*(0.12+0.40*clamp(0.5+0.5*(SF11[j]*pC+CF11[j]*pS)*(rS*CF04[j]+rC*SF04[j]),0,1)):0;inf[j*4]=-FD[j];
+    inf[j*4+1]=isFoam?TF9[j]*0.97:0;inf[j*4+2]=0;inf[j*4+3]=occC*TF3[j]*0.75}}
   let top=L;for(let j=1;j<=NQ;j++)if(a[j]>=1.45){const f=(1.45-a[j-1])/(a[j]-a[j-1]);top=(j-1+f)/NQ*L;break}
   // the falling lip: thrown from the tip of the curl, it arcs over and falls to the base of the wave, closing the tube
   const kT=NF+NQ,tipZ=z[kT],tipY=y[kT],tipFoam=inf[kT*4+1],arcTip=arc,cZ=o.cZ,cY=o.cY,cA=o.cA,VERT=1.5*PI;
   const kc=(!isFoam&&ec>0)?sstep(-0.10,-0.42,Math.sin(aEnd)):0,curOK=kc>0;let Lc=0;cZ[0]=tipZ;cY[0]=tipY;cA[0]=aEnd;   /* the curtain grows in as the lip comes over, instead of switching on at one angle (that was the shake and the step before a barrel) */
-  if(curOK){let D=0;for(let c=0;c<NC;c++){const t=(c+0.5)/NC;D-=Math.sin(aEnd+(VERT-aEnd)*(1-(1-t)*(1-t)))/NC}
+  if(curOK){let D=0;for(let c=0;c<NC;c++){const t=(c+0.5)/NC;D-=fsin(aEnd+(VERT-aEnd)*(1-(1-t)*(1-t)))/NC}
     Lc=kc*ec*Math.max(0,tipY-0.04)/Math.max(D,0.2)}
-  const cOn=sstep(0,0.4,Lc),airK=1-0.7*sstep(0.8,1,ec),rag=u=>-cOn*airK*0.8*sstep(0.40,1,u);   /* the curtain crumbles away toward its lower edge, in chunks, even when it is thrown all the way */
-  const crT=clamp(0.45+0.55*Math.sin(X*2.3+tt*2.9)*Math.sin(X*0.71-tt*1.6)+0.35*Math.sin(X*5.9-tt*4.1),0,1);
+  const cOn=sstep(0,0.4,Lc),airK=1-0.7*sstep(0.8,1,ec),ragK=-cOn*airK*0.8;   /* (a plain number now: it used to be a small function made afresh for each of the ~300 columns, every frame) */   /* the curtain crumbles away toward its lower edge, in chunks, even when it is thrown all the way */
+  const crT=crumb;
   for(let c=1;c<=NC;c++){const r=R_CUR+c-1,u=c/NC,t=ec*(c-0.5)/NC,am=curOK?aEnd+(VERT-aEnd)*(1-(1-t)*(1-t)):aEnd,dl=Lc/NC;
-    cZ[c]=cZ[c-1]-Math.cos(am)*dl;cY[c]=cY[c-1]+Math.sin(am)*dl;cA[c]=am;z[r]=cZ[c];y[r]=cY[c];
-    inf[r*4]=arcTip+Lc*u*0.6;inf[r*4+1]=isFoam?1:lerp(tipFoam,(0.26+0.72*Math.pow(u,1.2))*(0.72+0.28*crT)+0.30*crT*(1-u),cOn);inf[r*4+2]=isFoam?0.1:0.85;inf[r*4+3]=isFoam?0:rag(u)}
+    cZ[c]=cZ[c-1]-fcos(am)*dl;cY[c]=cY[c-1]+fsin(am)*dl;cA[c]=am;z[r]=cZ[c];y[r]=cY[c];
+    inf[r*4]=arcTip+Lc*u*0.6;inf[r*4+1]=isFoam?1:lerp(tipFoam,(0.26+0.72*PU12[c])*(0.72+0.28*crT)+0.30*crT*(1-u),cOn);inf[r*4+2]=isFoam?0.1:0.85;inf[r*4+3]=isFoam?0:ragK*sstep(0.40,1,u)}
   // where the lip lands the trough turns white
   {const land=curOK?sstep(0.85,1,ec)*cOn*(1-sstep(0.1,0.6,cY[NC])):0,dL=cZ[NC]-zs;
    if(land>0.01)for(let j=0;j<NF;j++)inf[j*4+1]=Math.max(inf[j*4+1],land*0.95*sstep(dL-1.4,dL-0.2,FD[j])*(1-sstep(dL+0.7,dL+5.5,FD[j])))}
@@ -1247,16 +1266,17 @@ function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
     if(onC){const fc=(Lc-dk)/Lc*NC,c0=Math.min(Math.floor(fc),NC-1),f=fc-c0;iz=lerp(cZ[c0],cZ[c0+1],f);iy=lerp(cY[c0],cY[c0+1],f);aa=lerp(cA[c0],cA[c0+1],f);uc=fc/NC}
     else{const qq=1-(dk-Lc)/L,fj=qq*NQ,j0=Math.max(0,Math.min(Math.floor(fj),NQ-1)),f=fj-j0;iz=lerp(z[NF+j0],z[NF+j0+1],f);iy=lerp(y[NF+j0],y[NF+j0+1],f);aa=lerp(a[j0],a[j0+1],f)}
     const d=thF*Math.min(0.6,0.04+0.22*dk);
-    z[r]=iz-Math.sin(aa)*d;y[r]=iy-Math.cos(aa)*d;
+    z[r]=iz-fsin(aa)*d;y[r]=iy-fcos(aa)*d;
     const fb=back>0.01?(dk-Lc)/back:0;
     inf[r*4]=arcTip+(Lc-dk)*0.6;inf[r*4+1]=isFoam?1:(onC?0.90-0.66*Math.sqrt(dk/Math.max(Lc,0.01)):thF*(0.50-0.4*fb));
-    inf[r*4+2]=isFoam?0.1:(onC?0.9:0.9*thF+0.3*(1-thF)*sstep(0.6,1.4,aEnd));inf[r*4+3]=onC&&!isFoam?rag(uc):0}
+    inf[r*4+2]=isFoam?0.1:(onC?0.9:0.9*thF+0.3*(1-thF)*sstep(0.6,1.4,aEnd));inf[r*4+3]=onC&&!isFoam?ragK*sstep(0.40,1,uc):0}
   const r0=R_BACK-1,p0z=z[r0],p0y=y[r0],t0z=-4.5,t0y=-1.1*sstep(0.2,1.2,aEnd),p1z=zA-18,p1y=0.05*Ht,t1z=-9,t1y=0;
   const arcR=inf[r0*4];
-  for(let k=0;k<NB;k++){const u=(k+1)/NB,u2=u*u,u3=u2*u,h00=2*u3-3*u2+1,h10=u3-2*u2+u,h01=-2*u3+3*u2,h11=u3-u2,r=R_BACK+k;
+  {const hbK=isFoam?sstep(0.3,1.2,Ht)*clamp(foamK,0,1)*Ht*0.14:0,bA=X*1.5-tt*1.9,bS=isFoam?Math.sin(bA):0,bC=isFoam?Math.cos(bA):0,bB=isFoam?Math.sin(X*0.7+tt*0.6):0,sW=isFoam?0:sstep(0.2,1,w);
+  for(let k=0;k<NB;k++){const u=(k+1)/NB,h00=HB0[k],h10=HB1[k],h01=HB2[k],h11=HB3[k],r=R_BACK+k;
     z[r]=h00*p0z+h10*t0z+h01*p1z+h11*t1z;y[r]=h00*p0y+h10*t0y+h01*p1y+h11*t1y;
-    inf[r*4]=arcR+u*14;inf[r*4+1]=isFoam?foamK*(0.97-0.3*u):0.10*w*(1-u);if(isFoam){const hb=sstep(0.3,1.2,Ht)*clamp(foamK,0,1)*Ht*0.14*(1-u)*(1-u);if(hb>0.002)y[r]+=hb*(0.25+0.75*clamp(0.5+0.5*Math.sin(X*1.5+u*7-tt*1.9)*Math.sin(X*0.7+tt*0.6),0,1))}   /* heaps of foam on top as well, not a flat white plateau */
-    inf[r*4+2]=isFoam?0.08:0.5*(1-u)*(1-u)*sstep(0.2,1,w);inf[r*4+3]=0}
+    inf[r*4]=arcR+u*14;inf[r*4+1]=isFoam?foamK*(0.97-0.3*u):0.10*w*(1-u);if(isFoam){const hb=hbK*(1-u)*(1-u);if(hb>0.002)y[r]+=hb*(0.25+0.75*clamp(0.5+0.5*(bS*CB7[k]+bC*SB7[k])*bB,0,1))}   /* heaps of foam on top as well, not a flat white plateau */
+    inf[r*4+2]=isFoam?0.08:0.5*(1-u)*(1-u)*sW;inf[r*4+3]=0}}
   z[R_FAR]=zA-90;y[R_FAR]=0.02*Ht;z[R_FAR+1]=zA-1900;y[R_FAR+1]=0;
   for(let k=0;k<2;k++){const r=R_FAR+k;inf[r*4]=arcR+14+(k?1800:72);inf[r*4+1]=isFoam?foamK*0.6*(1-k):0;inf[r*4+2]=0;inf[r*4+3]=0}
   o.L=L;o.top=top;o.z0=zs;o.aEnd=aEnd;o.aMax=aMax;o.H=Ht;o.cz=zA;o.Lc=Lc;
@@ -1282,7 +1302,7 @@ const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st
 /* each wave's barrel, true to the real one: tw = how far the lip throws out from the face (the tube's width: Pipeline and Greenbush wide and round, Supertubos and Cloud 9 thick and short, the point breaks tighter),
    sp = how hard the barrel spits, the "baforada" (0 = a wave that never barrels: Trestles, the bore) */
 const TUBE={1:{tw:1.0,sp:0.35},2:{tw:1.04,sp:0.5},3:{tw:1.30,sp:1.0},4:{tw:1.14,sp:0.75},5:{tw:1.0,sp:0},6:{tw:1.04,sp:0.5},7:{tw:1.0,sp:0},8:{tw:1.10,sp:0.6},9:{tw:1.20,sp:0.85},10:{tw:1.06,sp:0.85},11:{tw:1.32,sp:1.0},12:{tw:1.02,sp:0.65},13:{tw:1.0,sp:0.3}};
-let TUBE_W=1,TUBE_SP=0.35;
+let TUBE_W=1,TUBE_SP=0.35,VMAX=15.5;   /* VMAX 2026-11-17: the top speed goes with the size of the wave, as it does in the sea: about 49 km/h on the small ones (Cloud 9, Chicama), 52 on the pool, 56 at Pipeline and the bore (it was 56 everywhere) */
 const CLOSE_SPOTS=[3,4,8,9,11];   /* the waves that end in one block of closeout: Pipeline, Cloud 9, Þorlákshöfn, Supertubos, Greenbush */   /* Iceland's best-known wave: a heavy right off the harbour wall near Reykjavík, snow on the black mountains behind, surfed in hood, gloves and boots */   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
 let SPOT=SPOTS[0];
 function wallLen(X){return 48+5*(Math.sin(X*0.043+1.3)*0.6+Math.sin(X*0.105+4.1)*0.4)}
@@ -1319,18 +1339,18 @@ function buildWave(t){
   let E0;{const s=0,cr=SPOT.crumble?1:0,ef=endFoam(0,game.secAge),sv=secAt(0,game.secAge),ck=closeK(0,game.secAge),fo=Math.max(secFoam,rk,0.45*secJct,0.85*ef,0.95*cr),e=Math.max(clamp(1+0.3/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose))*(1-fo)*(1-cr);
    const w0=Math.max(wOf(0,48),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1);E0={w,ab:(205+65*e)*DEG,hk:lerp(2.0,4.0,sstep(0,0.42,w))/4.0*(1-0.10*fo)*(1-0.06*ef+0.10*ef*Math.sin(t*2.4))*(1+0.30*secJct),ec:sstep(0.35,0.95,e),fo}}
   for(let i=0;i<NS;i++){
-    const s=colS[i],X=s+adv,Lw=wallLen(X),Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s))*(1-0.42*sstep(62,135,s));
+    const s=colS[i],X=s+adv,Lw=0,Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s))*(1-0.42*sstep(62,135,s));
     let o=scA;
     if(s>=0){
       const cr=SPOT.crumble?1:0,ef=endFoam(s,game.secAge),sv=secAt(s,game.secAge),ck=closeK(s,game.secAge),fo=Math.max(secFoam,rk*(1-sstep(3.0,7.5,s)),0.45*secJct,0.95*ef,0.95*cr*(1-sstep(3,SPOT.fat?14:11,s))),e=Math.max(clamp(1-(s-0.3)/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose),ck)*(1-fo)*(1-cr),fade=1-0.74*sstep(150,205,s);
       const w0=Math.max(wOf(s,Lw),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1);   /* the bore is a fat wave, not a steep one */   // blends in with no kink where a section starts
       profile(scA,0.28*fade,w,(205+65*e)*DEG,lerp(2.0*fade,4.0,sstep(0,0.42,w))*Hs*(1-0.10*fo)*(1-0.06*ef+0.10*ef*Math.sin(t*2.4+X*0.31))*(1+0.30*secJct)*(1+0.12*ck*(1-fo)),0,0,false,sstep(0.35,0.95,e),fo,s,t);   // turning to white water at the end, the wave also loses height
-      colW[i]=w;colFoam[i]=fo;colSecF[i]=Math.max(secFoam,0.45*secJct);colEnd[i]=ef;HZ.fill(0,i*(NQ+1),(i+1)*(NQ+1));HY.fill(0,i*(NQ+1),(i+1)*(NQ+1));
+      colW[i]=w;colFoam[i]=fo;colSecF[i]=Math.max(secFoam,0.45*secJct);colEnd[i]=ef;
       if(game.lipHits&&game.lipHits.length){let d=0;for(const h of game.lipHits){const age=t-h.t,dx=(X-h.X)/0.88;if(age<0||age>1.7||Math.abs(dx)>3)continue;d=Math.max(d,h.k*Math.exp(-dx*dx)*sstep(0,0.09,age)*(1-sstep(0.6,1.7,age)))}colDmg[i]=d}else colDmg[i]=0;
     }else{
       const k=sstep(1.2,6.2,-s);colFoam[i]=0;colSecF[i]=0;colEnd[i]=0;   // the barrel stays hollow a little way behind the rider before it collapses into the foam ball
       profile(scB,0.78,0,0,4.0*Hs*(0.46+0.34*Math.exp(s/9)),0.9*k,Math.exp(s/34),true,0,0,s,t);for(let j=0;j<=NQ;j++){HZ[i*(NQ+1)+j]=HZt[j]*k;HY[i*(NQ+1)+j]=HYt[j]*k}   /* blended in by k below, so their lift is too */
-      for(let j=0;j<=NQ;j++){const q=j/NQ;scB.y[NF+j]+=k*0.26*Math.sin(q*8+X*1.4+t*5.3)*Math.sin(X*0.8-t*3.1)*Math.sin(PI*q)}
+      {const wA=X*1.4+t*5.3,wS=Math.sin(wA),wC=Math.cos(wA),wB=k*0.26*Math.sin(X*0.8-t*3.1);for(let j=0;j<=NQ;j++)scB.y[NF+j]+=wB*(S8[j]*wC+C8[j]*wS)*SPI[j]}
       o=scB;colW[i]=0;
       if(k<1){
         profile(scA,0.28,E0.w,E0.ab,4.0*Hs*E0.hk,0,0,false,E0.ec,E0.fo,s,t);
@@ -1352,18 +1372,18 @@ function buildWave(t){
    if(!SPOT.fat){let sB=1e9;for(let i=NS-1;i>=0;i--){const s=colS[i];if(s<0)break;if(colFoam[i]>0.5){sB=s;continue}const d=sB-s;if(d>DM||colAEnd[i]>=2.6)continue;slant(i,d)}}
    let sF=-99;for(let i=0;i<NS;i++){const s=colS[i];if(s<0)continue;if(colFoam[i]>0.5){sF=s;continue}const d=s-sF;if(d>DM||(!SPOT.fat&&colAEnd[i]>=2.6))continue;const b=i*NV,qm=0.42+0.58*sstep(0,DM,d);   /* the bore's white water is no square block: up top it runs on ahead like a falling curtain, and lower down the front slants back, down to the big foam at the bottom */
     for(let j=NF+Math.floor(qm*NQ);j<=NF+NQ;j++){const q=(j-NF)/NQ,f=sstep(qm,Math.min(1,qm+0.12),q)*(1-sstep(DM*0.7,DM,d));gInf[(b+j)*4+1]=Math.max(gInf[(b+j)*4+1],0.95*f)}}}
-  {const W=4.5;for(let i=0;i<NS;i++){const s=colS[i];colFW[i]=0;if(s<0)continue;let m=0;for(let d=-26;d<=26;d++){const j=i+d;if(j<0||j>=NS)continue;const ds=Math.abs(colS[j]-s);if(ds>W)continue;const f=(colFoam[j]-(SPOT.bore?0.40:0))*(1-0.45*colEnd[j]);if(f>0.05)m=Math.max(m,f*Math.pow(1-ds/W,0.6))}colFW[i]=m;
+  {const W=4.5,FWR=Math.ceil(W/(84/ND))+1;for(let i=0;i<NS;i++){const s=colS[i];colFW[i]=0;if(s<0)continue;let m=0;for(let d=-FWR;d<=FWR;d++){const j=i+d;if(j<0||j>=NS)continue;const ds=Math.abs(colS[j]-s);if(ds>W)continue;const f=(colFoam[j]-(SPOT.bore?0.40:0))*(1-0.45*colEnd[j]);if(f>0.05)m=Math.max(m,f*Math.pow(1-ds/W,0.6))}colFW[i]=m;
     if(m>0.02){const b=i*NV,jL=NF+Math.floor(NQ*0.42),ph=0.5+0.5*Math.sin(s*0.9-t*2.6);
       for(let j=NF;j<jL;j++){const u=(j-NF)/(jL-NF),k=b+j;gInf[k*4+1]=Math.max(gInf[k*4+1],m*0.95*(1-sstep(0.55,1,u)))}
       for(let j=0;j<NF;j++){const k=b+j;gInf[k*4+1]=Math.max(gInf[k*4+1],m*0.9*sstep(2.6+1.6*ph,0.2,FD[j]))}}}}
-  for(let i=0;i<NS;i++){const im=i>0?i-1:0,ip=i<NS-1?i+1:i,ax=colS[ip]-colS[im];
-    for(let j=0;j<NV;j++){const jm=j>0?j-1:0,jp=j<NV-1?j+1:j,k=i*NV+j;
-      const ay=PY[ip*NV+j]-PY[im*NV+j],az=PZ[ip*NV+j]-PZ[im*NV+j],by=PY[i*NV+jp]-PY[i*NV+jm],bz=PZ[i*NV+jp]-PZ[i*NV+jm];
+  for(let i=0;i<NS;i++){const im=i>0?i-1:0,ip=i<NS-1?i+1:i,ax=colS[ip]-colS[im],bi=i*NV,bp=ip*NV,bm=im*NV,sx=colS[i];
+    for(let j=0;j<NV;j++){const jm=j>0?j-1:0,jp=j<NV-1?j+1:j,k=bi+j,k3=k*3;
+      const ay=PY[bp+j]-PY[bm+j],az=PZ[bp+j]-PZ[bm+j],by=PY[bi+jp]-PY[bi+jm],bz=PZ[bi+jp]-PZ[bi+jm];
       let nx=ay*bz-az*by,ny=-ax*bz,nz=ax*by;const l=Math.sqrt(nx*nx+ny*ny+nz*nz);
-      if(l<1e-5){if(j>0){nx=gNor[(k-1)*3];ny=gNor[(k-1)*3+1];nz=gNor[(k-1)*3+2]}else{nx=0;ny=1;nz=0}}
-      else{nx/=l;ny/=l;nz/=l}
-      gNor[k*3]=nx;gNor[k*3+1]=ny;gNor[k*3+2]=nz;
-      gPos[k*3]=colS[i];gPos[k*3+1]=PY[k];gPos[k*3+2]=PZ[k]}}
+      if(l<1e-5){if(j>0){nx=gNor[k3-3];ny=gNor[k3-2];nz=gNor[k3-1]}else{nx=0;ny=1;nz=0}}
+      else{const il=1/l;nx*=il;ny*=il;nz*=il}
+      gNor[k3]=nx;gNor[k3+1]=ny;gNor[k3+2]=nz;
+      gPos[k3]=sx;gPos[k3+1]=PY[k];gPos[k3+2]=PZ[k]}}
 }
 
 const waveGeo=new THREE.BufferGeometry();
@@ -1585,7 +1605,7 @@ function updateJet(dt,time){
     emit(jet.x-jet.dir*1.5+rnd(-0.2,0.2),0.2,z+rnd(-0.35,0.35),-jet.v*rnd(0.15,0.4),up?rnd(3,6):rnd(0.8,2.4),rnd(-1.4,1.4),rnd(0.45,0.9),0.15,rnd(0.6,1.3),0.26,7,1.2)}}
 let accArc=0,accHandF=0,accVap=0,accLip=0,accWW=0,accCurl=0,accSpr=0,accLand=0,accBall=0,accFm=0,accJet=0,accPile=0,accSecF=0,accCloud=0,accSkirt=0,accEndC=0;const JETS=[];
 function emitWave(dt){
-  const pw=game.Hbase;
+  const pw=game.Hbase*(qLevel>=7?0.55:qLevel>=5?0.78:1);   /* 2026-11-17 on the lower picture levels the wave's own mist and white water are thinned out as well (the spray off the board is not): they are big soft sprites drawn over each other, the heaviest thing left for a slow graphics chip */
   accLip+=2100*dt*pw;   /* the offshore wind combing the crest: a veil of fine water torn off low and blown back flat, in gusts along the line */
   {const nk=1-0.35*TOD.value;while(accLip>=1){accLip--;const s=rnd(0.3,56),i=Math.round(colIndex(s)),w=colW[i];if(Math.random()>w*1.1)continue;
     const g=0.6+0.4*Math.sin(s*0.21+game.t*1.7)*Math.sin(s*0.057-game.t*0.6);
@@ -1983,7 +2003,7 @@ const SEC_BY={1:SEC.map(C=>({...C})),
   5:[{t0:6.5,c0:24,v:4.6,h:7,k:1},{t0:9.5,c0:24,v:4.4,h:7,k:1},{t0:12.5,c0:24,v:4.4,h:6.5,k:1},{t0:14.5,c0:20,v:2.6,h:7,k:2}],
   6:[{t0:7.5,c0:34,v:4.6,h:7,k:1},{t0:14,c0:36,v:4.4,h:6.8,k:1},{t0:19.5,c0:46,v:1.5,h:10.5,k:0,d:7.5,fol:1}],
   7:[{t0:7,c0:2,v:-1.5,h:7,k:1,d:8},{t0:17,c0:2,v:-1.8,h:8,k:1,d:8},{t0:27,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:37,c0:2,v:-1.9,h:8,k:1,d:8},{t0:47,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:57,c0:2,v:-1.8,h:8,k:1,d:8},{t0:67,c0:2,v:-1.7,h:8,k:1,d:8}]};   /* surges of heavy white water rolling out from the curl and chasing him down the line, one every ten seconds */   /* Campeche Rights: open walls to turn on, two sections to hit, the dry barrel only at the end */   /* Campeche Rights: a long right, five sections to turn on down the wall, and the dry barrel only at the end */   /* Trestles: a 20 s crumbling peak, no barrel at any point: sections to hit and float, the junction to finish */
-function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];{const T=TUBE[SPOT.id]||{};TUBE_W=T.tw||1;TUBE_SP=T.sp||0}{const wn=document.getElementById('waveNow');if(wn)wn.textContent=SPOT.name}SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
+function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];{const T=TUBE[SPOT.id]||{};TUBE_W=T.tw||1;TUBE_SP=T.sp||0}VMAX=clamp(11.4+3.2*(SPOT.hK||1),13.6,15.5);{const wn=document.getElementById('waveNow');if(wn)wn.textContent=SPOT.name}SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
   PROG.spot=SPOT.id;progSave();if(game.nightPref===undefined)game.nightPref=game.night;setTOD(SPOT.id===1?game.nightPref:0,SPOT.id===1);   /* night only at the pool */
   {const t=document.querySelector('.wzS[data-s="3"] .tod');if(t)t.style.display=SPOT.id===1?'':'none'}if(typeof progUI==='function')progUI()}
 /* Pororoca: the tidal bore of the Amazon. A brown river a few hundred metres wide between two walls of rainforest; the wave comes up the river with no
@@ -2499,7 +2519,7 @@ function prof(k,u){for(let i=1;i<k.length;i++)if(u<=k[i][0]){const a=k[i-1],b=k[
 class Tube{
   constructor(R,S,mat,rx,rzP,rzN,colFn,shapeFn){
     this.R=R;this.S=S;this.C=[];this.rx=new Float32Array(R);this.rzP=new Float32Array(R);this.rzN=new Float32Array(R);this.m=new Float32Array(R*S).fill(1);
-    this.refA=new V3(1,0,0);this.refB=new V3(1,0,0);
+    this.refA=new V3(1,0,0);this.refB=new V3(1,0,0);this.cj=new Float64Array(S);this.sj=new Float64Array(S);for(let j=0;j<S;j++){this.cj[j]=Math.cos(2*PI*j/S);this.sj[j]=Math.sin(2*PI*j/S)}
     const n=R*S;this.pos=new Float32Array(n*3);this.nor=new Float32Array(n*3);const col=new Float32Array(n*3),c=new THREE.Color(),idx=[];
     for(let i=0;i<R;i++){const u=i/(R-1);this.C.push(new V3);this.rx[i]=rx(u);this.rzP[i]=rzP(u);this.rzN[i]=(rzN||rzP)(u);
       for(let j=0;j<S;j++){colFn(u,j/S,c);
@@ -2519,7 +2539,7 @@ class Tube{
       let ax=lerp(this.refA.x,this.refB.x,u),ay=lerp(this.refA.y,this.refB.y,u),az=lerp(this.refA.z,this.refB.z,u);
       const dp=ax*tx+ay*ty+az*tz;ax-=tx*dp;ay-=ty*dp;az-=tz*dp;const al=Math.sqrt(ax*ax+ay*ay+az*az)||1;ax/=al;ay/=al;az/=al;
       const bx=ty*az-tz*ay,by=tz*ax-tx*az,bz=tx*ay-ty*ax,ex=this.rx[i];
-      for(let j=0;j<S;j++){const an=2*PI*j/S,mm=M[i*S+j],ca=Math.cos(an)*ex*mm,sa=Math.sin(an),se=sa*(sa>=0?this.rzP[i]:this.rzN[i])*mm,k=(i*S+j)*3;
+      const cj=this.cj,sj=this.sj,rP=this.rzP[i],rN=this.rzN[i];for(let j=0;j<S;j++){const mm=M[i*S+j],ca=cj[j]*ex*mm,sa=sj[j],se=sa*(sa>=0?rP:rN)*mm,k=(i*S+j)*3;
         P[k]=c.x+ax*ca+bx*se;P[k+1]=c.y+ay*ca+by*se;P[k+2]=c.z+az*ca+bz*se}}
     for(let i=0;i<R;i++){const ip=(i<R-1?i+1:i)*S,im=(i>0?i-1:i)*S;
       for(let j=0;j<S;j++){const jp=(i*S+(j+1)%S)*3,jm=(i*S+(j+S-1)%S)*3,up=(ip+j)*3,dn=(im+j)*3,k=(i*S+j)*3;
@@ -3381,7 +3401,9 @@ $('chMenu').addEventListener('click',e=>{e.stopPropagation();champClose();ptEnd(
 /* a Bluetooth or USB controller (standard mapping): the left stick or the d-pad steer, a button for each move, and the menus driven like a console's:
    d-pad / stick to move between buttons (a gold ring shows where you are), A to press, B to go back, START to go */
 const GP={prev:[],focus:null,rep:0,held:false};
-const gpPad=()=>navigator.getGamepads?[...navigator.getGamepads()].find(p=>p&&p.connected):null;
+/* 2026-11-17 the browser was asked for the gamepads on every frame, twice, building a new list each time. With none plugged in it is now asked twice a second; with one, every frame as before */
+let gpSeen=false,gpAsk=0;addEventListener('gamepadconnected',()=>{gpSeen=true});addEventListener('gamepaddisconnected',()=>{gpAsk=0});
+const gpPad=()=>{if(!navigator.getGamepads)return null;if(!gpSeen){const n=performance.now();if(n<gpAsk)return null;gpAsk=n+500}const l=navigator.getGamepads();for(let i=0;i<l.length;i++){const p=l[i];if(p&&p.connected){gpSeen=true;return p}}gpSeen=false;return null};
 function gpScope(){const op=id=>{const e=document.getElementById(id);return e&&!e.classList.contains('off')?e:null};
   return op('champ')||op('party')||op('manual')||op('wavePick')||op('pick')||op('trophies')||(game.state==='end'&&!$('end').classList.contains('off')?$('end'):null)||(game.attract?document.querySelector('#menu .wz'):null)}
 function gpItems(sc){return [...sc.querySelectorAll('button,input,.wpin,[data-spot]')].filter(e=>{if(e.disabled||e.offsetParent===null)return false;const r=e.getBoundingClientRect();if(r.width<4||r.height<4)return false;const cs=getComputedStyle(e);return cs.visibility!=='hidden'&&+cs.opacity>0.05&&!e.closest('.wzS:not(.on)')})}
@@ -3556,7 +3578,7 @@ function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classLi
 function readInput(){
   let x=((keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0))*(MIRROR?-1:1),y=(keys.ArrowUp||keys.KeyW?1:0)-(keys.ArrowDown||keys.KeyS?1:0);
   let cr=!!keys.Space,stl=!!(keys.ShiftLeft||keys.ShiftRight),cut=!!(keys.AltLeft||keys.AltRight);if(keys.KeyR)y=1;   /* OPTION: the cutback; R: the floater */
-  const gp=navigator.getGamepads?[...navigator.getGamepads()].find(g=>g):null;
+  const gp=gpPad();
   if(gp){const b=i=>!!(gp.buttons[i]&&(gp.buttons[i].pressed||gp.buttons[i].value>0.5));if(Math.hypot(gp.axes[0],gp.axes[1])>0.3){x=gp.axes[0]*(MIRROR?-1:1);y=-gp.axes[1]}
     {const dx=(b(15)?1:0)-(b(14)?1:0),dy=(b(12)?1:0)-(b(13)?1:0);if(dx||dy){x=dx*(MIRROR?-1:1);y=dy}}   /* the d-pad steers too */
     if(b(5))y=1;cr=cr||b(0);stl=stl||b(1)||b(7);cut=cut||b(2)}   /* A crouch / air · B or RT brake, layback · X cutback · RB floater */
@@ -3626,7 +3648,7 @@ function startWave(att){if(!att&&PARTY.on){if(PARTY.done){champShow();return}con
   qQuiet=performance.now()+2000;if(typeof judgeHide==='function')judgeHide();if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6||SPOT.id===12?1:SPOT.id===2||SPOT.id===3||SPOT.id===10||SPOT.id===11||SPOT.id===13?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&SPOT.id!==8&&SPOT.id!==10&&SPOT.id!==13&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
-  try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract){window.__qHold=false;setQuality(qNextWave());qFloor=QL.length-1}   /* every wave starts at its own level, set before it is seen */}catch(e){}if(!att)try{renderer.compile(scene,camera)}catch(e){}   /* every shader the wave will use is built now, under the cut between waves, not in its first seconds */   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
+  try{window.__qHold=false;if(!game.attract){setQuality(qNextWave());qFloor=QL.length-1}   /* every wave starts at its own level, set before it is seen; the menu screen behind it is drawn at whatever this machine holds (it used to be forced to the top level, which even a fast laptop could not keep up with) */}catch(e){}if(!att)try{const rt0=renderer.getRenderTarget();renderer.setRenderTarget(composer.readBuffer);renderer.compile(scene,camera);renderer.setRenderTarget(rt0)}catch(e){}   /* 2026-11-17 built for the off-screen picture the game really draws into: built for the screen (as it was) they were a different set, and the real ones were still being made the first time each thing showed up in the ride */   /* every shader the wave will use is built now, under the cut between waves, not in its first seconds */   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;game.chEnd=-99;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.wo=null;game.woNext=0;game.fin='';game.finale=0;game.exPlan=null;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
   Object.assign(sf,{ko:null,belly:false,pmS:0,pmN:0,pmT:-9,pumpK:0,layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,bsRec:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false,ffU:0,ffArm:0,koVy:0,koDive:0,snapRet:0,pivPrev:0});
@@ -4202,17 +4224,17 @@ function stepRide(dt){
   const ao=Math.abs(sf.om);
   acc+=ao*(2.75*sinA-0.055*sf.V)*(1-sstep(0.2,0.9,Math.abs(Math.sin(sf.slip))));
   {const sth=Math.sin(sf.th),cw=(!sf.rh&&!piv&&!sld&&sf.mode==='ride'&&!game.inTube&&sf.introT<=0&&sf.om>0.5&&Math.cos(sf.th)>-0.3&&sth<0.92)?clamp(sf.om/2.6,0,1)*(1-sstep(0.30,0.55,rel)):0;   /* 2026-11-17 the bottom turn (cavada) drives: low on the face, turning up off the bottom, he sinks onto the rail and pushes through it, so he comes out faster than he went in */
-   if(cw>0&&sf.V<14.2)acc+=cw*(5.4+0.055*sf.V*ao);sf.cavK=Math.max((sf.cavK||0)-dt*1.1,cw);
+   if(cw>0&&sf.V<VMAX-1.3)acc+=cw*(5.4+0.055*sf.V*ao);sf.cavK=Math.max((sf.cavK||0)-dt*1.1,cw);
    if(sth>0&&sf.cavK>0)acc+=G*(0.52-0.24*sstep(0.35,0.85,sth))*sinA*sth*0.5*sf.cavK}   /* ...and that speed projects him up the face: half the climb's cost is paid by the turn for a moment after it */
   if(inp.stall&&!sf.rh)acc-=7.5;
   if(sf.rh)acc+=Math.max(0,7.4-sf.V)*3-Math.max(0,sf.V-(sf.rh.ph?7.6:9.0))*5;
-  if(S.foam>0.05&&sf.mode==='ride'&&!game.inTube){const fk=S.foam*sstep(0.0,0.45,rel+0.35*S.foam);if(fk>0.22){sf.burst=Math.max(sf.burst,0.3*fk);acc+=fk*Math.max(0,15.5-sf.V)*0.9;   /* the white water is the broken wave's energy: wherever it catches him it shoves him on */
-    if(now-sf.foamAt>1.0){sf.foamAt=now;sf.V=Math.min(Math.max(sf.V*1.16,sf.V+1.6),15.5);A.impact=Math.max(A.impact,0.35);A.crouch.v+=0.8}}}   // and the moment it hits him, a jolt forward
+  if(S.foam>0.05&&sf.mode==='ride'&&!game.inTube){const fk=S.foam*sstep(0.0,0.45,rel+0.35*S.foam);if(fk>0.22){sf.burst=Math.max(sf.burst,0.3*fk);acc+=fk*Math.max(0,VMAX-sf.V)*0.9;   /* the white water is the broken wave's energy: wherever it catches him it shoves him on */
+    if(now-sf.foamAt>1.0){sf.foamAt=now;sf.V=Math.min(Math.max(sf.V*1.16,sf.V+1.6),VMAX);A.impact=Math.max(A.impact,0.35);A.crouch.v+=0.8}}}   // and the moment it hits him, a jolt forward
   if(mag<=0.3&&!piv&&sf.s>24)acc-=Math.min(4,(sf.s-24)*0.4);
   if(sf.glideT>0){acc+=5.0*Math.min(1,sf.glideT/0.3);sf.glideT=Math.max(0,sf.glideT-dt)}   // ...and the drop gives the speed back
   if(piv)sf.snapT=now;else if(now-(sf.snapT||-9)>1.6)sf.preV=sf.V;
   if(now-(sf.snapT||-9)<1.6&&sf.preV>0)acc-=Math.max(0,sf.V-(sf.preV+0.4))*5;   /* off the top he comes back down at the speed he went up with, not a dive that runs away */
-  sf.V=clamp(sf.V+acc*dt,1.8,15.5);
+  sf.V=clamp(sf.V+acc*dt,1.8,VMAX);
   if(sf.cv&&sf.cv.ph===1)sf.V=Math.min(sf.V,Math.max(sf.cv.v1,7.5)+0.4);   /* the arc holds the speed he brought to it */
   const st=Math.sin(sf.th),ct=Math.cos(sf.th);
   if(sf.c360){const C=sf.c360;C.t+=dt;if(!C.up)C.acc+=Math.abs(wrapPi(sf.th-C.pth));C.pth=sf.th;if(C.acc>=2*PI-0.15){sf.c360=null;sf.lastTop=now;sf.rhHold=now+0.8;const pt=1500+sf.V*45;award('Carve 360',pt);reqShot('Carve 360',pt,0)}else if(C.t>4.5)sf.c360=null}
@@ -4580,11 +4602,14 @@ function boardSpray(dt){
   accSpr+=(inten*2700*lerp(0.55,1,lowK)+btK*1900+(sf.V>4?80:0))*dt;
   while(accSpr>=1){accSpr--;const r=Math.random(),r2=Math.random();
     const rs=sg*0.22,tx=sf.pos.x-sf.f.x*(0.6+r*0.3)+sf.right.x*rs,ty=sf.pos.y-sf.f.y*(0.6+r*0.3)+sf.right.y*rs,tz=sf.pos.z-sf.f.z*(0.6+r*0.3)+sf.right.z*rs;   /* off the working rail, not the middle of the tail */
-    const stp=sstep(0.35,0.9,1-Math.abs(sf.up.y))*sstep(0.35,0.7,rel),un=(0.5+r2*r2*2.4*k)*lowK*(1-0.85*stp),sd=sg*(1.1+r*4.6)*k*(1-0.4*stp),bk=-(0.8+r2*2.0),upf=rel>0.6?(0.9+r*2.4)*k:0,fan=(2.0+r2*4.4)*k*stp;   /* low and close: a fan, not a column */   /* lower and closer than it was: the fan stays near him */
-    emit(tx,ty,tz,sf.up.x*un+sf.right.x*sd+sf.f.x*bk-CP*0.3+S.tp.x*fan,sf.up.y*un+sf.right.y*sd+sf.f.y*bk+upf*0.7+S.tp.y*fan+(0.5+r*1.2)*k*stp+btK*(1.6+r2*3.6),sf.up.z*un+sf.right.z*sd+sf.f.z*bk-upf*0.55+S.tp.z*fan-1.5*k*stp,
+    const stp=sstep(0.35,0.9,1-Math.abs(sf.up.y))*sstep(0.35,0.7,rel),un=(0.5+r2*r2*2.4*k)*lowK*(1-0.85*stp),sd=sg*(1.1+r*4.6)*k*(1-0.4*stp),bk=-(0.8+r2*2.0),upf=rel>0.6?(0.9+r*2.4)*k:0,kv=Math.min(k,1.25),fan=(1.6+r2*2.4)*kv*stp,wd=(Math.random()-0.5)*5.2*kv*stp;   /* (kv: a harder hit throws more water, not water three times faster) */   /* 2026-11-17 a snap at the lip threw its water straight up in a column two or three times the height of the wave; now it goes about half as high and opens sideways and over the back: a fan */   /* low and close: a fan, not a column */   /* lower and closer than it was: the fan stays near him */
+    /* 2026-11-17 no drop leaves faster than about 8 m/s straight up (the rail's own "sideways" points at the sky in a vertical snap, and the water used to go up in a column two or three times the height of the wave); what is taken off the height goes into the width of the fan */
+    let vx=sf.up.x*un+sf.right.x*sd+sf.f.x*bk-CP*0.3+S.tp.x*fan+wd,vy=sf.up.y*un+sf.right.y*sd+sf.f.y*bk+upf*(0.7-0.25*stp)+S.tp.y*fan+(0.4+r*0.8)*kv*stp+btK*(1.6+r2*3.6),vz=sf.up.z*un+sf.right.z*sd+sf.f.z*bk-upf*0.55+S.tp.z*fan-(1.5+2.2*r2)*kv*stp;
+    {const vm=4.6+2.8*r2;if(vy>vm){const ex=vy-vm;vy=vm;vx+=(r-0.5)*ex*1.3;vz-=ex*0.4}}
+    emit(tx,ty,tz,vx,vy,vz,
       rnd(0.35,0.9)*lerp(0.7,1,lowK),0.06,(rnd(0.22,0.5)+k*0.16)*lerp(0.7,1,lowK),lerp(0.22,0.30,lowK),7.5,1.0);
-    if(r<0.13*k)emit(tx,ty+0.1,tz,(sf.up.x*un+sf.right.x*sd)*0.50+sf.f.x*bk*0.5-CP*0.3,(sf.up.y*un+sf.right.y*sd)*0.45+0.25,(sf.up.z*un+sf.right.z*sd)*0.45+sf.f.z*bk*0.5,rnd(0.7,1.2),rnd(0.3,0.5),rnd(0.9,1.7),0.14,1.8,1.5,1);
-    if(r2<0.22*k){const q=0.55+0.40*r;emit(tx,ty+0.04,tz,(sf.up.x*un+sf.right.x*sd)*q+sf.f.x*bk*0.6-CP*0.3,(sf.up.y*un+sf.right.y*sd)*q+0.35+0.6*k,(sf.up.z*un+sf.right.z*sd)*q+sf.f.z*bk*0.6,rnd(0.45,0.8),0.10,rnd(0.35,0.75),rnd(0.42,0.6),9.5,0.7,1)}}}   /* and with the spray, chunks of real water: churned, heavy, falling back fast like the top of a breaking crest */   /* the fan gets a body: a soft cloud of mist filling it out, thicker than smoke, hanging after the spray */
+    if(r<0.13*k)emit(tx,ty+0.1,tz,(sf.up.x*un+sf.right.x*sd)*0.50+sf.f.x*bk*0.5-CP*0.3,Math.min((sf.up.y*un+sf.right.y*sd)*0.45+0.25,3.2),(sf.up.z*un+sf.right.z*sd)*0.45+sf.f.z*bk*0.5,rnd(0.7,1.2),rnd(0.3,0.5),rnd(0.9,1.7),0.14,1.8,1.5,1);
+    if(r2<0.22*k){const q=0.55+0.40*r;emit(tx,ty+0.04,tz,(sf.up.x*un+sf.right.x*sd)*q+sf.f.x*bk*0.6-CP*0.3+(r-0.5)*2.0*kv*stp,Math.min((sf.up.y*un+sf.right.y*sd)*q+0.35+0.6*k,6.4),(sf.up.z*un+sf.right.z*sd)*q+sf.f.z*bk*0.6-1.2*kv*stp,rnd(0.45,0.8),0.10,rnd(0.35,0.75),rnd(0.42,0.6),9.5,0.7,1)}}}
 
 /* ───────────────────────── camera ───────────────────────── */
 const camP=new V3(18,1.8,13),camL=new V3(4,1.6,0),cT1=new V3,cT2=new V3;let camBlend=0,camFov=30,camInit=false,camFocus=20,lastShot='',camShotT=9,blendFrom='',blendDur=1.2,camRP=3.2,camRL=7,camGP=0;const _oT1=new V3,_oT2=new V3;
@@ -4751,35 +4776,45 @@ addEventListener('resize',resize);resize();
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
 const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return c?Math.min(devicePixelRatio,2.25):Math.min(Math.max(devicePixelRatio,1.5),2.0)})();   /* sharper ceiling: a computer with a plain 1x screen draws at up to 1.5x and scales down (clean edges), a Retina screen at its full 2x; a phone uses up to 2.25x of its own pixels. The controller below still only climbs there while the frame rate holds */
-const QL=[[2.5,true,4],[2.0,false,4],[1.75,false,2],[1.5,false,2],[1.5,false,0],[1.25,false,0],[1.1,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0]];let qQuiet=0,qLockT=0,qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2,qRB=0,qRO=0,qRideL=(()=>{try{const v=parseInt(localStorage.getItem('playsurf_q'),10);if(v>=0&&v<QL.length)return v}catch(e){}return null})();const qBuf=[];
+const QL=[[2.0,true,4],[2.0,false,0],[1.75,false,0],[1.5,false,0],[1.3,false,0],[1.15,false,0],[1.0,false,0],[0.9,false,0],[0.8,false,0],[0.7,false,0]];   /* 2026-11-17 resolution, depth of field in replays, multisampling. Multisampling only at the very top: on a fast laptop it cost as much as the whole rest of the frame */
+const QCOARSE=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})(),QKEY='playsurf_q2';let qQuiet=0,qLockT=0,qLevel=3,qSum=0,qN=0,qWin=0,qCool=3,qBack=3,qUp=0,qLock=false,qProbe=null,qFloor=QL.length-1,qFloorT=0,qWarm=2,qRB=0,qRO=0,qRideL=(()=>{try{const v=parseInt(localStorage.getItem(QKEY),10);if(v>=0&&v<QL.length)return v}catch(e){}return null})();const qBuf=[];
 /* 2026-11-17 the picture is set once, before each wave, and stays the same right through the ride (it used to start soft and sharpen in steps mid-ride, which read as the game blurring and loading).
    The ride itself is the test: frames dropped in it make the next wave one step softer; a ride that held comfortably lets the next one try a step sharper. The level is remembered between visits. */
-function qNextWave(){let L=qRideL===null?Math.max(qLevel,(()=>{try{return matchMedia('(pointer:coarse)').matches?4:2}catch(e){return 2}})()):qRideL;
-  if(qRB>=2){L=Math.min(QL.length-1,L+1);qLock=true;qLockT=40}else if(qRO>=6&&!qLock&&L>0)L--;
-  qRB=qRO=0;qRideL=L;try{localStorage.setItem('playsurf_q',String(L))}catch(e){}return L}
+/* 2026-11-17 (b) the level is found on the menu screen, which draws the same wave: it climbs there while frames hold and drops at once when they do not, so the first wave already starts where this machine is comfortable.
+   In a ride it never gets sharper, but it does get softer the moment frames drop (a second of slow frames, not a whole wave of them). Trying a sharper level is left to the menu and the replay, where a stumble does not matter. */
+function qNextWave(){qRB=qRO=0;return qLevel}
+function qSave(){if(qRideL!==qLevel){qRideL=qLevel;try{localStorage.setItem(QKEY,String(qLevel))}catch(e){}}}
 function setQuality(l){l=clamp(l,0,QL.length-1);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=scenePass.ms.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0){scenePass.ms.samples=sm;scenePass.ms.dispose()}
+  bloom.enabled=l<=7;   /* the two lowest levels go without the glow as well */
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
-setQuality((()=>{try{return matchMedia('(pointer:coarse)').matches?4:3}catch(e){return 3}})());   /* start light and climb: frames first, sharpness when there is room */
+/* a first visit starts from a guess by the name of the graphics chip (a strong one a step sharper, built-in laptop graphics two steps softer), so the first seconds are neither a slide show nor soft for nothing; from there the controller finds the real level */
+const QDEF=(()=>{let t=1;try{const gl=renderer.getContext(),e=gl.getExtension('WEBGL_debug_renderer_info'),r=String(e?gl.getParameter(e.UNMASKED_RENDERER_WEBGL):'');
+  if(/Apple M\d|RTX|GTX 1\d{3}|GTX 9[6-9]0|Radeon RX|Radeon Pro|Arc\(TM\) A\d/i.test(r))t=2;else if(/Intel|UHD|HD Graphics|Iris|Mali|Adreno \(TM\) [1-5]\d\d|PowerVR|SwiftShader|llvmpipe|Basic Render/i.test(r))t=0}catch(e){}
+  return QCOARSE?(t===0?6:5):(t===2?3:t===1?4:6)})();
+setQuality(qRideL===null?QDEF:qRideL);   /* where this machine settled last time, or the first guess */
 // one step down that really changes something (on a 1x screen several levels share the same resolution)
-function qStepDown(){const l0=qLevel;for(let l=l0+1;l<=qFloor;l++)if(setQuality(l))return true;setQuality(l0);return false}
+function qStepDown(n){const l0=qLevel;let ok=false;n=n||1;for(let l=l0+1;l<=qFloor&&n>0;l++)if(setQuality(l)){ok=true;n--}if(!ok)setQuality(l0);return ok}   /* n steps that each change something */
 function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.visibilityState!=='visible'||TR.on||performance.now()<qQuiet){qBuf.length=0;qWin=0;return}   /* a wave starting or a cut between waves is not the machine being slow */
-  qBuf.push(ms);qWin+=ms;if(qWin<(qProbe?3000:1500))return;
+  const inRide=game.state==='ride'&&!game.attract&&!game.replay;
+  qBuf.push(ms);qWin+=ms;if(qWin<(qProbe?(inRide?1300:2000):(inRide?1000:1500)))return;   /* in a ride it decides within a second */
   qBuf.sort((a,b)=>a-b);const k=Math.max(1,Math.floor(qBuf.length*0.9));let sum=0;for(let i=0;i<k;i++)sum+=qBuf[i];const avg=sum/k;qBuf.length=0;qWin=0;   // the slowest 10% (a wave starting, a burst of spray) would make every judgement noisy
   if(qWarm>0){qWarm--;return}                                // the first seconds compile shaders and fill buffers
   if(qFloorT>0&&--qFloorT===0)qFloor=QL.length-1;            // every ~30 s, allow one more try at going lower
   if(qLock&&--qLockT<=0){qLock=false;qBack=3;qCool=3}   /* the lock on going sharper wears off after about a minute: the picture no longer only ever gets softer the longer one plays */
   const slow=avg>T*1.10;
   if(qProbe){const p=qProbe;qProbe=null;                    // the last step down: did it actually buy anything?
-    if(slow&&avg>p.avg*0.96){setQuality(p.l);qFloor=p.l;qFloorT=20;qCool=qBack;qUp=0;return}}   // no: resolution is not what limits this machine, so take the sharpness back and stop lowering
+    if(slow&&avg>p.avg*0.96){const r=renderer.getPixelRatio()/p.pr;   /* 2026-11-17 not yet, but on a 60 Hz screen a frame that went from 30 ms to 22 ms still shows as 33: one step proves nothing. It keeps going down until over half the pixels are gone, and only then decides */
+      if(r*r>0.45&&qLevel<qFloor&&qStepDown(avg>T*1.45?2:1)){qProbe=p;qCool=qBack;qUp=0;qSave();return}
+      setQuality(p.l);qFloor=p.l;qFloorT=20;qCool=qBack;qUp=0;qSave();return}}   // no: resolution is not what limits this machine, so take the sharpness back and stop lowering
   // cadence: one refresh less per frame when the screen keeps coming back early; one more before the picture gets soft
   if(cadHold>0)cadHold--;const cadOk=prN>=30&&prOk>=prN*0.95;prOk=prN=0;
   if(!slow&&!qProbe&&cadN>nMin&&cadHold<=0&&cadOk&&qLevel<=6){   // a faster cadence only while the picture stays sharp
    cadN--;cadHold=4;qCool=Math.max(qCool,3);return}
-  if(slow&&!qProbe&&(qLevel>=5||qLevel>=qFloor)&&(cadN+1)*rafD<=21.5){cadN++;cadHold=cadBack;cadBack=Math.min(cadBack*2,40);qLock=false;qFloor=QL.length-1;qFloorT=0;qCool=2;qBack=3;return}
-  if(game.state==='ride'&&!game.attract&&!game.replay){if(slow)qRB++;else if(avg<T*1.03)qRO++;qUp=0;return}   /* while a wave is being ridden the picture never changes, softer or sharper: what the ride showed decides the next wave's level */
-  if(slow){if(qUp){qLock=true;qLockT=40}const l0=qLevel;if(qLevel<qFloor&&qStepDown()){qProbe={l:l0,avg};qBack=Math.min(qBack*2,16);qCool=qBack}qUp=0}   // dropping frames: step down, then check it helped
-  else if(avg<T*1.03){qUp=0;if(!qLock&&qLevel>0&&--qCool<0){qUp=setQuality(qLevel-1)?1:0;qCool=qBack}}}  // holding the cadence comfortably: try one step up
+  if(slow&&!qProbe&&(qLevel>=7||qLevel>=qFloor)&&(cadN+1)*rafD<=34){cadN++;   /* 2026-11-17 soft already and still dropping frames: a steady slower cadence (30 a second on a 60 Hz screen) reads far better than a ragged 40-50 */cadHold=cadBack;cadBack=Math.min(cadBack*2,40);qLock=false;qFloor=QL.length-1;qFloorT=0;qCool=2;qBack=3;return}
+  if(inRide){if(slow)qRB++;else if(avg<T*1.03)qRO++}   /* what the ride showed: may the next wave try a step sharper? */
+  if(slow){if(qUp||inRide){qLock=true;qLockT=40}const l0=qLevel;const pr0=renderer.getPixelRatio();if(qLevel<qFloor&&qStepDown(avg>T*1.45?2:1)){qProbe={l:l0,avg,pr:pr0};qBack=Math.min(qBack*2,16);qCool=qBack}qUp=0;qSave()}   // dropping frames: step down (two steps when far off), then check it helped
+  else if(avg<T*1.03){qUp=0;if(!inRide&&!qLock&&qLevel>0&&--qCool<0){qUp=setQuality(qLevel-1)?1:0;qCool=game.attract?Math.min(qBack,1):qBack}else if(!inRide)qSave()}}  // holding the cadence comfortably: try one step up (never in a ride; quicker on the menu, where it is looking for this machine's level)
 
 const shotPool=[],pv=new V3;
 function grab(){const c=renderer.domElement,zoom=1.2;let sw=c.width/zoom,sh=sw*9/16;if(sh>c.height/zoom){sh=c.height/zoom;sw=sh*16/9}
@@ -4790,7 +4825,7 @@ function grab(){const c=renderer.domElement,zoom=1.2;let sw=c.width/zoom,sh=sw*9
 
 /* ───────────────────────── main loop ───────────────────────── */
 const elScore=$('score').querySelector('b'),elSpeed=$('speed').querySelector('b'),elCombo=$('combo'),elTube=$('tube'),elTubeB=elTube.querySelector('b'),elBar=$('wavebar').querySelector('i');
-let last=performance.now(),lastRaf=last,rafD=16.7,cadN=0,cadHold=4,cadBack=6,prPend=false,prOk=0,prN=0,clockT=0,hudAcc=0;
+let last=performance.now(),lastRaf=last,rafD=16.7,cadN=0,cadHold=4,cadBack=6,prPend=false,prOk=0,prN=0,clockT=0,hudAcc=0,hudPts=-1,hudSpd=-1,hudCmb=null,hudTube='',hudBar='';
 const REC_KEYS=['ffU','exV','exT','s','p','V','th','om','rail','steer','lam','lamG','mode','h','vh','spin','spinVis','airT','airDur','th0','pivot','introT','wT','burst','visible','splashed','tube','claimT','slip','fFoam','flip','layT','hit'],
       REC_LERP=['s','p','V','om','rail','steer','lam','lamG','h','vh','spin','spinVis','airT','wT','flip'];
 function frame(nowMs){
@@ -4907,11 +4942,11 @@ function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
   if(game.shotReq){game.shotReq.delay-=dtR;if(game.shotReq.delay<=0&&!(gradePass.uniforms.uWhite.value>0.12&&(game.shotReq.wt=(game.shotReq.wt||0)+dtR)<2.0)){addPhoto(game.shotReq.name,game.shotReq.pts,grab());game.shotReq=null}}
   updateAudio();
   if(hudAcc>0.08){hudAcc=0;document.body.classList.toggle('riding',game.state==='ride'&&!game.attract&&!game.replay);tipTick();
-    elScore.textContent=game.pts.toLocaleString('en-US');elSpeed.textContent=Math.round(sf.V*3.6*GSPD);
-    elCombo.textContent=game.combo>1&&game.waveAge-game.comboT<5.5?'COMBO ×'+(1+0.25*Math.min(game.combo-1,6)):'';
+    if(game.pts!==hudPts){hudPts=game.pts;elScore.textContent=game.pts.toLocaleString('en-US')}{const v=Math.round(sf.V*3.6*GSPD);if(v!==hudSpd){hudSpd=v;elSpeed.textContent=v}}   /* 2026-11-17 the page is only touched when a number really changed */
+    {const c=game.combo>1&&game.waveAge-game.comboT<5.5?'COMBO ×'+(1+0.25*Math.min(game.combo-1,6)):'';if(c!==hudCmb){hudCmb=c;elCombo.textContent=c}}
     $('rep').classList.toggle('on',!!game.replay&&!game.attract);
-    elTube.classList.toggle('on',!!(game.inTube&&sf.tube>0.3&&!game.replay&&game.state==='ride'));elTubeB.textContent=sf.tube.toFixed(1)+'s';
-    elBar.style.transform=`scaleX(${clamp(1-game.waveAge/game.waveDur,0,1)})`}
+    elTube.classList.toggle('on',!!(game.inTube&&sf.tube>0.3&&!game.replay&&game.state==='ride'));{const v=sf.tube.toFixed(1);if(v!==hudTube){hudTube=v;elTubeB.textContent=v+'s'}}
+    {const b=clamp(1-game.waveAge/game.waveDur,0,1).toFixed(3);if(b!==hudBar){hudBar=b;elBar.style.transform=`scaleX(${b})`}}}
 }
 buildWave(0);
 window.__g={BV,DSH,dropFallInit,kidPortrait,BOARDS,BB,bbG,stageG,friendsG,STG,FRN,neonG,RIG,J,RP,A,AT,JETS,DROP,NPCP,npcG,get npcBoard(){return npcBoard},colAEnd,colH,PY,PZ,NV,R_CUR,NC,colIndex,setRider,sheet(n,dt,cols,zoom,yoff,cb){window.__manual=true;const c=renderer.domElement;let o=document.getElementById('sheet');
