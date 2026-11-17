@@ -516,6 +516,73 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
 <script async data-ad-frequency-hint="60s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9543654204689824" crossorigin="anonymous"></script>
 <script>window.adsbygoogle=window.adsbygoogle||[];var adBreak=adConfig=function(o){adsbygoogle.push(o);};</script>
 <style>#seoNav{position:fixed;left:0;right:0;bottom:calc(1px + env(safe-area-inset-bottom,0px));padding:0 12px;text-align:center;font-weight:600;font-size:8px;line-height:1.5;font-family:inherit;letter-spacing:.06em;opacity:1;z-index:5;pointer-events:auto}#seoNav a{color:#15181b;text-decoration:none;margin:0 5px;white-space:nowrap}   /* fine print: almost black, there for whoever looks for it */#seoNav a:hover{text-decoration:underline;color:#3a4147}#seoNav span{color:#1a1d20;margin:0 4px}@media (max-height:420px){#seoNav{display:none}}</style>
+<style id="ptnew">
+/* PARTY SURF set-up, redesigned 2026-11-17: one card on a blurred, darkened screen (the menu behind no longer shows through), the rules as a stat strip, the line-up as a grid of player cards, BACK and LET'S SURF on one footer line */
+#party{background:radial-gradient(120% 90% at 50% 32%,rgba(16,30,66,.82),rgba(2,6,16,.97) 72%);-webkit-backdrop-filter:blur(14px) saturate(1.15);backdrop-filter:blur(14px) saturate(1.15)}
+#party .ptBox{position:relative;width:min(880px,92vw);max-width:none;max-height:92vh;overflow:auto;text-align:left;padding:30px 34px 24px;border-radius:24px;background:linear-gradient(180deg,rgba(22,36,74,.95),rgba(8,14,34,.97));border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 90px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);scrollbar-width:none}
+#party .ptBox::-webkit-scrollbar{display:none}
+body.touch #party .ptBox{width:min(880px,calc(100vw - 128px))}   /* on a phone the card keeps clear of the full-screen button in the corner */
+#party .ptBox::before{content:'';position:absolute;left:34px;right:34px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--ps-grad)}   /* the brand stripe along the top edge */
+#party .ptHead{justify-content:flex-start;gap:16px;margin:0 0 20px}
+#party .ptIco{width:58px;height:58px;border-radius:17px}#party .ptIco svg{width:36px;height:36px}
+#party .ptHead small{font-size:10px;letter-spacing:.34em;opacity:.7;margin-bottom:8px}
+#party .ptHead h3{font-size:clamp(30px,4vw,44px);line-height:.95;letter-spacing:.04em}
+#party .ptRules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 0 24px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);overflow:hidden}
+#party .ptRules span{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:13px 18px 14px;border:0;border-radius:0;background:none;font:800 9px/1.2 var(--ps-f);font-style:italic;letter-spacing:.22em}
+#party .ptRules span+span{border-left:1px solid rgba(255,255,255,.08)}
+#party .ptRules b{display:block;width:auto;height:auto;border-radius:0;background:var(--ps-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font:900 26px/1 var(--ps-f);font-style:italic;letter-spacing:0}
+#party .ptRules em{font-style:italic;opacity:.72}
+#party .ptN{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 12px}
+#party .ptNt small{display:block;font:800 9px/1 var(--ps-f);font-style:italic;letter-spacing:.34em;opacity:.5;margin-bottom:7px}
+#party .ptNt span{font:900 15px/1 var(--ps-f);font-style:italic;letter-spacing:.14em;opacity:1}
+#party #ptCount{padding:4px;border-radius:14px;background:rgba(2,6,16,.6);border:1px solid rgba(255,255,255,.12)}
+#party #ptCount button{width:46px;height:40px;font-size:19px;color:rgba(255,255,255,.7)}#party #ptCount button:hover{color:#fff}#party #ptCount button.on{color:var(--ps-navy)}
+#party .ptList{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#party .ptRow{min-height:66px;padding:10px 12px 10px 14px;gap:14px;border-radius:16px;background:linear-gradient(100deg,color-mix(in srgb,var(--pc) 17%,rgba(255,255,255,.03)),rgba(255,255,255,.03) 58%);border:1px solid rgba(255,255,255,.09)}
+#party .ptRow::before{display:none}   /* the colour is on the jersey tile and the card's tint: no side tab */
+#party .ptRow:focus-within{border-color:color-mix(in srgb,var(--pc) 75%,#fff);box-shadow:0 0 0 3px color-mix(in srgb,var(--pc) 26%,transparent);transform:none}
+#party .ptRow>.ptJ{width:46px;height:46px;padding:6px 7px;box-sizing:border-box;border-radius:12px;background:color-mix(in srgb,var(--pc) 24%,rgba(2,6,16,.7));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);filter:none}   /* the jersey on its own tile */
+#party .ptNm{gap:6px}#party .ptNm small{font-size:8.5px;letter-spacing:.26em;opacity:.58}
+#party .ptRow input{font:900 18px/1.15 var(--ps-f);font-style:italic;letter-spacing:.05em;padding:2px 0 4px;border:0;border-bottom:1px dashed rgba(255,255,255,.2)}
+#party .ptRow input:focus{border-bottom:1px solid var(--pc)}#party .ptRow input::placeholder{color:rgba(255,255,255,.3)}
+#party .ptSt{padding:3px;border-radius:11px;background:rgba(2,6,16,.65);border:1px solid rgba(255,255,255,.12);cursor:pointer}
+#party .ptSt span{padding:8px 10px;font-size:10.5px;border-radius:8px;color:#fff}#party .ptSt span.on{color:var(--pt,#fff)}
+#party .ptBtns{justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);gap:14px}
+#party .ptHint{font:800 9px/1 var(--ps-f);font-style:italic;letter-spacing:.3em;opacity:.42}
+#party #ptBack{font-size:13px;padding:19px 26px}   /* as tall as LET'S SURF */
+#party #ptGo{font:900 18px/1 var(--ps-f);font-style:italic;letter-spacing:.14em;padding:17px 40px;box-shadow:0 12px 34px rgba(247,90,120,.38)}
+@media (max-height:760px){   /* laptop heights: six surfers and the buttons still fit without scrolling */
+  #party .ptBox{padding:22px 28px 18px}#party .ptBox::before{left:28px;right:28px}
+  #party .ptHead{margin-bottom:12px}#party .ptIco{width:48px;height:48px;border-radius:14px}#party .ptIco svg{width:30px;height:30px}
+  #party .ptHead h3{font-size:clamp(26px,3.4vw,36px)}#party .ptHead small{margin-bottom:6px}
+  #party .ptRules{margin-bottom:14px}#party .ptRules span{flex-direction:row;align-items:center;gap:10px;padding:10px 14px}#party .ptRules b{font-size:20px}
+  #party .ptN{margin-bottom:10px}#party .ptList{gap:8px}
+  #party .ptRow{min-height:54px;padding:7px 10px 7px 12px}#party .ptRow>.ptJ{width:40px;height:40px;padding:5px 6px}
+  #party .ptNm{gap:3px}#party .ptRow input{font-size:16px}
+  #party .ptBtns{margin-top:14px;padding-top:12px}#party #ptBack{padding:14px 22px}#party #ptGo{font-size:16px;padding:15px 34px}
+}
+@media (max-height:540px){
+  #party .ptBox{padding:14px 18px 12px;border-radius:18px;max-height:96vh}#party .ptBox::before{left:18px;right:18px}
+  #party .ptHead{margin-bottom:10px;gap:12px}#party .ptIco{width:38px;height:38px;border-radius:12px}#party .ptIco svg{width:24px;height:24px}
+  #party .ptHead small{font-size:8px;margin-bottom:4px}#party .ptHead h3{font-size:24px}
+  #party .ptRules{display:none}
+  #party .ptN{margin-bottom:8px}#party .ptNt small{display:none}#party .ptNt span{font-size:12px}
+  #party #ptCount{padding:3px;border-radius:11px}#party #ptCount button{width:36px;height:30px;font-size:15px}
+  #party .ptList{gap:6px}
+  #party .ptRow{min-height:0;padding:6px 8px 6px 10px;gap:10px;border-radius:12px}
+  #party .ptRow>.ptJ{width:34px;height:34px;padding:4px 5px;border-radius:9px}
+  #party .ptNm small{display:none}#party .ptRow input{font-size:14px;padding:2px 0 3px}
+  #party .ptSt span{padding:5px 7px;font-size:9px}
+  #party .ptBtns{margin-top:10px;padding-top:10px}#party #ptBack{font-size:11px;padding:12px 16px}#party #ptGo{font-size:14px;padding:11px 24px}
+}
+</style>
+<style id="hudfix">
+/* desktop HUD, 2026-11-17: the HOW TO hints sit at the bottom centre, level with the CAMERA and CHANGE WAVE buttons (they were stacked over CHANGE WAVE on the right); the barrel clock moves up to stay clear of them */
+body:not(.touch) #keys{right:auto;left:50%;bottom:calc(var(--bar,5.5vh) + 1.5vh);text-align:center;transform:translate(-50%,8px)}
+body:not(.touch) #keys.on{transform:translate(-50%,0)}
+body:not(.touch) #tube{bottom:calc(var(--bar,5.5vh) + 1.5vh + 66px)}
+body:not(.touch) #pop{bottom:calc(var(--bar,5.5vh) + 1.5vh + 112px)}   /* the move names start above the GUIDE and CAMERA buttons, never over them */
+</style>
 <style id="mobfix">
 /* phones (touch layout), 2026-11-17: overlaps and cut-offs fixed; these rules come last so they win over the earlier ones */
 body.touch.riding{--bar:0px}   /* no cinema bars while riding on a phone: the whole screen is the wave */
@@ -618,9 +685,9 @@ body.touch .kbOnly{display:none}
     <div class="pkBtns"><button id="pkR" class="pbtn">&#9664; THE RIGHT<em id="pkRs"></em></button><button id="pkL" class="pbtn">THE LEFT &#9654;<em id="pkLs"></em></button></div><p><span class="kbOnly">&#8592; / &#8594; or </span>tap a side · the arrow is the way you'll ride</p></div></div>
   <div id="manual" class="off" role="dialog" aria-modal="true" aria-labelledby="mnT"><div class="trBox mnBox"><div class="ptHead"><i class="ptIco" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M9 10.5A4.5 4.5 0 0 1 13.5 6H39v30H13.5A4.5 4.5 0 0 0 9 40.5z" fill="none" stroke="#fff" stroke-width="3.2" stroke-linejoin="round"/><path d="M9 40.5A4.5 4.5 0 0 0 13.5 45H39v-9M17 15h14M17 22h9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg></i><div><small>GAME PAUSED</small><h3 id="mnT">MANEUVER GUIDE</h3></div></div><p class="wpSub" id="mnSub">Game paused</p><div class="mnGrid" id="mnGrid"></div><button id="mnClose" class="pbtn sm">&#9654; BACK TO THE WAVE</button></div></div>
   <div id="party" class="off" role="dialog" aria-modal="true" aria-labelledby="ptT"><div class="trBox ptBox"><div class="ptHead"><i class="ptIco" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M6 30c4-11 13-18 23-18 6 0 10 3 11 7-4-2-9-1-11 3s0 9 4 11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><path d="M4 38c4 0 5-3 9-3s5 3 9 3 5-3 9-3 5 3 9 3 5-3 6-3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></i><div><small>FRIENDS · ONE DEVICE · TAKE TURNS</small><h3 id="ptT">PARTY SURF</h3></div></div>
-    <div class="ptRules"><span><b>4</b>WAVES EACH</span><span><b>1</b>SAME SPOT</span><span><b>5</b>JUDGES</span><span><b>&#9733;</b>BEST AVERAGE WINS</span></div>
-    <div class="ptN"><span>HOW MANY SURFERS?</span><div id="ptCount" role="radiogroup" aria-label="Number of surfers"></div></div><div class="ptList" id="ptList"></div>
-    <div class="ptBtns"><button id="ptBack" class="pbtn wv sm">&#9664; BACK</button><button id="ptGo" class="pbtn">LET'S SURF &#9654;</button></div></div></div>
+    <div class="ptRules"><span><b>4</b><em>WAVES EACH</em></span><span><b>1</b><em>SAME SPOT</em></span><span><b>5</b><em>JUDGES</em></span><span><b>&#9733;</b><em>BEST AVERAGE WINS</em></span></div>
+    <div class="ptN"><div class="ptNt"><small>THE LINE-UP</small><span>HOW MANY SURFERS?</span></div><div id="ptCount" role="radiogroup" aria-label="Number of surfers"></div></div><div class="ptList" id="ptList"></div>
+    <div class="ptBtns"><button id="ptBack" class="pbtn wv sm">&#9664; BACK</button><span class="ptHint kbOnly">ENTER TO START</span><button id="ptGo" class="pbtn">LET'S SURF &#9654;</button></div></div></div>
   <div id="ptTurn" aria-live="polite"></div>
   <div id="champ" class="off" role="dialog" aria-modal="true" aria-labelledby="chT"><canvas id="chConf"></canvas><div class="chRays" aria-hidden="true"></div><div class="chBox"><div class="chJ">THE JUDGES HAVE DECIDED</div><div class="chTro"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="chG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".5" stop-color="#ffd23a"/><stop offset="1" stop-color="#e08a12"/></linearGradient></defs><path d="M34 14h52v18c0 20-11 34-26 36-15-2-26-16-26-36z" fill="url(#chG)"/><path d="M34 22H18c0 16 8 26 20 28M86 22h16c0 16-8 26-20 28" fill="none" stroke="url(#chG)" stroke-width="7" stroke-linecap="round"/><rect x="54" y="66" width="12" height="18" fill="url(#chG)"/><path d="M38 86h44l6 16H32z" fill="url(#chG)"/><rect x="30" y="102" width="60" height="8" rx="3" fill="#b8650c"/><path d="M60 26l5.4 10.6 11.6 1.4-8.6 7.8 2.4 11.6L60 51.6l-10.8 5.8 2.4-11.6-8.6-7.8 11.6-1.4z" fill="#fff" opacity=".9"/></svg></div>
     <h3 id="chT"><small>CHAMPION</small><b id="chName"></b></h3><div class="chAvg" id="chAvg"></div><div class="chPod" id="chPod"></div><div class="chTable" id="chTable"></div>
@@ -1137,6 +1204,8 @@ function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
       occ=occC*(0.75+0.25*sstep(0.08,0.4,q))}   /* the lip's shade carries on from the flat into the foot of the face: no bright seam, no step at the base of the barrel */
 
     inf[k*4]=arc;inf[k*4+1]=foam;inf[k*4+2]=sss;inf[k*4+3]=occ}
+  if(!isFoam&&TUBE_W!==1){let jv=0;for(let j=1;j<=NQ;j++)if(a[j]>=PI/2){jv=j;break}   /* the barrel's width: past the vertical the lip throws further out (wide) or tucks in, more the more it overhangs, so there is no kink */
+    if(jv>0){const zv=z[NF+jv];for(let j=jv+1;j<=NQ;j++){const k=NF+j;z[k]=zv+(z[k]-zv)*(1+(TUBE_W-1)*sstep(PI/2,PI,a[j]))}}}
   if(fo>0.01&&!isFoam){const hk=sstep(0.3,1,Ht);for(let j=Math.floor(NQ*0.08);j<=NQ;j++){const k=NF+j,q=j/NQ,q0=0.44+0.07*Math.sin(X*1.3+tt*0.9)+0.035*Math.sin(X*3.7-tt*1.5),t1=sstep(q0-0.15,q0+0.15,q),lump=0.5+0.5*Math.sin(q*7+X*0.8+tt*1.3)*Math.sin(X*0.5-tt*0.9),b=fo*t1*(0.55+0.26*lump)*hk;   // a fat roll of foam, about twice as thick; the ramp onto it is as gentle as before
       z[k]+=Math.sin(a[j])*b;y[k]+=Math.cos(a[j])*b*0.7;
       const up_=sstep(q0-0.30,q0-0.06,q);inf[k*4+1]=Math.max(inf[k*4+1],fo*(0.97*up_+0.84*sstep(0.03,0.20,q)*(1-up_)));inf[k*4+2]*=1-0.6*fo*Math.max(t1,0.75*sstep(0.03,0.2,q))}}   /* a foam section is white over most of the face: the wave breaks high on itself and the white water piles down the face, like the foam at the bottom */
@@ -1188,17 +1257,21 @@ const game={hl:false,showCard:null,waveId:0,cardAt:0,night:0,inTube:false,secAge
 // spots: each one its own wave and scenery; the next one opens when the score at the one before is good enough (more can be added to the list)
 const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st:9,lab:'l',what:'WAVE POOL · ALL ROUND · DAY OR NIGHT',name:'PLAYSURF POOL',full:'PLAYSURF POOL',sub:'WAVE POOL · ALL ROUND',hK:1,eL:1,dur:60},
   {id:2,ll:[-8.815,115.088],loc:'BALI · INDONESIA',dy:4,name:'ULUWATU',full:'ULUWATU',sub:'BALI · LONG LEFT WALLS',hK:1.25,eL:1.75,dur:46,req:{spot:1,nota:5}},
-  {id:4,ll:[9.80,126.17],loc:'SIARGAO · PHILIPPINES',name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.2,dur:30,req:{spot:2,nota:6}},
+  {id:4,ll:[9.80,126.17],loc:'SIARGAO · PHILIPPINES',name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.35,dur:30,req:{spot:2,nota:6}},
   {id:3,ll:[21.665,-158.05],loc:'OAHU · HAWAII',dy:7,name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · PIPE & BACKDOOR',hK:1.35,eL:2.0,dur:28,req:{spot:4,nota:6.5}},
   {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',dy:-7,short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
   {id:6,ll:[-27.67,-48.47],loc:'FLORIANÓPOLIS · BRAZIL',lean:38,st:9,short:'CAMPECHE',name:'CAMPECHE RIGHTS',full:'CAMPECHE RIGHTS',sub:'FLORIANÓPOLIS · LONG RIGHT',hK:0.86,eL:0.8,dur:30,req:{spot:5,nota:7}},
   {id:7,ll:[-1.68,-47.77],loc:'PARÁ · AMAZON, BRAZIL',name:'POROROCA',full:'POROROCA',sub:'AMAZON · RIVER BORE',hK:1.3,eL:0.6,dur:85,crumble:1,fat:1},
   {id:8,ll:[63.83,-21.37],loc:'ÞORLÁKSHÖFN · ICELAND',name:'ÞORLÁKSHÖFN',full:'ÞORLÁKSHÖFN',sub:'ICELAND · LEFTS & RIGHTS',what:'ARCTIC PEAK · LEFTS & RIGHTS · 4 °C WATER · FULL RUBBER',hK:1.15,eL:1.6,dur:30,req:{spot:6,nota:7}},
   {id:9,ll:[39.35,-9.37],loc:'PENICHE · PORTUGAL',lab:'l',name:'SUPERTUBOS',full:'SUPERTUBOS',sub:'PORTUGAL · HEAVY BEACH BREAK',what:'SAND-BOTTOM PEAK · LEFTS & RIGHTS · SHORT, HEAVY BARRELS · FULLSUIT',hK:1.15,eL:1.6,dur:24,req:{spot:8,nota:7}},
-  {id:10,ll:[-22.69,14.52],loc:'SKELETON COAST · NAMIBIA',dy:-7,name:'SKELETON BAY',full:'SKELETON BAY',sub:'NAMIBIA · ENDLESS LEFT BARREL',what:'DESERT SAND POINT · ONE BARREL AFTER ANOTHER · FOG AND COLD WATER',hK:1.05,eL:1.8,dur:60,req:{spot:9,nota:7}},
+  {id:10,ll:[-22.69,14.52],loc:'SKELETON COAST · NAMIBIA',dy:-7,name:'SKELETON BAY',full:'SKELETON BAY',sub:'NAMIBIA · ENDLESS LEFT BARREL',what:'DESERT SAND POINT · ONE BARREL AFTER ANOTHER · FOG AND COLD WATER',hK:1.05,eL:1.8,dur:66,req:{spot:9,nota:7}},
   {id:11,ll:[-2.75,100.13],loc:'MENTAWAI · INDONESIA',lab:'l',dy:-8,name:'GREENBUSH',full:'GREENBUSH',sub:'MENTAWAI · HEAVY LEFT SLAB',what:'SHALLOW CORAL · THICK-LIPPED BARREL · EXPERTS ONLY',hK:1.3,eL:2.0,dur:24,req:{spot:10,nota:7}},
   {id:12,ll:[-34.03,24.93],loc:'EASTERN CAPE · SOUTH AFRICA',dy:6,short:'J-BAY',name:'JEFFREYS BAY',full:'JEFFREYS BAY',sub:'SOUTH AFRICA · SUPERTUBES',what:'LONG RIGHT POINT · FAST WALLS AND THE SUPERTUBES BARREL · FULLSUIT',hK:1.05,eL:1.4,dur:50,req:{spot:11,nota:7}},
   {id:13,ll:[-7.70,-79.45],loc:'LA LIBERTAD · PERU',lab:'l',name:'CHICAMA',full:'CHICAMA',sub:'PERU · LONGEST LEFT',what:'DESERT POINT · THE LONGEST LEFT IN THE WORLD · ENDLESS WALLS',hK:0.75,eL:0.8,dur:80,req:{spot:12,nota:7}}];
+/* each wave's barrel, true to the real one: tw = how far the lip throws out from the face (the tube's width: Pipeline and Greenbush wide and round, Supertubos and Cloud 9 thick and short, the point breaks tighter),
+   sp = how hard the barrel spits, the "baforada" (0 = a wave that never barrels: Trestles, the bore) */
+const TUBE={1:{tw:1.0,sp:0.35},2:{tw:1.04,sp:0.5},3:{tw:1.30,sp:1.0},4:{tw:1.14,sp:0.75},5:{tw:1.0,sp:0},6:{tw:1.04,sp:0.5},7:{tw:1.0,sp:0},8:{tw:1.10,sp:0.6},9:{tw:1.20,sp:0.85},10:{tw:1.06,sp:0.85},11:{tw:1.32,sp:1.0},12:{tw:1.02,sp:0.65},13:{tw:1.0,sp:0.3}};
+let TUBE_W=1,TUBE_SP=0.35;
 const CLOSE_SPOTS=[3,4,8,9,11];   /* the waves that end in one block of closeout: Pipeline, Cloud 9, Þorlákshöfn, Supertubos, Greenbush */   /* Iceland's best-known wave: a heavy right off the harbour wall near Reykjavík, snow on the black mountains behind, surfed in hood, gloves and boots */   /* the Amazon tidal bore: a very long, thick, clean river wall; heavy white water keeps rolling out from the curl after him, and nothing else */   /* the Amazon tidal bore: no barrel, one long, strong wall of white water, made for turns */
 let SPOT=SPOTS[0];
 function wallLen(X){return 48+5*(Math.sin(X*0.043+1.3)*0.6+Math.sin(X*0.105+4.1)*0.4)}
@@ -1892,14 +1965,14 @@ const SEC_BY={1:SEC.map(C=>({...C})),
   4:[{t0:6.2,c0:46,v:2.0,h:9,k:0,d:5,fol:1},{t0:11.6,c0:27,v:4.9,h:9.2,k:1},{t0:20.0,c0:38,v:2.6,h:8.6,k:2}],   /* Cloud 9: a right, ~30 s: the barrel off the drop, one clean ramp for an air, then an open wall with no sections for two or three turns, the junction for one big last hit, and it all closes out in one block of white water */
   8:[{t0:6.4,c0:46,v:2.0,h:9.5,k:0,d:5,fol:1},{t0:11.8,c0:28,v:4.8,h:9.2,k:1},{t0:15.6,c0:30,v:4.6,h:7.8,k:1},{t0:19.4,c0:34,v:4.4,h:7.4,k:1},{t0:21.6,c0:40,v:2.6,h:8.8,k:2}],   /* Þorlákshöfn: a dark, cold right, ~30 s: the barrel off the drop, a ramp, foam sections one after the other, the junction, and it all closes out white */
   9:[{t0:5.5,c0:46,v:1.6,h:11,k:0,d:5,fol:1},{t0:12,c0:30,v:4.8,h:8.5,k:1},{t0:15.5,c0:44,v:1.8,h:10,k:0,d:3.5,fol:1},{t0:19.5,c0:30,v:2.6,h:8,k:2}],   /* Supertubos: a heavy sand-bottom peak, ~24 s: the barrel off the drop, a section to hit, a second short barrel, the junction, then it shuts down in one block */
-  10:[{t0:5,c0:46,v:1.8,h:10,k:0,d:6,fol:1},{t0:13,c0:44,v:1.8,h:9.5,k:0,d:6,fol:1},{t0:21,c0:44,v:1.6,h:9.5,k:0,d:6.5,fol:1},{t0:30,c0:46,v:1.8,h:10,k:0,d:6,fol:1},{t0:38,c0:32,v:4.6,h:8,k:1},{t0:43,c0:44,v:1.8,h:9.5,k:0,d:6,fol:1},{t0:52,c0:36,v:2.6,h:8,k:2}],   /* Skeleton Bay: the endless left, ~60 s: one barrel after another down the sand point, a single section to turn on, the junction */
+  10:[{t0:5,c0:46,v:1.8,h:10,k:0,d:8,fol:1},{t0:15,c0:44,v:1.8,h:10,k:0,d:8,fol:1},{t0:25,c0:44,v:1.6,h:10,k:0,d:8.5,fol:1},{t0:35.5,c0:46,v:1.8,h:10.5,k:0,d:8,fol:1},{t0:45,c0:32,v:4.6,h:8,k:1},{t0:50,c0:44,v:1.8,h:9.5,k:0,d:6.5,fol:1},{t0:57,c0:36,v:2.6,h:8,k:2}],   /* Skeleton Bay: the endless left, ~66 s: long barrels one after another down the sand point with only a breath between them, a single section to turn on, the junction */
   11:[{t0:5,c0:46,v:1.3,h:12,k:0,d:7,fol:1},{t0:14,c0:28,v:4.8,h:9,k:1},{t0:17.5,c0:44,v:1.5,h:11,k:0,d:4,fol:1},{t0:21,c0:30,v:2.6,h:8.5,k:2}],   /* Greenbush: a thick-lipped slab, ~24 s: a long heavy barrel off the drop, one section, a second barrel, and the reef shuts it down */
   12:[{t0:7,c0:34,v:4.6,h:7.5,k:1},{t0:12.5,c0:36,v:4.4,h:7.5,k:1},{t0:17,c0:46,v:2.0,h:10,k:0,d:6,fol:1},{t0:25,c0:34,v:4.6,h:7.5,k:1},{t0:30,c0:36,v:4.4,h:7,k:1},{t0:35,c0:44,v:2.2,h:9.5,k:0,d:5,fol:1},{t0:42,c0:40,v:2.6,h:8,k:2}],   /* Jeffreys Bay: a long, fast right, ~50 s: walls to carve, the Supertubes barrel, more walls, the Impossibles barrel, the junction */
   13:[{t0:8,c0:34,v:4.4,h:6.5,k:1},{t0:16,c0:34,v:4.4,h:6.5,k:1},{t0:24,c0:36,v:4.2,h:6.5,k:1},{t0:32,c0:34,v:4.4,h:6.5,k:1},{t0:40,c0:36,v:4.2,h:6.5,k:1},{t0:48,c0:34,v:4.4,h:6.5,k:1},{t0:56,c0:44,v:2.2,h:8.5,k:0,d:5,fol:1},{t0:64,c0:34,v:4.4,h:6.5,k:1},{t0:72,c0:38,v:2.6,h:7.5,k:2}],   /* Chicama: the longest left, ~80 s of soft walls, a section every eight seconds, one barrel near the end */
   5:[{t0:6.5,c0:24,v:4.6,h:7,k:1},{t0:9.5,c0:24,v:4.4,h:7,k:1},{t0:12.5,c0:24,v:4.4,h:6.5,k:1},{t0:14.5,c0:20,v:2.6,h:7,k:2}],
   6:[{t0:7.5,c0:34,v:4.6,h:7,k:1},{t0:14,c0:36,v:4.4,h:6.8,k:1},{t0:19.5,c0:46,v:1.5,h:10.5,k:0,d:7.5,fol:1}],
   7:[{t0:7,c0:2,v:-1.5,h:7,k:1,d:8},{t0:17,c0:2,v:-1.8,h:8,k:1,d:8},{t0:27,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:37,c0:2,v:-1.9,h:8,k:1,d:8},{t0:47,c0:2,v:-1.6,h:7.5,k:1,d:8},{t0:57,c0:2,v:-1.8,h:8,k:1,d:8},{t0:67,c0:2,v:-1.7,h:8,k:1,d:8}]};   /* surges of heavy white water rolling out from the curl and chasing him down the line, one every ten seconds */   /* Campeche Rights: open walls to turn on, two sections to hit, the dry barrel only at the end */   /* Campeche Rights: a long right, five sections to turn on down the wall, and the dry barrel only at the end */   /* Trestles: a 20 s crumbling peak, no barrel at any point: sections to hit and float, the junction to finish */
-function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];{const wn=document.getElementById('waveNow');if(wn)wn.textContent=SPOT.name}SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
+function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];{const T=TUBE[SPOT.id]||{};TUBE_W=T.tw||1;TUBE_SP=T.sp||0}{const wn=document.getElementById('waveNow');if(wn)wn.textContent=SPOT.name}SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
   PROG.spot=SPOT.id;progSave();if(game.nightPref===undefined)game.nightPref=game.night;setTOD(SPOT.id===1?game.nightPref:0,SPOT.id===1);   /* night only at the pool */
   {const t=document.querySelector('.wzS[data-s="3"] .tod');if(t)t.style.display=SPOT.id===1?'':'none'}if(typeof progUI==='function')progUI()}
 /* Pororoca: the tidal bore of the Amazon. A brown river a few hundred metres wide between two walls of rainforest; the wave comes up the river with no
@@ -3246,7 +3319,7 @@ const ptJersey=(c,n,cls)=>{const col=LYC_CSS[c]||c,dark=c==='yellow';return '<sv
 const ptEsc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function ptRender(){$('ptCount').innerHTML=[2,3,4,5,6].map(k=>'<button type="button" role="radio" aria-checked="'+(k===PARTY.n)+'" data-n="'+k+'"'+(k===PARTY.n?' class="on"':'')+' aria-label="'+k+' surfers">'+k+'</button>').join('');
   const L=$('ptList'),old=[...L.querySelectorAll('input')].map(i=>i.value);L.innerHTML='';PARTY.st=PARTY.st||[];
-  for(let i=0;i<PARTY.n;i++){const c=LYC_PARTY[i],r=document.createElement('label');r.className='ptRow';r.style.setProperty('--pc',LYC_CSS[c]);r.innerHTML=ptJersey(c,i+1)+'<span class="ptNm"><small>SURFER '+(i+1)+' · '+c.toUpperCase()+'</small><input maxlength="14" autocomplete="off" spellcheck="false" aria-label="Name of surfer '+(i+1)+'" placeholder="NAME"></span><button type="button" class="ptSt" aria-label="Stance of surfer '+(i+1)+'"></button>';
+  for(let i=0;i<PARTY.n;i++){const c=LYC_PARTY[i],r=document.createElement('label');r.className='ptRow';r.style.setProperty('--pc',c==='black'?'#a9b2c3':LYC_CSS[c]);r.style.setProperty('--pt',c==='yellow'||c==='black'?'#0e1838':'#fff');r.innerHTML=ptJersey(c,i+1)+'<span class="ptNm"><small>SURFER '+(i+1)+' · '+c.toUpperCase()+'</small><input maxlength="14" autocomplete="off" spellcheck="false" aria-label="Name of surfer '+(i+1)+'" placeholder="'+(matchMedia('(max-height:540px)').matches?'NAME':'TYPE A NAME')+'"></span><button type="button" class="ptSt" aria-label="Stance of surfer '+(i+1)+'"></button>';
     const inp=r.querySelector('input'),sb=r.querySelector('.ptSt');if(PARTY.st[i]===undefined)PARTY.st[i]=STANCE;const stTxt=()=>{sb.innerHTML='<span'+(PARTY.st[i]?' class="on"':'')+'>REG</span><span'+(PARTY.st[i]?'':' class="on"')+'>GOOFY</span>';sb.setAttribute('aria-label','Surfer '+(i+1)+' stance: '+(PARTY.st[i]?'regular':'goofy'))};stTxt();
     sb.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();PARTY.st[i]=PARTY.st[i]?0:1;stTxt()});   /* each surfer's own stance */
     inp.value=old[i]!==undefined?old[i]:(PARTY.names[i]||'');inp.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();ptStart()}});L.appendChild(r)}}
@@ -3568,7 +3641,6 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/05-barrel-vision.mp3',t:'Barrel Vision',b:'Wax Riot'},{f:'music/06-sunburn-sunday.mp3',t:'Sunburn Sunday',b:'The Skanking Gulls'},{f:'music/07-glassy-morning.mp3',t:'Glassy Morning',b:'Dawn Patrol Dub'},
   {f:'music/08-duck-dive.mp3',t:'Duck Dive',b:'The Duck Divers'},{f:'music/09-salt-in-my-hair.mp3',t:'Salt in My Hair',b:'Tidepool Saints'},
   {f:'music/11-wipeout-weekend.mp3',t:'Wipeout Weekend',b:'Kook Patrol'},{f:'music/12-tube-ride.mp3',t:'Tube Ride',b:'The Reverb Reef'},
-  {f:'music/14-dawn-patrol-dub.mp3',t:'Dawn Patrol Dub',b:'Low Tide Lions'},
   {f:'music/15-boardwalk-bounce.mp3',t:'Boardwalk Bounce',b:'Pier Pressure'},
   {f:'music/17-shred-till-sundown.mp3',t:'Shred Till Sundown',b:'Skeg Breakers'},{f:'music/18-closeout.mp3',t:'Closeout',b:'Bail Out Brigade'}];
 const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0};   /* the songs play shuffled, from the very first one, a new order every time round */
@@ -3620,7 +3692,7 @@ function award(name,pts,small){if(/^(Snap|Tail Throw|Roundhouse|Cutback|Off the 
   if(!small&&sf.exitWin>0&&!/Barrel|Spit/.test(name)){sf.exitWin=0;const b=Math.round(pts*0.5/10)*10;setTimeout(()=>award('Straight Out of the Barrel',b,true),420)}   /* the move that comes right off the spit is worth half again */
   if(/Barrel/.test(name))giveTro('barrel');if(name==='Huge Barrel')giveTro('huge');if(/^(Air|Backflip|Frontflip|Nose Pick|Alley)/.test(name))giveTro('air');if(/^(Air|Nose Pick).*360|^Alley/.test(name))giveTro('air360');if(game.combo>=5)giveTro('combo5');
   const el=document.createElement('div');el.className='p'+(small?' sm':'');
-  el.innerHTML=`<b>${name}</b><span>+${tot}${mult>1?`<i>×${mult}</i>`:''}</span>`;$('pop').appendChild(el);setTimeout(()=>el.remove(),2300);
+  el.innerHTML=`<b>${name}</b><span>+${tot}${mult>1?`<i>×${mult}</i>`:''}</span>`;{const P=$('pop'),mx=innerHeight<720?2:3;while(P.children.length>=mx)P.firstElementChild.remove();P.appendChild(el)}setTimeout(()=>el.remove(),2300);   /* two or three names at a time at most: a burst of moves no longer climbs up over the score */
   if(!small){sfxChime(Math.min(game.combo+1,4));if(name.indexOf('Barrel')===0){sf.claimT=1.5;sf.claimV=pickClaim()}return tot}return tot}
 // claims: [lead hand dir (x along the board, y = world up, z: + heel side), reach] and the same for the trail hand
 const CLAIMS=[[[0.30,0.95,0.20,0.60],[-0.30,0.95,0.20,0.60]],   // both arms up
@@ -3901,9 +3973,17 @@ function lipBurst(k,sH){const X=sH+CP*game.t+game.xOff;game.lipHits=game.lipHits
     emit(P.x+rnd(-0.5,0.5),P.y+rnd(-0.1,0.35),P.z+rnd(-0.3,0.3),Math.cos(a)*r-CP*0.4,up,Math.sin(a)*r,rnd(0.5,1.1),rnd(0.1,0.22),rnd(0.5,1.5),rnd(0.45,0.7),9,0.9)}
   for(let i=0;i<12*k;i++)emit(P.x+rnd(-0.6,0.6),P.y+rnd(0,0.6),P.z+rnd(-0.5,0.5),rnd(-1.4,1.4)-CP*0.5,rnd(0.6,2.6),rnd(-1,1),rnd(0.9,1.7),rnd(0.4,0.7),rnd(1.6,2.8),0.2,1.2,1.5,1);   /* a little mist left hanging */
   game.shake=Math.max(game.shake||0,0.2*k)}
-function spitBlast(){const P=sf.pos;for(let i=0;i<150;i++){const back=rnd(1.5,7);emit(P.x-back,P.y+rnd(0.2,2.6),P.z+rnd(-0.9,1.3),rnd(15,26),rnd(-0.2,1.8),rnd(-1.0,1.6),rnd(0.4,1.0),0.2,rnd(0.4,0.95),0.22,1.3,1.6)}   /* a dense, hard blast of spray right over him */
-  for(let i=0;i<55;i++){const back=rnd(0.5,6);emit(P.x-back,P.y+rnd(0.6,2.8),P.z+rnd(-1.2,1.5),rnd(9,17),rnd(0.2,1.4),rnd(-0.8,1.4),rnd(0.9,1.6),rnd(0.5,0.9),rnd(2.2,3.6),0.16,0.4,1.5,1)}   /* and the cloud of mist it drives out after it */
-  sf.blowT=0.6;spawnDrops(4);sfxNoise(0.7,3200,0.26);game.shake=Math.max(game.shake||0,0.32)}   /* the barrel blowing out: spray and mist from behind him, past him and out */
+function spitBlast(K){K=K===undefined?1:K;const P=sf.pos;for(let i=0;i<150*K;i++){const back=rnd(1.5,7);emit(P.x-back,P.y+rnd(0.2,2.6),P.z+rnd(-0.9,1.3),rnd(15,26),rnd(-0.2,1.8),rnd(-1.0,1.6),rnd(0.4,1.0),0.2,rnd(0.4,0.95),0.22,1.3,1.6)}   /* a dense, hard blast of spray right over him */
+  for(let i=0;i<55*K;i++){const back=rnd(0.5,6);emit(P.x-back,P.y+rnd(0.6,2.8),P.z+rnd(-1.2,1.5),rnd(9,17),rnd(0.2,1.4),rnd(-0.8,1.4),rnd(0.9,1.6),rnd(0.5,0.9),rnd(2.2,3.6),0.16,0.4,1.5,1)}   /* and the cloud of mist it drives out after it */
+  sf.blowT=0.6;spawnDrops(Math.max(1,Math.round(4*K)));sfxNoise(0.7,3200,0.26*Math.min(1,K+0.2));game.shake=Math.max(game.shake||0,0.32*K)}
+/* the baforada seen from anywhere: when a barrel closes on itself the air trapped inside blasts out of its open end, a jet of spray and a cloud of mist shot down the line out of the tube */
+function tubeMouth(s0,s1){for(let s=s1;s>=s0;s-=0.5){const i=Math.round(colIndex(Math.max(s,0.05)));if(colAEnd[i]>=3.25&&colH[i]>1.2)return colS[i]}return null}   /* the open end of a throwing stretch: the last column still covered, looking back from s1 */
+function tubeSpit(sm,K){const i=Math.round(colIndex(Math.max(sm,0.05))),b=i*NV,zt=PZ[b+NF+NQ];
+  for(let n=0;n<170*K;n++){const k=b+NF+Math.floor(rnd(0.15,0.6)*NQ),z=lerp(PZ[k],zt,rnd(0.2,0.8));   /* the jet: fine spray shot flat out of the tube, past its mouth and along the wall */
+    emit(sm-rnd(0,4),PY[k]+rnd(-0.1,0.25),z,rnd(13,27)*(0.6+0.4*K),rnd(-0.3,0.9),rnd(-0.2,1.2),rnd(0.5,1.1),0.12,rnd(0.35,0.8),0.17,0.9,1.1)}
+  for(let n=0;n<70*K;n++){const k=b+NF+Math.floor(rnd(0.2,0.65)*NQ),z=lerp(PZ[k],zt,rnd(0.25,1.0));   /* and the mist it drives out after it: a long, low veil drifting down the line, not a puff */
+    emit(sm-rnd(-1,3),PY[k]+rnd(0,0.35),z,rnd(8,17)*(0.6+0.4*K),rnd(0,0.6),rnd(-0.2,1.0),rnd(1.2,2.2),rnd(0.3,0.6),rnd(1.6,3.0),0.085,0.25,1.0,1)}
+  if(Math.abs(sm-sf.s)<14&&game.state==='ride')sfxNoise(0.5,3000,0.12*K)}   /* the barrel blowing out: spray and mist from behind him, past him and out */
 function spit(n){for(let i=0;i<n*1.8;i++)emit(sf.pos.x+rnd(-2.5,2.5),sf.pos.y+rnd(0.1,2.4),sf.pos.z+rnd(-0.6,1.2),rnd(7,15),rnd(-0.2,1.6),rnd(-0.6,1.4),rnd(0.5,1.1),0.2,rnd(0.5,1.2),0.22,1.4,1.5);
   for(let i=0;i<n*0.8;i++)emit(sf.pos.x+rnd(-3,1),sf.pos.y+rnd(0.5,2.6),sf.pos.z+rnd(-1,1.4),rnd(5,11),rnd(0.2,1.2),rnd(-0.6,1.2),rnd(1.0,1.7),rnd(0.5,0.9),rnd(2.2,3.4),0.15,0.4,1.4,1);sf.blowT=0.6}   /* the spit out of the barrel: thick, with mist rolling out over him */
 function foamBlast(p){const cx=p.x,cy=p.y+0.25,cz=p.z;   // the cutback hit: a fan of spray and whole lumps of whitewater thrown up
@@ -4174,7 +4254,7 @@ function stepRide(dt){
   if(covered){sf.tube+=dt;sf.tubeMin=Math.min(sf.tubeMin,sf.s);game.inTube=true}
   else{if(sf.tube>0.6){const deep=sf.tubeMin<2.2,nm=sf.tube>3.5?'Huge Barrel':deep?'Deep Barrel':'Barrel',pt=(600+850*Math.min(sf.tube,7))*(deep?1.3:1);award(nm,pt);sfxNoise(0.8,3000,0.3);
       if(game.state==='ride'&&game.list.length)game.list[game.list.length-1].dur=sf.tube;sf.boostV=CP+1.6;sf.boostT=0.7;
-      if(sf.tube>1.2){spit(34);award('Spit Out',300,true)}}
+      if(sf.tube>1.2){spit(Math.round(34*(0.55+0.6*TUBE_SP)));award('Spit Out',300,true)}}
     if(sf.tube>0.6){game.tubeOut=game.waveAge;sf.exitWin=1.8}sf.tube=0;sf.tubeMin=9;game.inTube=false;sf.tubeShot=false}
   if(covered&&sf.tube>0.9&&!sf.tubeShot){sf.tubeShot=true;reqShot('Barrel',1200+sf.tube*500,0)}
   // curl / foam
@@ -4780,8 +4860,12 @@ function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
   }
   if(game.state==='ride'){const f={t:game.t,age:game.waveAge,H:game.Hbase,rk:game.rhK||0,tube:game.inTube,ix:input.x,cr:input.crouch,st:input.stall,sf:{}};for(const k of REC_KEYS)f.sf[k]=sf[k];game.rec.push(f)}
   mk_('phys');placeSurfer(dt*MOVE,clockT);dropTick(dt*MOVE);bbTick(dt*MOVE,clockT);mk_('rider');
-  if(game.inTube&&Math.random()<dtR*(SPOT.id===3?0.9:0.35))spawnDrops(1);updateDrops(dtR);
-  if(SPOT.id===3&&game.inTube&&game.state==='ride'&&!game.replay){game.spitT=(game.spitT===undefined?0.8:game.spitT)-dtR;if(game.spitT<=0){game.spitT=rnd(1.0,1.8);spitBlast()}}else game.spitT=0.8;   /* Pipeline: the barrel keeps spitting */
+  if(game.inTube&&Math.random()<dtR*(0.35+0.55*TUBE_SP))spawnDrops(1);updateDrops(dtR);
+  if(TUBE_SP>=0.45&&game.inTube&&game.state==='ride'&&!game.replay){game.spitT=(game.spitT===undefined?0.8/TUBE_SP:game.spitT)-dtR;if(game.spitT<=0){game.spitT=rnd(1.0,1.8)/TUBE_SP;spitBlast(TUBE_SP)}}else game.spitT=0.8/Math.max(TUBE_SP,0.3);   /* inside the barrel it keeps spitting over him: Pipeline and Greenbush hardest and most often, the point breaks now and then */
+  if(TUBE_SP>0&&!SPOT.crumble&&game.state==='ride'&&!game.inTube){   /* seen from outside, the tubes breathe too */
+    game.brT=(game.brT===undefined?2:game.brT)-dtR;if(game.brT<=0){game.brT=rnd(2.6,5.2)/(0.4+0.6*TUBE_SP);const m=tubeMouth(0.6,9.5*SPOT.eL+3);if(m!==null&&m>2.5)tubeSpit(m-0.8,TUBE_SP*rnd(0.55,1))}   /* the barrel at the curl, every few seconds */
+    const a0=game.spPrev===undefined?game.secAge:game.spPrev,a1=game.secAge;if(a1>a0&&a1-a0<0.5)for(const C of SEC){if(C.k!==0||!C.d)continue;const T=C.t0+C.d+0.2;if(a0<T&&a1>=T&&C.c>2){const m=tubeMouth(C.c-C.h*0.7,C.c+C.h*0.8);if(m!==null)tubeSpit(m-0.8,Math.min(1,TUBE_SP*1.15))}}}   /* and a barrel section closing down blows out of its end, the big one */
+  game.spPrev=game.secAge;
   sunL.target.position.copy(sf.pos);sunL.position.copy(sf.pos).addScaledVector(SUN,14);
   emitWave(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
   updateCamera(dt,clockT);if(BOW.value>0&&game.bowT!==undefined&&(game.bowT-=dtR)<=0){game.bowT=undefined;camera.getWorldDirection(_bowF);const h=Math.hypot(_bowF.x,_bowF.z)||1,top=Math.asin(clamp(_bowF.y,-1,1))/DEG+camera.fov*0.40,E=clamp(42-top,12,41)*DEG;BOWC.value.set(_bowF.x/h*Math.cos(E),-Math.sin(E),_bowF.z/h*Math.cos(E))}   /* at each cut the rainbow is set where this shot sees sky, then it stays put in the world */
