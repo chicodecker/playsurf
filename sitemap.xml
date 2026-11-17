@@ -241,6 +241,56 @@
     <image:image><image:loc>https://playsurfgame.com/img/thorlakshofn-turn-1920.webp</image:loc></image:image>
   </url>
   <url>
+    <loc>https://playsurfgame.com/supertubos-surf-game</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/img/supertubos-hero-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/supertubos-barrel-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/supertubos-snap-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/supertubos-pocket-1920.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/skeleton-bay-surf-game</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/img/skeleton-bay-hero-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/skeleton-bay-barrel-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/skeleton-bay-pocket-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/skeleton-bay-foam-1920.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/greenbush-surf-game</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/img/greenbush-hero-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/greenbush-barrel-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/greenbush-pocket-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/greenbush-closeout-1920.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/jeffreys-bay-surf-game</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/img/jeffreys-bay-hero-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/jeffreys-bay-barrel-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/jeffreys-bay-turn-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/jeffreys-bay-lineup-1920.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/chicama-surf-game</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://playsurfgame.com/img/chicama-hero-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/chicama-snap-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/chicama-carve-1920.webp</image:loc></image:image>
+    <image:image><image:loc>https://playsurfgame.com/img/chicama-wall-1920.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://playsurfgame.com/contact</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://playsurfgame.com/press</loc>
     <lastmod>2026-11-17</lastmod>
     <priority>0.5</priority>

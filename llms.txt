@@ -17,11 +17,11 @@ PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by D
 - [Campeche](https://playsurfgame.com/campeche-surf-game): Florianópolis · the long right. Surf Campeche, Florianópolis, Brazil, in a free 3D surf game.
 - [Pororoca](https://playsurfgame.com/pororoca-surf-game): Amazon · the endless river wave. Surf the Pororoca, the Amazon tidal bore, in a free 3D surf game.
 - [Þorlákshöfn](https://playsurfgame.com/thorlakshofn-surf-game): Iceland · lefts and rights. Surf Þorlákshöfn (Thorlakshofn), Iceland, in a free 3D surf game.
-- Supertubos: Peniche, Portugal · heavy beach break barrels
-- Skeleton Bay: Namibia · an endless left barrel
-- Greenbush: Mentawai, Indonesia · a heavy left slab
-- Jeffreys Bay: South Africa · the Supertubes right
-- Chicama: Peru · the longest left in the world
+- [Supertubos](https://playsurfgame.com/supertubos-surf-game): Portugal · heavy beach break barrels. Surf Supertubos, Peniche, Portugal, in a free 3D surf game.
+- [Skeleton Bay](https://playsurfgame.com/skeleton-bay-surf-game): Namibia · the endless left barrel. Surf Skeleton Bay, Namibia, in a free 3D surf game.
+- [Greenbush](https://playsurfgame.com/greenbush-surf-game): Mentawai · the heavy left slab. Surf Greenbush, Mentawai, Indonesia, in a free 3D surf game.
+- [Jeffreys Bay](https://playsurfgame.com/jeffreys-bay-surf-game): South Africa · the Supertubes right. Surf Jeffreys Bay, South Africa, in a free 3D surf game.
+- [Chicama](https://playsurfgame.com/chicama-surf-game): Peru · the longest left. Surf Chicama, Peru, in a free 3D surf game.
 
 ## Party Surf
 - 2 to 6 friends play on one device, four waves each; the judges score every ride and crown a champion.
