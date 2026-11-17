@@ -18,20 +18,20 @@
 <meta property="og:site_name" content="PlaySurf">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="pt_BR">
-<meta property="og:image" content="https://playsurfgame.com/og-playsurf-v3.jpg">
-<meta property="og:image:secure_url" content="https://playsurfgame.com/og-playsurf-v3.jpg">
+<meta property="og:image" content="https://playsurfgame.com/og-playsurf-v5.jpg">
+<meta property="og:image:secure_url" content="https://playsurfgame.com/og-playsurf-v5.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="PLAYSURF, Ultimate Surfing Game: a surfer launching an air off a big blue wave, palm trees and city skyline behind. Out now at playsurfgame.com">
 <meta name="twitter:title" content="PlaySurf | Ultimate Surf Game | Play for FREE">
 <meta name="twitter:description" content="Surf a perfect wave-pool left, then perfect waves at the best spots around the world, on different boards. For free.">
-<meta name="twitter:image" content="https://playsurfgame.com/og-playsurf-v3.jpg">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="twitter:image" content="https://playsurfgame.com/og-playsurf-v5.jpg">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=5">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=5">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5">
 
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://playsurfgame.com/#website","url":"https://playsurfgame.com/","name":"PlaySurf","alternateName":["Play Surf","PlaySurf Game"],"inLanguage":"en"},{"@type":["VideoGame","WebApplication"],"@id":"https://playsurfgame.com/#game","name":"PlaySurf","alternateName":"PlaySurf: The Ultimate Surfing Game","url":"https://playsurfgame.com/","image":"https://playsurfgame.com/og-playsurf-v3.jpg","description":"Free 3D surf game in your browser: surf a perfect left in a wave pool, by day or under the floodlights, with bottom turns, snaps, off the lips, barrels, floaters and airs.","genre":["Sports","Surfing","Arcade"],"gamePlatform":["Web browser","PC","Mac"],"applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","playMode":"SinglePlayer","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"Decker Games"},"publisher":{"@type":"Organization","name":"Decker Games"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://playsurfgame.com/#website","url":"https://playsurfgame.com/","name":"PlaySurf","alternateName":["Play Surf","PlaySurf Game"],"inLanguage":"en"},{"@type":["VideoGame","WebApplication"],"@id":"https://playsurfgame.com/#game","name":"PlaySurf","alternateName":"PlaySurf: The Ultimate Surfing Game","url":"https://playsurfgame.com/","image":"https://playsurfgame.com/og-playsurf-v5.jpg","description":"Free 3D surf game in your browser: surf a perfect left in a wave pool, by day or under the floodlights, with bottom turns, snaps, off the lips, barrels, floaters and airs.","genre":["Sports","Surfing","Arcade"],"gamePlatform":["Web browser","PC","Mac"],"applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","playMode":"SinglePlayer","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"Decker Games"},"publisher":{"@type":"Organization","name":"Decker Games"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,100..900;1,50..125,100..900&display=swap" rel="stylesheet">
 <style>
@@ -516,6 +516,34 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
 <script async data-ad-frequency-hint="60s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9543654204689824" crossorigin="anonymous"></script>
 <script>window.adsbygoogle=window.adsbygoogle||[];var adBreak=adConfig=function(o){adsbygoogle.push(o);};</script>
 <style>#seoNav{position:fixed;left:0;right:0;bottom:calc(1px + env(safe-area-inset-bottom,0px));padding:0 12px;text-align:center;font-weight:600;font-size:8px;line-height:1.5;font-family:inherit;letter-spacing:.06em;opacity:1;z-index:5;pointer-events:auto}#seoNav a{color:#15181b;text-decoration:none;margin:0 5px;white-space:nowrap}   /* fine print: almost black, there for whoever looks for it */#seoNav a:hover{text-decoration:underline;color:#3a4147}#seoNav span{color:#1a1d20;margin:0 4px}@media (max-height:420px){#seoNav{display:none}}</style>
+<style id="mobfix">
+/* phones (touch layout), 2026-11-17: overlaps and cut-offs fixed; these rules come last so they win over the earlier ones */
+body.touch.riding{--bar:0px}   /* no cinema bars while riding on a phone: the whole screen is the wave */
+body.touch #touch{--g:min(2.8vh,13px)}   /* a little more air between the round buttons around SNAP */
+body.touch #pop{top:calc(var(--bar,5.5vh) + 27vh)}   /* the manoeuvre name under the score, not over it or under the top buttons */
+body.touch #pop .p b{font-size:clamp(20px,6.4vh,36px)}
+body.touch #pop .p span{font-size:clamp(12px,3.6vh,17px)}
+body.touch #pop .p.sm b{font-size:clamp(13px,4vh,18px)}
+body.touch[data-wz="3"]:not(.riding) #music{display:none}   /* the wave map needs the whole screen */
+body.touch:has(#pick:not(.off)) #touch,body.touch:has(#manual:not(.off)) #touch{visibility:hidden}   /* no round buttons showing through the side pick or the guide */
+body.touch .kbOnly{display:none}
+@media (max-height:540px){
+  body.touch:not(.riding){--bar:3.5vh}
+  #goParty i{display:block}   /* PARTY SURF keeps its line under the name, like SOLO */
+  body.touch:not(.riding) #music{gap:4px;padding:4px 8px}
+  body.touch:not(.riding) #music .mInfo,body.touch:not(.riding) #mCov{display:none}   /* the player shrinks to its buttons */
+  #bdSeal{width:76px;height:76px;left:auto;right:-3%;top:-52%}   /* the SPECIAL EDITION seal beside the board, clear of the title and BACK */
+  #manual{align-items:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch}   /* the guide fits (and scrolls if it must) above its button */
+  .mnBox{padding:8px 14px 12px}
+  .mnBox h3{font-size:18px}
+  .mnGrid{gap:6px;margin:6px 0 8px}
+  .mnSec{padding:6px 8px 4px}
+  .mnSec h4{margin:0 0 3px;font-size:9px}
+  .mnSec h4 i{width:18px;height:18px;border-radius:6px}
+  .mnSec h4 i svg{width:11px;height:11px}
+  .mnRow{padding:2px 2px;font-size:8.5px;gap:0}
+}
+</style>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -549,7 +577,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   </div>
   <div id="menu" class="panel"><h1 class="srh">PlaySurf: Free Online Surf Game</h1>
     <div class="wz">
-      <div class="psBrand"><img src="playsurf-logo.webp" alt="PlaySurf" width="1026" height="163"><span>ULTIMATE SURFING GAME</span></div>
+      <div class="psBrand"><img src="playsurf-logo.webp?v=5" alt="PlaySurf" width="1026" height="163"><span>ULTIMATE SURFING GAME</span></div>
       <div class="wzTop"><button id="wzBack" class="pbtn wv sm" aria-label="Back">&#9664; BACK</button>
         <div class="wzDots"><i data-s="2"><b>1</b><span> · STANCE</span></i><i data-s="3"><b>2</b><span> · WAVE</span></i><i data-s="4"><b>3</b><span> · BOARD</span></i></div></div>
       <section class="wzS" data-s="0"><h2 class="wzH">HOW DO YOU WANT TO SURF?</h2>
@@ -578,7 +606,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
         <div class="pbtns wzGo"><button id="goPlay" class="pbtn big">GO SURF &#9654;</button></div>
 </section>
       <div id="rdRow" style="display:none"><button id="rdN"></button><button id="rdC"></button></div>
-      <nav id="seoNav" aria-label="Surf game guides"><span>WAVES</span> <a href="/wave-pool-surf-game">Wave pool</a> <a href="/uluwatu-surf-game">Uluwatu</a> <a href="/cloud-9-surf-game">Cloud 9</a> <a href="/pipeline-surf-game">Pipeline</a> <a href="/trestles-surf-game">Trestles</a> <a href="/campeche-surf-game">Campeche</a> <a href="/pororoca-surf-game">Pororoca</a> <span>·</span> <a href="/free-surf-game" hreflang="en" lang="en">English</a> <a href="/jogo-de-surf" hreflang="pt-BR" lang="pt-BR">Português</a> <a href="/juego-de-surf" hreflang="es" lang="es">Español</a> <a href="/jeu-de-surf" hreflang="fr" lang="fr">Français</a> <a href="/surf-spiel" hreflang="de" lang="de">Deutsch</a> <a href="/gioco-di-surf" hreflang="it" lang="it">Italiano</a> <a href="/ja" hreflang="ja" lang="ja">日本語</a> <a href="/game-selancar" hreflang="id" lang="id">Bahasa Indonesia</a></nav>
+      <nav id="seoNav" aria-label="Surf game guides"><span>WAVES</span> <a href="/wave-pool-surf-game">Wave pool</a> <a href="/uluwatu-surf-game">Uluwatu</a> <a href="/cloud-9-surf-game">Cloud 9</a> <a href="/pipeline-surf-game">Pipeline</a> <a href="/trestles-surf-game">Trestles</a> <a href="/campeche-surf-game">Campeche</a> <a href="/pororoca-surf-game">Pororoca</a> <a href="/thorlakshofn-surf-game">Þorlákshöfn</a> <a href="/supertubos-surf-game">Supertubos</a> <a href="/skeleton-bay-surf-game">Skeleton Bay</a> <a href="/greenbush-surf-game">Greenbush</a> <a href="/jeffreys-bay-surf-game">Jeffreys Bay</a> <a href="/chicama-surf-game">Chicama</a> <span>·</span> <a href="/free-surf-game" hreflang="en" lang="en">English</a> <a href="/jogo-de-surf" hreflang="pt-BR" lang="pt-BR">Português</a> <a href="/juego-de-surf" hreflang="es" lang="es">Español</a> <a href="/jeu-de-surf" hreflang="fr" lang="fr">Français</a> <a href="/surf-spiel" hreflang="de" lang="de">Deutsch</a> <a href="/gioco-di-surf" hreflang="it" lang="it">Italiano</a> <a href="/ja" hreflang="ja" lang="ja">日本語</a> <a href="/game-selancar" hreflang="id" lang="id">Bahasa Indonesia</a></nav>
     </div>
   </div>
   <div id="end" class="panel off"></div>
@@ -587,7 +615,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
   <div id="wavePick" class="off" role="dialog" aria-modal="true" aria-labelledby="wpT"><div class="trBox wpBox"><h3 id="wpT">CHANGE WAVE</h3><p class="wpSub">Pick a spot on the map: a new wave starts there right away</p>
     <div class="wmap" id="wpMap"></div><button id="wpClose" class="pbtn sm">&#9664; BACK TO THE WAVE</button></div></div>
   <div id="pick" class="off" role="dialog" aria-labelledby="pkT"><div class="pkBox"><small id="pkS">LOWER TRESTLES · A-FRAME PEAK</small><b id="pkT">PICK YOUR SIDE</b>
-    <div class="pkBtns"><button id="pkR" class="pbtn">&#9664; THE RIGHT<em id="pkRs"></em></button><button id="pkL" class="pbtn">THE LEFT &#9654;<em id="pkLs"></em></button></div><p>&#8592; / &#8594; or tap a side · the arrow is the way you'll ride</p></div></div>
+    <div class="pkBtns"><button id="pkR" class="pbtn">&#9664; THE RIGHT<em id="pkRs"></em></button><button id="pkL" class="pbtn">THE LEFT &#9654;<em id="pkLs"></em></button></div><p><span class="kbOnly">&#8592; / &#8594; or </span>tap a side · the arrow is the way you'll ride</p></div></div>
   <div id="manual" class="off" role="dialog" aria-modal="true" aria-labelledby="mnT"><div class="trBox mnBox"><div class="ptHead"><i class="ptIco" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M9 10.5A4.5 4.5 0 0 1 13.5 6H39v30H13.5A4.5 4.5 0 0 0 9 40.5z" fill="none" stroke="#fff" stroke-width="3.2" stroke-linejoin="round"/><path d="M9 40.5A4.5 4.5 0 0 0 13.5 45H39v-9M17 15h14M17 22h9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg></i><div><small>GAME PAUSED</small><h3 id="mnT">MANEUVER GUIDE</h3></div></div><p class="wpSub" id="mnSub">Game paused</p><div class="mnGrid" id="mnGrid"></div><button id="mnClose" class="pbtn sm">&#9654; BACK TO THE WAVE</button></div></div>
   <div id="party" class="off" role="dialog" aria-modal="true" aria-labelledby="ptT"><div class="trBox ptBox"><div class="ptHead"><i class="ptIco" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M6 30c4-11 13-18 23-18 6 0 10 3 11 7-4-2-9-1-11 3s0 9 4 11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><path d="M4 38c4 0 5-3 9-3s5 3 9 3 5-3 9-3 5 3 9 3 5-3 6-3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></i><div><small>FRIENDS · ONE DEVICE · TAKE TURNS</small><h3 id="ptT">PARTY SURF</h3></div></div>
     <div class="ptRules"><span><b>4</b>WAVES EACH</span><span><b>1</b>SAME SPOT</span><span><b>5</b>JUDGES</span><span><b>&#9733;</b>BEST AVERAGE WINS</span></div>
@@ -599,7 +627,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <div class="chBtns"><button id="chAgain" class="pbtn sm">REMATCH</button><button id="chMenu" class="pbtn wv sm">MENU</button></div></div></div>
   <div id="toast"></div>
   <div id="spPop" class="off" role="dialog" aria-modal="true" aria-labelledby="spT"><div class="spBox"><button id="spX" aria-label="Close">&times;</button>
-    <img src="sign-logo-v3.webp" alt="PlaySurf official soundtrack"><h3 id="spT">Liked the music?</h3><p>Follow our soundtrack on Spotify</p>
+    <img src="sign-logo-v5.webp" alt="PlaySurf official soundtrack"><h3 id="spT">Liked the music?</h3><p>Follow our soundtrack on Spotify</p>
     <a id="spGo" class="spGo" href="#" target="_blank" rel="noopener">&#9654;&nbsp; LISTEN ON SPOTIFY</a><button id="spNo" class="spNo">Not now</button></div></div>
   <div id="touch"><div id="stick"><i></i></div>
     <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
@@ -607,7 +635,7 @@ var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearI
     <button class="tb sm" id="tLay" style="--dx:-.3827;--dy:.9239;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-.9239;--dy:.3827;--k:2">BRAKE</button>
     <div id="tTop"><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tMan" aria-label="Maneuver guide">GUIDE</button><button class="tb" id="tRider" aria-label="Change surfer">SURFER</button><button class="tb" id="tPause">&#10074;&#10074;</button><button class="tb" id="tFull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button></div>
     <div id="tHint">STICK: STEER · CARVE UP HIGH · SNAP AT THE TOP · AIR AT THE LIP</div></div>
-  <div id="ld"><img src="playsurf-logo.webp" alt="PlaySurf" width="1026" height="163"><i><u id="ldU"></u></i><b>LOADING</b></div>
+  <div id="ld"><img src="playsurf-logo.webp?v=5" alt="PlaySurf" width="1026" height="163"><i><u id="ldU"></u></i><b>LOADING</b></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
   <button id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
   <div id="fsSwipe"><div class="fsHand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><b>SWIPE UP TO HIDE THE BROWSER BAR</b><span>REAL FULL SCREEN ON IPHONE: SHARE &#9656; ADD TO HOME SCREEN, THEN OPEN PLAYSURF FROM THE ICON</span><button id="fsX" aria-label="Close">&#10005;</button></div>
@@ -826,7 +854,7 @@ const palmI=(()=>{const g=new THREE.BufferGeometry(),w=3.6,h=12;
   g.setAttribute('uv',new THREE.Float32BufferAttribute([0,0,1,0,1,1,0,1,0,0,1,0,1,1,0,1],2));g.setIndex([0,1,2,0,2,3,4,5,6,4,6,7]);
   const m=new THREE.InstancedMesh(g,palmMat,PALM.length);m.frustumCulled=false;envG.add(m);return m})();
 // brand type comes from the web fonts; anything painted on a canvas is repainted once they have arrived
-const PS_LOGO=new Image();PS_LOGO.src='playsurf-logo.webp';   /* the wordmark, painted on the beach banners */
+const PS_LOGO=new Image();PS_LOGO.src='playsurf-logo.webp?v=5';   /* the wordmark, painted on the beach banners */
 const SCRIPT='Saira,"Avenir Next",Arial,sans-serif',CONDF='Saira,"Avenir Next","Helvetica Neue",Arial,sans-serif';
 function whenFonts(fn){fn();try{Promise.all([document.fonts.load('italic 800 40px Saira'),document.fonts.load('800 40px Saira')]).then(()=>fn(),()=>{})}catch(e){}}
 const SUIT={value:0},KIDU={value:0},KIDSKIN={value:new THREE.Color('#e2ac88')};   /* 1 = the little surfer: the softboard's rider is a kid of seven or eight, skinny, shirtless, pixel-print boardshorts */
@@ -996,7 +1024,7 @@ const neonWord=new THREE.Mesh(new THREE.PlaneGeometry(56,19.7),neonMat(neonWordT
 neonWord.position.set(9,NEON.y+3.2,0.25);neonSub.position.set(9,NEON.y-8.6,0.25);neonWord.renderOrder=neonSub.renderOrder=3;neonG.add(neonWord,neonSub);
 const neonWave=new THREE.Mesh(new THREE.PlaneGeometry(21,21),neonMat(neonWaveTex));neonWave.position.set(-28.5,NEON.y+1.2,0.25);neonWave.renderOrder=3;neonG.add(neonWave);
 neonWord.visible=neonSub.visible=neonWave.visible=false;   // replaced by the LED wall below
-const signTex=new THREE.TextureLoader().load('sign-logo-v3.webp');signTex.colorSpace=THREE.SRGBColorSpace;signTex.anisotropy=8;
+const signTex=new THREE.TextureLoader().load('sign-logo-v5.webp');signTex.colorSpace=THREE.SRGBColorSpace;signTex.anisotropy=8;
 const ledMat=new THREE.ShaderMaterial({uniforms:{map:{value:signTex},uRes:{value:new THREE.Vector2(256,143)},uK:{value:1.35},uT:{value:0},uFlip:{value:0}},toneMapped:false,fog:false,
   vertexShader:`varying vec2 vU;void main(){vU=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
   fragmentShader:`uniform sampler2D map;uniform vec2 uRes;uniform float uK;uniform float uT;uniform float uFlip;varying vec2 vU;
@@ -1009,7 +1037,7 @@ const ledMat=new THREE.ShaderMaterial({uniforms:{map:{value:signTex},uRes:{value
      #include <colorspace_fragment>
    }`});
 const ledWall=new THREE.Mesh(new THREE.PlaneGeometry(54,30.2),ledMat);ledWall.position.set(0,NEON.y,0.12);neonG.add(ledWall);
-{const v=document.createElement('video');v.src='sign-loop-v3.mp4';v.muted=true;v.playsInline=true;v.preload='auto';   // the LED wall plays the opening animation, holds the logo, then plays it again
+{const v=document.createElement('video');v.src='sign-loop-v5.mp4';v.muted=true;v.playsInline=true;v.preload='auto';   // the LED wall plays the opening animation, holds the logo, then plays it again
  const vt=new THREE.VideoTexture(v);vt.colorSpace=THREE.SRGBColorSpace;let hold=0;
  const play=()=>{hold=0;try{v.currentTime=0}catch(e){}const p=v.play();if(p&&p.catch)p.catch(()=>{})};
  v.addEventListener('playing',()=>{ledMat.uniforms.map.value=vt});
@@ -1159,7 +1187,7 @@ const game={hl:false,showCard:null,waveId:0,cardAt:0,night:0,inTube:false,secAge
 
 // spots: each one its own wave and scenery; the next one opens when the score at the one before is good enough (more can be added to the list)
 const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st:9,lab:'l',what:'WAVE POOL · ALL ROUND · DAY OR NIGHT',name:'PLAYSURF POOL',full:'PLAYSURF POOL',sub:'WAVE POOL · ALL ROUND',hK:1,eL:1,dur:60},
-  {id:2,ll:[-8.815,115.088],loc:'BALI · INDONESIA',lab:'l',name:'ULUWATU',full:'ULUWATU',sub:'BALI · LONG LEFT WALLS',hK:1.25,eL:1.75,dur:46,req:{spot:1,nota:5}},
+  {id:2,ll:[-8.815,115.088],loc:'BALI · INDONESIA',dy:4,name:'ULUWATU',full:'ULUWATU',sub:'BALI · LONG LEFT WALLS',hK:1.25,eL:1.75,dur:46,req:{spot:1,nota:5}},
   {id:4,ll:[9.80,126.17],loc:'SIARGAO · PHILIPPINES',name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.2,dur:30,req:{spot:2,nota:6}},
   {id:3,ll:[21.665,-158.05],loc:'OAHU · HAWAII',dy:7,name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · PIPE & BACKDOOR',hK:1.35,eL:2.0,dur:28,req:{spot:4,nota:6.5}},
   {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',dy:-7,short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
@@ -2269,7 +2297,7 @@ function kidHeadMod(mat){mat.onBeforeCompile=sh=>{
     float khh(vec3 p){p=fract(p*0.3183099+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
     float khn(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(mix(mix(khh(i),khh(i+vec3(1,0,0)),f.x),mix(khh(i+vec3(0,1,0)),khh(i+vec3(1,1,0)),f.x),f.y),mix(mix(khh(i+vec3(0,0,1)),khh(i+vec3(1,0,1)),f.x),mix(khh(i+vec3(0,1,1)),khh(i+vec3(1,1,1)),f.x),f.y),f.z);}
     float khNape(vec3 p){float bk=smoothstep(-0.04,-0.20,p.x)*smoothstep(0.42,0.30,abs(p.z));float edge=0.035*(khn(vec3(p.z*40.,0.,p.x*40.))-0.5);return bk*smoothstep(-0.475,-0.42,p.y+edge)*(1.-smoothstep(-0.10,0.02,p.y));}
-    float khF(float y){return y<-0.05?0.82-0.23*pow(min(1.,(-0.05-y)/0.42),2.):0.82-0.07*min(1.,(y+0.05)/0.12);}
+    float khF(float y){return y<-0.05?0.82-0.28*pow(min(1.,(-0.05-y)/0.42),2.):0.82-0.07*min(1.,(y+0.05)/0.12);}
   `;
   sh.vertexShader='attribute vec3 p0;\n'+fn+sh.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
     {float e=pow((p0.y+0.335)/0.14,2.)+pow(p0.z/0.25,2.),mk=(1.-smoothstep(0.65,1.0,e))*step(0.08,p0.x);objectNormal=normalize(mix(objectNormal,vec3(0.94,-0.10,p0.z*khF(p0.y)*1.7),mk));}   /* the closed mouth is lit like smooth skin */`).replace('#include <begin_vertex>',`#include <begin_vertex>
@@ -2310,16 +2338,19 @@ function kidHeadMod(mat){mat.onBeforeCompile=sh=>{
       float bm=(1.-smoothstep(th*0.6,th,abs(p.y-yb)))*(1.-smoothstep(0.82,1.0,abs(t)))*step(0.10,p.x)*(1.-hm)*(0.78+0.22*khn(vec3(p.z*160.,p.y*60.,0.)));
       diffuseColor.rgb=mix(diffuseColor.rgb,pow(vec3(0.26,0.17,0.11),vec3(2.2)),bm);}
      {float e=pow((p.y+0.335)/0.14,2.)+pow(p.z/0.25,2.),mk=(1.-smoothstep(0.78,1.0,e))*step(0.08,p.x);
-      if(mk>0.){vec3 pm=vMs;float dz=pm.z;p.y=pm.y;float ym=-0.352+2.2*dz*dz;vec3 c=SKs;   /* (painted on the face as it now is, so the folds of the old teeth don't show) */
-           /* his smile: corners up, the lips parted over the upper teeth, with the gap between the front two */
-        float u=dz/0.080,s=sqrt(max(0.,1.-u*u)),yT=ym+0.001,yB=ym-0.0135*s;
-        float op=(1.-smoothstep(0.94,1.0,abs(u)))*smoothstep(yB-0.001,yB+0.001,p.y)*(1.-smoothstep(yT-0.001,yT+0.001,p.y));
-        vec3 ti=mix(vec3(0.38,0.14,0.12),vec3(0.93,0.90,0.84)*(1.-0.40*u*u),smoothstep(yT-0.0105,yT-0.0088,p.y));
-        ti=mix(ti,vec3(0.30,0.10,0.09),(1.-smoothstep(0.0032,0.0046,abs(dz)))*step(yT-0.0095,p.y));
-        float up=(1.-smoothstep(0.90,1.02,abs(u)))*smoothstep(yT-0.0008,yT+0.0008,p.y)*(1.-smoothstep(yT+0.0065*s-0.001,yT+0.0065*s+0.001,p.y));
-        float yL2=yB-0.0135*pow(s,0.7),lw=(1.-smoothstep(0.85,0.98,abs(u)))*smoothstep(yL2-0.0015,yL2+0.0015,p.y)*(1.-smoothstep(yB-0.0008,yB+0.0008,p.y));
-        c=mix(c,SKs*0.82,(1.-smoothstep(0.0,0.005,length(vec2(abs(dz)-0.083,p.y-ym-0.001))))*0.5);
-        c=mix(c,vec3(0.76,0.50,0.46),up*0.85);c=mix(c,mix(vec3(0.80,0.54,0.50),vec3(0.86,0.64,0.60),exp(-pow((p.y-yB+0.006)/0.004,2.)-pow(dz/0.03,2.))),lw*0.85);c=mix(c,ti,op);
+      if(mk>0.){vec3 pm=vMs;float dz=pm.z;p.y=pm.y;float ym=-0.338+2.4*dz*dz;vec3 c=SKs;   /* (painted on the face as it now is, so the folds of the old teeth don't show) */
+           /* his big smile: wide open, corners up into the cheeks, the upper teeth (with the gap between the front two), his tongue and a glimpse of the lower teeth */
+        float u=dz/0.118,s=sqrt(max(0.,1.-u*u)),yT=ym+0.001,yB=yT-0.050*pow(s,0.75);   /* a wide open D: flat on top, deep in the middle */
+        float op=(1.-smoothstep(0.95,1.0,abs(u)))*smoothstep(yB-0.0012,yB+0.0012,p.y)*(1.-smoothstep(yT-0.0012,yT+0.0012,p.y));
+        vec3 ti=vec3(0.36,0.11,0.11)*(0.75+0.25*smoothstep(yB,yT,p.y));   /* the dark of the mouth */
+        ti=mix(ti,vec3(0.78,0.36,0.38),(1.-smoothstep(0.55,1.0,length(vec2(dz/0.050,(p.y-yB-0.010)/0.012))))*0.9);   /* his tongue */
+        float tH=0.019*pow(s,0.45);ti=mix(ti,vec3(0.96,0.93,0.87)*(1.-0.35*u*u),smoothstep(yT-tH-0.0012,yT-tH+0.0004,p.y)*(1.-smoothstep(0.80,0.97,abs(u))));   /* the upper teeth */
+        ti=mix(ti,vec3(0.28,0.09,0.09),(1.-smoothstep(0.0036,0.0052,abs(dz)))*smoothstep(yT-tH*0.92,yT-tH*0.80,p.y));   /* the gap between his front teeth */
+        ti=mix(ti,vec3(0.86,0.82,0.76),(1.-smoothstep(yB+0.0060*s,yB+0.0072*s+0.0006,p.y))*(1.-smoothstep(0.40,0.62,abs(u))));   /* the lower teeth just showing */
+        float up=(1.-smoothstep(0.92,1.03,abs(u)))*smoothstep(yT-0.0008,yT+0.0008,p.y)*(1.-smoothstep(yT+0.0045*s-0.001,yT+0.0045*s+0.001,p.y));
+        float yL2=yB-0.0100*pow(s,0.7),lw=(1.-smoothstep(0.85,0.98,abs(u)))*smoothstep(yL2-0.0015,yL2+0.0015,p.y)*(1.-smoothstep(yB-0.0008,yB+0.0008,p.y));
+        c=mix(c,SKs*0.78,(1.-smoothstep(0.0,0.007,length(vec2(abs(dz)-0.121,p.y-ym-0.001))))*0.55);c=mix(c,SKs*0.88,(1.-smoothstep(0.0,0.004,abs(length(vec2(abs(dz)-0.108,(p.y-ym)*1.6))-0.022)))*smoothstep(0.0,0.014,p.y-ym)*0.45);   /* dimples at the corners and the cheeks pushed up by the smile */
+        c=mix(c,vec3(0.76,0.50,0.46),up*0.85);c=mix(c,mix(vec3(0.80,0.54,0.50),vec3(0.86,0.64,0.60),exp(-pow((p.y-yB+0.005)/0.004,2.)-pow(dz/0.035,2.))),lw*0.85);c=mix(c,ti,op);
         diffuseColor.rgb=mix(diffuseColor.rgb,pow(c,vec3(2.2)),mk);}}}`).replace('#include <emissivemap_fragment>','totalEmissiveRadiance=emissive*diffuseColor.rgb;');}}
 /* the boy from his photos: the 3D head was sculpted from the board's caricature, round as a ball and with spiky hair, so before it is used it is
    reshaped toward the real boy: the spikes on top combed down into the hair, the head and face narrowed (an oval face, narrower toward the chin),
@@ -2332,11 +2363,11 @@ function kidReshape(ge){if(ge.userData.kidR)return;ge.userData.kidR=1;const P=ge
     for(let j=0;j<N;j+=2)if(dx*D[j*3]+dy*D[j*3+1]+dz*D[j*3+2]>0.972)nb.push(R[j]);
     if(nb.length<6)continue;nb.sort((a,b)=>a-b);const lim=nb[nb.length>>1]*1.035;
     if(R[i]>lim){const s=(lim+(R[i]-lim)*0.08)/R[i];A[i*3]*=s;A[i*3+1]=CY+(A[i*3+1]-CY)*s;A[i*3+2]*=s}}   /* the spikes on top and the stray strands over the temples combed down into the hair */
-  const fz=y=>y<-0.05?0.82-0.23*Math.pow(Math.min(1,(-0.05-y)/0.42),2):0.82-0.07*Math.min(1,(y+0.05)/0.12),cl=v=>Math.min(1,Math.max(0,v));   /* same as khF in the shader: a round little face narrowing to a small chin */
+  const fz=y=>y<-0.05?0.82-0.28*Math.pow(Math.min(1,(-0.05-y)/0.42),2):0.82-0.07*Math.min(1,(y+0.05)/0.12),cl=v=>Math.min(1,Math.max(0,v));   /* same as khF in the shader: a round little face narrowing to a small chin */
   for(let i=0;i<N;i++){const x=A[i*3],y=A[i*3+1],z=A[i*3+2],az=Math.abs(z),f=fz(y);let nx=x,ny=y,nz=z*f;
     const w=cl((az-0.385)/0.03)*cl((0.10-y)/0.05)*cl((y+0.24)/0.04)*cl((0.16-x)/0.04)*cl((x+0.19)/0.04);   /* the ears: smaller, and still sticking out a little */
     if(w>0){const ez=Math.sign(z)*(0.395*f+Math.max(0,az-0.395)*0.62);nz+=(ez-nz)*w;ny+=(-0.07+(y+0.07)*0.78-y)*w;nx+=(-0.01+(x+0.01)*0.80-x)*w}
-    if(y<-0.38&&x>-0.12){const k=cl((x+0.12)/0.12);ny+=((-0.39+(y+0.39)*0.74)-y)*k}   /* a short little chin */
+    if(y<-0.38&&x>-0.12){const k=cl((x+0.12)/0.12);ny+=((-0.39+(y+0.39)*0.60)-y)*k}   /* a short, tiny chin */
     if(x>0.29&&az<0.11&&y>-0.31&&y<-0.06){const k=cl((0.11-az)/0.04)*cl((y+0.31)/0.04)*cl((-0.06-y)/0.04);nx+=((0.29+(x-0.29)*0.90)-x)*k}   /* a small child's nose */
     A[i*3]=nx;A[i*3+1]=ny;A[i*3+2]=nz;if(NA){const a=NA[i*3],b=NA[i*3+1],c=NA[i*3+2]/f,l=Math.hypot(a,b,c)||1;NA[i*3]=a/l;NA[i*3+1]=b/l;NA[i*3+2]=c/l}}
   /* the caricature's grin left big round cheeks with deep creases beside the mouth, and the hair on top is lumpy: both smoothed out (copies of a
@@ -2354,7 +2385,7 @@ function kidReshape(ge){if(ge.userData.kidR)return;ge.userData.kidR=1;const P=ge
         for(const i of adj.keys()){const w=Math.min(1,W[i]*1.5);if(!w)continue;const k=i*3,l=Math.hypot(T[k],T[k+1],T[k+2])||1;let x=NA[k]+(T[k]/l-NA[k])*w,y=NA[k+1]+(T[k+1]/l-NA[k+1])*w,z=NA[k+2]+(T[k+2]/l-NA[k+2])*w;const m=Math.hypot(x,y,z)||1;NA[k]=x/m;NA[k+1]=y/m;NA[k+2]=z/m}}
       for(let i=0;i<N;i++){const c=can[i];if(c!==i){A[i*3]=A[c*3];A[i*3+1]=A[c*3+1];A[i*3+2]=A[c*3+2];NA[i*3]=NA[c*3];NA[i*3+1]=NA[c*3+1];NA[i*3+2]=NA[c*3+2]}}}}
   P.needsUpdate=true;if(Nn)Nn.needsUpdate=true;ge.computeBoundingBox();ge.computeBoundingSphere()}
-const KHG={s:0.248,cy:-0.125,z:0.004,glow:0.22,nr:0.036,nl:0.13,nz:-0.014};   /* the Magnific head: its scale, the height of the chin and how far forward it sits on the head joint, and the neck */
+const KHG={s:0.231,cy:-0.125,z:0.004,glow:0.22,nr:0.036,nl:0.13,nz:-0.014};   /* the Magnific head: its scale, the height of the chin and how far forward it sits on the head joint, and the neck */
 /* a child's build, not a small grown-up: thin arms and legs, a slim neck, narrow shoulders and a flat chest, a body that is straight up and down */
 function kidBones(){const b=RIG.b;if(RIG.kB||!b||!b.chest||!RIG.arm.length)return;RIG.kB=1;
   const P=(r,kx,kz)=>{const A=r.A0;r.kP=new THREE.Matrix4().makeTranslation(A.x,A.y,A.z).multiply(new THREE.Matrix4().makeScale(kx,1,kz)).multiply(new THREE.Matrix4().makeTranslation(-A.x,-A.y,-A.z))};   /* model rest axes: x forward, z across */
@@ -2736,6 +2767,7 @@ function poseRider(time,dt){
   const dg=AT.drag||0;if(dg>0.01){A.grab=Math.max(g0,0.80*dg);AT.drag=0}
   poseRider0(time,dt);
   AT.rail=k0.rail;AT.intent=k0.intent;AT.slipYaw=k0.slip;AT.look=k0.look;AT.drag=k0.drag;AT.gz=k0.gz;AT.tw=k0.tw;AT.hroll=k0.hroll;AT.hipBack=k0.hipBack;AT.shiftX=k0.shiftX;AT.crouch=k0.crouch;A.grab=g0;A.bsArm=0;A.bsJoin=0}
+const ARMS={i:3.4,u:3.0,p:6,q:4,s:5,t:1.2,c:0.85,f:2.8,pl:[0.34,0.72],po:[1.3,3.0],pa:3.6},ARQ={q:new THREE.Quaternion(),slow:new THREE.Quaternion(),i:new THREE.Quaternion(),id:new THREE.Quaternion(),m:new THREE.Matrix4(),z:new THREE.Vector3(),v:new THREE.Vector3(),ok:false};   /* how fast the arms follow steering, climbing, pumping, hard turns and the side of the pendulum (per second): lower = calmer arms; t, c: how the arms ride the torso's quick moves; f: the hands' spring (Hz); pl, po, pa: how hard a turn must be before the lead hand goes down to the water, and how fast it gets there */
 const BSL={bt:-0.45,hit:1.45,roll:0.30};   /* backside head: yaw up the wall in the bottom turn, yaw toward the back foot at the hit, head tilt toward the back shoulder */
 function poseRider0(time,dt){
   // Posture rules below were tuned frame by frame against footage of a goofy-footer surfing a wave-pool left frontside:
@@ -2811,12 +2843,13 @@ function poseRider0(time,dt){
   // arms: mostly low, lead arm forward and trail arm back along the board; they lead the turn (intent), a beat ahead of the board
   J.shF.copy(J.chest).addScaledVector(J.axis,0.186).addScaledVector(J.spine,0.014);J.shB.copy(J.chest).addScaledVector(J.axis,-0.186).addScaledVector(J.spine,0.014);
   {const sg=(A.shrug=damp(A.shrug||0,AT.shrug||0,10,dt))*0.07;if(sg>0.001){J.shF.addScaledVector(J.spine,sg);J.shB.addScaledVector(J.spine,sg)}}   // shoulders up: a shrug
-  const nK=1+1.8*rev,n1=(Math.sin(time*1.3)*0.025+Math.sin(time*2.9)*0.01+Math.sin(time*5.1)*0.012*rev)*nK,n2=(Math.sin(time*1.1+2)*0.025+Math.sin(time*3.3+1)*0.01+Math.sin(time*4.3+2)*0.012*rev)*nK,cv=1-sn,pump=clamp(-A.crouch.v*0.04,-0.05,0.08)*st;
+  const nK=1+1.8*rev,n1=(Math.sin(time*1.3)*0.025+Math.sin(time*2.9)*0.01+Math.sin(time*5.1)*0.012*rev)*nK,n2=(Math.sin(time*1.1+2)*0.025+Math.sin(time*3.3+1)*0.01+Math.sin(time*4.3+2)*0.012*rev)*nK,cv=1-sn,pump=A.armP=damp(A.armP||0,clamp(-A.crouch.v*0.04,-0.05,0.08)*st,ARMS.p,dt);
   // Arms stay low and close to the body. Only the manoeuvre opens them: lead arm out toward the wave, palm up as if carrying a tray, trail arm stretched straight back.
-  const tray=A.tray=damp(A.tray||0,clamp(Math.max(sn,th_*0.9,heelI*cv*0.55)*(1-rev)*(1-gr)*(1-air)*(1-bh),0,1),8,dt);
+  const tray=A.tray=damp(A.tray||0,clamp(Math.max(sn,th_*0.9,(A.armH||0)*cv*0.55)*(1-rev)*(1-gr)*(1-air)*(1-bh),0,1),8,dt);
   // Style reference: Ethan Ewing. Compact and quiet: the lead hand lives beside the front knee and only leaves the leg to open low toward the wave
   // in the manoeuvre (palm turning up, like carrying a tray); the trail arm does the talking and goes straight back when he hits.
-  {let tx=-0.45,ty=-0.80,tz=0.22,tr=0.44;
+  {const toeI=A.armT=damp(A.armT||0,Math.max(ti,0),ARMS.i,dt),heelI=A.armH=damp(A.armH||0,Math.max(-ti,0),ARMS.i,dt),up=A.armU=damp(A.armU||0,AT.vup*st,ARMS.u,dt);   /* the arms read slow copies of the steering: a pro's arms follow the line he draws, not every little correction of the feet, so a tap up or down the face no longer swaps the whole arm pose */
+   let tx=-0.45,ty=-0.80,tz=0.22,tr=0.44;
    const mt=(w,bx_,by_,bz_,br)=>{if(w<=0)return;if(w>1)w=1;tx+=(bx_-tx)*w;ty+=(by_-ty)*w;tz+=(bz_-tz)*w;tr+=(br-tr)*w};
    mt(toeI*(1-up),-0.66,-0.70,-0.04,0.44);mt(up*(1-heelI),-0.50,-0.82,0.24,0.42);mt(drv,-0.55,-0.80,0.18,0.42);mt(heelI*cv*(1-tray),-0.46,-0.78,0.40,0.47);
    mt(tray,-0.80,-0.30,0.52,0.555);mt(Math.max(A.impact,rev),-0.76,-0.56,0.14,0.46);mt(tub,-0.50,-0.72,-0.38,0.44);mt(cl,-0.45,-0.80,0.20,0.40);
@@ -2825,16 +2858,16 @@ function poseRider0(time,dt){
    const ml=(w,ax,ay,az,ar)=>{if(w<=0)return;if(w>1)w=1;_b.set(ax,ay,az).normalize().multiplyScalar(ar).add(J.shF);J.hFt.lerp(_b,w)};
    ml(heelI*cv*(1-tray)*0.55,0.62,-0.66,0.30,0.46);ml(tray*0.85,0.45,-0.55,-0.70,0.50);ml(Math.max(A.impact,rev)*0.7,0.78,-0.56,-0.30,0.47);ml(cl,0.50,0.55,-0.25,0.50);
    J.hFt.y+=n1*0.6+pump;
-   {const live=(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub*0.7)*(1-Math.min(1,Math.abs(lay))),tq=sstep(1.0,4.2,Math.abs(sf.om||0))*live;   /* arms that ride: in a hard turn the trail arm lifts and swings out for balance and the lead arm reaches into the turn; cruising, small balance movements */
+   {const live=(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub*0.7)*(1-Math.min(1,Math.abs(lay))),tq=(A.armQ=damp(A.armQ||0,sstep(1.0,4.2,Math.abs(sf.om||0)),ARMS.q,dt))*live;   /* arms that ride: in a hard turn the trail arm lifts and swings out for balance and the lead arm reaches into the turn; cruising, small balance movements */
     J.hBt.y+=0.11*tq+0.016*Math.sin(time*1.6+1.0)*live;_d.subVectors(J.shB,J.shF);_d.y=0;if(_d.lengthSq()>1e-6){_d.normalize();J.hBt.addScaledVector(_d,0.07*tq)}
     J.hFt.addScaledVector(J.front,0.09*tq);J.hFt.y+=0.05*tq+0.012*Math.sin(time*1.9)*live}}
-  {const ptg=clamp(sstep(0.22,0.6,Math.abs(lamN))*sstep(0.8,2.4,Math.abs(sf.om||0)),0,1)*(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub)*(1-Math.min(1,Math.abs(lay)))*(1-gr)*(1-bh)*(1-rev),pw=A.pend=damp(A.pend||0,ptg,ptg>(A.pend||0)?5:2.6,dt);   /* the pendulum, through every drawn turn on every wave: the lead hand down to the water on the inside of the turn, the trail hand up behind on a diagonal */
-   if(pw>0.01){const ins=lamN>=0?-1:1,dp=0.5+0.5*sstep(0.5,0.95,Math.abs(lamN));   /* one long diagonal through the shoulders: the lead arm reaches ahead and down to the face on the inside of the turn, nearly straight, palm skimming; the trail arm answers it, back and up behind */
+  {const ptg=clamp(sstep(ARMS.pl[0],ARMS.pl[1],Math.abs(lamN))*sstep(ARMS.po[0],ARMS.po[1],Math.abs(sf.om||0)),0,1)*(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub)*(1-Math.min(1,Math.abs(lay)))*(1-gr)*(1-bh)*(1-rev),pw=A.pend=damp(A.pend||0,ptg,ptg>(A.pend||0)?ARMS.pa:2.6,dt);   /* the pendulum, through every drawn turn on every wave: the lead hand down to the water on the inside of the turn, the trail hand up behind on a diagonal */
+   if(pw>0.01){const ins=A.pIns=damp(A.pIns===undefined?-clamp(lamN/0.35,-1,1):A.pIns,-clamp(lamN/0.35,-1,1),ARMS.s,dt),dp=0.5+0.5*sstep(0.5,0.95,Math.abs(lamN));   /* one long diagonal through the shoulders: the lead arm reaches ahead and down to the face on the inside of the turn, nearly straight, palm skimming; the trail arm answers it, back and up behind */
      _b.copy(XV).multiplyScalar(0.62).addScaledVector(WU,-0.38-0.22*dp).addScaledVector(ZV,0.34*ins).normalize().multiplyScalar(0.61).add(J.shF);J.hFt.lerp(_b,pw);
      _c.copy(XV).multiplyScalar(-0.72).addScaledVector(WU,0.30+0.16*dp).addScaledVector(ZV,-0.18*ins).normalize().multiplyScalar(0.58).add(J.shB);J.hBt.lerp(_c,pw*0.95)}}
   {const on=RB&&sf.mode==='ride'?(1-Math.min(1,cl))*(1-air)*(1-pr)*(1-tub)*(1-Math.min(1,Math.abs(lay))):0,act=(sf.pivot>0||sf.rh||Math.abs(sf.om||0)>2.2)?1:0;   /* backside: after every move the trail arm is thrown back and swings on behind like a pendulum, tracing the line he just drew; it never just hangs down */
    A.bsw=damp(A.bsw||0,on*(act?1:0.45),act?7:1.3,dt);A.bph=(A.bph||0)+dt*(4.2+2*act);if(act)A.bam=1;A.bam=Math.max(0,(A.bam||0)-dt*0.9);
-   if(A.bsw>0.01){const sw=0.16*A.bam*Math.sin(A.bph);_c.copy(XV).multiplyScalar(-0.80-sw).addScaledVector(WU,0.22+0.20*A.bam+sw*0.6).addScaledVector(ZV,-0.10).normalize().multiplyScalar(0.58).add(J.shB);J.hBt.lerp(_c,Math.min(1,A.bsw))}}
+   if(A.bsw>0.01){const sw=0;_c.copy(XV).multiplyScalar(-0.80-sw).addScaledVector(WU,0.22+0.20*A.bam+sw*0.6).addScaledVector(ZV,-0.10).normalize().multiplyScalar(0.58).add(J.shB);J.hBt.lerp(_c,Math.min(1,A.bsw))}}
   if(cl>0.01&&AT.claimV===6){const w=Math.min(1,cl);_c.copy(camera.position).sub(riderG.position).applyQuaternion(_qi.copy(riderG.quaternion).invert());if(RB)_c.z=-_c.z;   // points at the camera, then the hang loose
     if(AT.clPh)_b.copy(_c).sub(J.shF).normalize().multiplyScalar(0.64).add(J.shF);
     else{_b.set(0.30,0,-0.50).addScaledVector(WU,0.85).normalize().multiplyScalar(0.56).add(J.shF);_b.x+=0.06*Math.sin(time*15)}
@@ -2890,11 +2923,16 @@ function poseRider0(time,dt){
     paddlePt(AT.paddle+PI,-1,_a);_b.set(-0.05,0.08,-0.22);_a.lerp(_b,push);J.hBt.lerp(_a,1-st)}
   if(wk>0.001){_a.copy(J.shB);_a.x-=0.10;_a.y-=0.50;_a.z-=0.06;J.hBt.lerp(_a,wk);   /* back hand round the board's lower rail */
     _b.copy(J.shF);_b.x+=0.24+0.05*Math.sin(wph);_b.y+=-0.20+0.08*Math.sin(wph*2)+0.36*wpn;_b.z+=-0.24+0.07*Math.cos(wph);J.hFt.lerp(_b,wk)}   /* the free arm out for balance, flung up on a sharp step */
-  const stiff=pr>0.2,hf=wk>0.3?10:stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:(cl>0.4&&AT.claimV>=8?11:2.6)),hz=stiff?1:0.70;
+  const stiff=pr>0.2,hf=wk>0.3?10:stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:(cl>0.4&&AT.claimV>=8?11:ARMS.f)),hz=stiff||hf<=ARMS.f?1:0.70;   /* riding, the hands follow a critically damped spring: they arrive and stop, no overshoot, no wobble (a pro's arms are quiet) */
+  {const T=ARQ;T.z.copy(J.front).negate();T.m.makeBasis(J.axis,J.spine,T.z);T.q.setFromRotationMatrix(T.m);   /* the torso's orientation now */
+   if(!T.ok){T.slow.copy(T.q);T.ok=true}else T.slow.slerp(T.q,1-Math.exp(-ARMS.t*dt));   /* and its slow average */
+   const c=ARMS.c*st*(1-pr);if(c>0.01){T.q.multiply(T.i.copy(T.slow).invert()).slerp(T.id,1-c);   /* the quick part of the torso's motion carries the arms along: a twist or a lean on a tap
+     up or down the face moves shoulders and arms as one piece, the way a surfer's arms ride with his body, instead of the hands staying put while the arm swings round them */
+     T.v.subVectors(J.hFt,J.shF).applyQuaternion(T.q);J.hFt.copy(J.shF).add(T.v);T.v.subVectors(J.hBt,J.shB).applyQuaternion(T.q);J.hBt.copy(J.shB).add(T.v)}}
   J.haF.copy(A.hF.step(J.hFt,dt,hf,hz));J.haB.copy(A.hB.step(J.hBt,dt,AT.drag>0.5?5:hf,hz));
   J.shF.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haF,J.shF).normalize().dot(J.spine)));J.shB.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haB,J.shB).normalize().dot(J.spine)));
   ik(J.shF,J.haF,0.30,0.26,-0.25*st,-0.75*st+0.5*pr,0.6*st+pr,J.elF,J.tA);J.haF.copy(J.tA);
-  ik(J.shB,J.haB,0.30,0.26,-0.6*st,(-0.20-0.4*toeI-0.8*gr+1.0*th_+0.6*heelI*cv)*st+0.5*pr,0.7*st-pr,J.elB,J.tA);J.haB.copy(J.tA);
+  ik(J.shB,J.haB,0.30,0.26,-0.6*st,(-0.20-0.4*(A.armT||0)-0.8*gr+1.0*th_+0.6*(A.armH||0)*cv)*st+0.5*pr,0.7*st-pr,J.elB,J.tA);J.haB.copy(J.tA);
   for(let n=0;n<2;n++){const arm=n?armB:armF,sh=n?J.shB:J.shF,el=n?J.elB:J.elF;_d.subVectors(el,sh).normalize();_c.copy(sh).addScaledVector(_d,-0.02).lerp(J.chest,0.40);
     fillLimb(arm,_c,el,n?J.haB:J.haF,0.571,0.065);arm.update();
     _c.copy(J.chest).lerp(sh,0.55).addScaledVector(J.spine,-0.06);softN(arm,_c,0,19,0.12,0.26);softN(torso,_c,24,43,0.12,0.26)}
@@ -3169,7 +3207,7 @@ function setMirror(m){STANCE=m?1:0;MIRROR=m?1:0;riderG.scale.set(1,1,1);kidApply
   $('goLeft').classList.toggle('sel',!MIRROR);$('goRight').classList.toggle('sel',!!MIRROR);try{localStorage.setItem('playsurf_wave',MIRROR?'R':'L')}catch(e){}}
 $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});$('goRight').addEventListener('click',e=>{e.stopPropagation();setMirror(1);e.currentTarget.blur();if(document.body.classList.contains('touch'))goFull();wzGo(3)});
 var WZ={s:1};
-function wzGo(n){WZ.s=n===0?0:clamp(n,2,4);{const t=document.querySelector('.wzTop');if(t)t.style.visibility=WZ.s===0?'hidden':''}   /* the device is detected on its own and the jersey changes by itself: stance, wave, board, surf */   /* 1 device, 2 stance, 3 wave, 4 board, 5 jersey, 6 turns */if(typeof adBreakNext==='function')adBreakNext(WZ.s);document.querySelectorAll('.wzS').forEach(e=>e.classList.toggle('on',+e.dataset.s===WZ.s));
+function wzGo(n){WZ.s=n===0?0:clamp(n,2,4);document.body.dataset.wz=WZ.s;{const t=document.querySelector('.wzTop');if(t)t.style.visibility=WZ.s===0?'hidden':''}   /* the device is detected on its own and the jersey changes by itself: stance, wave, board, surf */   /* 1 device, 2 stance, 3 wave, 4 board, 5 jersey, 6 turns */if(typeof adBreakNext==='function')adBreakNext(WZ.s);document.querySelectorAll('.wzS').forEach(e=>e.classList.toggle('on',+e.dataset.s===WZ.s));
   document.querySelectorAll('.wzDots i').forEach(e=>{const k=+e.dataset.s;e.classList.toggle('on',k===WZ.s);e.classList.toggle('done',k<WZ.s)});
   $('wzBack').style.display=WZ.s>=2?'':'none';   /* gone, not just hidden, so the step names line up with the logo and title */if(WZ.s===3||WZ.s===4)progUI();if(WZ.s===3){requestAnimationFrame(mapFit);setTimeout(mapFit,520)}if(WZ.s===6)tutUI();bvShow(WZ.s===4)}
 /* the wave map on a phone: centred on the screen and as big as the room under the title allows */
@@ -3501,7 +3539,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
 function hbAt(a){if(a<=game.waveDur){let gr=0;for(const C of SEC)if(C.fol){const t=a-C.t0;gr=Math.max(gr,sstep(-1,3,t)*(1-sstep(C.d,C.d+2.5,t)))}return 1+0.32*(1-sstep(5,13,a))+0.2*gr}
   const u=a-game.waveDur;return (1-0.30*sstep(1.5,10,u))*(1+0.06*Math.sin(a*2.7)*(1-sstep(7,11,u)))}
 function startWave(att){if(!att&&PARTY.on){if(PARTY.done){champShow();return}const p=ptCur();if(p){setLycra(p.lyc);if(STANCE!==p.st)setMirror(p.st)}setTimeout(ptTurnShow,150)}   /* party: the next surfer's jersey and name */
-  qQuiet=performance.now()+2000;if(typeof judgeHide==='function')judgeHide();if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6?1:SPOT.id===2||SPOT.id===3?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
+  qQuiet=performance.now()+2000;if(typeof judgeHide==='function')judgeHide();if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6||SPOT.id===12?1:SPOT.id===2||SPOT.id===3||SPOT.id===10||SPOT.id===11||SPOT.id===13?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&SPOT.id!==8&&SPOT.id!==10&&SPOT.id!==13&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.night,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
   try{const fine=!matchMedia('(pointer:coarse)').matches;if(game.attract&&fine){window.__qHold=true;setQuality(1)}else if(!game.attract&&window.__qHold){window.__qHold=false;setQuality(3)}else if(!game.attract&&qLevel>3){setQuality(3);qLock=false;qFloor=QL.length-1}   /* every wave starts sharp again */}catch(e){}   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
@@ -3937,7 +3975,7 @@ function endRide(kind){
   const lv1=lvlOf(PROG.xp);if(lv1>lv0)unl.push('LEVEL UP · '+lv1);(game.newTro||[]).forEach(n=>unl.push('TROPHY · '+n));game.newTro=[];
   const nxt=SPOTS.find(o=>!spotOpen(o)&&!o.soon)||BOARDS.find(b=>!boardOpen(b)),goal=nxt?(nxt.full?'NEXT: '+nxt.full+' — ':'NEXT BOARD: '+nxt.name+' — ')+reqText(nxt.req):'',xpK=clamp((PROG.xp-lvlXP(lv1))/(lvlXP(lv1+1)-lvlXP(lv1)),0,1);
   const agg={};game.list.forEach(m=>{agg[m.name]=agg[m.name]||{n:0,p:0};agg[m.name].n++;agg[m.name].p+=m.pts});
-  const head={wipe:'WIPEOUT! — RIDE OVER',done:'END OF THE POOL',kick:'KICKED OUT OVER THE TOP'}[kind];
+  const head={wipe:'WIPEOUT! — RIDE OVER',done:SPOT.id===1?'END OF THE POOL':'END OF THE WAVE',kick:'KICKED OUT OVER THE TOP'}[kind];   /* (only the pool is a pool) */
   const wave=game.waveId;
   game.showCard=()=>{if(game.state!=='end'||game.waveId!==wave||!game.showCard)return;game.showCard=null;game.hl=false;game.endT=0;game.cardAt=performance.now();
     const rp=game.replay;if(rp&&rp.clips){rp.clips=null;rp.rt=game.rec[0].age;rp.i=0;wake.length=0;camInit=false}
