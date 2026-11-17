@@ -1,8 +1,8 @@
 # PlaySurf
 
-> PlaySurf is a free 3D surfing game that runs in the web browser: surf eight real waves, from Pipeline to the Amazon river bore, with no download and no sign-up.
+> PlaySurf is a free indie 3D surfing game that runs in the web browser: surf 13 real waves, from Pipeline and Jeffreys Bay to the Amazon river bore, alone or in Party Surf with friends, with no download and no sign-up.
 
-PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by Decker Games. It is free, needs no account and no download, and runs in Chrome, Safari, Edge and Firefox on computers, phones and tablets. Players ride real surf spots like a surfer: speed from the bottom turn, snaps, cutbacks, floaters, laybacks, carve 360s, airs and barrels, linked into combos, and five judges score every wave. Rain, sun showers, dawn and night sessions change the conditions. There are seven boards, a soundtrack of 15 songs and 12 trophies. Controls: keyboard (arrows, Space for airs, Shift to brake in the barrel), gamepad or touch.
+PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by Decker Games. It is free, needs no account and no download, and runs in Chrome, Safari, Edge and Firefox on computers, phones and tablets. Players ride real surf spots like a surfer: speed from the bottom turn, snaps, cutbacks, floaters, laybacks, carve 360s, airs and barrels, linked into combos, and five judges score every wave. Rain, sun showers, dawn and night sessions change the conditions. There are 13 waves, a Party Surf mode for 2 to 6 friends on one device, seven boards, a soundtrack of 15 songs and 12 trophies. It is an indie game, made by a surfer. Controls: keyboard (arrows, Space for airs, Shift to brake in the barrel), gamepad or touch.
 
 ## Play
 - [PlaySurf](https://playsurfgame.com/): the game, free in the browser
@@ -17,6 +17,20 @@ PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by D
 - [Campeche](https://playsurfgame.com/campeche-surf-game): Florianópolis · the long right. Surf Campeche, Florianópolis, Brazil, in a free 3D surf game.
 - [Pororoca](https://playsurfgame.com/pororoca-surf-game): Amazon · the endless river wave. Surf the Pororoca, the Amazon tidal bore, in a free 3D surf game.
 - [Þorlákshöfn](https://playsurfgame.com/thorlakshofn-surf-game): Iceland · lefts and rights. Surf Þorlákshöfn (Thorlakshofn), Iceland, in a free 3D surf game.
+- Supertubos: Peniche, Portugal · heavy beach break barrels
+- Skeleton Bay: Namibia · an endless left barrel
+- Greenbush: Mentawai, Indonesia · a heavy left slab
+- Jeffreys Bay: South Africa · the Supertubes right
+- Chicama: Peru · the longest left in the world
+
+## Party Surf
+- 2 to 6 friends play on one device, four waves each; the judges score every ride and crown a champion.
+
+## The story
+PlaySurf is an indie game, and it started with a long wait. Its creator is a surfer who spent decades hoping for a surf game that felt like the real thing: the drop, the bottom turn that turns into speed, the lip pitching overhead as you line up the barrel. That game never came. So the creator stopped waiting and made it.
+It was made to be played at home, with a son and a wife who surf too. One screen passes from hand to hand in Party Surf sessions: four waves each, judges scoring every ride, and a champion at the end.
+Knowing surfing from the water shaped every part of the game. Each move was ridden, felt and tuned again and again (the timing of a snap, the line through a cutback, the moment to brake and let the barrel catch you) until the riding flowed and had style. PlaySurf keeps growing the same way, wave by wave: today it has 13 real spots, from Pipeline and Jeffreys Bay to Chicama and the Amazon's Pororoca.
+And it is free, on purpose. The idea is to offer PlaySurf to everyone who wants to have fun, and to let people who live far from the beach feel what surfing is like: the drop, the speed off the bottom turn, the moment the lip throws over your head.
 
 ## Guides in other languages
 - [Português](https://playsurfgame.com/jogo-de-surf): Jogo de surf online grátis

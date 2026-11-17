@@ -39,7 +39,7 @@ img{max-width:100%;height:auto;display:block}a{color:var(--acc)}
 a:focus-visible,summary:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:6px}
 .skip{position:absolute;left:-9999px;top:8px;z-index:60;background:#fff;color:var(--navy);padding:10px 16px;border-radius:8px;font-weight:700}.skip:focus{left:8px}
 .top{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(10,18,48,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.top .logo{display:block;line-height:0}.top .logo img{height:20px;width:auto}
+.top .logo{display:block;line-height:0}.top .tr{display:flex;align-items:center;gap:14px}.top .cl{color:var(--fg);font:italic 700 13px/1 var(--f);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:9px 2px;white-space:nowrap}.top .cl:hover{color:var(--acc)}.top .logo img{height:20px;width:auto}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;font:italic 800 17px/1 var(--f);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;color:var(--navy);background:var(--grad);padding:16px 30px;border-radius:7px;transform:skewX(-9deg);box-shadow:0 12px 32px rgba(227,54,143,.32);transition:transform .15s,box-shadow .15s;white-space:nowrap}
 .btn:hover{transform:skewX(-9deg) translateY(-2px);box-shadow:0 16px 40px rgba(227,54,143,.45)}.btn:focus-visible{outline:3px solid #fff;outline-offset:4px}
 .btn.sm{font-size:13px;padding:10px 16px;box-shadow:none}.btn.big{font-size:clamp(18px,2.4vw,22px);padding:19px 36px}
@@ -124,7 +124,7 @@ footer .brand img{height:22px;width:auto;margin-bottom:10px}footer .brand a{marg
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="top"><a class="logo" href="/" aria-label="PlaySurf"><img src="/playsurf-logo.webp" alt="PlaySurf" width="1026" height="163"></a><a class="btn sm" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z"/></svg>Play free</a></header>
+<header class="top"><a class="logo" href="/" aria-label="PlaySurf"><img src="/playsurf-logo.webp" alt="PlaySurf" width="1026" height="163"></a><nav class="tr"><a class="btn sm" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z"/></svg>Play free</a></nav></header>
 <header class="hero" style="--pos:50%"><img class="bg" src="/img/pipeline-hero-1280.webp" srcset="/img/pipeline-hero-640.webp 640w, /img/pipeline-hero-1280.webp 1280w, /img/pipeline-hero-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="Pipeline in PlaySurf: the heavy left barrel of the North Shore of Oahu" fetchpriority="high" decoding="async"><div class="in">
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">PlaySurf</a><span>›</span><a href="/free-surf-game">Free surf game</a><span>›</span>Pipeline Surf Game</nav>
 <p class="eyebrow">Hawaii · Pipe and Backdoor</p>
