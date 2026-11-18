@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://playsurfgame.com/">
 <link rel="canonical" href="https://playsurfgame.com/">
-<link rel="preload" href="surfer.glb" as="fetch" type="model/gltf-binary" crossorigin>
+<script>/* 2026-11-18 search-engine crawlers (Googlebot, Google's URL inspection, Bing, headless Chrome, Lighthouse) get the same page and text but not the 3D game: its WebGL start-up and the 1 MB models made Google's live test time out. ?bot=1 shows that mode for testing */window.__PSBOT=/Googlebot|Google-InspectionTool|GoogleOther|Storebot-Google|AdsBot-Google|Mediapartners-Google|APIs-Google|bingbot|HeadlessChrome|Chrome-Lighthouse|Lighthouse/i.test(navigator.userAgent)||/[?&]bot=1/.test(location.search);if(!window.__PSBOT){var l=document.createElement('link');l.rel='preload';l.href='surfer.glb';l.as='fetch';l.type='model/gltf-binary';l.crossOrigin='anonymous';document.head.appendChild(l)}</script>
 <meta name="twitter:card" content="summary_large_image"><script data-goatcounter="https://playsurf.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script><script>/* PlaySurf: tempo de permanencia (eventos GoatCounter) */(function(){var M=[[30,'30s'],[60,'1min'],[180,'3min'],[300,'5min'],[600,'10min'],[1200,'20min'],[1800,'30min']],t=0,i=0,q=[],id;function send(){while(q.length&&window.goatcounter&&window.goatcounter.count){var m=q.shift();window.goatcounter.count({path:'tempo-'+m,title:'Ficou '+m,event:true})}}id=setInterval(function(){if(document.visibilityState==='visible'){t++;while(i<M.length&&t>=M[i][0]){q.push(M[i][1]);i++}}send();if(i>=M.length&&!q.length)clearInterval(id)},1000)})();</script><meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#0b3d63">
 <meta property="og:site_name" content="PlaySurf">
@@ -770,6 +770,7 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {BokehPass} from 'three/addons/postprocessing/BokehPass.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+if(window.__PSBOT){document.documentElement.classList.add('bot');throw new Error('PlaySurf: crawler, the 3D game is not started (the page and its text are the same)')}
 /* a quick LOADING bar while the models and textures come down */
 {const ld=document.getElementById('ld'),u=document.getElementById('ldU');let done=false;const fin=()=>{if(done)return;done=true;if(u)u.style.width='100%';if(ld)setTimeout(()=>{ld.classList.add('off');setTimeout(()=>ld.remove(),800)},Math.max(350,1600-performance.now()))};   /* the splash stays at least ~1.6 s, the bar full for a moment before it fades */
  THREE.DefaultLoadingManager.onProgress=(url,n,t)=>{if(!done&&u)u.style.width=Math.max(4,Math.round(100*n/Math.max(t,1)))+'%'};THREE.DefaultLoadingManager.onLoad=()=>setTimeout(fin,200);setTimeout(fin,15000)}
