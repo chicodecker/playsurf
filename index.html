@@ -2918,24 +2918,26 @@ function girlShader(mat){if(RIG.fix&&RIG.fix.skin)GIRLS.value.setRGB(...RIG.fix.
           vec3 gq=(transformed-vec3(-0.028*FSX,0.936,0.010))/vec3(0.0715,0.0735,0.0705);float gr=length(gq),gk=max(smoothstep(0.950,0.958,position.y),smoothstep(-0.03,-0.05,gx)*smoothstep(0.87,0.89,position.y))*smoothstep(0.86,0.95,gr);
           transformed=mix(transformed,vec3(-0.028*FSX,0.936,0.010)+gq/max(gr,1e-4)*min(gr,0.93)*vec3(0.0715,0.0735,0.0705),gk);}}`);   /* his curls pressed flat under her hair */
     sh.fragmentShader='uniform float uGirl;uniform vec3 uGirlC;uniform vec3 uGirlS;uniform vec3 uGirlH;uniform vec3 uSkinT;\n'+sh.fragmentShader.replace('#include <color_fragment>',`{float sTc=max(cOrig.g,cOrig.b)-cOrig.r,sTs=smoothstep(-0.07,-0.02,sTc)*(1.-smoothstep(0.56,0.58,vMY))*step(0.30,vMY);diffuseColor.rgb*=mix(vec3(1.),uSkinT,(1.-lycK)*(1.-smoothstep(0.95,0.962,vMY))*(1.-step(0.5,uSuit))*(1.-sTs));}   /* (a person's own skin tone: the extra people at Campeche) */
-      if(uGirl>0.5&&uSuit<0.5){vec3 gp=vMN;float gy=vMY,gz=abs(gp.z),glu=dot(cOrig,vec3(.3,.59,.11));
+      float gHairK=0.;if(uGirl>0.5){vec3 gp=vMN;float gy=vMY,gz=abs(gp.z),glu=dot(cOrig,vec3(.3,.59,.11));
+        float gNS=1.-step(0.5,uSuit),gHd=step(0.9,uSuit),gHo=mix(1.,smoothstep(0.018,0.040,vMN.x*FSX)*smoothstep(0.862,0.884,vMY)*(1.-smoothstep(0.944,0.960,vMY)),gHd);   /* aesthetic 2026-11-18: under a fullsuit only her body is left alone; her face and hair still apply (a hood: only the face, inside its opening). Before, on the five fullsuit waves she wore his stubble and his dark curls stuck out under her hair */
         vec3 gsk=uGirlS*(0.94+0.12*smoothstep(0.1,0.5,glu));
-        float gSh=smoothstep(0.276,0.292,gy)*(1.-smoothstep(0.582,0.600,gy));   /* his boardshorts are gone: bare legs */
+        float gSh=smoothstep(0.276,0.292,gy)*(1.-smoothstep(0.582,0.600,gy))*gNS;   /* his boardshorts are gone: bare legs */
         float gyb=mix(0.462,0.520,smoothstep(0.024,0.088,gz))+0.016*smoothstep(-0.01,-0.05,gp.x*FSX)*smoothstep(0.02,0.07,gz),gBb=smoothstep(gyb-0.002,gyb+0.002,gy)*(1.-smoothstep(0.533,0.538,gy));   /* a bikini bottom, cut high at the hips */
         vec3 gfab=uGirlC*(0.82+0.36*smoothstep(0.04,0.45,glu));
         diffuseColor.rgb=mix(diffuseColor.rgb,gsk,gSh*(1.-gBb));diffuseColor.rgb=mix(diffuseColor.rgb,gfab,gSh*gBb);
         float gcy=(gy-0.700)/0.066,gTri=step(0.,gcy)*step(gcy,1.)*(1.-smoothstep(0.044*(1.-gcy)+0.002,0.044*(1.-gcy)+0.005,abs(gz-0.046+0.012*gcy)))*smoothstep(-0.01,0.015,gp.x*FSX);
         float gBand=smoothstep(0.692,0.695,gy)*(1.-smoothstep(0.704,0.707,gy))*(1.-smoothstep(0.10,0.11,gz));
         float gzs=mix(0.034,0.016,clamp((gy-0.766)/0.086,0.,1.)),gStr=smoothstep(0.762,0.768,gy)*(1.-smoothstep(0.85,0.856,gy))*(1.-smoothstep(0.0035,0.0055,abs(gz-gzs)));
-        float gTop=max(max(gTri,gBand),gStr)*(1.-lycK);diffuseColor.rgb=mix(diffuseColor.rgb,gfab,gTop);   /* and the top, where the jersey leaves it showing */
+        float gTop=max(max(gTri,gBand),gStr)*(1.-lycK)*gNS;diffuseColor.rgb=mix(diffuseColor.rgb,gfab,gTop);   /* and the top, where the jersey leaves it showing */
         float gFace=smoothstep(0.008,0.030,gp.x*FSX)*smoothstep(0.850,0.858,gy)*(1.-smoothstep(0.913,0.918,gy));   /* jaw, chin, cheeks and upper lip: no beard, no moustache */
         float gLip=(1.-smoothstep(0.65,1.0,length(vec2((gp.z-0.010)/0.0115,(gy-0.8965)/0.0040))))*smoothstep(0.026,0.034,gp.x*FSX);
-        diffuseColor.rgb=mix(diffuseColor.rgb,gsk*vec3(1.03,0.99,0.97),gFace*0.92);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.52,0.15,0.15),gLip*0.6);   /* soft pink lips */
-        float gBr=smoothstep(0.944,0.947,gy)*(1.-smoothstep(0.955,0.958,gy))*smoothstep(0.022,0.03,gp.x*FSX)*smoothstep(0.25,0.08,glu);diffuseColor.rgb=mix(diffuseColor.rgb,gsk*0.92,gBr*0.45);   /* lighter, finer brows */
+        diffuseColor.rgb=mix(diffuseColor.rgb,gsk*vec3(1.03,0.99,0.97),gFace*0.92*gHo);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.52,0.15,0.15),gLip*0.6*gHo);   /* soft pink lips */
+        float gBr=smoothstep(0.944,0.947,gy)*(1.-smoothstep(0.955,0.958,gy))*smoothstep(0.022,0.03,gp.x*FSX)*smoothstep(0.25,0.08,glu);diffuseColor.rgb=mix(diffuseColor.rgb,gsk*0.92,gBr*0.45*gHo);   /* lighter, finer brows */
         float gHy=mix(0.925,0.86,smoothstep(-FSX*0.01,-FSX*0.02,gp.x)),gHf=smoothstep(FSX*0.015,FSX*0.045,gp.x)*(1.-smoothstep(0.944,0.949,gy));   /* (his curls over the forehead too: they become her wispy fringe) */
-        diffuseColor.rgb=mix(diffuseColor.rgb,uGirlH*(0.7+1.6*glu),smoothstep(0.2,0.07,glu)*smoothstep(gHy,gHy+0.025,gy)*(1.-gHf));}   /* what shows of his dark hair: hers */
+        float gHm=smoothstep(0.2,0.07,glu)*smoothstep(gHy,gHy+0.025,gy)*(1.-gHf)*(1.-gHd);diffuseColor.rgb=mix(diffuseColor.rgb,uGirlH*(0.7+1.6*glu),gHm);gHairK=max(gHm,gFace*gHo);}   /* what shows of his dark hair: hers */
       #include <color_fragment>`).replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
-      if(uGirl>0.5){float gcc=smoothstep(0.940,0.946,vMY)*smoothstep(-0.01,0.02,vMN.x*FSX);material.clearcoat*=1.-gcc;material.roughness=mix(material.roughness,0.75,gcc);}`)};
+      if(uGirl>0.5){float gcc=max(smoothstep(0.940,0.946,vMY)*smoothstep(-0.01,0.02,vMN.x*FSX),gHairK);material.clearcoat*=1.-gcc;   /* aesthetic: what is left of his hair and the cheeks she gets from him are matt (with his clearcoat they shone like silver foil at the temples) */
+        material.roughness=mix(material.roughness,0.75,gcc);}`)};
   mat.customProgramCacheKey=()=>'rider-girl'}
 /* her hair: built in the model's own space (metres = model units x RIG.s) and carried by the head bone's transform */
 const GH={c1:new V3(),t1:new V3(),n1:new V3(),b1:new V3(),ref:new V3(),bk:new V3(),dn:new V3(),bc:new V3(),m2:new THREE.Matrix4(),on:false,P:[],O:[],N:7,seg:0.031,acc:0,last:new V3(),tmp:new V3(),tmp2:new V3(),m:new THREE.Matrix4(),mi:new THREE.Matrix4(),c:new V3(-0.028,0.936,0.010),R:new V3(0.0715,0.0735,0.0705),a0:new V3(-0.110,0.966,0.010)};
@@ -5753,6 +5755,16 @@ function shot(kind,p,tk,ak){
   if(kind==='tight'){cT1.set(p.x+20,2.8,36);cT2.set(p.x+0.6,p.y+0.85,p.z*0.8);return 8.5}
   cT1.set(p.x+13,1.2,p.z+4.5);cT2.set(p.x,p.y+0.7,p.z);return 24}
 const _sunP=new V3;
+/* aesthetic 2026-11-18: the camera never ends up inside the wave. The GoPro on its pole off the tail (held a moment after the barrel while he turns down
+   the face), a chase behind him or a glide between two shots could put the lens behind the face or in the curtain: the frame went murky green-blue and
+   he showed only as the x-ray ghost. The wave's own cross-section at the camera (the profile of its column, closed along the sea) says if the lens is in
+   the water; then it is moved out to the nearest air, along the wave's depth (z), or up */
+function wIns(i,y,z){const o=i*NV;let c=false;for(let a=0,b=NV-1;a<NV;b=a++){const ya=PY[o+a],za=PZ[o+a],yb=PY[o+b],zb=PZ[o+b];if(((za>z)!==(zb>z))&&(y<(yb-ya)*(z-za)/(zb-za)+ya))c=!c}return c}   /* is (y,z) inside the water of column i */
+function camDry(v){if(game.state==='menu')return 0;const i=Math.round(colIndex(v.x));if(!(i>=0&&i<NS))return 0;
+  const ins=(y,z)=>wIns(i,y,z);
+  if(!ins(v.y,v.z))return 0;
+  for(let d=0.06;d<=3.2;d+=0.06){if(!ins(v.y,v.z+d)){v.z+=d+0.12;return 1}if(!ins(v.y,v.z-d)){v.z-=d+0.12;return 1}}
+  for(let d=0.1;d<=4;d+=0.1)if(!ins(v.y+d,v.z)){v.y+=d+0.12;return 1}return 0}
 function updateCamera(dt,time){
   {_gT.set(sf.f.x,0,sf.f.z);if(_gT.lengthSq()>1e-4){_gT.normalize();_gfS.lerp(_gT,1-Math.exp(-3.2*dt)).normalize()}_guS.lerp(sf.up,1-Math.exp(-2.6*dt)).normalize()}   /* the board's heading and tilt, smoothed over ~0.3 s for the GoPro */
   let fov=30,rp=3.2,rl=7,kind='menu';const p=sf.mode==='kickout'&&sf.ko&&riderG.visible?riderG.position:sf.mode==='wipe'||sf.mode==='kickout'?sf.wPos:sf.pos;
@@ -5797,6 +5809,7 @@ function updateCamera(dt,time){
   const shk=(game.shake||0)*(1-0.95*(sf.tubeK||0));game.shake=damp(game.shake||0,0,7,dt);const sx_=Math.sin(time*29.3)*0.6+Math.sin(time*47.1)*0.4,sy_=Math.sin(time*31.7+1.3)*0.6+Math.sin(time*53.9+0.4)*0.4;
   camera.position.set(camP.x+hx+sx_*shk*0.09,Math.max(camP.y+hy+sy_*shk*0.09,0.45),camP.z);
   {const ce=A.ceZ=damp(A.ceZ||0,sf.endCl&&game.state==='ride'&&!game.attract&&sf.mode!=='reef'&&sf.mode!=='gag'?1:0,1.1,dt);if(ce>0.001){_ce.set(camera.position.x-camL.x,camera.position.y-camL.y,camera.position.z-camL.z);camera.position.addScaledVector(_ce,0.38*ce);camera.position.y=Math.max(camera.position.y,0.45)}}   /* the celebration: the camera steps back so all of him and the wave show */
+  {const y0=camera.position.y,z0=camera.position.z;if(camDry(camera.position)){camP.y+=camera.position.y-y0;camP.z+=camera.position.z-z0}}   /* aesthetic: never inside the wave (see camDry) */
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
   {const nr=lastShot==='gopro'||sf.tubeK>0.3?0.08:0.3;if(camera.near!==nr){camera.near=nr;camera.updateProjectionMatrix()}}   /* close to the wall in the barrel: never clip the water */
   camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(_guS,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
@@ -5990,12 +6003,40 @@ function reelCut(){const ids=SPOTS.filter(spotOpen).map(o=>o.id);if(ids.length<1
 /* 2026-11-18 the surfer is never lost: where the wave itself stands between him and the camera (the curl of a foam section, the lip from outside the barrel,
    a rail under the face) he shows through the water as a soft water-tinted shape. The wave is drawn first; the surfer marks the stencil where he is seen;
    the shape is drawn only where he is hidden behind something and not behind his own body */
-const XR={done:new WeakSet(),pairs:[],t:0,mat:null};
-function xrayTick(dt){if(!XR.mat){XR.mat=new THREE.MeshBasicMaterial({color:0xaee9e1,transparent:true,opacity:0.42,depthWrite:false,depthFunc:THREE.GreaterDepth,fog:false,stencilWrite:true,stencilRef:1,stencilFunc:THREE.NotEqualStencilFunc,stencilFail:THREE.KeepStencilOp,stencilZFail:THREE.KeepStencilOp,stencilZPass:THREE.KeepStencilOp});waveMesh.renderOrder=-2}
+const XR={on:1,done:new WeakSet(),pairs:[],t:0,mat:null,mine:new WeakSet(),k:0,hid:0,fo:0,oT:0,P:new THREE.Vector3(),D:new THREE.Vector3()};
+/* aesthetic 2026-11-18: how much of him the wave hides from the camera (XR.hid, 0..1) and how white the water that hides him is (XR.fo): a line from
+   each of head, chest, hips and knees toward the lens, stepped through the wave's cross-sections from 0.5 m off him (a hand or a knee in the
+   surface under him is not "hidden") out to 14 m */
+function xrOcc(){const c=camera.position,K=['head','chest','pel','knF','knB'];let n=0,h=0,f=0;
+  for(const k of K){if(!J[k])continue;n++;const P=gW(XR.P.copy(J[k])),D=XR.D.subVectors(c,P),L=D.length();if(L<0.8)continue;D.divideScalar(L);
+    for(let t=0.5,T=Math.min(L-0.3,14);t<T;t+=0.2){const x=P.x+D.x*t,i=Math.round(colIndex(x));if(!(i>=0&&i<NS))continue;
+      if(wIns(i,P.y+D.y*t,P.z+D.z*t)){h++;f+=Math.max(colFoam[i],colSecF[i],colEnd[i]);break}}}
+  XR.hid=n?h/n:0;XR.fo=h?f/h:0}
+function xrayTick(dt){if(!XR.mat){XR.mat=new THREE.MeshBasicMaterial({color:0xaee9e1,transparent:true,opacity:0.42,depthWrite:false,depthFunc:THREE.GreaterDepth,fog:false,stencilWrite:true,stencilRef:1,stencilFunc:THREE.NotEqualStencilFunc,stencilFail:THREE.KeepStencilOp,stencilZFail:THREE.KeepStencilOp,stencilZPass:THREE.KeepStencilOp});waveMesh.renderOrder=-2;
+    /* aesthetic 2026-11-18: the shape is tested 0.5 m nearer the camera, so it shows only where a real wall of water stands in front of him (curl, lip, foam);
+       and nothing below the bottom of his board gets it (a hand dragging in the face, the fins): those are under the water he rides on, not hidden behind a wave.
+       Before, a hand, a foot, a shoulder or a fin dipping into the surface turned into a flat pale blob */
+    XR.bp=new THREE.Vector3();XR.bn=new THREE.Vector3(0,1,0);
+    XR.mat.onBeforeCompile=sh=>{sh.uniforms.uXBP={value:XR.bp};sh.uniforms.uXBN={value:XR.bn};
+      sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vXW;').replace('#include <project_vertex>','#include <project_vertex>\nvXW=(modelMatrix*vec4(transformed,1.)).xyz;\n{vec4 xq=projectionMatrix*vec4(mvPosition.xy,min(mvPosition.z+0.5,-0.05),1.);gl_Position.z=xq.z/xq.w*gl_Position.w;}');
+      sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vXW;uniform vec3 uXBP,uXBN;').replace('void main() {','void main() {\n  if(dot(vXW-uXBP,uXBN)<0.03)discard;')}}
+  /* aesthetic: no ghost while he lies on the board (paddling in, the pick-your-side screen, the pop-up) or in a wipeout; it fades in as he stands up.
+     And only when he is lost inside a barrel: in the tube, nearly all of him (head, chest, hips, knees) behind the water, and that water not white foam.
+     Half of him showing with the rest as a pale cut-out, or a pale shape on white water, read as a glitch (the user's two screenshots). Fainter too
+     (0.42 -> 0.34). XR.on=0 turns the ghost off altogether */
+  {const m=sf.mode;let xk=XR.on&&(game.inTube||sf.tubeK>0.3)&&(m==='ride'||m==='air'||m==='float'||m==='kickout')?1-A.prone:0;
+    XR.oT=(XR.oT||0)-dt;if(xk>0.01){if(XR.oT<=0){XR.oT=0.05;xrOcc()}}else XR.hid=0;
+    xk*=sstep(0.7,0.95,XR.hid||0)*(1-sstep(0.3,0.6,XR.fo||0));
+    XR.k=damp(XR.k,xk,xk>XR.k?2.5:14,Math.max(dt,0));XR.mat.opacity=0.34*XR.k;XR.mat.visible=XR.k>0.03;
+    XR.bp.copy(boardG.position);XR.bn.set(0,1,0).applyQuaternion(boardG.quaternion)}
   XR.t-=dt;if(XR.t<=0){XR.t=0.5;[riderG,boardG].forEach(G=>G.traverse(o=>{if(!(o.isMesh||o.isSkinnedMesh)||o.userData.xr||XR.done.has(o))return;XR.done.add(o);
       (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(!m)return;m.stencilWrite=true;m.stencilRef=1;m.stencilFunc=THREE.AlwaysStencilFunc;m.stencilZPass=THREE.ReplaceStencilOp});
+      {const m0=Array.isArray(o.material)?o.material[0]:o.material;if(m0&&(m0.alphaTest>0||m0.transparent))return}   /* aesthetic: hair cards and other cut-out pieces get no ghost (it would be their whole flat card) */
       let gm;if(o.isSkinnedMesh){gm=new THREE.SkinnedMesh(o.geometry,XR.mat);gm.bind(o.skeleton,o.bindMatrix);gm.bindMode=o.bindMode;o.parent.add(gm);XR.pairs.push([o,gm])}else{gm=new THREE.Mesh(o.geometry,XR.mat);o.add(gm)}
-      gm.userData.xr=1;gm.frustumCulled=false;gm.renderOrder=60;gm.castShadow=gm.receiveShadow=false}))}
+      XR.mine.add(gm);gm.userData.xr=1;gm.frustumCulled=false;gm.renderOrder=60;gm.castShadow=gm.receiveShadow=false}));
+    /* aesthetic: boards and heads cloned for other people (the drop-in local, the paddler, the Campeche crowd) carried a copy of the ghost along:
+       it drew the sunk half of their boards as flat pale crescents on the water. Only the rider's own ghost stays */
+    const st=[];scene.traverse(o=>{if(o.userData&&o.userData.xr&&!XR.mine.has(o))st.push(o)});st.forEach(o=>o.parent&&o.parent.remove(o))}
   for(const [o,gm] of XR.pairs){gm.visible=o.visible;gm.position.copy(o.position);gm.quaternion.copy(o.quaternion);gm.scale.copy(o.scale)}}
 function tick(dtR,draw){xrayTick(dtR);if(draw){trStep(dtR);reelTick(dtR)}
   clockT+=dtR;if(game.lipQ&&game.lipQ.length&&game.waveAge>=game.lipQ[0].at){const q=game.lipQ.shift();if(game.state==='ride'||game.attract)lipBurst(q.k,q.s)}if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(SNOW.pts.visible){SNOW.m.uniforms.uT.value=clockT;SNOW.m.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
