@@ -626,6 +626,8 @@ body.touch .kbOnly{display:none}
 #keys,#camBtn.hb,#waveBtn.hb,#manBtn,#riderBtn,#jcard{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 #keys{background:linear-gradient(180deg,rgba(12,22,48,.68),rgba(2,6,16,.60))}
 #camBtn.hb,#waveBtn.hb,#manBtn,#riderBtn{background:linear-gradient(180deg,rgba(12,22,48,.74),rgba(2,6,16,.66))}
+#homeBtn{position:absolute;left:max(3vw,env(safe-area-inset-left,0px));bottom:calc(var(--bar,5.5vh) + 1.5vh + 162px);white-space:nowrap;pointer-events:auto;cursor:pointer;color:#fff;display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:14px;border:1px solid rgba(255,255,255,.20);background:linear-gradient(180deg,rgba(12,22,48,.74),rgba(2,6,16,.66));box-shadow:0 6px 22px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08);font-family:inherit;text-align:left;opacity:.9;transition:opacity .6s,border-color .2s,background .2s}
+#homeBtn:hover{border-color:rgba(255,255,255,.55);opacity:1}body:not(.softB) #homeBtn{bottom:calc(var(--bar,5.5vh) + 1.5vh + 108px)}body:not(.riding) #homeBtn,body.attract #homeBtn,body.touch #homeBtn{display:none!important}#tHome{display:flex;align-items:center;justify-content:center;padding:0 11px!important}#tHome svg{width:17px;height:17px;display:block;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}   /* 2026-11-18 HOME: back to the first menu from any wave */
 #qCal{position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(2,6,16,.92);opacity:0;pointer-events:none;transition:opacity .25s}
 #qCal.on{opacity:1;pointer-events:auto;transition:none}#qCal b{font:700 italic 11px var(--ps-f);font-stretch:112%;letter-spacing:.34em;color:#fff;opacity:.7}#qCal i{display:block;width:min(40vw,220px);height:3px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}#qCal u{display:block;height:100%;width:40%;background:var(--ps-grad);animation:qcal 1s ease-in-out infinite alternate}@keyframes qcal{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
 #bdSeal{width:auto!important;height:auto!important;left:3%!important;right:auto!important;top:-10%!important;display:inline-flex!important;align-items:center;gap:6px;padding:5px 8px 5px 9px;border-radius:4px!important;border:1px solid rgba(255,255,255,.32);background:rgba(8,16,40,.30)!important;box-shadow:none!important;filter:none!important;transform:none!important;animation:none!important;font:800 9px/1 var(--ps-f);font-style:italic;font-stretch:112%;letter-spacing:.26em;color:rgba(255,255,255,.85);white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.4)}   /* 2026-11-18 the SPECIAL EDITION seal as a small clean tag, like the BETA one: a gold dot instead of the big round sticker */
@@ -649,7 +651,7 @@ body.touch .kbOnly{display:none}
     <div id="speed"><small>SPEED</small><b>0</b><small>KM/H</small></div>
   </div>
   <div id="wavebar"><i></i></div>
-  <button id="camBtn" class="hb" aria-label="Change camera (C)"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.6A2.6 2.6 0 0 1 5.6 6H8l1.6-2.2h4.8L16 6h2.4A2.6 2.6 0 0 1 21 8.6v7.8a2.6 2.6 0 0 1-2.6 2.6H5.6A2.6 2.6 0 0 1 3 16.4z"/><circle cx="12" cy="12.4" r="3.6"/></svg></i><span class="hbT"><b>CAMERA</b><small id="camMode">SIDE</small></span><kbd>C</kbd></button><button id="waveBtn" class="hb" aria-label="Change wave"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 13.2c0-5 3.9-9 8.8-9 3.1 0 5.6 1.8 6.2 4.1-1.8-1-4.2-.7-5.3 1.1-1.1 1.7-.5 3.9 1.4 4.9"/><path d="M2 18.2c2.4 0 3.3-1.6 5-1.6s2.6 1.6 5 1.6 3.3-1.6 5-1.6 2.6 1.6 5 1.6"/></svg></i><span class="hbT"><b>CHANGE WAVE</b><small id="waveNow">PLAYSURF POOL</small></span><em class="hbA">&#8250;</em></button><button id="muteBtn" aria-label="Sound on">&#128266; SOUND ON</button><button id="riderBtn" class="hb" aria-label="Change surfer (U)"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="6.5" r="2.6"/><path d="M3.5 19v-3a4.5 4.5 0 0 1 9 0v3"/><path d="M15 8h6m0 0-2.4-2.4M21 8l-2.4 2.4M21 16h-6m0 0 2.4-2.4M15 16l2.4 2.4"/></svg></i><span class="hbT"><b>CHANGE SURFER</b><small id="riderNow">THEO</small></span><kbd>U</kbd></button><button id="manBtn" class="hb" aria-label="Maneuver guide (H)"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.2A2.2 2.2 0 0 1 6.7 3H19.5v14.6H6.7a2.2 2.2 0 0 0-2.2 2.2z"/><path d="M4.5 19.8A2.2 2.2 0 0 0 6.7 22h12.8v-4.4"/><path d="M8.8 7.6h6.6M8.8 11h4.4"/></svg></i><span class="hbT"><b>GUIDE</b><small>MANEUVERS</small></span><kbd>H</kbd></button>
+  <button id="camBtn" class="hb" aria-label="Change camera (C)"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.6A2.6 2.6 0 0 1 5.6 6H8l1.6-2.2h4.8L16 6h2.4A2.6 2.6 0 0 1 21 8.6v7.8a2.6 2.6 0 0 1-2.6 2.6H5.6A2.6 2.6 0 0 1 3 16.4z"/><circle cx="12" cy="12.4" r="3.6"/></svg></i><span class="hbT"><b>CAMERA</b><small id="camMode">SIDE</small></span><kbd>C</kbd></button><button id="waveBtn" class="hb" aria-label="Change wave"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 13.2c0-5 3.9-9 8.8-9 3.1 0 5.6 1.8 6.2 4.1-1.8-1-4.2-.7-5.3 1.1-1.1 1.7-.5 3.9 1.4 4.9"/><path d="M2 18.2c2.4 0 3.3-1.6 5-1.6s2.6 1.6 5 1.6 3.3-1.6 5-1.6 2.6 1.6 5 1.6"/></svg></i><span class="hbT"><b>CHANGE WAVE</b><small id="waveNow">PLAYSURF POOL</small></span><em class="hbA">&#8250;</em></button><button id="muteBtn" aria-label="Sound on">&#128266; SOUND ON</button><button id="riderBtn" class="hb" aria-label="Change surfer (U)"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="6.5" r="2.6"/><path d="M3.5 19v-3a4.5 4.5 0 0 1 9 0v3"/><path d="M15 8h6m0 0-2.4-2.4M21 8l-2.4 2.4M21 16h-6m0 0 2.4-2.4M15 16l2.4 2.4"/></svg></i><span class="hbT"><b>CHANGE SURFER</b><small id="riderNow">THEO</small></span><kbd>U</kbd></button><button id="homeBtn" class="hb" aria-label="Back to the main menu"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2"/><path d="M6 9.6V20h4.4v-5.2h3.2V20H18V9.6"/></svg></i><span class="hbT"><b>HOME</b><small>MAIN MENU</small></span></button><button id="manBtn" class="hb" aria-label="Maneuver guide (H)"><i class="hbI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.2A2.2 2.2 0 0 1 6.7 3H19.5v14.6H6.7a2.2 2.2 0 0 0-2.2 2.2z"/><path d="M4.5 19.8A2.2 2.2 0 0 0 6.7 22h12.8v-4.4"/><path d="M8.8 7.6h6.6M8.8 11h4.4"/></svg></i><span class="hbT"><b>GUIDE</b><small>MANEUVERS</small></span><kbd>H</kbd></button>
   <div id="pop"></div>
   <div id="tip"></div>
   <div id="tube">BARREL<b>0.0s</b></div>
@@ -721,7 +723,7 @@ body.touch .kbOnly{display:none}
     <button class="tb" id="tSnap">SNAP<small>HOLD: TAIL THROW</small></button>
     <button class="tb sm" id="tAir" style="--dx:0;--dy:1;--k:1">AIR</button><button class="tb sm big" id="tCarve" style="--dx:-.7071;--dy:.7071;--k:1">CARVE</button><button class="tb sm" id="tRound" style="--dx:-.7071;--dy:.7071;--k:2.34">CUT<br>BACK</button>
     <button class="tb sm" id="tLay" style="--dx:-.3827;--dy:.9239;--k:2">LAY<br>BACK</button><button class="tb sm" id="tBrake" style="--dx:-.9239;--dy:.3827;--k:2">BRAKE</button>
-    <div id="tTop"><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tMan" aria-label="Maneuver guide">GUIDE</button><button class="tb" id="tRider" aria-label="Change surfer">SURFER</button><button class="tb" id="tPause">&#10074;&#10074;</button><button class="tb" id="tFull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button></div>
+    <div id="tTop"><button class="tb" id="tHome" aria-label="Back to the main menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2"/><path d="M6 9.6V20h4.4v-5.2h3.2V20H18V9.6"/></svg></button><button class="tb" id="tMute" aria-label="Sound">&#128266;</button><button class="tb" id="tWave">WAVE</button><button class="tb" id="tCam">CAMERA</button><button class="tb" id="tMan" aria-label="Maneuver guide">GUIDE</button><button class="tb" id="tRider" aria-label="Change surfer">SURFER</button><button class="tb" id="tPause">&#10074;&#10074;</button><button class="tb" id="tFull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button></div>
     <div id="tHint">STICK: STEER · CARVE UP HIGH · SNAP AT THE TOP · AIR AT THE LIP</div></div>
   <div id="ld"><div class="psMark"><img src="playsurf-logo.webp?v=5" alt="PlaySurf" width="1026" height="163"><b class="psChip">BETA</b></div><i><u id="ldU"></u></i><b>LOADING</b></div>
   <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
@@ -2917,12 +2919,14 @@ function poseRider0(time,dt){
   if(bh>0.01){J.pel.x+=0.24*bh;J.pel.y+=0.06*bh;J.pel.z-=0.08*bh}   // backside hit: hips over the front foot, so the back leg straightens and kicks the tail
   const wk=A.walk=damp(A.walk||0,AT.walk||0,6,dt),wph=AT.wph||0,wpn=A.wpn=damp(A.wpn||0,AT.wpain||0,16,dt);
   if(wk>0.001){_a.set(-0.28+0.026*Math.sin(wph),0.81+0.035*Math.abs(Math.sin(wph))+0.06*wpn,-0.02+0.012*Math.sin(wph));J.pel.lerp(_a,wk)}   /* walking: hips centred over the feet, bobbing with each step, jerking up when a foot finds coral */
+  if(GAGP.pel&&sf.mode==='gag')GAGP.pel(J);   /* a gag sets the hips (sitting on the duck) */
   {const hy=hp+0.45*sy;J.hax.set(st*Math.cos(hy),0,1-st+st*Math.sin(hy)).normalize()}
   J.hipF.copy(J.pel).addScaledVector(J.hax,0.088);J.hipF.y-=0.02;J.hipB.copy(J.pel).addScaledVector(J.hax,-0.088);J.hipB.y-=0.02;
   J.ftF.set(lerp(-1.39,-0.06*cs+0.05*ss,st),lerp(0.12,0.11,st),lerp(0.10,0.06*ss+0.05*cs,st));if((AT.npTh||0)>0.005){const t=AT.npTh;J.ftF.x=-0.54+0.48*Math.cos(t);J.ftF.y=0.11+0.48*Math.sin(t)}   /* nose pick: the front foot stays on the board as the nose comes up */{const yb=sy*(1-0.40*(A.lay||0)),cb=Math.cos(yb),sb=Math.sin(yb);J.ftB.set(lerp(-1.39,-(0.63+0.06*bh)*cb+0.05*sb,st),lerp(0.12,0.11,st),lerp(-0.10,0.54*sb+0.05*cb,st))}   // the back foot lags the kicked tail, out toward the rail
   if(pr>0.02){const kp=(AT.paddle||0)*1.6,kF=Math.sin(kp),kB=Math.sin(kp+PI);J.ftF.y+=pr*(0.17+0.17*kF);J.ftF.x+=pr*(0.12+0.10*kF);J.ftB.y+=pr*(0.17+0.17*kB);J.ftB.x+=pr*(0.12+0.10*kB)}   /* paddling in: the legs flutter-kick, the feet up out of the water and slapping down */
   if(wk>0.001){const L=0.12,lift=0.15+0.10*wpn,ft=(q,x,o)=>{q=((q%(2*PI))+2*PI)%(2*PI);if(q<PI){const u=q/PI;o.set(x,0.11,J.pel.z-L+2*L*u)}else{const u=(q-PI)/PI,e=u*u*(3-2*u);o.set(x,0.11+lift*Math.sin(PI*u),J.pel.z+L-2*L*e)}return o};
     J.ftF.lerp(ft(wph,-0.21,_b),wk);J.ftB.lerp(ft(wph+PI,-0.39,_c),wk)}   /* stance foot slides back under him, swing foot comes through lifted */
+  if(GAGP.legs&&sf.mode==='gag')GAGP.legs(J);   /* a gag places the feet */
   ik(J.hipF,J.ftF,0.44,0.43,(0.30*cs-0.78*ss)*st,0.8*st-0.95*pr,(-0.30*ss-0.78*cs)*st,J.knF,J.tA);J.ftF.copy(J.tA);
   ik(J.hipB,J.ftB,0.44,0.43,(0.10*cs-0.85*ss)*st,0.75*st-0.95*pr,(-0.10*ss-0.85*cs)*st,J.knB,J.tA);J.ftB.copy(J.tA);
   fillLimb(legF,J.hipF,J.knF,J.ftF,0.506,0.08);legF.update();fillLimb(legB,J.hipB,J.knB,J.ftB,0.506,0.08);legB.update();
@@ -3051,6 +3055,7 @@ function poseRider0(time,dt){
     paddlePt(AT.paddle+PI,-1,_a);_b.set(-0.05,0.08,-0.22);_a.lerp(_b,push);J.hBt.lerp(_a,1-st)}
   if(wk>0.001){_a.copy(J.shB);_a.x-=0.10;_a.y-=0.50;_a.z-=0.06;J.hBt.lerp(_a,wk);   /* back hand round the board's lower rail */
     _b.copy(J.shF);_b.x+=0.24+0.05*Math.sin(wph);_b.y+=-0.20+0.08*Math.sin(wph*2)+0.36*wpn;_b.z+=-0.24+0.07*Math.cos(wph);J.hFt.lerp(_b,wk)}   /* the free arm out for balance, flung up on a sharp step */
+  if(GAGP.arms&&sf.mode==='gag')GAGP.arms(J,WU,time);   /* a gag places the hands */
   const stiff=pr>0.2,hf=wk>0.3?10:stiff?9:(air>0.5||gr>0.5||Math.abs(lay)>0.3||bh>0.3||pu>0.2?6:(cl>0.4&&AT.claimV>=8?11:ARMS.f)),hz=stiff||hf<=ARMS.f?1:0.70;   /* riding, the hands follow a critically damped spring: they arrive and stop, no overshoot, no wobble (a pro's arms are quiet) */
   {const T=ARQ;T.z.copy(J.front).negate();T.m.makeBasis(J.axis,J.spine,T.z);T.q.setFromRotationMatrix(T.m);   /* the torso's orientation now */
    if(!T.ok){T.slow.copy(T.q);T.ok=true}else T.slow.slerp(T.q,1-Math.exp(-ARMS.t*dt));   /* and its slow average */
@@ -3168,6 +3173,44 @@ function dropFallInit(D){npcPlace(D.s,D.p,D.th);
 const DSH=(()=>{const c=document.createElement('canvas');c.width=128;c.height=64;const x=c.getContext('2d'),g=x.createRadialGradient(64,32,4,64,32,30);g.addColorStop(0,'rgba(0,18,30,0.9)');g.addColorStop(1,'rgba(0,18,30,0)');
   x.save();x.scale(1.9,1);x.fillStyle=g;x.beginPath();x.arc(34,32,30,0,PI*2);x.fill();x.restore();
   const m=new THREE.Mesh(new THREE.PlaneGeometry(1.9,0.95),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,opacity:0,fog:false}));m.rotation.x=-PI/2;m.visible=false;m.renderOrder=4;scene.add(m);return m})();
+/* ── 2026-11-18 the paddler caught inside ("tomando uma vaca"): on every wave but the pool, once a wave, somebody paddling out over the face well ahead
+   of the rider is picked up by the lip and thrown over the falls, board and all. The drop-in local's body again (his own skeleton), green shorts, a blue board. ── */
+const PAD={on:false,done:false,wid:-1,t:0,s:0,p:0,ph:'',g:null,bones:null,board:null,W:new V3(),ax:new V3(),p0:new V3(),q0:new THREE.Quaternion(),by:0,sp:false,bsp:false,at:9};
+const SPD=mkS(),_pdv=new V3(),_pdq=new THREE.Quaternion();
+function padMake(){const src=RIG.mesh,sk=src.skeleton,nb=sk.bones.length,g=new THREE.Group();g.visible=false;scene.add(g);const bones=[];for(let i=0;i<nb;i++){const b=new THREE.Bone();b.matrixAutoUpdate=false;g.add(b);bones.push(b)}
+  const mat=src.material.clone();mat.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n  {float cool=max(diffuseColor.g,diffuseColor.b)-diffuseColor.r;float l=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.30,1.7,0.55)*l*3.0,smoothstep(0.008,0.024,cool));}')};mat.customProgramCacheKey=()=>'pad-green';   /* his blue boardshorts turn green */
+  const m=new THREE.SkinnedMesh(src.geometry,mat);m.frustumCulled=false;g.add(m);m.bind(new THREE.Skeleton(bones,sk.boneInverses),new THREE.Matrix4());
+  const bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(0x3cc4ff);o.castShadow=o.receiveShadow=false}});bd.visible=false;scene.add(bd);
+  PAD.g=g;PAD.bones=bones;PAD.board=bd}
+function padApply(a,b,f){const B=PAD.bones;for(let i=0;i<B.length;i++){const e=B[i].matrix.elements,o=i*16;if(b&&f>0.001)for(let k=0;k<16;k++)e[k]=a[o+k]+(b[o+k]-a[o+k])*f;else for(let k=0;k<16;k++)e[k]=a[o+k];B[i].matrixWorldNeedsUpdate=true}}
+function padRot(i,pv,q){if(i<0)return;_pM.makeRotationFromQuaternion(q);_pT.makeTranslation(-pv.x,-pv.y,-pv.z);_pM.multiply(_pT);_pT.makeTranslation(pv.x,pv.y,pv.z);_pT.multiply(_pM);PAD.bones[i].matrix.premultiply(_pT);PAD.bones[i].matrixWorldNeedsUpdate=true}
+function padFlail(t){npcIdx();const B=PAD.bones,hb=NPI.neck>=0?NPI.neck:NPI.head;_pc.setFromMatrixPosition(B[hb>=0?hb:NPI.arms[0][0]].matrix);   /* arms windmilling: nothing to hold on to */
+  for(let a=0;a<2;a++){const A_=NPI.arms[a];if(A_[0]<0||A_[5]<0)continue;_pa.setFromMatrixPosition(B[A_[0]].matrix);_pb.setFromMatrixPosition(B[A_[5]].matrix).sub(_pa).normalize();const lx=_pa.x-_pc.x,lz=_pa.z-_pc.z,ll=Math.hypot(lx,lz)||1,ph=t*(11+a*2.4)+a*2.2;
+    _pf.set(lx/ll*0.8+0.35*Math.sin(ph),0.45+0.45*Math.sin(ph*0.8+1.3),lz/ll*0.8+0.35*Math.cos(ph)).normalize();_pq.setFromUnitVectors(_pb,_pf);for(const i of A_)padRot(i,_pa,_pq)}}
+function padPlace(s,p,th){sampleSurf(s,Math.max(p,0),SPD);_nx.copy(SPD.ts).multiplyScalar(Math.cos(th)).addScaledVector(SPD.tp,Math.sin(th)).normalize();_ny.copy(SPD.n);_nz.crossVectors(_nx,_ny).normalize();_ny.crossVectors(_nz,_nx);_nq.setFromRotationMatrix(_nb.makeBasis(_nx,_ny,_nz));
+  PAD.g.quaternion.copy(_nq);PAD.g.position.copy(SPD.pos).addScaledVector(SPD.n,0.05);PAD.board.quaternion.copy(_nq);PAD.board.position.copy(PAD.g.position)}
+function padHide(){PAD.on=false;if(PAD.g){PAD.g.visible=false;PAD.board.visible=false}}
+function padTick(dt){if(!RIG.ready||!RIG.mesh)return;const P=PAD;
+  if(P.wid!==game.waveId){P.wid=game.waveId;P.done=false;P.at=rnd(7,Math.max(8,game.waveDur*0.62));padHide()}
+  if(game.state!=='ride'||game.replay||SPOT.id===1){if(P.on)padHide();return}   /* not in the pool */
+  if(!P.on){if(P.done||!DROP.ready||!NPCP.pad[0]||!NPCP.pop[4]||DROP.on||game.attract||game.waveAge<P.at||game.waveAge>game.waveDur-9||sf.mode!=='ride'||game.inTube||sf.introT>0)return;
+    const s0=sf.s+30+rnd(0,5);if(colFoam[Math.round(colIndex(s0))]>0.08||colFoam[Math.round(colIndex(s0-6))]>0.08)return;   /* well down the line, where the face is still unbroken */
+    if(!P.g)padMake();sampleSurf(s0,0,SPD);Object.assign(P,{on:true,done:true,t:0,s:s0,ph:'pad',p:0.22*SPD.top,spl:0,sp:false,bsp:false});P.g.visible=P.board.visible=true;return}
+  P.t+=dt;
+  if(P.ph==='pad'){sampleSurf(P.s,0,SPD);const top=Math.max(SPD.top,0.8);P.p=lerp(0.22*top,0.97*top,sstep(0,1.5,P.t));padPlace(P.s,P.p,PI/2);   /* paddling up the face, flat out, to get over it */
+    const u=((P.t*13)%(2*PI))/(2*PI)*12,i0=Math.floor(u)%12;padApply(NPCP.pad[i0],NPCP.pad[(i0+1)%12],u-Math.floor(u));
+    P.spl+=dt;if(P.spl>0.25){P.spl=0;P.g.updateMatrixWorld(true);_pdv.set(0.35,0.05,0).applyMatrix4(P.g.matrixWorld);splash(4,_pdv,0.5)}
+    if(P.t>1.5){P.ph='fall';P.t=0;P.p0.copy(P.g.position);P.q0.copy(P.g.quaternion);sampleSurf(P.s,P.p,SPD);P.W.set(-SPD.tp.x,0,-SPD.tp.z);if(P.W.lengthSq()<1e-4)P.W.set(0,0,1);P.W.normalize();P.ax.crossVectors(UPV,P.W).normalize();
+      sampleSurf(P.s,0,SPD);P.by=SPD.pos.y;if(typeof lipBurst==='function')lipBurst(0.5,P.s);hudMsg('OUCH!','a paddler got caught inside');sfxNoise(0.5,1400,0.18);
+      if(!audio.muted&&'speechSynthesis' in window&&!speechSynthesis.speaking){try{const u2=new SpeechSynthesisUtterance('Noooo!');u2.lang='en-US';u2.rate=0.9;u2.pitch=0.8;speechSynthesis.speak(u2)}catch(e){}}}}
+  else if(P.ph==='fall'){const t=P.t,y=P.p0.y+2.4*t-4.9*t*t;   /* sucked up with the lip and thrown over the falls, head over heels; the board goes higher still */
+    P.g.position.copy(P.p0).addScaledVector(P.W,3.4*t);P.g.position.y=Math.max(y,P.by-0.5);P.g.quaternion.copy(P.q0).premultiply(_pdq.setFromAxisAngle(P.ax,-t*7.5));
+    padApply(NPCP.pop[4]);padFlail(t*1.3);
+    const by=P.p0.y+7.0*t-4.9*t*t;P.board.position.copy(P.p0).addScaledVector(P.W,2.0*t);P.board.position.y=Math.max(by,P.by+0.05);P.board.quaternion.copy(P.q0).premultiply(_pdq.setFromAxisAngle(P.ax,t*9.5));
+    if(!P.sp&&y<P.by+0.15){P.sp=true;_pdv.copy(P.g.position).setY(P.by+0.1);splash(140,_pdv,1.6);splash(50,_pdv,0.8);P.g.visible=false;if(!sfxPlay('splash',{vol:0.5}))sfxNoise(0.5,1100,0.25)}
+    if(!P.bsp&&by<P.by+0.1&&t>0.6){P.bsp=true;splash(40,P.board.position,0.9)}
+    if(P.bsp)P.board.position.addScaledVector(P.W,0);
+    if(t>3.0)padHide()}}
 function dropTick(dt){
   if(RIG.ready&&!npcMesh)makeNPC();if(!npcMesh)return;
   npcCapture();
@@ -3271,7 +3314,9 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>{keys[e.code]=false});
 function setCam(i){game.cam=((i%3)+3)%3;game.camPicked=true;$('camMode').textContent=['CHASE','SIDE','FRONT'][game.cam]}
 $('camBtn').addEventListener('click',e=>{e.stopPropagation();setCam(game.cam+1);e.target.blur()});
-$('manBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();manOpen()});$('riderBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();riderSwap()});$('bdRider').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();riderSwap()});$('mnClose').addEventListener('click',e=>{e.stopPropagation();manClose()});$('manual').addEventListener('click',e=>{e.stopPropagation();if(e.target.id==='manual')manClose()});$('manual').addEventListener('pointerdown',e=>e.stopPropagation());
+$('manBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();manOpen()});$('riderBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();riderSwap()});$('bdRider').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();riderSwap()});
+function goHome(){if(game.state==='menu'||game.attract)return;try{wpClose()}catch(_){}try{manClose()}catch(_){}if(game.paused){game.paused=false;const pz=$('pause');if(pz)pz.style.display='none'}if(typeof PARTY!=='undefined'&&PARTY.on){try{ptEnd()}catch(_){}}document.body.classList.remove('riding');startAttract();wzGo(0)}   /* HOME: the ride is left where it is and the first menu comes back */
+$('homeBtn').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();goHome()});$('mnClose').addEventListener('click',e=>{e.stopPropagation();manClose()});$('manual').addEventListener('click',e=>{e.stopPropagation();if(e.target.id==='manual')manClose()});$('manual').addEventListener('pointerdown',e=>e.stopPropagation());
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 $('goDesk').addEventListener('click',e=>{e.stopPropagation();setTouch(false);wzGo(2)});
 /* touch: a stick for the wall on the left; on the right a big SNAP under the thumb and the other tricks on two arcs round it; they press what the keyboard does */
@@ -3299,6 +3344,7 @@ function setTouch(on){document.body.classList.toggle('touch',!!on);try{localStor
  $('tPause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();key('KeyP',true);key('KeyP',false)});
  $('tMan').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();manOpen()});
  $('tRider').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();riderSwap()});
+ $('tHome').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();goHome()});
  $('touch').addEventListener('contextmenu',e=>e.preventDefault())}
 /* full screen on phones. Turning the phone sideways asks for it at once; browsers only grant it from a tap, so if that is refused the very
    next tap anywhere takes the game full screen (and locks landscape). Swiping out of it is respected until the phone is turned again.
@@ -3539,7 +3585,7 @@ function progUI(){
   $('trGrid').innerHTML=TROPHIES.map(t=>`<div class="tr${PROG.tro[t.id]?' on':''}"><b>${t.n}</b><span>${t.d}</span></div>`).join('')+BOARDS.map(b=>`<div class="tr${boardOpen(b)?' on':''}"><b>BOARD · ${b.name}</b><span>${boardOpen(b)?b.sub:'&#128274; '+reqText(b.req)}</span></div>`).join('')}
 $('spotMap')._pick=o=>{
   if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}game.pickSpot=o.id;if(o.id!==SPOT.id){if(game.attract)washCut(()=>{setSpot(o.id);startAttract()},true);else setSpot(o.id)}else progUI();if(game.attract&&WZ.s===3)wzGo(4)};   /* picking the wave is the answer: straight on to the board, no NEXT */
-{const cyc=d=>{const i=BOARDS.indexOf(BOARD);for(let k=1;k<=BOARDS.length;k++){const b=BOARDS[(i+d*k+BOARDS.length*9)%BOARDS.length];if(boardOpen(b)){setBoard(b.id);return}}};
+{const cyc=d=>{const i=BOARDS.indexOf(BOARD);for(let k=1;k<=BOARDS.length;k++){const b=BOARDS[(i+d*k+BOARDS.length*9)%BOARDS.length];if(boardOpen(b)){setBoard(b.id);if(b.id==='soft'&&PROG.softRider==='pro'){PROG.softRider='theo';progSave();boardLook()}if(typeof theoPage==='function')theoPage();return}}};   /* 2026-11-18 picking Theo's board puts Theo on it (CHANGE SURFER can still swap in the grown-up) */
  $('bdPrev').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(-1)});$('bdNext').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(1)});
  $('bdName').addEventListener('click',e=>{e.stopPropagation();e.target.blur();cyc(1)})}
 $('trBtn').addEventListener('click',e=>{e.stopPropagation();e.target.blur();progUI();$('trophies').classList.remove('off')});
@@ -3775,12 +3821,310 @@ const EXITS=[
   {id:'belly',ex:8},                   /* drops onto his belly and rides the white water in, like a kid */
   {id:'grab',ex:9},                    /* pops off the foam holding the rail and lands in the flat with the board */
   {id:'pencil',ex:10},                 /* jumps off forward, straight as a pencil, arms up */
-  {id:'ollieRide',ex:1,fin:'none'}];   /* an ollie and a claim, then he rides the white water out standing */
-function pickExit(){const used=game.exHist||(game.exHist=[]);let c=EXITS.filter(e=>used.indexOf(e.id)<0);if(!c.length)c=EXITS;const e=c[Math.floor(Math.random()*c.length)];used.push(e.id);if(used.length>4)used.shift();game.exPlan=e;game.lastExit=e.ex;return e.ex}
+  {id:'ollieRide',ex:1,fin:'none'},    /* an ollie and a claim, then he rides the white water out standing */
+  {id:'gJet',ex:21,gag:'jetski',npc:1},{id:'gBack',ex:22,gag:'badback'},{id:'gCapt',ex:23,gag:'captain'},{id:'gRun',ex:24,gag:'runwater'},{id:'gMoon',ex:25,gag:'moonwalk'},
+  {id:'gSuper',ex:26,gag:'superman'},{id:'gOstr',ex:27,gag:'ostrich'},{id:'gBall',ex:28,gag:'ballet'},{id:'gGull',ex:29,gag:'gull'},{id:'gDrone',ex:30,gag:'drone'},
+  {id:'gBonk',ex:31,gag:'bonk'},{id:'gShark',ex:32,gag:'shark'},{id:'gDizzy',ex:33,gag:'dizzy'},{id:'gCopter',ex:34,gag:'helicopter'},{id:'gDuck',ex:35,gag:'duck'},
+  {id:'gSelfie',ex:36,gag:'selfie'},{id:'gPush',ex:37,gag:'pushups'},{id:'gNap',ex:38,gag:'nap'},{id:'gWrong',ex:39,gag:'wrongway'},{id:'gCannon',ex:40,gag:'cannonball'}];   /* 2026-11-18 twenty funny ones (the gags, below) */
+function pickExit(){const used=game.exHist||(game.exHist=[]),npcOk=typeof npcMesh!=='undefined'&&npcMesh&&NPCP.pop[3];let c=EXITS.filter(e=>used.indexOf(e.id)<0&&(!e.npc||npcOk)&&(!e.gag||!game.attract));if(!c.length)c=EXITS.filter(e=>!e.gag);const e=c[Math.floor(Math.random()*c.length)];used.push(e.id);if(used.length>8)used.shift();game.exPlan=e;game.lastExit=e.ex;return e.ex}
 const _trAx=new V3(0.6,0,-0.8).normalize();   /* the trust fall goes over backwards and toward the tail, so it reads from the beach */
 function koStart(v){const T={6:'flip',7:'trust',9:'grab',10:'pencil'}[v];sf.mode='kickout';sf.ko=T;sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);
   sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.25);sf.wVel.x+=(sf.V*Math.cos(sf.th)-CP*0.6)*0.32;sf.wVel.y=0;sf.koVy={flip:5.0,trust:0,grab:4.4,pencil:3.8}[T];   /* he carries on only a little: the camera stays on him */sf.koDive=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2);
   if(game.state==='ride'&&!game.attract)award({flip:'Backflip Exit',trust:'Trust Fall',grab:'Grab Air Exit',pencil:'Pencil Jump'}[T],400,true)}   /* the ollie and his celebration; the ride itself ends a moment later, in the white water (see the finale) */   // 1 ollie, now and then 3: kick the board up (no varial)
+/* ── 2026-11-18 twenty funny ways off the wave ("gags"): short scripted scenes in sf.mode 'gag', all worked out from sf.wT alone, so the replay plays them again.
+   Frame: the rider faces the beach (his -z toward the camera on the beach), shoulders along his x; the board lies along his x under his feet. ── */
+const GAGP={arms:null,legs:null,pel:null,deck:0};   /* pose overrides that poseRider0 reads while a gag runs (hands, feet, hips, in the rider's own frame) */
+const GEV={last:-1,t:0};const gEv=te=>GEV.last<te&&GEV.t>=te;   /* fires once as the scene's clock passes te (again in the replay) */
+const _g1=new V3(),_g2=new V3(),_g3=new V3(),_g4=new V3(),_g5=new V3(),_g6=new V3(),_g7=new V3(),_g8=new V3(),_gB1=new V3(),_gq=new THREE.Quaternion(),_gq2=new THREE.Quaternion(),_gq3=new THREE.Quaternion(),_gBq=new THREE.Quaternion();
+const GG={ok:0,shown:0,npc:0};
+const gW=o=>o.multiply(riderG.scale).applyQuaternion(riderG.quaternion).add(riderG.position);   /* a point in his own frame, to the world (from his position, turn and size: his matrix is not kept up to date) */
+function gQ(o,yaw,pitch,roll){o.setFromAxisAngle(UPV,yaw);if(pitch)o.multiply(_gq3.setFromAxisAngle(XV,pitch));if(roll)o.multiply(_gq3.setFromAxisAngle(ZV,roll));return o}
+function gPut(G,p,yaw,pitch,roll,bl){gQ(_gq,yaw,pitch,roll);if(bl!==undefined&&bl<1){riderG.position.copy(G.rp0).lerp(p,bl);riderG.quaternion.copy(G.rq0).slerp(_gq,bl)}else{riderG.position.copy(p);riderG.quaternion.copy(_gq)}}
+function gBoardOn(){boardG.position.copy(riderG.position);boardG.quaternion.copy(riderG.quaternion)}
+function gBoardFloat(G,p,yaw,t,k,bl){_gB1.copy(p);_gB1.y=G.wy+0.06+0.03*Math.sin(t*2.3+k);gQ(_gBq,yaw,0.05*Math.sin(t*1.7+k),0.06*Math.sin(t*2.1+k));
+  if(bl!==undefined&&bl<1){boardG.position.copy(G.bp0).lerp(_gB1,bl);boardG.position.y+=0.3*Math.sin(PI*bl);boardG.quaternion.copy(G.bq0).slerp(_gBq,bl)}else{boardG.position.copy(_gB1);boardG.quaternion.copy(_gBq)}}
+const gP=(o,b,J_,U,f,s,u)=>o.copy(b).addScaledVector(J_.front,f).addScaledVector(J_.axis,s).addScaledVector(U,u);   /* a point from a joint: ahead of the chest, along the shoulders, up */
+function gSpl(p,n,pow){splash(n,_g8.set(p.x,(sf.gag?sf.gag.wy:p.y)+0.12,p.z),pow)}
+function gFoam(q,n){const wy=sf.gag?sf.gag.wy:q.y;for(let i=0;i<n;i++)emit(q.x+rnd(-1.8,1.8),wy+rnd(-0.2,2.2),q.z+rnd(-1.6,1.2),rnd(-1.2,1.2)-CP*0.3,rnd(0.6,3.8),rnd(0.8,3.4),rnd(0.9,1.7),rnd(0.6,1.0),rnd(2.0,3.6),0.45,2.6,1.2,1);sfxNoise(0.9,800,0.26)}   /* the white water rolls right over him */
+function gSay(txt,pitch,rate){if(audio.muted||game.attract||game.replay||!('speechSynthesis' in window))return;try{const u=new SpeechSynthesisUtterance(txt);u.lang='en-US';u.rate=rate||1.05;u.pitch=Math.min(2,(pitch||1)*(RIG.kid?1.35:1));u.volume=1;
+  const vs=speechSynthesis.getVoices(),v=vs.find(v=>/^en/i.test(v.lang)&&/Daniel|Fred|Alex|Aaron|Arthur|Gordon|Rishi|Male/i.test(v.name))||vs.find(v=>/^en/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}   /* his voice (the browser's own speech, nothing to download); quiet when the game is muted */
+function gSprite(draw,s,add){const c=document.createElement('canvas');c.width=c.height=128;draw(c.getContext('2d'));const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false,blending:add?THREE.AdditiveBlending:THREE.NormalBlending}));sp.scale.setScalar(s);sp.visible=false;sp.renderOrder=12;scene.add(sp);return sp}
+function gProps(){if(GG.ok)return;GG.ok=1;const M=(c,r,m)=>new THREE.MeshStandardMaterial({color:c,roughness:r==null?0.5:r,metalness:m||0});
+  {const g=new THREE.Group(),cap=(r,l,m)=>new THREE.Mesh(new THREE.CapsuleGeometry(r,l,6,14),m);   /* the lifeguards' jet ski (bow toward +x): white hull, red stripe and steering pod, black seat, a yellow rescue sled on a short tow */
+   const hull=cap(0.42,1.9,M(0xf2f2f0,0.35));hull.rotation.z=PI/2;hull.scale.set(0.72,1,1.25);hull.position.y=0.26;g.add(hull);
+   const st=cap(0.425,1.6,M(0xd8261c,0.4));st.rotation.z=PI/2;st.scale.set(0.40,1,1.27);st.position.set(-0.05,0.14,0);g.add(st);
+   const seat=cap(0.16,0.8,M(0x151515,0.85));seat.rotation.z=PI/2;seat.position.set(-0.35,0.62,0);g.add(seat);
+   const pod=new THREE.Mesh(new THREE.BoxGeometry(0.46,0.30,0.52),M(0xd8261c,0.4));pod.position.set(0.50,0.62,0);pod.rotation.z=-0.35;g.add(pod);
+   const bar=new THREE.Mesh(new THREE.CylinderGeometry(0.022,0.022,0.78,8),M(0x222222,0.45,0.4));bar.rotation.x=PI/2;bar.position.set(0.40,0.90,0);g.add(bar);
+   const sled=new THREE.Mesh(new THREE.BoxGeometry(1.4,0.10,0.95),M(0xffc21a,0.5));sled.position.set(-2.1,0.08,0);g.add(sled);
+   const tow=new THREE.Mesh(new THREE.CylinderGeometry(0.014,0.014,0.62,6),M(0x222222,0.8));tow.rotation.z=PI/2;tow.position.set(-1.25,0.16,0);g.add(tow);
+   g.visible=false;scene.add(g);GG.jet=g}
+  {const g=new THREE.Group(),w=M(0xf4f4f0,0.6),gr=M(0x8d939b,0.6),bk=M(0xe8b83a,0.5),dk=M(0x1a1a1a,0.6);   /* a gull in a few shapes, beak toward +x, its wings flapping on their own pivots */
+   const b=new THREE.Mesh(new THREE.SphereGeometry(1,12,8),w);b.scale.set(0.24,0.08,0.085);g.add(b);
+   const h=new THREE.Mesh(new THREE.SphereGeometry(0.06,10,8),w);h.position.set(0.21,0.045,0);g.add(h);
+   const k=new THREE.Mesh(new THREE.ConeGeometry(0.018,0.085,6),bk);k.rotation.z=-PI/2;k.position.set(0.30,0.035,0);g.add(k);
+   const tl=new THREE.Mesh(new THREE.ConeGeometry(0.06,0.14,4),w);tl.rotation.z=PI/2;tl.scale.set(1,1,0.35);tl.position.set(-0.27,0.01,0);g.add(tl);
+   GG.gw=[];for(const s of [1,-1]){const p=new THREE.Group();p.position.set(0.03,0.03,0.05*s);const a=new THREE.Mesh(new THREE.BoxGeometry(0.17,0.008,0.40),gr);a.position.z=0.20*s;p.add(a);const c=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.009,0.16),dk);c.position.set(-0.01,0,0.47*s);p.add(c);p.userData.s=s;g.add(p);GG.gw.push(p)}
+   g.scale.setScalar(1.3);g.visible=false;scene.add(g);GG.gull=g}
+  {const sh=new THREE.Shape();sh.moveTo(-0.38,0);sh.quadraticCurveTo(-0.02,0.16,0.14,0.64);sh.quadraticCurveTo(0.13,0.24,0.36,0);sh.lineTo(-0.38,0);   /* a shark's fin: the long curved edge leads (toward -x) */
+   const geo=new THREE.ExtrudeGeometry(sh,{depth:0.04,bevelEnabled:true,bevelThickness:0.02,bevelSize:0.02,bevelSegments:2,curveSegments:10});geo.translate(0,0,-0.02);
+   GG.fin=new THREE.Mesh(geo,M(0x3b4752,0.4));GG.fin.visible=false;scene.add(GG.fin)}
+  {const g=new THREE.Group(),y=M(0xffd21f,0.28),o=M(0xff7a1a,0.32),k=M(0x111111,0.2);   /* a giant rubber duck, head toward +x */
+   const b=new THREE.Mesh(new THREE.SphereGeometry(1,22,14),y);b.scale.set(1.05,0.62,0.78);b.position.y=0.22;g.add(b);
+   const tl=new THREE.Mesh(new THREE.ConeGeometry(0.32,0.62,14),y);tl.rotation.z=PI/2-0.7;tl.position.set(-0.98,0.62,0);g.add(tl);
+   const hd=new THREE.Mesh(new THREE.SphereGeometry(0.46,20,12),y);hd.position.set(0.70,1.02,0);g.add(hd);
+   const bk=new THREE.Mesh(new THREE.SphereGeometry(1,14,8),o);bk.scale.set(0.30,0.085,0.24);bk.position.set(1.13,0.95,0);g.add(bk);
+   for(const s of [1,-1]){const e=new THREE.Mesh(new THREE.SphereGeometry(0.075,10,6),k);e.position.set(1.0,1.16,0.22*s);g.add(e)}
+   g.visible=false;scene.add(g);GG.duck=g}
+  GG.phone=new THREE.Mesh(new THREE.BoxGeometry(0.075,0.15,0.012),M(0x0e1216,0.25,0.4));GG.phone.visible=false;scene.add(GG.phone);
+  GG.flash=gSprite(x=>{const g=x.createRadialGradient(64,64,2,64,64,62);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(0.25,'rgba(255,255,240,0.8)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128)},0.6,true);
+  GG.stars=[];for(let i=0;i<5;i++)GG.stars.push(gSprite(x=>{x.translate(64,64);x.beginPath();for(let k=0;k<10;k++){const r=k%2?22:54,a=-PI/2+k*PI/5;x.lineTo(Math.cos(a)*r,Math.sin(a)*r)}x.closePath();x.fillStyle='#ffd83a';x.fill();x.lineWidth=7;x.strokeStyle='#7a4a00';x.stroke()},0.13));
+  GG.zz=[];for(let i=0;i<3;i++)GG.zz.push(gSprite(x=>{x.font='900 100px Impact, Arial Black, sans-serif';x.textAlign='center';x.textBaseline='middle';x.lineWidth=12;x.strokeStyle='#1b2a3a';x.strokeText('Z',64,68);x.fillStyle='#ffffff';x.fillText('Z',64,68)},0.3))}
+function gDrone(){if(!GG.drone&&typeof DRONE!=='undefined'&&DRONE.g){GG.drone=DRONE.g.clone(true);GG.drone.visible=false;scene.add(GG.drone)}return GG.drone}
+function gHide(){if(!GG.shown)return;GG.shown=0;for(const k of ['jet','gull','fin','duck','phone','flash','drone'])if(GG[k])GG[k].visible=false;(GG.stars||[]).forEach(s=>s.visible=false);(GG.zz||[]).forEach(s=>s.visible=false);if(GG.npc){GG.npc=0;if(!DROP.on)npcG.visible=false}}
+function gStars(c,t,on){(GG.stars||[]).forEach((s,i)=>{s.visible=on;if(!on)return;const a=t*5+i*2*PI/5;s.position.set(c.x+Math.cos(a)*0.26,c.y+0.18+0.05*Math.sin(t*9+i),c.z+Math.sin(a)*0.26);s.material.rotation=t*3+i})}
+function gZz(c,t,on){(GG.zz||[]).forEach((s,i)=>{const u=(t*0.6+i/3)%1;s.visible=on;if(!on)return;s.position.set(c.x+0.25*u+0.05*Math.sin(t*2+i),c.y+0.25+0.9*u,c.z+0.1*u);s.scale.setScalar(0.12+0.24*u);s.material.opacity=Math.min(1,u*5)*(1-u)})}
+function gFlash(p,k){const f=GG.flash;f.visible=k>0.01;if(!f.visible)return;f.position.copy(p);f.scale.setScalar(0.25+1.1*k);f.material.opacity=k}
+function gNpcDrive(pos,q){if(!npcMesh||!NPCP.pop[3])return;GG.npc=1;npcG.visible=true;if(npcBoard)npcBoard.visible=false;npcG.position.copy(pos);npcG.quaternion.copy(q);npcG.scale.setScalar(1);npcApply(NPCP.pop[3]);npcIdx();   /* the lifeguard on the ski: the drop-in local's body again, crouched over the seat, both hands forward on the bars */
+  const hb=NPI.neck>=0?NPI.neck:NPI.head;_pc.setFromMatrixPosition(npcBones[hb>=0?hb:NPI.arms[0][0]].matrix);
+  for(let a=0;a<2;a++){const A_=NPI.arms[a],F=NPI.fore[a];if(A_[0]<0||A_[1]<0||A_[5]<0)continue;_pa.setFromMatrixPosition(npcBones[A_[0]].matrix);const lx=_pa.x-_pc.x,lz=_pa.z-_pc.z,ll=Math.hypot(lx,lz)||1;
+    _pb.setFromMatrixPosition(npcBones[A_[1]].matrix).sub(_pa).normalize();_pq.setFromUnitVectors(_pb,_pf.set(lx/ll*0.25,-0.45,-0.86).normalize());for(const i of A_)npcRot(i,_pa,_pq);
+    const e=_pc2.setFromMatrixPosition(npcBones[A_[1]].matrix);_pb.setFromMatrixPosition(npcBones[A_[5]].matrix).sub(e).normalize();_pq.setFromUnitVectors(_pb,_pf.set(-lx/ll*0.15,-0.10,-1).normalize());for(const i of F)npcRot(i,e,_pq)}}
+function gBase(){AT.rail=0;AT.lt=0;AT.drag=0;AT.snap=0;AT.intent=0;AT.vup=0;AT.drive=0;AT.tube=0;AT.rev=0;AT.speed=0;AT.slipYaw=0;AT.lay=0;AT.claim=0;AT.claimV=0;AT.clE=0;AT.clPh=0;AT.npTh=0;AT.bsh=0;AT.push=0;AT.flo=0;AT.hipBack=0;
+  AT.walk=0;AT.wph=0;AT.wpain=0;AT.crouch=0.22;AT.tw=0;AT.hip=0;AT.look=PI/2;AT.gz=0;AT.shiftX=0;AT.lean=0;AT.hroll=0;AT.shrug=0;AT.paddle=0;
+  A.prone=0;A.grab=0;A.air=0;A.aa=0;A.impact=0;A.flail=0;GAGP.arms=null;GAGP.legs=null;GAGP.pel=null}
+/* the falls that end several of them: stiff, straight over backwards (pitch about his feet) */
+const gFall=(t,t0,t1)=>PI/2*0.96*sstep(t0,t1,t);
+const GAG={
+  jetski:{name:'Jet Ski Rescue',dur:6.4,cam:[9.5,2.3,3.0,0,44],npc:1,f(G,t){const u=sstep(0,0.55,t);
+    const fl=_g1.copy(G.c);fl.y=G.wy+0.03*Math.sin(t*2.2);   /* floating on his back, arms and legs out, a hand waving for help */
+    const hd=_g7.copy(G.L).negate(),jy=Math.atan2(-hd.z,hd.x);   /* the ski comes in along the beach and leaves the same way (its +x along hd) */
+    const J1=_g3.copy(G.c).addScaledVector(G.W,1.15).addScaledVector(G.L,2.1);const jt=clamp((t-1.0)/1.6,0,1),e=1-(1-jt)*(1-jt);const Jp=_g4.copy(J1).addScaledVector(G.L,16*(1-e));
+    if(t>3.2){const a=t-3.2;Jp.addScaledVector(hd,1.6*a*a)}Jp.y=G.wy-0.05+0.04*Math.sin(t*2.6);
+    const jet=GG.jet;jet.visible=t>0.95;jet.position.copy(Jp);gQ(jet.quaternion,jy,0,0.03*Math.sin(t*2.1));if(t>3.2)jet.quaternion.multiply(_gq3.setFromAxisAngle(ZV,0.10*sstep(3.2,3.8,t)));
+    const spd=t<2.6?20*(1-jt)/1.6:t>3.2?3.2*(t-3.2):0;if(spd>1&&jet.visible){_g5.copy(Jp).addScaledVector(hd,-1.3);for(let i=0;i<3;i++)emit(_g5.x+rnd(-0.3,0.3),G.wy+0.1,_g5.z+rnd(-0.3,0.3),-hd.x*rnd(1,3)+rnd(-0.8,0.8)-CP*0.3,rnd(0.8,2.8),-hd.z*rnd(1,3)+rnd(-0.8,0.8),rnd(0.5,0.9),0.15,rnd(0.6,1.2),0.45,7,1.2,1)}
+    if(!jet.visible&&GG.npc){GG.npc=0;if(!DROP.on)npcG.visible=false}if(jet.visible){_g5.set(-0.30,0.46,0).applyQuaternion(jet.quaternion).add(Jp);_gq2.copy(jet.quaternion).multiply(_gq3.setFromAxisAngle(UPV,-PI/2));gNpcDrive(_g5,_gq2)}
+    if(t<2.6){gPut(G,fl,G.yaw+PI/2,PI/2*u,0,u);A.air=u;
+      GAGP.legs=J_=>{J_.ftF.lerp(_g6.set(J_.pel.x+0.32,J_.pel.y-0.78,J_.pel.z),u);J_.ftB.lerp(_g6.set(J_.pel.x-0.32,J_.pel.y-0.78,J_.pel.z),u)};
+      GAGP.arms=J_=>{const wv=sstep(0.9,1.2,t)*(1-sstep(2.3,2.6,t));gP(_g6,J_.shF,J_,J_.spine,0.12+0.40*wv,0.44-0.22*wv+0.14*wv*Math.sin(t*12),0.22+0.12*wv);J_.hFt.lerp(_g6,u);gP(_g6,J_.shB,J_,J_.spine,0.08,-0.46,0.22);J_.hBt.lerp(_g6,u)}}
+    else{const k=sstep(2.6,3.15,t);_g5.set(-2.1,0.14,0).applyQuaternion(jet.quaternion).add(Jp).addScaledVector(hd,0.42);const P=_g6.copy(fl).lerp(_g5,k);P.y+=0.35*Math.sin(PI*k);   /* hauled up on to the sled, face down on it, and away */
+      gQ(_gq2,jy,0,0);gQ(_gq,G.yaw+PI/2,PI/2,0);riderG.position.copy(P);riderG.quaternion.copy(_gq).slerp(_gq2,k);A.prone=k;A.air=1-k;
+      GAGP.arms=(J_,U)=>{const th=sstep(3.6,3.9,t)*(1-sstep(5.6,5.9,t));if(th>0){gP(_g8,J_.shF,J_,U,0.10,0.20,0.42);J_.hFt.lerp(_g8,th)}}}
+    gBoardFloat(G,_g5.copy(G.c).addScaledVector(G.L,-1.2).addScaledVector(G.W,-0.6+0.15*t),G.yaw+0.3,t,0,sstep(0,0.6,t));
+    G.fc.copy(G.c).lerp(Jp,t>3.2?0.55*sstep(3.2,4.5,t):0.25*sstep(1,2.6,t));G.fc.y=G.wy+0.6;
+    if(gEv(0.45))gSpl(fl,60,1.1);if(gEv(0.8))gSay('Help!',1.25,1.1);if(gEv(1.0))sfxNoise(1.7,380,0.10);if(gEv(3.2))sfxNoise(2.4,520,0.13);if(gEv(3.05))gSpl(riderG.position,20,0.6)}},
+  badback:{name:'Bad Back',dur:5.6,cam:[4.6,1.25,1.3,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.55,t),gy=G.wy-0.58*sc,wt=Math.max(0,t-1.1),ph=wt*5.0,step=Math.pow(Math.max(0,Math.sin(ph)),6);
+    const p=_g1.copy(G.c).addScaledVector(G.W,0.5+wt*0.40);p.y=lerp(G.rp0.y,gy,u)+0.22*Math.sin(PI*clamp(t/0.55,0,1))-0.02*step;   /* off the board into the shallows, then the slow walk in, bent over, a hand on his back */
+    gPut(G,p,G.yaw+0.05*Math.sin(ph*0.5),0,0,Math.min(1,u*1.6));
+    AT.walk=sstep(1.0,1.5,t);AT.wph=ph;AT.wpain=0.35*step+0.5*sstep(0.55,0.9,t)*(1-sstep(0.9,1.4,t));AT.crouch=0.44;AT.gz=-0.30;AT.lean=0.05*Math.sin(ph);AT.hroll=0.07*Math.sin(ph+0.6);AT.shrug=0.35+0.4*step;
+    GAGP.arms=(J_,U)=>{const w=sstep(0.5,0.9,t);gP(_g6,J_.pel,J_,U,-0.17,-0.05,0.12);J_.hBt.lerp(_g6,w);gP(_g6,J_.shF,J_,U,0.10,0.06,-0.52);J_.hFt.lerp(_g6,w*0.8)};
+    gBoardFloat(G,_g5.copy(G.c).addScaledVector(G.W,-0.4+0.25*t).addScaledVector(G.L,0.9),G.yaw+1.2,t,1,sstep(0.1,0.7,t));
+    G.fc.copy(p).setY(G.wy+0.75*sc);
+    if(gEv(0.45))gSpl(p,40,0.8);if(gEv(0.75))gSay('Ouch! My back...',0.75,0.85)}},
+  captain:{name:'Captain Goes Down',dur:5.4,cam:[6.2,1.35,1.6,0,38],f(G,t){const sc=G.sc,u=sstep(0,0.45,t),sk=sstep(1.0,4.7,t)*2.3*sc;
+    const p=_g1.copy(G.b0);p.y=G.wy+0.06-sk+0.02*Math.sin(t*2);   /* the captain goes down with his ship: standing to attention, saluting, sinking straight down */
+    gPut(G,p,G.yaw,0,0,u);gBoardOn();boardG.visible=sk<0.4;riderG.visible=sk<2.25*sc;AT.crouch=0.10;AT.gz=0.14;
+    GAGP.arms=(J_,U)=>{const w=sstep(0.35,0.75,t);gP(_g6,J_.head,J_,U,0.11,0.05,0.07);J_.hFt.lerp(_g6,w);gP(_g6,J_.shB,J_,U,0.02,-0.05,-0.58);J_.hBt.lerp(_g6,w)};
+    if(t>1.2&&t<4.9&&Math.random()<0.25)emit(p.x+rnd(-0.3,0.3),G.wy+0.05,p.z+rnd(-0.3,0.3),rnd(-0.3,0.3)-CP*0.3,rnd(0.2,0.8),rnd(-0.3,0.3),rnd(0.4,0.8),0.08,rnd(0.2,0.4),0.5,2,1.5,1);
+    G.fc.copy(p).setY(G.wy+0.9*sc-0.25*sstep(1,4.7,t));
+    if(gEv(0.6))gSay('Aye aye, captain!',0.85,0.9);if(gEv(4.75)){gSpl(p,14,0.5);sfxNoise(0.3,420,0.14)}}},
+  runwater:{name:'Water Runner',dur:4.4,cam:[1.4,1.3,7.2,0,40],f(G,t){const sc=G.sc,run=t<0.3?0:(Math.min(t,2.3)-0.3)*3.4,dr=t<2.65?0:Math.pow(t-2.65,2)*9;
+    const p=_g1.copy(G.c).addScaledVector(G.W,run);p.y=t<0.3?lerp(G.rp0.y,G.wy+0.02,t/0.3)+0.45*Math.sin(PI*t/0.3):G.wy+0.02-dr*sc;   /* he runs on the water like a cartoon, looks down, and drops like a stone */
+    gPut(G,p,G.yaw,0,0,sstep(0,0.3,t));riderG.visible=dr<2.2;
+    const ph=Math.max(0,Math.min(t,2.3)-0.3)*34;
+    if(t>=0.3&&t<2.65){AT.walk=1;AT.wph=ph;AT.crouch=0.30;AT.gz=t<2.3?0.05:-0.75}
+    GAGP.arms=(J_,U)=>{if(t>=0.3&&t<2.3){const a=Math.sin(ph);gP(_g6,J_.shF,J_,U,0.28*a+0.05,0.10,-0.30+0.12*Math.abs(a));J_.hFt.lerp(_g6,1);gP(_g6,J_.shB,J_,U,-0.28*a+0.05,-0.10,-0.30+0.12*Math.abs(a));J_.hBt.lerp(_g6,1)}
+      else if(t>=2.3){const k=sstep(2.3,2.7,t);gP(_g6,J_.shF,J_,U,0.05,0.30,0.45*k-0.2);J_.hFt.lerp(_g6,1);gP(_g6,J_.shB,J_,U,0.05,-0.30,0.45*k-0.2);J_.hBt.lerp(_g6,1)}};
+    gBoardFloat(G,_g5.copy(G.c).addScaledVector(G.L,0.5),G.yaw+0.8,t,2,sstep(0,0.5,t));
+    if(t>0.3&&t<2.3){const k0=Math.floor(Math.max(0,GEV.last-0.3)*34/PI),k1=Math.floor((t-0.3)*34/PI);if(k1>k0)gSpl(p,4,0.35)}
+    G.fc.copy(p).setY(G.wy+0.8*sc);
+    if(gEv(2.35))gSay('Uh oh.',0.8,0.8);if(gEv(2.75)){gSpl(p,70,1.2);if(!sfxPlay('splash',{vol:0.6}))sfxNoise(0.5,1200,0.3)}}},
+  moonwalk:{name:'Moonwalk',dur:4.6,cam:[5.6,1.3,0,0,40],f(G,t){const sc=G.sc,d=Math.max(0,Math.min(t,3.0)-0.4)*0.62,dr=t<3.75?0:Math.pow(t-3.75,2)*9,fy=Math.atan2(-G.L.x*G.side,-G.L.z*G.side);
+    const p=_g1.copy(G.c).addScaledVector(G.L,G.side*(0.8-d));p.y=t<0.4?lerp(G.rp0.y,G.wy+0.02,t/0.4)+0.35*Math.sin(PI*t/0.4):G.wy+0.02-dr*sc;   /* a moonwalk across the foam, side on to the beach, gliding backwards; a spin, the pose... and down he goes */
+    gPut(G,p,t<3.0?fy:lerp(fy,G.yaw+2*PI,sstep(3.0,3.4,t)),0,0,sstep(0,0.4,t));riderG.visible=dr<2.2;
+    if(t>=0.4&&t<3.0){AT.walk=1;AT.wph=-(t-0.4)*6.5;AT.crouch=0.18+0.04*Math.sin(t*13);AT.shrug=0.25*Math.max(0,Math.sin(t*6.5))}else if(t>=3.0&&t<3.75){AT.crouch=0.05;AT.gz=0.25}
+    GAGP.arms=(J_,U)=>{if(t<3.0){const a=Math.sin(t*6.5),w=sstep(0.3,0.6,t);gP(_g6,J_.shF,J_,U,0.22,0.10,-0.25+0.08*a);J_.hFt.lerp(_g6,w);gP(_g6,J_.shB,J_,U,-0.08,-0.12,-0.48-0.05*a);J_.hBt.lerp(_g6,w)}
+      else{const k=sstep(3.3,3.5,t);gP(_g6,J_.head,J_,U,0.06,0.06,0.10);J_.hFt.lerp(_g6,k);gP(_g6,J_.shB,J_,U,0.30,-0.25,-0.45);J_.hBt.lerp(_g6,k)}};
+    gBoardFloat(G,_g5.copy(G.c).addScaledVector(G.L,-0.8),G.yaw-0.6,t,3,sstep(0,0.5,t));
+    G.fc.copy(p).setY(G.wy+0.85*sc);
+    if(gEv(3.45))gSay('Hee hee!',1.6,1.1);if(gEv(3.85)){gSpl(p,70,1.2);sfxNoise(0.5,1200,0.3)}}},
+  superman:{name:'Superman Belly Flop',dur:3.9,cam:[1.6,1.7,8.0,0,44],f(G,t){const ta=Math.max(0,t-0.3),T=0.9,p=_g1;let pit=0;
+    if(t<0.3){p.copy(G.b0)}
+    else if(ta<T){p.copy(G.b0).addScaledVector(G.W,3.0*ta);p.y=Math.max(G.wy+0.02,G.wy+0.06+4.4*ta-4.9*ta*ta);pit=-PI/2*sstep(0,0.45,ta)}   /* flying, arms out ahead like Superman */
+    else{const tb=ta-T;p.copy(G.b0).addScaledVector(G.W,3.0*T+1.2*(1-Math.exp(-tb*2.5)));p.y=G.wy+0.02+0.02*Math.sin(t*2.4);pit=-PI/2}   /* ...flat on his belly: SPLAT */
+    gPut(G,p,G.yaw,pit,0,sstep(0,0.3,t));A.air=t>0.3?1:0;AT.crouch=t<0.3?0.9*sstep(0,0.25,t):0.08;
+    gBoardFloat(G,_g5.copy(G.b0).addScaledVector(G.L,0.3),G.yaw+PI/2,t,4,sstep(0.25,0.6,t));
+    GAGP.arms=(J_,U)=>{if(t<0.3)return;if(ta<T){gP(_g6,J_.shF,J_,J_.spine,0.02,0.07,0.62);J_.hFt.lerp(_g6,1);gP(_g6,J_.shB,J_,J_.spine,0.02,-0.07,0.62);J_.hBt.lerp(_g6,1)}
+      else{const th=sstep(T+1.0,T+1.3,ta);gP(_g6,J_.shF,J_,J_.spine,0,0.50,0.25);_g6.lerp(gP(_g4,J_.shF,J_,U,0,0.1,0.55),th);J_.hFt.lerp(_g6,1);gP(_g6,J_.shB,J_,J_.spine,0,-0.50,0.25);J_.hBt.lerp(_g6,1)}};
+    if(ta>=T)GAGP.legs=J_=>{J_.ftF.set(J_.pel.x+0.28,J_.pel.y-0.78,J_.pel.z);J_.ftB.set(J_.pel.x-0.28,J_.pel.y-0.78,J_.pel.z)};
+    G.fc.copy(p).setY(G.wy+0.7);
+    if(gEv(0.3+T)){gSpl(p,230,2.3);gSpl(p,80,1.0);game.shake=Math.max(game.shake||0,0.9);if(!sfxPlay('splash',{vol:1}))sfxNoise(1.0,600,0.4)}if(gEv(2.5))gSay('Ow.',0.7,0.7)}},
+  ostrich:{name:'Head in the Sand',dur:4.6,cam:[5.2,1.0,2.2,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.55,t),pv=0.81*sc;
+    const P0=_g2.copy(G.rp0);P0.y+=pv;const P1=_g3.copy(G.c).addScaledVector(G.W,1.3);P1.y=G.wy+0.22*sc+0.03*Math.sin(t*3);   /* a dive head first into the shallows, and stuck there: upside down, legs kicking in the air */
+    const hp=_g4.copy(P0).lerp(P1,u);hp.y+=0.9*Math.sin(PI*u);const wig=t>2.2&&t<3.4?0.28*Math.sin((t-2.2)*16):0;
+    gQ(_gq,G.yaw+wig,-PI*u,0);_g5.set(0,pv,0).applyQuaternion(_gq);riderG.position.copy(hp).sub(_g5);riderG.quaternion.copy(G.rq0).slerp(_gq,Math.min(1,u*1.3));A.air=1;
+    AT.walk=sstep(0.5,0.8,t);AT.wph=t*15;AT.crouch=0.1;
+    GAGP.arms=J_=>{const w=sstep(0.2,0.5,t);gP(_g6,J_.shF,J_,J_.spine,0.08,0.08,0.55);J_.hFt.lerp(_g6,w);gP(_g6,J_.shB,J_,J_.spine,0.08,-0.08,0.55);J_.hBt.lerp(_g6,w)};
+    if(t>0.6&&Math.random()<0.3)emit(hp.x+rnd(-0.3,0.3),G.wy+0.04,hp.z+rnd(-0.3,0.3),rnd(-0.2,0.2)-CP*0.3,rnd(0.3,0.9),rnd(-0.2,0.2),rnd(0.3,0.6),0.06,rnd(0.15,0.3),0.6,2,1.5,1);
+    gBoardFloat(G,_g6.copy(G.c).addScaledVector(G.L,-1.0),G.yaw+0.4,t,5,sstep(0,0.5,t));
+    G.fc.copy(hp).setY(G.wy+0.6*sc);
+    if(gEv(0.42))gSpl(hp,60,1.0);if(gEv(1.1))gSay('Mmmph! Mmmph!',0.7,1.25)}},
+  ballet:{name:'Water Ballet',dur:4.8,cam:[5.2,1.15,1.6,0,38],f(G,t){const sc=G.sc,u=sstep(0,0.55,t),pv=0.81*sc,sk=sstep(3.9,4.6,t)*1.6*sc;
+    const P0=_g2.copy(G.rp0);P0.y+=pv;const P1=_g3.copy(G.c).addScaledVector(G.W,1.2);P1.y=G.wy-0.32*sc-sk;   /* synchronised swimming: only his legs out of the water, together, the splits, one knee bent, turning slowly */
+    const hp=_g4.copy(P0).lerp(P1,u);hp.y+=0.8*Math.sin(PI*u);
+    gQ(_gq,G.yaw+1.3*Math.max(0,t-0.7),-PI*u,0);_g5.set(0,pv,0).applyQuaternion(_gq);riderG.position.copy(hp).sub(_g5);riderG.quaternion.copy(G.rq0).slerp(_gq,Math.min(1,u*1.3));A.air=1;riderG.visible=sk<1.5*sc;
+    GAGP.legs=J_=>{if(t<0.6)return;const sp=sstep(1.6,1.9,t)*(1-sstep(2.5,2.8,t)),fla=sstep(2.6,2.9,t)*(1-sstep(3.6,3.9,t));
+      J_.ftF.set(J_.pel.x+0.04+0.46*sp,J_.pel.y-0.84+0.24*sp,J_.pel.z+0.03);J_.ftB.set(J_.pel.x-0.04-0.46*sp,J_.pel.y-0.84+0.24*sp+0.42*fla,J_.pel.z-0.03+0.28*fla)};
+    GAGP.arms=J_=>{gP(_g6,J_.shF,J_,J_.spine,0.1,0.25,0.3);J_.hFt.lerp(_g6,1);gP(_g6,J_.shB,J_,J_.spine,0.1,-0.25,0.3);J_.hBt.lerp(_g6,1)};
+    if(t>0.7&&Math.random()<0.2)emit(hp.x+rnd(-0.4,0.4),G.wy+0.04,hp.z+rnd(-0.4,0.4),rnd(-0.3,0.3)-CP*0.3,rnd(0.2,0.6),rnd(-0.3,0.3),rnd(0.4,0.8),0.08,rnd(0.25,0.5),0.5,2,1.5,1);
+    gBoardFloat(G,_g6.copy(G.c).addScaledVector(G.L,1.0),G.yaw-0.5,t,6,sstep(0,0.5,t));
+    G.fc.copy(hp).setY(G.wy+0.55*sc);
+    if(gEv(0.42))gSpl(hp,50,0.9);if(gEv(1.0))gSay('La la la la laaa!',1.5,1.0)}},
+  gull:{name:'Seagull Attack',dur:4.6,cam:[5.4,1.7,1.7,0,42],f(G,t){const u=sstep(0,0.4,t),fb=gFall(t,2.7,3.15),rock=t>1.0&&t<2.7?0.10*Math.sin(t*7.5):0;
+    const p=_g1.copy(G.b0);gPut(G,p,G.yaw,fb,rock,u);riderG.visible=t<3.4;   /* a gull comes down on his head and pecks; he fights it off, loses his balance and goes over backwards */
+    if(t<2.7)gBoardOn();else{boardG.position.copy(G.b0);gQ(boardG.quaternion,G.yaw,0,0)}
+    AT.claim=t>0.25&&t<1.0?1:0;AT.claimV=0;AT.crouch=t>1.0&&t<2.7?0.35+0.12*Math.sin(t*9):0.2;A.flail=t>1.05&&t<2.75?1:0;AT.gz=t>0.9&&t<2.7?0.45:0;
+    const hd=gW(_g2.set(0,1.78,0));const H=_g3.copy(hd);H.y+=0.30;
+    const A0=_g4.copy(G.c).addScaledVector(G.L,9).addScaledVector(G.W,-2);A0.y=G.wy+5.5;const gp=_g5,g=GG.gull;let vx=0,vz=0,pit=0;
+    if(t<1.0){const k=sstep(0.35,1.0,t);gp.copy(A0).lerp(H,k);gp.y-=0.8*Math.sin(PI*k);vx=H.x-A0.x;vz=H.z-A0.z;pit=-0.3}
+    else if(t<2.7){gp.copy(H);gp.y-=0.16*Math.abs(Math.sin((t-1.0)*9));gp.x+=0.08*Math.sin(t*5);vx=G.W.x;vz=G.W.z;pit=-0.5}
+    else{const k=sstep(2.7,4.3,t);gp.copy(H).addScaledVector(G.L,-7*k);gp.y+=4*k;vx=-G.L.x;vz=-G.L.z;pit=0.3}
+    g.visible=t>0.3&&t<4.4;g.position.copy(gp);g.quaternion.setFromAxisAngle(UPV,Math.atan2(-vz,vx)).multiply(_gq3.setFromAxisAngle(ZV,pit));
+    GG.gw.forEach(w=>{w.rotation.x=w.userData.s*(0.15+0.65*Math.sin(t*(t>1&&t<2.7?26:15)))});
+    G.fc.copy(G.b0).setY(G.wy+1.0);
+    if(gEv(1.05))gSay('Hey! Get off me!',1.1,1.2);if(gEv(3.1))gSpl(_g6.copy(G.b0).addScaledVector(G.W,-1.0),70,1.2)}},
+  drone:{name:'Drone Selfie',dur:4.6,cam:[6.0,1.6,-1.8,0,42],f(G,t){const u=sstep(0,0.4,t),fb=gFall(t,2.35,2.8);
+    gPut(G,_g1.copy(G.b0),G.yaw,fb,0,u);riderG.visible=t<3.0;if(t<2.35)gBoardOn();else{boardG.position.copy(G.b0);gQ(boardG.quaternion,G.yaw,0,0)}   /* the drone flies in for a selfie, he poses, it flashes... and then flies straight into his head */
+    const hd=gW(_g2.set(0,1.62,0));
+    const H=_g3.copy(hd).addScaledVector(G.W,1.15);H.y+=0.12+0.05*Math.sin(t*3.1);const A0=_g4.copy(G.c).addScaledVector(G.W,7).addScaledVector(G.L,-2);A0.y=G.wy+3.2;const dp=_g5;
+    if(t<0.9)dp.copy(A0).lerp(H,sstep(0,0.9,t));else if(t<2.0)dp.copy(H);else if(t<2.4){dp.copy(H).lerp(_g6.copy(hd).addScaledVector(G.W,0.12),sstep(2.0,2.4,t));dp.x+=0.12*Math.sin(t*40)}
+    else{const tf=t-2.4;dp.copy(hd).addScaledVector(G.W,0.25+0.6*tf);dp.y=Math.max(G.wy,hd.y+1.2*tf-4.9*tf*tf)}
+    const dr=gDrone();if(dr){dr.visible=t>0.05&&t<3.3;dr.position.copy(dp);dr.quaternion.setFromAxisAngle(UPV,Math.atan2(-(hd.z-dp.z),hd.x-dp.x));if(t>2.4)dr.quaternion.multiply(_gq3.setFromAxisAngle(XV,(t-2.4)*9));else if(t>2.0)dr.quaternion.multiply(_gq3.setFromAxisAngle(XV,0.3*Math.sin(t*30)))}
+    AT.crouch=0.25;AT.hroll=0.15*sstep(0.6,0.9,t)*(1-sstep(2.0,2.2,t));
+    GAGP.arms=(J_,U)=>{const w=sstep(0.6,0.9,t)*(1-sstep(2.2,2.4,t));gP(_g6,J_.shF,J_,U,0.55,0.12,0.25);J_.hFt.lerp(_g6,w);gP(_g6,J_.head,J_,U,0.12,-0.16,0.06);J_.hBt.lerp(_g6,w)};
+    gFlash(dp,Math.max(0,1-Math.abs(t-1.5)/0.12));
+    G.fc.copy(G.b0).setY(G.wy+1.0);
+    if(gEv(0.8))gSay('Selfie time!',1.2,1.1);if(gEv(1.5))sfxNoise(0.05,7000,0.18);if(gEv(2.4))sfxNoise(0.12,1400,0.3);if(gEv(2.95)){gSpl(_g6.copy(G.b0).addScaledVector(G.W,-1.0),60,1.1);gSpl(dp,16,0.5)}}},
+  bonk:{name:'Bonk!',dur:4.5,cam:[5.0,1.45,1.3,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.4,t),gy=G.wy-0.85*sc,fb=gFall(t,3.2,3.9);
+    const p=_g1.copy(G.c);p.y=lerp(G.rp0.y,gy,u)+0.25*Math.sin(PI*clamp(t/0.4,0,1));gPut(G,p,G.yaw,fb,0,Math.min(1,u*1.5));riderG.visible=t<4.1;   /* he kicks the board straight up, loses it in the sky, and it comes down flat on his head */
+    const hd=gW(_g2.set(0,1.80,0));const tb=t-0.1,TB=1.67;
+    if(tb<0){boardG.position.copy(G.bp0);boardG.quaternion.copy(G.bq0)}
+    else if(tb<TB){const k=tb/TB;boardG.position.copy(G.bp0).lerp(hd,k);boardG.position.y=G.bp0.y+8.6*tb-4.9*tb*tb+(hd.y-G.bp0.y-(8.6*TB-4.9*TB*TB))*k;gQ(boardG.quaternion,G.yaw,0,0).multiply(_gq3.setFromAxisAngle(ZV,tb*4*PI/TB))}
+    else if(t<2.1){boardG.position.copy(hd);boardG.position.y+=0.06;gQ(boardG.quaternion,G.yaw,0,0.1*Math.sin(t*20))}
+    else if(t<2.6){const k=sstep(2.1,2.6,t);boardG.position.copy(hd).lerp(_g3.copy(G.c).addScaledVector(G.L,1.0).setY(G.wy+0.06),k);boardG.position.y+=0.4*Math.sin(PI*k);gQ(boardG.quaternion,G.yaw+0.5*k,0,0.6*Math.sin(PI*k))}
+    else gBoardFloat(G,_g3.copy(G.c).addScaledVector(G.L,1.0),G.yaw+0.5,t,9);
+    if(t<1.77){AT.gz=0.6*sstep(0.3,0.6,t);AT.crouch=0.2}else if(t<3.2){AT.hroll=0.35*Math.sin(t*7);AT.crouch=0.32+0.12*Math.sin(t*5);AT.gz=-0.1+0.15*Math.sin(t*3.3)}
+    GAGP.arms=(J_,U)=>{if(t<1.77){const w=sstep(0.4,0.7,t);gP(_g6,J_.shF,J_,U,0.25,0.28,-0.18);J_.hFt.lerp(_g6,w);gP(_g6,J_.shB,J_,U,0.25,-0.28,-0.18);J_.hBt.lerp(_g6,w)}else{gP(_g6,J_.shF,J_,U,0.10,0.05,-0.56);J_.hFt.lerp(_g6,1);gP(_g6,J_.shB,J_,U,0.10,-0.05,-0.56);J_.hBt.lerp(_g6,1)}};
+    gStars(hd,t,t>1.8&&t<3.5);
+    G.fc.copy(p).setY(G.wy+0.9);
+    if(gEv(0.6))gSay('Where did it go?',1.0,1.0);if(gEv(1.77)){sfxNoise(0.15,900,0.4);gSay('Ouch!',1.0,1.1)}if(gEv(3.85))gSpl(_g6.copy(G.c).addScaledVector(G.W,-1.2),70,1.2)}},
+  shark:{name:'Shark Scare',dur:5.1,cam:[7.0,1.9,2.2,0,44],f(G,t){const sc=G.sc,u=sstep(0,0.45,t),gy=G.wy-0.85*sc,bp=_g6.copy(G.c).addScaledVector(G.L,0.95);bp.y=G.wy+0.06+0.02*Math.sin(t*2.3);
+    const up=sstep(1.85,2.25,t),fb=gFall(t,3.9,4.4);const p=_g1.copy(G.c);p.y=lerp(G.rp0.y,gy,u)+0.22*Math.sin(PI*clamp(t/0.45,0,1));if(up>0){p.lerp(bp,up);p.y+=0.6*Math.sin(PI*up)}   /* a fin circles him; he scrambles up on his board in a panic... and faints */
+    gPut(G,p,G.yaw,fb,0,Math.min(1,u*1.5));riderG.visible=t<4.6;
+    if(t<0.5){boardG.position.copy(G.bp0).lerp(bp,sstep(0,0.5,t));boardG.quaternion.copy(G.bq0).slerp(gQ(_gBq,G.yaw,0,0),sstep(0,0.5,t))}else{boardG.position.copy(bp);gQ(boardG.quaternion,G.yaw,0,0.04*Math.sin(t*2))}
+    const f=GG.fin;f.visible=t>0.6&&t<4.9;if(f.visible){let r,a;const a0=G.r*6.28;
+      if(t<2.2){r=lerp(6.5,1.7,sstep(0.6,2.2,t));a=a0+(t-0.6)*1.4}else if(t<3.7){r=1.7;a=a0+2.24+(t-2.2)*2.4}else{r=1.7+(t-3.7)*6;a=a0+5.84+(t-3.7)*0.5}
+      const fx=bp.x+Math.cos(a)*r,fz=bp.z+Math.sin(a)*r;f.position.set(fx,G.wy-0.03+0.02*Math.sin(t*4),fz);const dx=t<3.7?-Math.sin(a):Math.cos(a),dz=t<3.7?Math.cos(a):Math.sin(a);f.quaternion.setFromAxisAngle(UPV,Math.atan2(dz,-dx));
+      if(Math.random()<0.5)emit(fx+rnd(-0.1,0.1),G.wy+0.05,fz+rnd(-0.1,0.1),rnd(-0.3,0.3)-CP*0.3,rnd(0.2,0.8),rnd(-0.3,0.3),rnd(0.4,0.8),0.10,rnd(0.25,0.5),0.5,4,1.5,1)}
+    A.flail=t>1.3&&t<2.3?1:0;AT.gz=t>1.3&&t<3.9?-0.2:0.05;AT.crouch=t>2.25&&t<3.9?0.5+0.04*Math.sin(t*40):0.22;
+    GAGP.arms=(J_,U)=>{const w=sstep(2.2,2.45,t)*(1-sstep(3.85,4.0,t));if(w<=0)return;gP(_g7,J_.shB,J_,U,0.13,0,-0.04);J_.hFt.lerp(_g7,w);gP(_g7,J_.shF,J_,U,0.14,0,-0.06);J_.hBt.lerp(_g7,w)};
+    G.fc.copy(G.c).addScaledVector(G.L,0.5).setY(G.wy+0.8);
+    if(gEv(0.4))gSpl(p,40,0.8);if(gEv(1.35))gSay('Shark!!!',1.5,1.3);if(gEv(3.95))gSay('Ohhh...',0.8,0.7);if(gEv(4.35))gSpl(_g7.copy(bp).addScaledVector(G.W,-1.0),70,1.2)}},
+  dizzy:{name:'Dizzy',dur:4.8,cam:[5.4,1.45,1.5,0,40],f(G,t){const u=sstep(0,0.3,t),k=clamp((t-0.2)/1.7,0,1),sp=6*PI*k*k*(3-2*k),tb=sstep(3.5,4.0,t);
+    const p=_g1.copy(G.b0);gPut(G,p,G.yaw+sp,0,PI/2*0.97*tb*G.side,u);riderG.visible=t<4.3;   /* three spins on the board, faster and faster, then dizzy, and over like a felled tree */
+    if(tb<0.01)gBoardOn();else{boardG.position.copy(G.b0);gQ(boardG.quaternion,G.yaw+sp,0,0)}
+    if(t<1.9){AT.claim=t>0.25?1:0;AT.claimV=3}else if(t<3.5){AT.hroll=0.35*Math.sin(t*6.5);AT.crouch=0.34+0.12*Math.sin(t*4.3);AT.lean=0.18*Math.sin(t*3.1);AT.look=PI/2+0.4*Math.sin(t*2.7);AT.gz=-0.1}
+    GAGP.arms=(J_,U)=>{if(t<1.9)return;const w=sstep(1.9,2.2,t),a=Math.sin(t*3.1);gP(_g6,J_.shF,J_,U,0.12+0.1*a,0.18,-0.45);J_.hFt.lerp(_g6,w);gP(_g6,J_.shB,J_,U,0.12-0.1*a,-0.18,-0.45);J_.hBt.lerp(_g6,w)};
+    G.fc.copy(p).setY(G.wy+0.85*G.sc);
+    if(gEv(2.1))gSay('Whoa... whoa...',0.8,0.75);if(gEv(3.5))gSay('Timber!',0.9,1.1);if(gEv(4.0)){gQ(_gq2,G.yaw+sp,0,0);gSpl(_g6.set(-1.1*G.side,0,0).applyQuaternion(_gq2).add(p),70,1.2)}},
+    post(G,t){_g6.copy(J.head);gW(_g6);gStars(_g6,t,t>2.0&&t<3.6)}},
+  helicopter:{name:'Board Copter',dur:4.8,cam:[7.6,1.6,1.9,0,46],f(G,t){const sc=G.sc,u=sstep(0,0.4,t),gy=G.wy-0.85*sc,rs=t<1.8?0:1.2*(t-1.8)*(t-1.8);
+    const p=_g1.copy(G.c);p.y=lerp(G.rp0.y,gy,u)+0.2*Math.sin(PI*clamp(t/0.4,0,1))+rs;gPut(G,p,G.yaw,0,0,Math.min(1,u*1.5));   /* the board over his head, spun like a rotor, faster and faster, and up he goes */
+    const hd=gW(_g2.set(0,2.14,0));
+    const lift=sstep(0.4,0.9,t),ang=t<0.9?0:t<1.8?7*(t-0.9)*(t-0.9)/0.9:6.3+14*(t-1.8);
+    if(lift<=0){boardG.position.copy(G.bp0);boardG.quaternion.copy(G.bq0)}else{boardG.position.copy(G.bp0).lerp(hd,lift);gQ(_gq2,G.yaw+ang,0,0);boardG.quaternion.copy(G.bq0).slerp(_gq2,lift)}
+    AT.crouch=0.12;AT.gz=0.35*lift;if(t>1.8){AT.walk=1;AT.wph=(t-1.8)*7}
+    GAGP.arms=(J_,U)=>{const w=sstep(0.35,0.7,t);gP(_g6,J_.head,J_,U,0.02,0.13,0.42);J_.hFt.lerp(_g6,w);gP(_g6,J_.head,J_,U,0.02,-0.13,0.42);J_.hBt.lerp(_g6,w)};
+    if(t>1.0&&rs<4){const n=t>1.6?3:1;for(let i=0;i<n;i++){const a=rnd(PI*2),r=rnd(0.6,1.8);emit(p.x+Math.cos(a)*r,G.wy+0.05,p.z+Math.sin(a)*r,Math.cos(a)*rnd(2,4)-CP*0.3,rnd(0.3,1.2),Math.sin(a)*rnd(2,4),rnd(0.4,0.8),0.12,rnd(0.4,0.8),0.45,3,1.2,1)}}
+    G.fc.copy(G.c).setY(G.wy+0.9*sc+Math.min(rs,2.6));
+    if(gEv(0.3))gSpl(p,30,0.7);if(gEv(0.95))sfxNoise(3.6,650,0.12);if(gEv(1.9))gSay('Bye bye!',1.3,1.1)}},
+  duck:{name:'Rubber Duck',dur:5.6,cam:[8.0,1.9,2.8,0,44],f(G,t){const sc=G.sc,u=sstep(0,0.45,t),gy=G.wy-1.15*sc;
+    const hd=_g7.copy(G.L).negate(),dy=Math.atan2(-hd.z,hd.x),ry=Math.atan2(-hd.x,-hd.z);   /* a giant rubber duck floats by; he climbs on and rides it in, waving */
+    const D1=_g3.copy(G.c).addScaledVector(G.L,1.9);const k=clamp((t-0.5)/1.3,0,1),e=1-(1-k)*(1-k);const Dp=_g4.copy(D1).addScaledVector(G.L,12*(1-e));
+    if(t>2.3)Dp.addScaledVector(hd,1.3*(t-2.3)).addScaledVector(G.W,0.4*(t-2.3));Dp.y=G.wy-0.25+0.05*Math.sin(t*2.4);
+    const dk=GG.duck;dk.visible=t>0.5;dk.position.copy(Dp);gQ(dk.quaternion,dy,0.03*Math.sin(t*2.1),0.04*Math.sin(t*1.7));
+    _g5.set(-0.12,0.86,0).applyQuaternion(dk.quaternion).add(Dp);const cl=sstep(1.8,2.3,t);const sw=_g1.copy(G.c);sw.y=lerp(G.rp0.y,gy,u)+0.25*Math.sin(PI*clamp(t/0.45,0,1))+0.04*Math.sin(t*3);
+    const P=sw.lerp(_g5,cl);P.y+=0.7*Math.sin(PI*cl);
+    if(cl<=0)gPut(G,P,G.yaw,0,0,Math.min(1,u*1.5));else{gQ(_gq,G.yaw,0,0);gQ(_gq2,ry+0.03*Math.sin(t*2.1),0,0);riderG.position.copy(P);riderG.quaternion.copy(_gq).slerp(_gq2,cl)}
+    if(cl>0.5){const w=sstep(1.9,2.3,t);GAGP.pel=J_=>{J_.pel.lerp(_g6.set(-0.30,0.14,0.04),w)};GAGP.legs=J_=>{J_.ftF.lerp(_g6.set(J_.pel.x+0.30,J_.pel.y-0.42,J_.pel.z-0.22),w);J_.ftB.lerp(_g6.set(J_.pel.x-0.30,J_.pel.y-0.42,J_.pel.z-0.22),w)}}
+    GAGP.arms=(J_,U)=>{if(t<1.8){gP(_g6,J_.shF,J_,U,0.25,0.30,-0.35+0.06*Math.sin(t*5));J_.hFt.lerp(_g6,u);gP(_g6,J_.shB,J_,U,0.25,-0.30,-0.35+0.06*Math.sin(t*5+1));J_.hBt.lerp(_g6,u)}
+      else{const w=sstep(2.1,2.4,t);gP(_g6,J_.shF,J_,U,0.10,0.12+0.15*Math.sin(t*9),0.55);J_.hFt.lerp(_g6,w);gP(_g6,J_.shB,J_,U,0.42,-0.05,-0.30);J_.hBt.lerp(_g6,w)}};
+    gBoardFloat(G,_g6.copy(G.c).addScaledVector(G.L,-1.0),G.yaw+0.7,t,8,sstep(0,0.5,t));
+    G.fc.copy(G.c).lerp(Dp,t<2.3?0.2*sstep(0.5,1.8,t):0.2+0.4*sstep(2.3,3.5,t)).setY(G.wy+0.8);
+    if(gEv(0.4))gSpl(G.c,50,0.9);if(gEv(2.4))gSay('Quack quack!',1.9,1.2)}},
+  selfie:{name:'Selfie',dur:4.1,cam:[5.2,1.5,-1.5,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.4,t),sw=sstep(2.4,2.75,t);
+    const p=_g1.copy(G.b0);p.y=G.wy+0.06-sw*1.9*sc+0.02*Math.sin(t*2);gPut(G,p,G.yaw+0.25*sstep(0.4,1.0,t)*(1-sw),0,0,u);   /* a selfie on the board; the white water swallows him, and the hand with the phone keeps taking pictures */
+    if(sw<0.02)gBoardOn();else{const tb=t-2.4;boardG.position.copy(G.b0).addScaledVector(G.W,1.5*tb);boardG.position.y=Math.max(G.wy+0.06,G.wy+0.06+5*tb-4.9*tb*tb);gQ(boardG.quaternion,G.yaw,0,tb*6)}
+    AT.crouch=0.22-0.1*sw;AT.hroll=0.22*sstep(0.5,0.9,t)*(1-sw);AT.shiftX=0.04*sstep(0.5,0.9,t);AT.gz=0.1;
+    GAGP.arms=(J_,U)=>{const w=sstep(0.3,0.6,t);if(sw<0.5){gP(_g6,J_.shF,J_,U,0.38,0.22,0.40);J_.hFt.lerp(_g6,w);gP(_g6,J_.head,J_,U,0.10,-0.17,0.04);J_.hBt.lerp(_g6,w)}else{gP(_g6,J_.shF,J_,U,0.02,0.02,0.64);J_.hFt.lerp(_g6,1)}};
+    G.fc.copy(G.b0).setY(G.wy+0.95);
+    if(gEv(0.5))gSay('Say cheese!',1.3,1.1);if(gEv(1.3)||gEv(1.95)||gEv(3.3))sfxNoise(0.04,7000,0.18);if(gEv(2.4))gFoam(_g6.copy(G.b0),130)},
+    post(G,t){const ph=GG.phone;ph.visible=t>0.3;if(!ph.visible){gFlash(_g6,0);return}_g6.copy(J.haF);gW(_g6);ph.position.copy(_g6);_g7.copy(J.head);gW(_g7);ph.lookAt(_g7);
+      gFlash(_g6,Math.max(0,1-Math.abs(t-1.3)/0.1,1-Math.abs(t-1.95)/0.1,1-Math.abs(t-3.3)/0.1))}},
+  pushups:{name:'Push-ups',dur:4.4,cam:[5.0,1.2,2.4,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.45,t),hy=Math.atan2(G.L.z,-G.L.x);   /* face down on the board doing push-ups, showing off, and the white water flattens him */
+    const ang=t>0.55&&t<2.7?0.30*(0.5-0.5*Math.cos(2*PI*1.5*(t-0.55))):0;gQ(_gq2,hy,0,0);const Pv=_g2.set(-1.39*sc,0.12*sc,0);_gq.copy(_gq2).multiply(_gq3.setFromAxisAngle(ZV,ang));
+    const base=_g3.copy(G.b0);const pos=_g4.copy(Pv).applyQuaternion(_gq2).add(base).sub(_g5.copy(Pv).applyQuaternion(_gq));
+    if(u<1){riderG.position.copy(G.rp0).lerp(pos,u);riderG.quaternion.copy(G.rq0).slerp(_gq,u)}else{riderG.position.copy(pos);riderG.quaternion.copy(_gq)}
+    riderG.visible=t<2.75;A.prone=u;GAGP.deck=(base.y+0.11*sc-riderG.position.y)/sc;
+    if(t<2.75){boardG.position.copy(G.bp0).lerp(base,u);boardG.quaternion.copy(G.bq0).slerp(_gq2,u)}else{const tb=t-3.0;boardG.visible=tb>0;boardG.position.copy(base).addScaledVector(G.W,0.8*Math.max(0,tb));boardG.position.y=G.wy+0.06+Math.max(0,6.5*tb-4.9*tb*tb);gQ(boardG.quaternion,hy+tb*2,0,tb*7)}
+    GAGP.arms=(J_,U)=>{if(u<0.5)return;const w=sstep(0.3,0.5,t);for(let n=0;n<2;n++){const s=n?J_.shB:J_.shF,h=n?J_.hBt:J_.hFt,d=s.dot(U)-GAGP.deck;_g6.copy(s).addScaledVector(U,-d).addScaledVector(J_.axis,n?-0.10:0.10);h.lerp(_g6,w)}};
+    G.fc.copy(base).setY(G.wy+0.5);
+    if(gEv(0.95))gSay('One!',1.0,1.2);if(gEv(1.62))gSay('Two!',1.0,1.2);if(gEv(2.28))gSay('Three!',1.0,1.2);if(gEv(2.7))gFoam(_g6.copy(base),140)}},
+  nap:{name:'Nap Time',dur:5.4,cam:[5.4,1.5,2.4,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.6,t),hy=Math.atan2(G.L.z,-G.L.x),dr=Math.max(0,t-0.6)*0.7;   /* on his back on the board, hands behind his head, ankles crossed, drifting in asleep */
+    const base=_g3.copy(G.b0).addScaledVector(G.W,dr);base.y=G.wy+0.06+0.03*Math.sin(t*2.2);gQ(_gq2,hy,0,0.03*Math.sin(t*1.8));_gq.copy(_gq2).multiply(_gq3.setFromAxisAngle(XV,PI*u));
+    const pos=_g4.copy(base);pos.y+=0.30*sc*u;riderG.position.copy(G.rp0).lerp(pos,Math.min(1,u*1.2));riderG.quaternion.copy(G.rq0).slerp(_gq,u);A.prone=sstep(0,0.4,t);A.air=u;
+    boardG.position.copy(G.bp0).lerp(base,u);boardG.quaternion.copy(G.bq0).slerp(_gq2,u);
+    GAGP.arms=J_=>{const w=sstep(0.4,0.8,t);gP(_g6,J_.head,J_,J_.spine,-0.07,0.11,0.02);J_.hFt.lerp(_g6,w);gP(_g6,J_.head,J_,J_.spine,-0.07,-0.11,0.02);J_.hBt.lerp(_g6,w)};
+    GAGP.legs=J_=>{const w=sstep(0.5,0.9,t);J_.ftF.lerp(_g6.set(-1.36,0.16,-0.05),w);J_.ftB.lerp(_g6.set(-1.30,0.24,0.04+0.03*Math.sin(t*3)),w)};
+    G.fc.copy(base).setY(G.wy+0.5);
+    if(gEv(1.2))gSay('Zzzz...',0.6,0.6)},
+    post(G,t){_g6.copy(J.head);gW(_g6);gZz(_g6,t,t>1.0)}},
+  wrongway:{name:'Wrong Way!',dur:4.2,cam:[6.6,1.7,2.4,0,42],f(G,t){const u=sstep(0,0.5,t),hy=Math.atan2(G.W.z,-G.W.x),pd=Math.max(0,Math.min(t,2.55)-0.5);   /* he lies down and paddles flat out... straight back into the white water */
+    const base=_g3.copy(G.b0).addScaledVector(G.W,-1.0*pd);base.y=G.wy+0.06+0.02*Math.sin(t*3);gQ(_gq2,hy,0,0.04*Math.sin(t*9));
+    riderG.position.copy(G.rp0).lerp(base,u);riderG.quaternion.copy(G.rq0).slerp(_gq2,u);riderG.visible=t<2.6;A.prone=sstep(0,0.4,t);AT.paddle=Math.max(0,t-0.4)*17;
+    if(t<2.6){boardG.position.copy(G.bp0).lerp(base,u);boardG.quaternion.copy(G.bq0).slerp(_gq2,u)}else{const tb=t-3.0;boardG.visible=tb>0;boardG.position.copy(base).addScaledVector(G.W,0.8*Math.max(0,tb));boardG.position.y=G.wy+0.06+Math.max(0,6.5*tb-4.9*tb*tb);gQ(boardG.quaternion,hy+tb*2,0,tb*7)}
+    if(t>1.4&&t<2.7){const q=_g6.copy(base).addScaledVector(G.W,-2.2+0.9*(t-1.4));for(let i=0;i<4;i++)emit(q.x+rnd(-2,2),G.wy+rnd(0,1.2),q.z+rnd(-0.5,0.5),rnd(-0.8,0.8)-CP*0.3,rnd(0.5,2.5),rnd(-0.3,0.3),rnd(0.6,1.2),rnd(0.6,1.0),rnd(1.6,2.8),0.40,2.5,1.2,1)}
+    if(t>0.5&&t<2.55){const k0=Math.floor(Math.max(0,GEV.last-0.4)*17/PI),k1=Math.floor((t-0.4)*17/PI);if(k1>k0)gSpl(base,5,0.4)}
+    G.fc.copy(base).setY(G.wy+0.5);
+    if(gEv(0.7))gSay("Let's go again!",1.1,1.1);if(gEv(2.55))gFoam(_g6.copy(base),140)}},
+  cannonball:{name:'Cannonball!',dur:4.2,cam:[6.6,1.6,2.0,0,44],f(G,t){const sc=G.sc,ta=t-0.3,T=1.32,air=t>=0.3&&ta<T,tk=sstep(0.35,0.6,t),p=_g1.copy(G.b0);   /* a huge jump, tucked into a ball, the biggest splash of the day, and up he comes: ta-da */
+    if(air){p.addScaledVector(G.W,0.7*ta);p.y=Math.max(G.wy,G.wy+0.06+6.4*ta-4.9*ta*ta)}
+    gPut(G,p,G.yaw,-0.5*sstep(0.3,0.3+T,t),0,sstep(0,0.3,t));riderG.visible=t<0.3+T||t>2.8;
+    if(t<0.3)gBoardOn();else if(air){boardG.position.copy(G.b0);gQ(boardG.quaternion,G.yaw,0,0)}else gBoardFloat(G,_g6.copy(G.b0).addScaledVector(G.L,-0.6),G.yaw,t,10);
+    AT.crouch=t<0.3?0.95*sstep(0,0.25,t):air?0.3:0.2;
+    if(air){GAGP.legs=J_=>{J_.ftF.lerp(_g6.set(J_.pel.x+0.12,J_.pel.y-0.16,J_.pel.z-0.30),tk);J_.ftB.lerp(_g6.set(J_.pel.x-0.12,J_.pel.y-0.16,J_.pel.z-0.30),tk)};
+      GAGP.arms=J_=>{_g6.copy(J_.knF).addScaledVector(J_.front,0.06);J_.hFt.lerp(_g6,tk);_g6.copy(J_.knB).addScaledVector(J_.front,0.06);J_.hBt.lerp(_g6,tk)}}
+    if(t>2.8){const k=sstep(2.8,3.1,t);p.copy(G.b0).addScaledVector(G.W,0.7*T);p.y=G.wy-(1.8-0.65*k)*sc;gPut(G,p,G.yaw,0,0);AT.claim=t>2.9?1:0;AT.claimV=0;AT.gz=0.2}
+    G.fc.copy(G.b0).addScaledVector(G.W,0.5).setY(G.wy+1.0*sc+0.4*clamp(ta,0,1));
+    if(gEv(0.35))gSay('Cannonball!',1.0,1.2);
+    if(gEv(0.3+T)){const q=_g6.copy(G.b0).addScaledVector(G.W,0.7*T).setY(G.wy);gSpl(q,260,2.6);for(let i=0;i<90;i++)emit(q.x+rnd(-0.6,0.6),G.wy+rnd(0,0.4),q.z+rnd(-0.6,0.6),rnd(-1,1)-CP*0.3,rnd(5,10),rnd(-1,1),rnd(1.0,1.6),0.25,rnd(0.8,1.6),0.5,8,1.0);game.shake=Math.max(game.shake||0,1.0);if(!sfxPlay('splash',{vol:1}))sfxNoise(1.0,700,0.4)}
+    if(gEv(3.0))gSay('Ta-da!',1.2,1.0)}}
+};
+function gagStart(id){const D=GAG[id];if(!D)return false;if(D.npc&&!(npcMesh&&NPCP.pop[3]))return false;gProps();
+  sampleSurf(sf.s,Math.max(sf.p,0.3),S);const W=new V3(-S.tp.x,0,-S.tp.z);if(W.lengthSq()<1e-4)W.set(0,0,1);W.normalize();const L=new V3(-W.z,0,W.x);
+  sampleSurf(sf.s,2,S2);const wy=Math.min(boardG.position.y-0.04,S2.pos.y*0.3-0.2+0.6),sc=Math.abs(riderG.scale.y)||1,c=riderG.position.clone().setY(wy).addScaledVector(W,1.6);
+  if(DROP.on)dropEnd();
+  sf.gag={id,dur:D.dur,W,L,wy,sc,c,b0:c.clone().setY(wy+0.06),yaw:Math.atan2(-W.x,-W.z),rp0:riderG.position.clone(),rq0:riderG.quaternion.clone(),bp0:boardG.position.clone(),bq0:boardG.quaternion.clone(),r:Math.random(),side:Math.random()<0.5?1:-1,fc:new V3()};
+  sf.mode='gag';sf.wT=0;sf.claimT=0;sf.belly=false;GEV.last=-1;
+  if(!game.attract)award(D.name,350,true);return true}
+function gagPlace(dt,time){const G=sf.gag,D=G&&GAG[G.id];if(!D){sf.mode='ride';return}
+  const t=Math.min(sf.wT,D.dur+1.2);if(t<GEV.last-0.05)GEV.last=-1;GEV.t=t;GG.shown=1;
+  gBase();riderG.visible=boardG.visible=true;G.fc.copy(G.c).setY(G.wy+0.75*G.sc);
+  D.f(G,t,dt,time);sf.pos.copy(G.fc);
+  A.claim=damp(A.claim,AT.claim,7,dt);poseRider(time,dt);
+  if(D.post)D.post(G,t)
+  GEV.last=t}
 // end-of-wave celebrations, a different one each wave, in turn (the turn carries over to the next visit)
 const CELEB=[{v:17,n:'Marrento'},{v:7,n:'Nota 10'},{v:8,n:'67'},{v:12,n:'Bate no Peito'},{v:9,n:'Macarena'},{v:13,n:'Palmas'},{v:10,n:'Ihhh, não sei'},{v:14,n:'Arqueiro'},{v:11,n:'Tô doidão'},{v:15,n:'Dab'},{v:6,n:'Hang Loose'},{v:16,n:'Guitarra'}];
 function nextCeleb(){if(game.attract)return CELEB[Math.floor(Math.random()*CELEB.length)];
@@ -4426,13 +4770,14 @@ function riderCut(){const U=waveMat.uniforms,on=sf.visible&&riderG.visible&&boar
   if(_rcB.distanceTo(U.uRA.value)>2.4)_rcB.copy(U.uRA.value).addScaledVector(_rcU,1.3*sc);U.uRB.value.copy(_rcB);
   const bh=Math.max(0.3,((boardG.userData.look&&boardG.userData.look.L)||1.84)*0.5-0.24);U.uBA.value.copy(boardG.position).addScaledVector(_rcX,bh);U.uBB.value.copy(boardG.position).addScaledVector(_rcX,-bh);U.uRR.value=0.27*sc;U.uBR.value=0.11}   /* the board's cut stays inside its own outline: it used to reach 20 cm past the nose and left a little square hole in the water there */
 function placeSurfer(dt,time){
-  RB=BACK&&sf.mode!=='reef'?1:0;riderG.scale.z=Math.abs(riderG.scale.z)*(RB?-1:1);LYC.f.value=MIRROR^RB;   // backside is drawn mirrored (the jersey print flipped back so it reads); walking on the reef he is himself again
+  RB=BACK&&sf.mode!=='reef'&&sf.mode!=='gag'?1:0;riderG.scale.z=Math.abs(riderG.scale.z)*(RB?-1:1);LYC.f.value=MIRROR^RB;   // backside is drawn mirrored (the jersey print flipped back so it reads); walking on the reef he is himself again
   shadowM.visible=false;
   if(!sf.visible){riderG.visible=boardG.visible=false;return}
   {const m=sf.mode,m0=A.lastMode;A.lastMode=m;   /* onto or off a floater: the board and rider ease from the motion they already had into the new pose */
    if(m0&&m0!==m&&(m0==='float'||m==='float')&&(m==='ride'||m==='float')&&A.bpPrev)A.tb={t:0,T:0.38,bp:A.bpPrev.clone(),bv:A.bvel.clone(),bq:A.bqPrev.clone(),bw:A.bw.clone(),rq:A.rqPrev.clone(),rw:A.rw.clone()}}
   A.impact=Math.max(0,A.impact-dt*3.2);
   let spin=0,slip=0,rootYaw=0,pitchT=0,proneT=0,airT=0,grabT=0,projT=0;AT.bsh=0;
+  if(sf.mode==='gag'&&sf.gag){gagPlace(dt,time);return}if(GG.shown)gHide();
   if(sf.mode==='wipe'){
     const t=sf.wT,vy=sf.wVel.y;sampleSurf(sf.wPos.x+sf.wVel.x*t,2,S);const wy=S.pos.y*0.3-0.2;
     /* he goes in: a big hole in the water, then the water boils over him while he sinks out of sight (no more vanishing in mid-air); the board slaps down and floats */
@@ -4661,6 +5006,7 @@ function shot(kind,p,tk,ak){
     cT2.set(p.x+lerp(1.6,0.4,tk),p.y+lerp(1.25,0.7,tk)-ak*sf.h*0.45-(sf.openCam?1.1:0)*(1-tk),p.z*0.8);
     if(game.attract&&game.state!=='menu'){_bd.subVectors(cT2,cT1).cross(UPV).normalize().multiplyScalar(-3.6*(MIRROR?-1:1));cT1.add(_bd);cT2.add(_bd)}   /* behind the menu: framed so he rides on the right third, clear of the buttons */
     return lerp(18.5,48,tk)+ak*2.5}   /* on the drop it aims lower: the wave fills the frame, less sky */
+  if(kind==='beach'&&sf.mode==='gag'&&sf.gag){const G=sf.gag,C=(GAG[G.id]&&GAG[G.id].cam)||[7,1.5,0,0,40];cT1.copy(p).addScaledVector(G.W,C[0]).addScaledVector(G.L,C[2]);cT1.y=G.wy+C[1];cT2.copy(p);return C[4]}   /* the gags: each frames its own scene from the beach side */
   if(kind==='beach'){sampleSurf(sf.s,Math.max(sf.p,0.3),SCam);_bd.copy(SCam.tp).setY(0);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize().multiplyScalar(-1);   // on the beach side, facing him as he comes in
     if(sf.mode==='reef'){cT1.copy(p).addScaledVector(_bd,3.7);cT1.y=p.y+1.25;cT2.set(p.x,p.y+0.80,p.z);return 38}   /* the walk out over the reef: close, face on */
     cT1.copy(p).addScaledVector(_bd,7.5);cT1.y=p.y+1.5;cT2.set(p.x,p.y+0.95,p.z);return 44}
@@ -4694,13 +5040,13 @@ function updateCamera(dt,time){
     {const op=false,pk=game.inTube&&sf.tube>0.35?1:0;   // the close in-barrel view only once he has really been covered for a moment, never just because a lip is throwing nearby
      const w=pk>sf.tubeK?4.6:4.0;sf.tubeKv=(sf.tubeKv||0)+((pk-sf.tubeK)*w*w-2*w*(sf.tubeKv||0))*dt;sf.tubeK=clamp(sf.tubeK+sf.tubeKv*dt,0,1);if(sf.tubeK<=0||sf.tubeK>=1)sf.tubeKv=0}   // a critically damped spring: the barrel framing starts and settles from rest, never with a kick
     {const at=sf.mode==='air'?1:0,w=5.5;sf.airKv=(sf.airKv||0)+((at-sf.airK)*w*w-2*w*(sf.airKv||0))*dt;sf.airK=clamp(sf.airK+sf.airKv*dt,0,1);if(sf.airK<=0||sf.airK>=1)sf.airKv=0}
-    if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
-    else if(game.replay)kind=game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
+    if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];kind=sf.mode==='gag'?'beach':cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam)}
+    else if(game.replay)kind=sf.mode==='gag'?'beach':game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
     else if(game.attract)kind=REEL.cam||'tele';   /* behind the menu: the chase camera, or the side camera when he rides backside */   // start screen: two wide shots from far off, the whole wave and the place around it
     else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
       {let base=['follow','tele','front'][game.cam];const a=game.waveAge,D=game.waveDur||80;
        if(game.cam===1&&a>D-Math.max(8,D*0.3)&&a<D-4.5&&!(lastShot!=='front'&&(game.inTube||sf.tubeK>0.05||(S.aEnd>3.3&&sf.s<9)||a-(game.tubeOut||-99)<3||SEC.some(C=>C.fol&&a>C.t0-3.5&&a<C.t0+C.d+2))))base='front';   /* not while a barrel is about to close over him or he is just out of one */   /* the side camera directs the end of the ride: square on from the beach for the last stretch, then back to the side for the arrival */
-       kind=sf.openCam?'tele':(sf.straight&&game.cam!==1)?'beach':base}
+       kind=sf.mode==='gag'?'beach':sf.openCam?'tele':(sf.straight&&game.cam!==1)?'beach':base}
       if(kind!==lastShot&&(kind==='beach'||lastShot==='beach'||(kind==='front'&&lastShot==='tele')||(kind==='tele'&&lastShot==='front')))camInit=false;   /* a clean cut between the side and the front */
       if(game.cam===1&&kind==='tele'&&game.state==='ride'){const now=game.waveAge;   // the side camera cuts to the chase now and then: on a move, or every so often
         if(game.marks.length!==(game.mkN||0)){if(game.marks.length>(game.mkN||0)&&(game.chN||0)<2&&now>14&&now-(game.chEnd||-99)>18&&now-(game.tubeOut||-99)>6&&!game.inTube){game.chEnd=now+4.0;game.chN=(game.chN||0)+1}game.mkN=game.marks.length}
@@ -4710,7 +5056,7 @@ function updateCamera(dt,time){
         if(sf.mode==='wipe'){}else if(lastShot==='gopro'&&(game.inTube||sf.tubeK>0.2))kind='gopro';else if((game.inTube&&sf.tube>0.3)||sf.tubeK>(lastShot==='gopro'?0.35:0.6))kind='gopro'}   // in the barrel the view is the GoPro behind him, from the moment he is covered until he is out   // one glide into the barrel shot and it stays there until he comes out; the behind-him chase only when the chase camera is already on and the barrel is open behind
       if(game.inTube&&sf.tube>0.3)sf.gpHold=0.9;else sf.gpHold=Math.max(0,(sf.gpHold||0)-dt);
       if(lastShot==='gopro'&&sf.gpHold>0&&sf.mode!=='wipe')kind='gopro';   /* out of the barrel he rides clear with the spit before the camera leaves it */
-      if(kind!==lastShot&&lastShot&&camShotT<2.4&&sf.mode!=='wipe'&&!game.camPicked&&!(kind==='gopro'&&game.inTube&&sf.tube>0.3))kind=lastShot;   /* every shot stays up at least ~2.4 s: no quick back-and-forth cuts */
+      if(kind!==lastShot&&lastShot&&camShotT<2.4&&sf.mode!=='wipe'&&sf.mode!=='gag'&&!game.camPicked&&!(kind==='gopro'&&game.inTube&&sf.tube>0.3))kind=lastShot;   /* every shot stays up at least ~2.4 s: no quick back-and-forth cuts */
       if(kind!==lastShot){const fb=(kind==='follow'&&lastShot==='barrel')||(kind==='barrel'&&lastShot==='follow');   // behind him <-> ahead of him: a clean cut (a glide would fly through him)
         if(kind==='gopro'){camInit=false;camBlend=0;camGP=1}else if(fb){camInit=false;camBlend=0}else if(kind==='follow'||lastShot==='follow'||kind==='barrel'||lastShot==='barrel'||lastShot==='gopro'){camBlend=camBlend>0?1-camBlend:1;blendFrom=lastShot;blendDur=lastShot==='gopro'?1.5:kind==='barrel'||lastShot==='barrel'?0.9:1.2}}}   // side <-> chase: a quick glide between the two, not a jump cut
     if(sf.mode==='ride')sf.camDir=damp(sf.camDir,clamp(Math.cos(sf.th)*1.4,-1,1),2.4,dt);
@@ -4729,7 +5075,7 @@ function updateCamera(dt,time){
   const calm=1-0.8*(sf.tubeK||0),hx=(Math.sin(time*0.83)*0.07+Math.sin(time*2.1)*0.02)*calm,hy=(Math.sin(time*1.17+1)*0.06+Math.sin(time*0.6)*0.08)*calm;
   const shk=(game.shake||0)*(1-0.95*(sf.tubeK||0));game.shake=damp(game.shake||0,0,7,dt);const sx_=Math.sin(time*29.3)*0.6+Math.sin(time*47.1)*0.4,sy_=Math.sin(time*31.7+1.3)*0.6+Math.sin(time*53.9+0.4)*0.4;
   camera.position.set(camP.x+hx+sx_*shk*0.09,Math.max(camP.y+hy+sy_*shk*0.09,0.45),camP.z);
-  {const ce=A.ceZ=damp(A.ceZ||0,sf.endCl&&game.state==='ride'&&!game.attract&&sf.mode!=='reef'?1:0,1.1,dt);if(ce>0.001){_ce.set(camera.position.x-camL.x,camera.position.y-camL.y,camera.position.z-camL.z);camera.position.addScaledVector(_ce,0.38*ce);camera.position.y=Math.max(camera.position.y,0.45)}}   /* the celebration: the camera steps back so all of him and the wave show */
+  {const ce=A.ceZ=damp(A.ceZ||0,sf.endCl&&game.state==='ride'&&!game.attract&&sf.mode!=='reef'&&sf.mode!=='gag'?1:0,1.1,dt);if(ce>0.001){_ce.set(camera.position.x-camL.x,camera.position.y-camL.y,camera.position.z-camL.z);camera.position.addScaledVector(_ce,0.38*ce);camera.position.y=Math.max(camera.position.y,0.45)}}   /* the celebration: the camera steps back so all of him and the wave show */
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
   {const nr=lastShot==='gopro'||sf.tubeK>0.3?0.08:0.3;if(camera.near!==nr){camera.near=nr;camera.updateProjectionMatrix()}}   /* close to the wall in the barrel: never clip the water */
   camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(_guS,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
@@ -4880,7 +5226,7 @@ function grab(){const c=renderer.domElement,zoom=1.2;let sw=c.width/zoom,sh=sw*9
 /* ───────────────────────── main loop ───────────────────────── */
 const elScore=$('score').querySelector('b'),elSpeed=$('speed').querySelector('b'),elCombo=$('combo'),elTube=$('tube'),elTubeB=elTube.querySelector('b'),elBar=$('wavebar').querySelector('i');
 let last=performance.now(),lastRaf=last,rafD=16.7,cadN=0,cadHold=4,cadBack=6,prPend=false,prOk=0,prN=0,clockT=0,hudAcc=0,hudPts=-1,hudSpd=-1,hudCmb=null,hudTube='',hudBar='';
-const REC_KEYS=['ffU','exV','exT','s','p','V','th','om','rail','steer','lam','lamG','mode','h','vh','spin','spinVis','airT','airDur','th0','pivot','introT','wT','burst','visible','splashed','tube','claimT','slip','fFoam','flip','layT','hit'],
+const REC_KEYS=['ffU','exV','exT','gag','s','p','V','th','om','rail','steer','lam','lamG','mode','h','vh','spin','spinVis','airT','airDur','th0','pivot','introT','wT','burst','visible','splashed','tube','claimT','slip','fFoam','flip','layT','hit'],
       REC_LERP=['s','p','V','om','rail','steer','lam','lamG','h','vh','spin','spinVis','airT','wT','flip'];
 function frame(nowMs){
   requestAnimationFrame(frame);
@@ -4944,6 +5290,7 @@ function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
       if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
         if(sf.exV===3){sf.mode='kickout';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.7);sf.wVel.x+=sf.V*Math.cos(sf.th)-CP*0.6;sf.wVel.y=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}   // kicks the board up and steps off
         else if(sf.exV===6||sf.exV===7||sf.exV===9||sf.exV===10)koStart(sf.exV);
+        else if(sf.exV>=21&&game.exPlan&&game.exPlan.gag&&!game.attract&&gagStart(game.exPlan.gag)){}   /* one of the twenty gags */
         else if(sf.exV===8){sf.belly=true;sf.claimT=0;if(!game.attract)award('Belly Ride',300,true)}   /* down on his belly, the white water carries him in */
         else{const C=nextCeleb();sf.claimT=4.2;sf.claimV=C.v;sf.celebN=C.n;sfxNoise(0.22,2600,0.15)}}
       if(sf.exV===4&&sf.mode==='ride'&&game.waveAge>=sf.reefAt)reefStart();   // ollie or varial, then the celebration
@@ -4969,10 +5316,11 @@ function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
       else if(sf.mode==='wipe'){sf.wT+=h;if(sf.wT>1.5&&game.state==='ride')endRide(game.finale?'done':'wipe');if(sf.wT>2.5)sf.visible=false}
       else if(sf.mode==='kickout'){sf.wT+=h;if(sf.ko&&sf.wT>2.6&&game.state==='ride'&&!game.attract)endRide('done')}
       else if(sf.mode==='reef'){sf.wT+=h;reefStep(h)}
+      else if(sf.mode==='gag'){sf.wT+=h;if(sf.gag&&sf.wT>sf.gag.dur&&game.state==='ride'&&!game.attract)endRide('done')}
       if(sf.exV)sf.exT=(sf.exT||0)+h}
   }
   if(game.state==='ride'){const f={t:game.t,age:game.waveAge,H:game.Hbase,rk:game.rhK||0,tube:game.inTube,ix:input.x,cr:input.crouch,st:input.stall,sf:{}};for(const k of REC_KEYS)f.sf[k]=sf[k];game.rec.push(f)}
-  mk_('phys');placeSurfer(dt*MOVE,clockT);dropTick(dt*MOVE);bbTick(dt*MOVE,clockT);mk_('rider');
+  mk_('phys');placeSurfer(dt*MOVE,clockT);dropTick(dt*MOVE);padTick(dt*MOVE);bbTick(dt*MOVE,clockT);mk_('rider');
   if(game.inTube&&Math.random()<dtR*(0.35+0.55*TUBE_SP))spawnDrops(1);updateDrops(dtR);
   if(TUBE_SP>=0.45&&game.inTube&&game.state==='ride'&&!game.replay){if(!sf.spitDone&&sf.tube>=1.4){sf.spitDone=true;spitBlast(Math.max(TUBE_SP,0.85))}}else if(!game.inTube)sf.spitDone=false;   /* 2026-11-17 one spit per barrel, a big one (it used to keep spitting every second or two) */   /* inside the barrel it keeps spitting over him: Pipeline and Greenbush hardest and most often, the point breaks now and then */
   if(TUBE_SP>0&&!SPOT.crumble&&game.state==='ride'&&!game.inTube){   /* seen from outside, the tubes breathe too */
