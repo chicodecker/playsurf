@@ -1349,11 +1349,11 @@ function wOf(s,Lw){if(s<=4.5)return 1;if(s<9)return lerp(1,0.64,sstep(4.5,9,s));
 // the whole wave turning to white water.
 const SEC=[{t0:9,c0:46,v:2.0,h:9.0,k:0,d:10,fol:1},{t0:25,c0:64,v:4.6,h:7.0,k:1},{t0:30.5,c0:44,v:2.0,h:6.5,k:0,d:4.5,fol:1},   /* the wall that stood up without breaking now throws: a barrel in the middle of the ride */
            {t0:39,c0:40,v:2.0,h:6.0,k:0,d:7,fol:1},{t0:47.5,c0:46,v:2.6,h:7.5,k:2},{t0:49.6,c0:40,v:2.0,h:6.5,k:0,d:3.6,fol:1}];   /* the tall wall near the end throws once more: a last short barrel before it all goes white */   /* about a minute, like the longest pool waves (45 s published, riders timing 50-60 s) */
-const END_FOAM=70;function endFoam(s,age){if(CLOSE_SPOTS.includes(SPOT.id)){const T=game.waveDur-3.4+0.006*Math.max(s,0);return age>T?sstep(T,T+1.3,age):0}   /* Pipeline: no white water running down the line; the whole wall goes white at once, right after it closes out */
+const END_FOAM=70;function endFoam(s,age){if(CLOSE_SPOTS.includes(SPOT.id)){const T=game.waveDur-2.6+0.006*Math.max(s,0);return age>T?sstep(T,T+1.3,age):0}   /* Pipeline: no white water running down the line; the whole wall goes white at once, right after it closes out */
   const E=game.waveDur-clamp(game.waveDur*0.125,4,10);return age>E?sstep(-5,5,(age-E)*7.5-s):0}
 /* 2026-11-18 the closeout turns white as the block of lip lands and stays white to the end: the wall it collapses into is never seen clean again (it used to throw, show the clean wall again for a moment, then go to foam) */
-function closeFoamK(s,age){if(!CLOSE_SPOTS.includes(SPOT.id)||age<0)return 0;const T=game.waveDur-4.6+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T+0.65,T+1.2,age)*(1-sstep(60,95,s))}
-function closeK(s,age){if(!CLOSE_SPOTS.includes(SPOT.id)||age<0)return 0;const T=game.waveDur-4.6+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T,T+1.1,age)*(1-sstep(60,95,s))}   /* Pipeline's closeout: near the end the whole wall stands up and pitches at once, from the curl to far down the line, one block of lip coming down */   /* 4 to 10 s before the end of the ride, by its length */   // from the curl down the line, everything goes white
+function closeFoamK(s,age){if(!CLOSE_SPOTS.includes(SPOT.id)||age<0)return 0;const T=game.waveDur-3.8+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T+0.65,T+1.2,age)*(1-sstep(60,95,s))}
+function closeK(s,age){if(!CLOSE_SPOTS.includes(SPOT.id)||age<0)return 0;const T=game.waveDur-3.8+0.006*Math.max(s,0)+0.10*Math.sin(s*0.23+1.1);return sstep(T,T+1.1,age)*(1-sstep(60,95,s))}   /* Pipeline's closeout: near the end the whole wall stands up and pitches at once, from the curl to far down the line, one block of lip coming down */   /* 4 to 10 s before the end of the ride, by its length */   // from the curl down the line, everything goes white
 SEC.forEach(C=>C.c00=C.c0);   // fol: a barrel that lines up on the rider when it starts, so it pitches over him instead of waiting ahead like a tunnel
 let secClose=0,secFoam=0,secJct=0;
 function secUpdate(age){
@@ -1790,7 +1790,7 @@ function todFor(id){const p=game.nightPref|0;return p===1&&id!==1?0:p}   /* the 
 /* the PlaySurf cover palette, laid over every wave once its own look is set: deep navy water, cobalt-teal face, cyan-blue light through the lip, lavender shade in the foam, a rose glint */
 function coverTint(n){const U=waveMat.uniforms,k=n?0.22:SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.06:0.55,M=(u,r,g,b,kk)=>u.value.lerp(_tintV.set(r,g,b),kk===undefined?k:kk);
   if(n){M(U.uWA,0.004,0.020,0.075);M(U.uWB,0.010,0.090,0.250);M(U.uFoamA,0.20,0.20,0.40);return}
-  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.05:C.k;   /* Iceland keeps its dark arctic water */
+  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.05:SPOT.id===14?0.1:SPOT.id===6||SPOT.id===15?0.28:C.k;   /* Iceland keeps its dark arctic water; Santa Catarina keeps its green water (Matadeiro green, Campeche and Rosa greenish) */
   M(U.uWA,...C.wa,kd);M(U.uWB,...C.wb,kd);M(U.uG1,...C.g1,kd);M(U.uG2,...C.g2,kd);M(U.uFl,...C.fl,kd);M(U.uFlL,...C.fll,kd);
   M(U.uFoamA,...C.fa,kd);M(U.uFoamB,...C.fb,kd);M(U.uSpecC,1.15,0.98,0.92,kd*0.6);
   const f=scene.fog.color;f.lerp(_fogC.setRGB(...C.fog),kd*0.7)}
@@ -2095,10 +2095,40 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
    const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv),transparent:true,depthWrite:false}));m.rotation.x=-PI/2;m.position.set(x,0.04,z);m.renderOrder=-1;G.add(m);return m};
 
  /* the open sea past the edge of the game's ocean, so the horizon never shows the sky through it */
- [mataG,rosaG,restG].forEach(G=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(9000,9000),new THREE.MeshBasicMaterial({color:0x1f5680}));m.rotation.x=-PI/2;m.position.y=-0.6;m.renderOrder=-3;G.add(m)});
- /* ── MATADEIRO: the left breaks right on the granite of the costão; past it the deep channel and Ilha das Campanhas with its tail of dark boulders
-    running out into the sea, Armação far behind it; on the other side the bay, the footbridge over the Sangradouro and the steep Atlantic forest ── */
+ [[mataG,0x1c5a50],[rosaG,0x1d5a60],[restG,0x1f5680]].forEach(([G,col])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(9000,9000),new THREE.MeshBasicMaterial({color:col}));m.rotation.x=-PI/2;m.position.y=-0.6;m.renderOrder=-3;G.add(m)});
+ /* ── MATADEIRO (2026-11-18, as the user sees it from the water): behind the left there is only open sea and the end of a low island running out into it —
+    one big lawn of grass, rising a little and falling again, and at its point a jumble of granite boulders and slabs with natural pools between them.
+    People sit up on the grass by the rocks watching the surf. The peak breaks right off the point ── */
  {const G=mataG;
+  const TX=-30,TZ=-78,BX=-470,BZ=-175,VX=BX-TX,VZ=BZ-TZ,L2=VX*VX+VZ*VZ,LL=Math.sqrt(L2),nx=-VZ/LL,nz=VX/LL;   /* the island's spine: from its point by the peak out to the left */
+  const prof=t=>{const a=6.5*sstep(0.02,0.14,t),b=7.5*sstep(0.12,0.36,t)*(1-0.45*sstep(0.45,0.72,t)),c=3.5*sstep(0.62,0.95,t);return 1.0+a+b+c};   /* up from the rocks onto the lawn, a gentle crown, down a little and up again */   /* low at the point, a gentle rise, a long easy slope */
+  const isl=(x,z)=>{const t=((x-TX)*VX+(z-TZ)*VZ)/L2,tc=clamp(t,0,1.2),px=TX+VX*tc,pz=TZ+VZ*tc,d=Math.hypot(x-px,z-pz),w=lerp(16,95,sstep(0,0.45,tc))*(1+0.12*nn(x*1.1,z*1.3)),q=d/w;
+    if(q>=1.25)return -6;const h0=prof(tc),dome=q<1?Math.pow(1-q*q,0.5):0;let h=h0*dome+0.6*nn(x*0.8,z*0.9)*dome;   /* a rounded lawn, no ridge, no cliffs */
+    h+=(1-sstep(0.1,0.3,tc))*1.6*Math.abs(nn(x*0.9,z*0.8))*dome;return q<1?Math.max(h,0.4*dome):lerp(0.4,-6,sstep(1.0,1.25,q))};
+  const GR1=CL(0x6e8f3e),GR2=CL(0x86a24c),GR3=CL(0x56762f),PATH=CL(0xb8a77a);
+  terr(G,-520,40,-260,-6,210,110,isl,(c,x,y,z,ny)=>{const t=((x-TX)*VX+(z-TZ)*VZ)/L2;c.copy(GR1).lerp(GR2,0.5+0.5*nn(x*1.4,z*1.2)).lerp(GR3,0.35*(0.5+0.5*nn(x*3.1,z*2.7)));
+    const bare=Math.max(1-sstep(0.55,0.82,ny),1-sstep(0.9,2.2,y));c.lerp(ROCK,bare*0.85);if(bare>0.5)c.lerp(ROCKD,0.3*(0.5+0.5*nn(x*4,z*4)));
+    if(t<0.16){const k=1-sstep(0.08,0.16,t);c.lerp(ROCK,k*0.8)}if(y<0.35)c.multiplyScalar(0.62)});   /* grass all over, granite showing at the point and along the waterline */
+  /* the point: dozens of boulders and flat slabs, and the pools between them */
+  const RL=[],SL=[],POOL=[];
+  for(let i=0;i<80;i++){const t=Math.pow(rr(),1.5)*0.17,o=rs(-1.15,1.15),w=lerp(16,95,sstep(0,0.45,t)),x=TX+VX*t+nx*o*w,z=TZ+VZ*t+nz*o*w,s=rs(1.8,6.8)*(t<0.05?1.25:1);if(z>-30)continue;RL.push([x,rs(-0.3,0.55)*s+Math.max(0,isl(x,z))*0.7,z,s])}   /* big boulders stacked up the point */
+  for(let i=0;i<34;i++){const t=rs(-0.03,0.12),o=rs(-1.25,1.25),x=TX+VX*t+nx*o*22,z=TZ+VZ*t+nz*o*22;if(z>-30)continue;RL.push([x,rs(-0.9,-0.1)*3,z,rs(1.6,4.4)])}   /* the outer rocks in the sea, the white water breaking on them */
+  for(let i=0;i<26;i++){const t=rs(0.01,0.14),o=rs(-0.8,0.8),w=lerp(16,95,sstep(0,0.45,t)),x=TX+VX*t+nx*o*w,z=TZ+VZ*t+nz*o*w;if(z>-30)continue;const y=Math.max(0.2,isl(x,z));SL.push([x,y-0.2,z,rs(3,7),0.22]);if(i%2===0)POOL.push([x+rs(-2,2),y+0.35,z+rs(-2,2),rs(1.2,2.6)])}
+  rocks(G,RL,ROUND,0xa8a092);rocks(G,SL,ROUND,0x9c9486);
+  {const pm=new THREE.InstancedMesh(new THREE.CircleGeometry(1,14),new THREE.MeshStandardMaterial({color:0x6fc6c0,roughness:0.08,metalness:0.1,transparent:true,opacity:0.85}),POOL.length);POOL.forEach(([x,y,z,r],k)=>{QQ.setFromEuler(EE.set(-PI/2,0,rs(0,6.3)));M4.compose(PP.set(x,y,z),QQ,SS.set(r*rs(0.8,1.4),r,1));pm.setMatrixAt(k,M4)});G.add(pm)}   /* the natural pools, holding the sky */
+  spray(G,[[TX-4,TZ+16,10],[TX-26,TZ+20,9],[TX+12,TZ+10,8],[TX-48,TZ+26,8]]);
+  /* people sat up on the grass by the rocks, watching the surf */
+  {const N=18,skin=[0xc68a62,0xe0b08a,0x8d5a3a,0xd9a07a],shirt=[0xffffff,0xf2c230,0xe25a4c,0x2f6fd6,0x3fbf9a,0xf28ac0,0x222222,0xff8c42],cap=(r,l)=>new THREE.CapsuleGeometry(r,l,3,8);
+   const TG=cap(0.16,0.34),HG=new THREE.SphereGeometry(0.11,10,8),LG=cap(0.07,0.42);LG.rotateZ(PI/2);
+   const tm=new THREE.InstancedMesh(TG,new THREE.MeshStandardMaterial({roughness:0.8}),N),hm=new THREE.InstancedMesh(HG,new THREE.MeshStandardMaterial({roughness:0.7}),N),lm=new THREE.InstancedMesh(LG,new THREE.MeshStandardMaterial({roughness:0.8}),N*2);let k=0;
+   for(let i=0;i<N*4&&k<N;i++){const t=rs(0.06,0.24),o=rs(-0.45,0.65),w=lerp(16,95,sstep(0,0.45,t)),x=TX+VX*t+nx*o*w,z=TZ+VZ*t+nz*o*w,y=isl(x,z);if(y<1.5)continue;
+     const yaw=Math.atan2(26-z,30-x)+rs(-0.4,0.4);QQ.setFromEuler(EE.set(0,-yaw,0));const fx=Math.cos(yaw),fz=Math.sin(yaw);   /* facing the break */
+     M4.compose(PP.set(x,y+0.42,z),QQ,SS.set(1,1,1));tm.setMatrixAt(k,M4);tm.setColorAt(k,c2.set(shirt[(rr()*shirt.length)|0]));M4.compose(PP.set(x+fx*0.03,y+0.86,z+fz*0.03),QQ,SS.set(1,1,1));hm.setMatrixAt(k,M4);hm.setColorAt(k,c2.set(skin[(rr()*skin.length)|0]));
+     for(const sd2 of [-1,1]){M4.compose(PP.set(x+fx*0.28-fz*0.1*sd2,y+0.1,z+fz*0.28+fx*0.1*sd2),QQ,SS.set(1,1,1));lm.setMatrixAt(k*2+(sd2>0?1:0),M4);lm.setColorAt(k*2+(sd2>0?1:0),c2.set(rr()<0.5?0x2a3a5a:skin[(rr()*skin.length)|0]))}k++}
+   tm.count=hm.count=k;lm.count=k*2;G.add(tm,hm,lm)}
+  shallow(G,TX-20,TZ+6,110,46,'70,200,175',0.4);
+  /* the mainland is on the shore side, in front of the wave (behind it there is only the island and the open sea): built as before, then mirrored across the line of the wave */
+  const GL=new THREE.Group();GL.scale.z=-1;G.add(GL);
   /* the mainland as a smooth union of three shores, every point rounded: the bay of Matadeiro to the right, the land beyond the costão to the left,
      and the far shore of Armação across the channel */
   const smin=(a,b,k)=>{const h=clamp(0.5+0.5*(b-a)/k,0,1);return lerp(b,a,h)-k*h*(1-h)};
@@ -2108,38 +2138,16 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
   const rivR=(x,z)=>Math.abs(x-(92+(-258-z)*0.28));   /* the river: only across the sand, its banks sloping */
   const hM=(x,z)=>{const b=dB(x,z),d=Math.max(b,dL(x,z),dF(x,z));if(d<0)return Math.max(-7,d*0.5);const bay=b>=d-0.01&&x>-30,bw=bay?24:3,rr2=rivR(x,z),rk=bay&&d<bw+30?sstep(6,16,rr2):1;if(d<bw)return lerp(-1.4,0.3+d*0.045,rk);
     const e=d-bw,lo=bay?(0.22+0.78*sstep(-60,220,x))*(0.35+0.65*sstep(0,150,x+70)):1,far=dF(x,z)>=d-0.01?0.75:1;let h=((1-Math.exp(-e/(bay?70:40)))*(46+24*nn(x*0.7,z*0.7))+e*0.30)*lo*far+0.3+bw*0.045;h=Math.min(h,215+22*nn(x*0.3,z*0.3));h=lerp(Math.min(h,-1.4+Math.max(0,rr2-6)*0.4),h,rk);return h+sstep(5,12,h)*canopy(x,z,0)*0.7};
-  terr(G,-900,900,-1180,-150,300,172,hM,(c,x,y,z,ny)=>{forest(c,x,z);const b=dB(x,z),d=dist(x,z);if(b>=d-0.01&&x>-30&&d<25.5&&d>-3&&y>-1){c.copy(SAND);if(y<0.5)c.lerp(SANDW,0.6);return}rocky(c,x,y,z,ny)});
-  /* the costão: a granite ridge from the mainland down to the peak, scrub and forest on top, bare slabs and boulders at the sea */
-  const TX=-45,TZ=-50,BX=-520,BZ=-430,VX=BX-TX,VZ=BZ-TZ,L2=VX*VX+VZ*VZ,LL=Math.sqrt(L2);
-  const ridge=(x,z)=>{const t=((x-TX)*VX+(z-TZ)*VZ)/L2,tc=clamp(t,0,1),px=TX+VX*tc,pz=TZ+VZ*tc,d=Math.hypot(x-px,z-pz),w=lerp(18,110,Math.pow(tc,0.8))*(1+0.16*nn(x*1.3,z*1.3)),q=d/w;
-    if(q>=1.18)return -7;const h0=lerp(6,92,sstep(0,0.85,tc))*(1+0.14*nn(x*0.8+3,z*0.8));let h=q<1?h0*Math.pow(1-q*q,0.62):0;
-    h+=(1-sstep(0.55,1.1,q))*(2.4*Math.abs(nn(x*0.45,z*0.5))+1.3*Math.abs(nn(x*1.4+5,z*1.2)));h+=sstep(14,30,h)*canopy(x,z,1)*0.8;return q<1?h:lerp(h,-7,sstep(1.0,1.18,q))};
-  terr(G,-660,10,-500,-12,200,150,ridge,(c,x,y,z,ny)=>{c.copy(SCRUB).lerp(F2,0.5+0.5*nn(x*1.9,z*1.6));c.lerp(F1,sstep(16,40,y)*0.8);const bare=Math.max(1-sstep(0.55,0.82,ny),1-sstep(3.5,10,y));c.lerp(ROCK,bare*0.9);if(bare>0.4)c.lerp(ROCKD,0.35*(0.5+0.5*nn(x*3.3,z*3.1)));if(y<1.5)c.lerp(ROCKD,0.55);if(y<0.3)c.multiplyScalar(0.62)});
-  const RL=[];for(let i=0;i<26;i++){const x=rs(-125,-7),z=rs(-64,-28)-Math.max(0,-x-60)*0.25,s=rs(2.4,7.5)*(x>-30?0.65:1);RL.push([x,rs(-0.5,0.3)*s,z,s])}   /* the rocks the peak breaks on */
-  for(let i=0;i<190;i++){const t=rs(0,0.9),sd2=rr()<0.5?-1:1,w=lerp(18,110,Math.pow(t,0.8)),px=TX+VX*t,pz=TZ+VZ*t,o=w*rs(0.82,1.12),s=rs(1.8,6.5);RL.push([px-VZ/LL*sd2*o,rs(-0.6,0.5)*s,pz+VX/LL*sd2*o,s])}
-  for(let i=0;i<10;i++){const a=rs(0,6.3),s=rs(3,7);RL.push([TX+Math.cos(a)*rs(8,20),rs(-0.2,0.6)*s,Math.min(-30,TZ+Math.sin(a)*rs(6,15)),s])}
-  rocks(G,RL,ROUND,0xa29a8c);
-  spray(G,[[-40,-36,9],[-75,-44,11],[-105,-52,10],[-22,-34,7]]);
-  /* Ilha das Campanhas: low granite under scrub and grass, and its tail of dozens of big dark boulders */
-  const CX=-262,CZ=-525,AX=128,AZ=50;
-  const isl=(x,z)=>{const u=(x-CX)/AX,v=(z-CZ)/AZ,r=Math.hypot(u,v),sh=0.08*nn(x*1.1,z*1.3)+0.05*Math.sin(Math.atan2(v,u)*6+0.7),m=1-sstep(0.78+sh,1.0+sh,r);if(m<0.02)return -7;
-    const q2=t=>t*t;let h=40*Math.exp(-q2((u+0.25)/0.42)-q2(v/0.7))+26*Math.exp(-q2((u-0.38)/0.33)-q2((v+0.1)/0.6))+9*Math.exp(-q2(u/0.95)-q2(v/0.8));h+=sstep(4,10,h)*(1.6*(0.5+0.5*Math.sin(x*0.5)*Math.sin(z*0.6))+1.2*nn(x*1.2,z*1.4));return h*m};
-  terr(G,CX-AX*1.2,CX+AX*1.2,CZ-AZ*1.25,CZ+AZ*1.25,110,44,isl,(c,x,y,z,ny)=>{c.copy(GRASS).lerp(SCRUB,0.5+0.5*nn(x*1.6,z*1.6)).lerp(F2,sstep(12,26,y)*0.6);const bare=Math.max(1-sstep(0.5,0.8,ny),1-sstep(3,9,y));c.lerp(ROCKD,bare*0.75);c.lerp(ROCK,bare*0.3*(0.5+0.5*nn(x*3,z*3)));if(y<0.3)c.multiplyScalar(0.6)});
-  const TL=[],ex=CX+AX*0.9,ez=CZ+6,dx=0.62,dz=0.78;for(let i=0;i<64;i++){const t=Math.pow(i/63,0.85),L=t*175,sp=(1-t)*16+4,o=rs(-1,1)*sp,s=lerp(9,2.6,t)*rs(0.75,1.2);TL.push([ex+dx*L-dz*o,rs(-0.45,0.15)*s,ez+dz*L+dx*o,s])}
-  for(let i=0;i<70;i++){const a=rs(0,6.3);TL.push([CX+Math.cos(a)*AX*0.97+rs(-6,6),rs(-2,0.8),CZ+Math.sin(a)*AZ*0.97+rs(-4,4),rs(2,5.5)])}
-  rocks(G,TL,JAG,0x6a645c,true);
-  spray(G,[[ex+dx*60,ez+dz*60,14],[ex+dx*120,ez+dz*120,12]]);
-  /* Armação's fishing boats at anchor in the channel */
-  [[-120,-330,0.4,0xf4f1ea,0x2a5d9a],[-60,-400,-0.8,0x3b78b8,0xf2f2ee],[-185,-415,1.9,0xe8e1d2,0xc0392b]].forEach(([x,z,ry,a,b])=>{const bo=boat(7,a,b);bo.position.set(x,0.3,z);bo.rotation.y=ry;G.add(bo);COAST.bob.push(bo)});
+  terr(GL,-900,900,-1180,-150,300,172,hM,(c,x,y,z,ny)=>{forest(c,x,z);const b=dB(x,z),d=dist(x,z);if(b>=d-0.01&&x>-30&&d<25.5&&d>-3&&y>-1){c.copy(SAND);if(y<0.5)c.lerp(SANDW,0.6);return}rocky(c,x,y,z,ny)});
   /* the footbridge over the Sangradouro, on its piles, with the rock wall of the river mouth under it */
   {const fb=new THREE.Group(),wood=new THREE.MeshStandardMaterial({color:0x8a6a4a,roughness:0.9}),L=30,dk=new THREE.Mesh(new THREE.BoxGeometry(L,0.35,2.6),wood);dk.position.y=2.6;fb.add(dk);
    [-1.25,1.25].forEach(z=>{const r=new THREE.Mesh(new THREE.BoxGeometry(L,0.12,0.12),wood);r.position.set(0,3.6,z);fb.add(r)});const pl=new THREE.InstancedMesh(new THREE.CylinderGeometry(0.16,0.16,1,6),wood,40);let k=0;
    for(let i=0;i<=8;i++){const x=-L/2+i*L/8;[-1.25,1.25].forEach(z=>{M4.makeScale(1,4.8,1).setPosition(x,0.4,z);pl.setMatrixAt(k++,M4);M4.makeScale(0.6,1,0.6).setPosition(x,3.1,z);pl.setMatrixAt(k++,M4)})}pl.count=k;fb.add(pl);
-   fb.position.set(92,0,-262);G.add(fb);const wl=[];for(let i=0;i<26;i++)wl.push([92+rs(-17,17),rs(-0.6,0.1)*2,-262+rs(-5,5),rs(1.2,2.4)]);rocks(G,wl,ROUND,0x8f887c)}
+   fb.position.set(92,0,-262);GL.add(fb);const wl=[];for(let i=0;i<26;i++)wl.push([92+rs(-17,17),rs(-0.6,0.1)*2,-262+rs(-5,5),rs(1.2,2.4)]);rocks(GL,wl,ROUND,0x8f887c)}
   const HL=[];for(let i=0;i<14;i++){const x=rs(110,240),z=rs(-292,-330);HL.push([x,hM(x,z)-0.6,z,rs(5,8),rs(5,7),rs(3.5,5.5),rs(-0.3,0.3)])}
-  for(let i=0;i<70;i++){const x=rs(-420,-100),z=-990+30*Math.sin(x*0.011+1)-rs(14,80);HL.push([x,hM(x,z)-0.6,z,rs(4,7),rs(4,6),rs(3,5),rs(-0.4,0.4)])}   /* Armação, far across the channel */
-  huts(G,HL,[0xffffff,0xf3eee4,0xf6e9d0,0xe9eef0],[0xb5532d,0xa8492a,0xc0643a,0x8e4a2e]);
-  shallow(G,-60,-48,170,60,'64,190,170',0.45)}
+  huts(GL,HL,[0xffffff,0xf3eee4,0xf6e9d0,0xe9eef0],[0xb5532d,0xa8492a,0xc0643a,0x8e4a2e]);
+  }
+
 
  /* ── ROSA NORTE: the north corner of Praia do Rosa. The wave runs out into the channel against the costão: grassy slopes strewn with granite boulders,
     dark rocks at the waterline and the natural pools between them; the long curve of the beach, its dunes and restinga, pousadas up the green hills,
@@ -2174,7 +2182,8 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
   {const wg=new THREE.Group(),sk=new THREE.MeshStandardMaterial({color:0x2a2e33,roughness:0.55}),body=new THREE.Mesh(new THREE.SphereGeometry(1,16,10),sk);body.scale.set(8.5,1.9,2.6);wg.add(body);
    const fl=new THREE.Group(),fg=new THREE.ConeGeometry(1,1,3);fg.rotateZ(PI/2);[-1,1].forEach(s=>{const f=new THREE.Mesh(fg,sk);f.scale.set(1.1,0.18,2.6);f.position.set(0,0,s*1.5);f.rotation.y=s*0.5;fl.add(f)});fl.position.set(-8,0,0);wg.add(fl);
    const sp=[0,1].map(s=>{const m=new THREE.Sprite(new THREE.SpriteMaterial({map:ST,transparent:true,opacity:0,depthWrite:false}));m.renderOrder=3;wg.add(m);return m});
-   wg.position.set(-130,-4,-165);wg.rotation.y=0.25;G.add(wg);COAST.whale={g:wg,body,fl,sp,t:-8}}}
+   wg.position.set(-130,-4,165);wg.rotation.y=-0.25;G.add(wg);COAST.whale={g:wg,body,fl,sp,t:-8}}
+  G.scale.z=-1}   /* 2026-11-18 the beach, the hills and the costão are on the shore side, in front of the wave; the whale (z mirrored back) stays out at sea behind it */
 
  /* ── RESTAURANTS: a long, perfect left over shallow coral off the south-west corner of Tavarua. The island right behind the wave, white sand,
     coconut palms, the thatched bures and the restaurant deck on its stilts looking straight down the line; the reef dry in places, turquoise over
@@ -2306,15 +2315,15 @@ const SPOT_LOOK={2:{wa:[0.0,0.034,0.080],wb:[0.0,0.190,0.300],g1:[0.0,0.28,0.38]
   3:{wa:[0.0,0.024,0.078],wb:[0.0,0.125,0.300],g1:[0.0,0.22,0.42],g2:[0.08,0.80,0.92],fl:[0.10,0.30,0.38],fll:[0.02,0.08,0.12],flk:0.62,fog:[0.56,0.74,0.93],hill:0x2f6034,hy:0.85,rot:0.5},
   4:{wa:[0.0,0.040,0.070],wb:[0.0,0.240,0.300],g1:[0.0,0.32,0.38],g2:[0.15,0.98,0.85],fl:[0.22,0.56,0.50],fll:[0.05,0.18,0.20],flk:0.86,fog:[0.60,0.78,0.92],hill:0x4c8a44,hy:0.38,rot:-0.4},
   7:{wa:[0.030,0.022,0.010],wb:[0.20,0.15,0.07],g1:[0.30,0.24,0.11],g2:[0.82,0.68,0.36],fl:[0.24,0.19,0.10],fll:[0.09,0.07,0.035],flk:0.45,fog:[0.64,0.70,0.62],hill:0x2f5a2a,hy:0.5,rot:0,amz:1},   /* Pororoca: café-com-leite water, the light through the lip a muddy gold, humid green haze */
-  6:{wa:[0.0,0.036,0.060],wb:[0.0,0.205,0.250],g1:[0.0,0.30,0.34],g2:[0.14,0.95,0.80],fl:[0.52,0.50,0.40],fll:[0.30,0.29,0.22],flk:0.9,fog:[0.66,0.80,0.93],hill:0x3f7a3a,hy:0.5,rot:0.2,camp:1},   /* Campeche: South Atlantic green-blue over sand */
+  6:{wa:[0.0,0.036,0.044],wb:[0.0,0.20,0.17],g1:[0.0,0.30,0.25],g2:[0.14,0.94,0.58],fl:[0.50,0.51,0.38],fll:[0.29,0.30,0.21],flk:0.9,fog:[0.66,0.80,0.92],hill:0x3f7a3a,hy:0.5,rot:0.2,tk:0.55,camp:1},   /* Campeche: South Atlantic green-blue over sand */
   8:{wa:[0.0,0.008,0.016],wb:[0.004,0.050,0.068],g1:[0.01,0.095,0.115],g2:[0.10,0.40,0.44],fl:[0.05,0.065,0.075],fll:[0.015,0.022,0.028],flk:0.45,fog:[0.58,0.63,0.69],hill:0x24272b,hy:1,rot:0,ice:1,dark:1,suit:1},   /* Þorlákshöfn: near-black North Atlantic water, the light through the lip a cold dark green, grey arctic air */
   9:{wa:[0.0,0.026,0.045],wb:[0.006,0.13,0.17],g1:[0.01,0.22,0.24],g2:[0.16,0.75,0.70],fl:[0.42,0.40,0.32],fll:[0.24,0.23,0.18],flk:0.75,fog:[0.66,0.74,0.82],hill:0x7d8256,hy:0.28,rot:0.3,tk:0.5,pen:1,suit:2},   /* Supertubos: green Atlantic over sand, a fullsuit */
   10:{wa:[0.004,0.026,0.036],wb:[0.03,0.14,0.15],g1:[0.05,0.22,0.22],g2:[0.30,0.78,0.66],fl:[0.50,0.44,0.32],fll:[0.30,0.26,0.18],flk:0.8,fog:[0.82,0.80,0.76],hill:0xd9a35c,hy:0.2,rot:0,tk:0.6,nam:1,suit:2},   /* Skeleton Bay: cold Benguela water over sand, desert haze */
   11:{wa:[0.0,0.040,0.075],wb:[0.0,0.22,0.30],g1:[0.0,0.32,0.40],g2:[0.15,0.98,0.86],fl:[0.18,0.44,0.40],fll:[0.05,0.14,0.15],flk:0.85,fog:[0.62,0.80,0.92],hill:0x2f6a34,hy:0.55,rot:-0.2,tk:0.35,ment:1},   /* Greenbush: Mentawai turquoise over live coral */
   12:{wa:[0.0,0.030,0.060],wb:[0.005,0.15,0.22],g1:[0.01,0.24,0.32],g2:[0.14,0.80,0.80],fl:[0.30,0.30,0.26],fll:[0.13,0.13,0.11],flk:0.7,fog:[0.66,0.76,0.88],hill:0x6f7a48,hy:0.42,rot:0.6,tk:0.5,jbay:1,suit:2},   /* Jeffreys Bay: cool Indian Ocean blue-green, a fullsuit */
   13:{wa:[0.004,0.030,0.045],wb:[0.02,0.14,0.17],g1:[0.03,0.22,0.24],g2:[0.24,0.76,0.70],fl:[0.46,0.42,0.33],fll:[0.26,0.23,0.17],flk:0.78,fog:[0.78,0.76,0.72],hill:0xa8865c,hy:0.55,rot:0.1,tk:0.6,chic:1,suit:2},   /* Chicama: cold Humboldt water, a hazy desert */
-  14:{wa:[0.0,0.030,0.034],wb:[0.0,0.17,0.15],g1:[0.0,0.27,0.22],g2:[0.10,0.88,0.52],fl:[0.46,0.50,0.38],fll:[0.27,0.29,0.21],flk:0.88,fog:[0.66,0.78,0.86],hill:0x2f5a2a,hy:0.6,rot:0.3,tk:0.62,mata:1},   /* Matadeiro: thick emerald Atlantic water over granite */
-  15:{wa:[0.0,0.032,0.062],wb:[0.0,0.18,0.25],g1:[0.0,0.28,0.34],g2:[0.12,0.90,0.82],fl:[0.48,0.50,0.42],fll:[0.28,0.29,0.23],flk:0.88,fog:[0.68,0.80,0.92],hill:0x4f7a3a,hy:0.5,rot:0.1,tk:0.35,rosa:1},   /* Rosa Norte: clear blue-green water over sand */
+  14:{wa:[0.0,0.032,0.024],wb:[0.0,0.17,0.105],g1:[0.0,0.28,0.16],g2:[0.12,0.88,0.38],fl:[0.44,0.50,0.34],fll:[0.26,0.30,0.19],flk:0.88,fog:[0.68,0.80,0.84],hill:0x2f5a2a,hy:0.6,rot:0.3,tk:0.8,mata:1},   /* Matadeiro: thick emerald Atlantic water over granite */
+  15:{wa:[0.0,0.033,0.046],wb:[0.0,0.18,0.18],g1:[0.0,0.28,0.25],g2:[0.12,0.90,0.60],fl:[0.47,0.51,0.38],fll:[0.27,0.30,0.21],flk:0.88,fog:[0.68,0.80,0.91],hill:0x4f7a3a,hy:0.5,rot:0.1,tk:0.55,rosa:1},   /* Rosa Norte: clear blue-green water over sand */
   16:{wa:[0.0,0.045,0.085],wb:[0.0,0.25,0.32],g1:[0.0,0.34,0.42],g2:[0.18,1.0,0.90],fl:[0.20,0.50,0.46],fll:[0.05,0.16,0.17],flk:0.88,fog:[0.64,0.80,0.94],hill:0x2f6a34,hy:0.7,rot:0,tk:0.45,rest:1},   /* Restaurants: Fiji's clear turquoise over live coral */
   5:{wa:[0.003,0.040,0.055],wb:[0.020,0.180,0.200],g1:[0.02,0.26,0.28],g2:[0.25,0.85,0.70],fl:[0.30,0.32,0.28],fll:[0.12,0.13,0.12],flk:0.7,fog:[0.64,0.74,0.84],hill:0x9a8a62,hy:0.5,rot:0.9}};
 function spotTint(n){const on=SPOT.id!==1,U=waveMat.uniforms,S3=(u,v,k)=>u.value.set(v[0]*k,v[1]*k,v[2]*k);
@@ -4697,7 +4706,7 @@ function softBreakTick(dt){if(SBRK.t<0||!SBRK.parts)return;SBRK.t+=dt;SBRK.parts
 function wipe(){if(typeof BOARD!=='undefined'&&BOARD.id==='soft'&&!game.attract&&game.state==='ride'&&game.waveAge>game.waveDur-4&&!sf.softBroke&&Math.random()<0.4)setTimeout(()=>{try{if(sf.mode==='wipe')softBreak()}catch(e){}},260);   /* 2026-11-18 now and then the softboard snaps in two in the end-of-wave white water (the break was there, never called) */
   if(sf.mode==='wipe')return;
   if(game.state!=='ride'){sf.visible=false;return}
-  if(CLOSE_SPOTS.includes(SPOT.id)&&!game.attract&&!game.finale&&game.waveAge>game.waveDur-4.8){game.finale=1;if(!game.fin){game.fin='eat';game.finAt=game.waveAge}}   /* taken by Pipeline's closeout: that is the end of the wave, not a fall (the full ride still counts) */
+  if(CLOSE_SPOTS.includes(SPOT.id)&&!game.attract&&!game.finale&&game.waveAge>game.waveDur-4.0){game.finale=1;if(!game.fin){game.fin='eat';game.finAt=game.waveAge}}   /* taken by Pipeline's closeout: that is the end of the wave, not a fall (the full ride still counts) */
   sf.tt=null;sf.slip=0;
   sf.mode='wipe';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sf.splashed=false;sf.bSplash=false;sf.wB=0;if(!game.finale&&sf.s>0.5&&sf.p>0.45*(S.top||1))lipBurst(0.5,sf.s);   /* going over with the lip tears it as well */
   sf.wVel.set(clamp(sf.V*Math.cos(sf.th)-CP,-5,3),2.6,1.6);sf.wSpin=5.5;
@@ -5581,8 +5590,8 @@ function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
     dt=dtR*game.ts*GSPD;game.t+=dt;
     if(game.state==='ride'&&game.attract&&game.waveAge>Math.min(game.waveDur-1,18))endRide('done');
     if(game.state==='ride'){game.waveAge+=dt;if(game.waveAge<=game.waveDur){let gr=0;for(const C of SEC)if(C.fol){const t=game.waveAge-C.t0;gr=Math.max(gr,sstep(-1,3,t)*(1-sstep(C.d,C.d+2.5,t)))}game.Hbase=hbAt(game.waveAge)}   // the set stands up bigger for the drop, and swells as each barrel forms   // the set wave: it stands up bigger for the drop
-      if(!sf.straight&&game.waveAge>game.waveDur-2.6&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.cv=null;sf.tt=null}   // he turns to face the beach first
-      if(!sf.endCl&&game.waveAge>game.waveDur-0.6&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
+      if(!sf.straight&&game.waveAge>game.waveDur-1.0&&sf.mode==='ride'){sf.straight=true;sf.rh=null;sf.cv=null;sf.tt=null}   // he turns to face the beach first
+      if(!sf.endCl&&game.waveAge>game.waveDur+0.2&&sf.mode==='ride'){sf.endCl=true;sf.exV=pickExit();   /* 2026-11-18 right at the very end of the wave, not before it */sf.exT=0;sf.exLand=false;   // the exit, a different one each wave
         if(sf.exV===3){sf.mode='kickout';sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);sf.wVel.copy(S.tp).multiplyScalar(sf.V*Math.sin(sf.th)*0.7);sf.wVel.x+=sf.V*Math.cos(sf.th)-CP*0.6;sf.wVel.y=0;sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}   // kicks the board up and steps off
         else if(sf.exV===6||sf.exV===7||sf.exV===9||sf.exV===10||sf.exV===14||sf.exV===15||sf.exV===16)koStart(sf.exV);
         else if(sf.exV===12){sf.standT=1;sf.claimT=0}   /* standing tall */
@@ -5598,7 +5607,7 @@ function tick(dtR,draw){if(draw){trStep(dtR);reelTick(dtR)}
         if(game.fin==='eat'){game.finale=1;sampleSurf(sf.s,sf.p,S);wipe();sf.wVel.set(-2.2,5.4,6.6);sf.wSpin=9.5;const q=sf.pos;for(let i=0;i<90;i++)emit(q.x+rnd(-1.6,1.6),q.y+rnd(0,1.8),q.z+rnd(-1.6,0.8),rnd(-1.5,1.5)-CP*0.4,rnd(1,4.5),rnd(1,4),rnd(0.8,1.6),rnd(0.5,0.9),rnd(1.8,3.4),0.4,3,1.2,1);sfxNoise(1.0,700,0.3)}   /* it catches him from behind and throws him forward */
         else if(game.fin!=='none'){sf.mode='kickout';sf.wT=0;sf.koVy=4.4;sf.koDive=1;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sf.wVel.set(sf.V*0.2-CP*0.5,0,-3.2);sf.splashed=false;sf.bSplash=false;sfxNoise(0.3,2200,0.2)}}   /* he jumps up and lays himself back over the white water */
       if(game.fin&&game.state==='ride'&&game.waveAge>game.finAt+(game.fin==='eat'?1.5:game.fin==='pop'?2.9:1.7))endRide('done');
-      if(game.waveAge>game.waveDur){game.Hbase=hbAt(game.waveAge);if(game.waveAge>game.waveDur+3.5&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done');if(sf.mode==='reef'&&sf.wT>4.6)endRide('done')}}
+      if(game.waveAge>game.waveDur){game.Hbase=hbAt(game.waveAge);if(game.waveAge>game.waveDur+4.3&&(sf.mode==='ride'||sf.mode==='kickout'))endRide('done');if(sf.mode==='reef'&&sf.wT>4.6)endRide('done')}}
     else if(game.state==='end'){game.endT+=dtR;if(!game.replay){game.waveAge+=dt;game.Hbase=hbAt(game.waveAge)}}
   }
   const P_=window.__prof;let pt_=P_?performance.now():0;const mk_=n=>{if(P_){const u=performance.now();P_[n]=(P_[n]||0)+u-pt_;pt_=u}};mk_('pre');
