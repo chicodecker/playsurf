@@ -348,8 +348,8 @@ h1,.wzH,#pop .p b,#hud b,.tutCard b,#end .nota,.pkBox b,.wpBox h3,.spBox h3,#pau
 .wdot::after{content:'';position:absolute;inset:-7px;border-radius:50%;border:1.5px solid rgba(255,179,71,.85);animation:wmPulse 2.6s ease-out infinite;opacity:0}
 .wdot.sel{width:14px;height:14px;margin:-7px 0 0 -7px;background:#fff;box-shadow:0 0 0 3px var(--ps-pink),0 0 22px 6px rgba(255,171,61,.6)}.wdot.sel::after{animation-duration:1.5s;border-color:#fff}
 @keyframes wmPulse{0%{transform:scale(.5);opacity:.95}100%{transform:scale(2.1);opacity:0}}
-.wlab{position:absolute;display:flex;align-items:center;gap:7px;white-space:nowrap;padding:6px 11px 6px 9px;border-radius:6px;border:1.5px solid rgba(255,255,255,.62);background:rgba(4,14,22,.64);color:#fff;font:800 12px/1 var(--ps-f);font-style:italic;letter-spacing:.06em;cursor:pointer;transform:translate(16px,calc(-50% + var(--dy,0px))) skewX(-9deg);transition:background .15s,color .15s,border-color .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent;outline:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
-.wlab.l{transform:translate(calc(-100% - 16px),calc(-50% + var(--dy,0px))) skewX(-9deg)}
+.wlab{position:absolute;display:flex;align-items:center;gap:7px;white-space:nowrap;padding:6px 11px 6px 9px;border-radius:6px;border:1.5px solid rgba(255,255,255,.62);background:rgba(4,14,22,.64);color:#fff;font:800 12px/1 var(--ps-f);font-style:italic;letter-spacing:.06em;cursor:pointer;transform:translate(calc(16px + var(--dx,0px)),calc(-50% + var(--dy,0px))) skewX(-9deg);transition:background .15s,color .15s,border-color .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent;outline:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.wlab.l{transform:translate(calc(-100% - 16px - var(--dx,0px)),calc(-50% + var(--dy,0px))) skewX(-9deg)}.wlab.mv::before{display:none}.wmLines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.wmLines line{stroke:rgba(255,255,255,.72);stroke-width:1.2;stroke-linecap:round}
 .wlab::before{content:'';position:absolute;top:50%;right:100%;width:10px;height:1.5px;background:rgba(255,255,255,.75)}.wlab.l::before{right:auto;left:100%}
 .wlab b{font:900 11px/1 var(--ps-f);font-style:italic;background:var(--ps-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .wlab:hover,.wlab:focus-visible,.wlab.tip{background:#fff;color:#0b1520;border-color:#fff;box-shadow:0 10px 26px rgba(247,90,120,.38)}
@@ -1322,12 +1322,12 @@ const game={hl:false,showCard:null,waveId:0,cardAt:0,night:0,inTube:false,secAge
   best:(()=>{try{return +(localStorage.getItem('surfpool_best')||0)}catch(e){return 0}})(),ts:1,slowT:0,cam:1,paused:false,shotReq:null,waveDur:80,endKind:''};
 
 // spots: each one its own wave and scenery; the next one opens when the score at the one before is good enough (more can be added to the list)
-const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st:9,lab:'l',dy:-11,what:'WAVE POOL · ALL ROUND · DAY OR NIGHT',name:'PLAYSURF POOL',full:'PLAYSURF POOL',sub:'WAVE POOL · ALL ROUND',hK:1,eL:1,dur:60},
+const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st:9,what:'WAVE POOL · ALL ROUND · DAY OR NIGHT',name:'PLAYSURF POOL',full:'PLAYSURF POOL',sub:'WAVE POOL · ALL ROUND',hK:1,eL:1,dur:60},
   {id:2,ll:[-8.815,115.088],loc:'BALI · INDONESIA',dy:4,name:'ULUWATU',full:'ULUWATU',sub:'BALI · LONG LEFT WALLS',hK:1.25,eL:1.75,dur:46,req:{spot:1,nota:5}},
   {id:4,ll:[9.80,126.17],loc:'SIARGAO · PHILIPPINES',name:'CLOUD 9',full:'CLOUD 9',sub:'SIARGAO · 6 FT RIGHT',hK:0.73,eL:1.35,dur:30,req:{spot:2,nota:6}},
   {id:3,ll:[21.665,-158.05],loc:'OAHU · HAWAII',dy:7,name:'PIPELINE',full:'PIPELINE',sub:'HAWAII · PIPE & BACKDOOR',hK:1.35,eL:2.0,dur:28,req:{spot:4,nota:6.5}},
   {id:5,ll:[33.38,-117.59],loc:'SAN CLEMENTE · CALIFORNIA',lab:'l',dy:-7,short:'TRESTLES',name:'LOWER TRESTLES',full:'LOWER TRESTLES',sub:'CALIFORNIA · LEFTS & RIGHTS',hK:0.92,eL:0.75,dur:20,crumble:1,req:{spot:3,nota:7}},
-  {id:6,ll:[-27.67,-48.47],loc:'FLORIANÓPOLIS · BRAZIL',lean:38,st:9,dy:-11,short:'CAMPECHE',name:'CAMPECHE RIGHTS',full:'CAMPECHE RIGHTS',sub:'FLORIANÓPOLIS · LONG RIGHT',hK:0.86,eL:0.8,dur:30,req:{spot:5,nota:7}},
+  {id:6,ll:[-27.67,-48.47],loc:'FLORIANÓPOLIS · BRAZIL',lean:38,st:9,short:'CAMPECHE',name:'CAMPECHE RIGHTS',full:'CAMPECHE RIGHTS',sub:'FLORIANÓPOLIS · LONG RIGHT',hK:0.86,eL:0.8,dur:30,req:{spot:5,nota:7}},
   {id:7,ll:[-1.68,-47.77],loc:'PARÁ · AMAZON, BRAZIL',name:'POROROCA',full:'POROROCA',sub:'AMAZON · RIVER BORE',hK:1.3,eL:0.6,dur:85,crumble:1,fat:1},
   {id:8,ll:[63.83,-21.37],loc:'ÞORLÁKSHÖFN · ICELAND',name:'ÞORLÁKSHÖFN',full:'ÞORLÁKSHÖFN',sub:'ICELAND · LEFTS & RIGHTS',what:'ARCTIC PEAK · LEFTS & RIGHTS · 4 °C WATER · FULL RUBBER',hK:1.15,eL:1.6,dur:30,req:{spot:6,nota:7}},
   {id:9,ll:[39.35,-9.37],loc:'PENICHE · PORTUGAL',lab:'l',name:'SUPERTUBOS',full:'SUPERTUBOS',sub:'PORTUGAL · HEAVY BEACH BREAK',what:'SAND-BOTTOM PEAK · LEFTS & RIGHTS · SHORT, HEAVY BARRELS · FULLSUIT',hK:1.15,eL:1.6,dur:24,req:{spot:8,nota:7}},
@@ -1335,10 +1335,10 @@ const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st
   {id:11,ll:[-2.75,100.13],loc:'MENTAWAI · INDONESIA',lab:'l',dy:-8,name:'GREENBUSH',full:'GREENBUSH',sub:'MENTAWAI · HEAVY LEFT SLAB',what:'SHALLOW CORAL · THICK-LIPPED BARREL · EXPERTS ONLY',hK:1.3,eL:2.0,dur:24,req:{spot:10,nota:7}},
   {id:12,ll:[-34.03,24.93],loc:'EASTERN CAPE · SOUTH AFRICA',dy:6,short:'J-BAY',name:'JEFFREYS BAY',full:'JEFFREYS BAY',sub:'SOUTH AFRICA · SUPERTUBES',what:'LONG RIGHT POINT · FAST WALLS AND THE SUPERTUBES BARREL · FULLSUIT',hK:1.05,eL:1.4,dur:50,req:{spot:11,nota:7}},
   {id:13,ll:[-7.70,-79.45],loc:'LA LIBERTAD · PERU',lab:'l',name:'CHICAMA',full:'CHICAMA',sub:'PERU · LONGEST LEFT',what:'DESERT POINT · THE LONGEST LEFT IN THE WORLD · ENDLESS WALLS',hK:0.75,eL:0.8,dur:80,req:{spot:12,nota:7}},
-  {id:14,ll:[-27.755,-48.497],loc:'FLORIANÓPOLIS · BRAZIL',lab:'l',dy:12,name:'MATADEIRO',full:'MATADEIRO',sub:'FLORIANÓPOLIS · WEDGING LEFT',what:'GRANITE POINT · A BARREL OFF THE DROP · A RAMP FOR AN AIR · TEN SECONDS',hK:1.15,eL:1.55,dur:10,tri:0.42,req:{spot:13,nota:7}},
-  {id:15,ll:[-28.115,-48.637],loc:'PRAIA DO ROSA · BRAZIL',dy:12,name:'ROSA NORTE',full:'ROSA NORTE',sub:'SANTA CATARINA · RIGHT INTO THE CHANNEL',what:'NORTH CORNER · NO BARREL · FULL WHITE WATER BEHIND · WALLS FOR CARVES AND CUTBACKS',hK:0.95,eL:0.8,dur:24,crumble:1,chan:1,req:{spot:14,nota:7}},
+  {id:14,ll:[-27.755,-48.497],loc:'FLORIANÓPOLIS · BRAZIL',name:'MATADEIRO',full:'MATADEIRO',sub:'FLORIANÓPOLIS · WEDGING LEFT',what:'GRANITE POINT · A BARREL OFF THE DROP · A RAMP FOR AN AIR · TEN SECONDS',hK:0.9,eL:1.55,dur:10,tri:0.55,req:{spot:13,nota:7}},
+  {id:15,ll:[-28.115,-48.637],loc:'PRAIA DO ROSA · BRAZIL',name:'ROSA NORTE',full:'ROSA NORTE',sub:'SANTA CATARINA · RIGHT INTO THE CHANNEL',what:'NORTH CORNER · NO BARREL · FULL WHITE WATER BEHIND · WALLS FOR CARVES AND CUTBACKS',hK:0.95,eL:0.8,dur:24,crumble:1,chan:1,req:{spot:14,nota:7}},
   {id:16,ll:[-17.86,177.19],loc:'TAVARUA · FIJI',lab:'l',name:'RESTAURANTS',full:'RESTAURANTS',sub:'FIJI · PERFECT LEFT',what:'SHALLOW REEF OFF TAVARUA · FAST, MECHANICAL BARRELS · WATCHED FROM THE RESTAURANT',hK:1.05,eL:1.7,dur:20,req:{spot:15,nota:7}},
-  {id:17,ll:[-29.35,-49.67],loc:'TORRES · BRAZIL',dy:32,short:'LOBOS',name:'ILHA DOS LOBOS',full:'ILHA DOS LOBOS',sub:'RIO GRANDE DO SUL · BIG-WAVE SLAB',what:'A GIANT BARREL OFF A BASALT ISLAND · ROCKS ALL AROUND · TEN SECONDS INTO THE CHANNEL',hK:2.4,eL:2.2,dur:10,chan:1,req:{spot:16,nota:7}}];
+  {id:17,ll:[-29.35,-49.67],loc:'TORRES · BRAZIL',short:'LOBOS',name:'ILHA DOS LOBOS',full:'ILHA DOS LOBOS',sub:'RIO GRANDE DO SUL · BIG-WAVE SLAB',what:'A GIANT BARREL OFF A BASALT ISLAND · ROCKS ALL AROUND · TEN SECONDS INTO THE CHANNEL',hK:2.4,eL:2.2,dur:10,chan:1,req:{spot:16,nota:7}}];
 /* each wave's barrel, true to the real one: tw = how far the lip throws out from the face (the tube's width: Pipeline and Greenbush wide and round, Supertubos and Cloud 9 thick and short, the point breaks tighter),
    sp = how hard the barrel spits, the "baforada" (0 = a wave that never barrels: Trestles, the bore) */
 const TUBE={1:{tw:1.0,sp:0.35},2:{tw:1.04,sp:0.5},3:{tw:1.30,sp:1.0},4:{tw:1.14,sp:0.75},5:{tw:1.0,sp:0},6:{tw:1.04,sp:0.5},7:{tw:1.0,sp:0},8:{tw:1.10,sp:0.6},9:{tw:1.20,sp:0.85},10:{tw:1.06,sp:0.85},11:{tw:1.32,sp:1.0},12:{tw:1.02,sp:0.65},13:{tw:1.0,sp:0.3},14:{tw:1.16,sp:0.8},15:{tw:1.0,sp:0},16:{tw:1.12,sp:0.8},17:{tw:1.36,sp:1.0}};
@@ -1795,7 +1795,7 @@ function todFor(id){const p=game.nightPref|0;return p===1&&id!==1?0:p}   /* the 
 /* the PlaySurf cover palette, laid over every wave once its own look is set: deep navy water, cobalt-teal face, cyan-blue light through the lip, lavender shade in the foam, a rose glint */
 function coverTint(n){const U=waveMat.uniforms,k=n?0.22:SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.06:0.55,M=(u,r,g,b,kk)=>u.value.lerp(_tintV.set(r,g,b),kk===undefined?k:kk);
   if(n){M(U.uWA,0.004,0.020,0.075);M(U.uWB,0.010,0.090,0.250);M(U.uFoamA,0.20,0.20,0.40);return}
-  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.05:SPOT.id===14?0.1:SPOT.id===6||SPOT.id===15?0.28:C.k;   /* Iceland keeps its dark arctic water; Santa Catarina keeps its green water (Matadeiro green, Campeche and Rosa greenish) */
+  const C={wa:[0.002,0.020,0.085],wb:[0.004,0.110,0.300],g1:[0.010,0.200,0.440],g2:[0.14,0.74,1.0],fl:[0.10,0.30,0.58],fll:[0.02,0.10,0.26],fa:[0.60,0.64,0.92],fb:[1.10,1.07,1.10],fog:[0.60,0.70,0.96],k:0.65};const kd=SPOT.id===2?0.2:SPOT.id===7?0.04:SPOT.id===8?0.05:SPOT.id===14?0.0:SPOT.id===6||SPOT.id===15?0.28:C.k;   /* Iceland keeps its dark arctic water; Santa Catarina keeps its green water (Matadeiro green, Campeche and Rosa greenish) */
   M(U.uWA,...C.wa,kd);M(U.uWB,...C.wb,kd);M(U.uG1,...C.g1,kd);M(U.uG2,...C.g2,kd);M(U.uFl,...C.fl,kd);M(U.uFlL,...C.fll,kd);
   M(U.uFoamA,...C.fa,kd);M(U.uFoamB,...C.fb,kd);M(U.uSpecC,1.15,0.98,0.92,kd*0.6);
   const f=scene.fog.color;f.lerp(_fogC.setRGB(...C.fog),kd*0.7)}
@@ -2050,7 +2050,7 @@ const campG=new THREE.Group();campG.visible=false;scene.add(campG);
 /* ── three new coasts (2026-11-18): Matadeiro and Rosa Norte in Santa Catarina, Restaurants off Tavarua in Fiji. One small kit for all three:
    height-field land (Atlantic-forest canopy, granite where it is steep and at the waterline), granite boulders (rounded or broken, dark and wet
    at the foot) with froth working round them, tree crowns on the skyline, little houses, palms, boats ── */
-const mataG=new THREE.Group(),rosaG=new THREE.Group(),restG=new THREE.Group(),lobosG=new THREE.Group();[mataG,rosaG,restG,lobosG].forEach(g=>{g.visible=false;scene.add(g)});
+const mataG=new THREE.Group(),rosaG=new THREE.Group(),restG=new THREE.Group(),lobosG=new THREE.Group(),jbay2G=new THREE.Group();[mataG,rosaG,restG,lobosG,jbay2G].forEach(g=>{g.visible=false;scene.add(g)});
 const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
 {let sd=1405;const rr=()=>(sd=(sd*16807)%2147483647)/2147483647,rs=(a,b)=>a+(b-a)*rr();
  const nn=(x,z)=>Math.sin(x*0.031+z*0.017)*0.5+Math.sin(x*0.077-z*0.061+1.3)*0.3+Math.sin(x*0.19+z*0.23+2.1)*0.2;
@@ -2100,7 +2100,7 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
    const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv),transparent:true,depthWrite:false}));m.rotation.x=-PI/2;m.position.set(x,0.04,z);m.renderOrder=-1;G.add(m);return m};
 
  /* the open sea past the edge of the game's ocean, so the horizon never shows the sky through it */
- [[mataG,0x1c5a50],[rosaG,0x1d5a60],[restG,0x1f5680],[lobosG,0x24524a]].forEach(([G,col])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(9000,9000),new THREE.MeshBasicMaterial({color:col}));m.rotation.x=-PI/2;m.position.y=-0.6;m.renderOrder=-3;G.add(m)});
+ [[mataG,0x1c5a50],[rosaG,0x1d5a60],[restG,0x1f5680],[lobosG,0x24524a],[jbay2G,0x1e5470]].forEach(([G,col])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(9000,9000),new THREE.MeshBasicMaterial({color:col}));m.rotation.x=-PI/2;m.position.y=-0.6;m.renderOrder=-3;G.add(m)});
  /* ── MATADEIRO (2026-11-18, as the user sees it from the water): behind the left there is only open sea and the end of a low island running out into it —
     one big lawn of grass, rising a little and falling again, and at its point a jumble of granite boulders and slabs with natural pools between them.
     People sit up on the grass by the rocks watching the surf. The peak breaks right off the point ── */
@@ -2194,15 +2194,19 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
     on top and sea lions hauled out on them, and dozens of black rocks breaking the surface all round the peak and down into the channel; on the shore side,
     in front of the wave, Torres: its beach and the basalt towers of the Guarita ── */
  {const G=lobosG;const BAS=CL(0x2e2c2a),BAS2=CL(0x45413c);
-  const CX=-150,CZ=-215,AX=230,AZ=58;
+  const CX=-85,CZ=-112,AX=95,AZ=36;
   const isl=(x,z)=>{const u=(x-CX)/AX,v=(z-CZ)/AZ,a=Math.atan2(v,u),r=Math.hypot(u,v)*(1+0.12*Math.sin(a*3+0.4)+0.06*Math.sin(a*7+1.1)+0.05*nn(x*0.6,z*0.6));if(r>=1.04)return -6;
     const top=9+3*nn(x*0.05,z*0.08)+2.5*Math.sin(u*2.2);return r<0.86?top+0.8*Math.abs(nn(x*0.9,z*0.9)):lerp(top,-6,sstep(0.86,1.04,r))};   /* a flat basalt table, sheer edges */
   terr(G,CX-AX*1.15,CX+AX*1.15,CZ-AZ*1.25,CZ+AZ*1.25,150,50,isl,(c,x,y,z,ny)=>{c.copy(BAS).lerp(BAS2,0.5+0.5*nn(x*2.3,z*2.1));if(ny>0.85&&y>8.5)c.lerp(CL(0x5d6b3a),0.55*(0.5+0.5*nn(x*0.7,z*0.7)));if(y<1.2)c.multiplyScalar(0.7)},true);
   const RL=[];for(let i=0;i<120;i++){const a=rs(0,6.3);RL.push([CX+Math.cos(a)*AX*rs(0.95,1.12),rs(-1.5,0.8),CZ+Math.sin(a)*AZ*rs(0.95,1.2),rs(2,6)])}
-  for(let i=0;i<60;i++){RL.push([rs(-150,-8),rs(-1.4,0.4),rs(-95,-30),rs(1.6,5.2)])}   /* the rocks round the peak */
+  for(let i=0;i<70;i++){RL.push([rs(-110,-4),rs(-1.0,0.9),rs(-72,-30),rs(2.2,6.5)])}   /* big black rocks round the peak, standing out of the water as the barrel starts */
   for(let i=0;i<46;i++){RL.push([rs(120,260),rs(-1.4,0.3),rs(-90,-18),rs(1.5,4.6)])}   /* and down in the channel at the end */
-  for(let i=0;i<22;i++){const L=rr()<0.5;RL.push([L?rs(-70,-12):rs(48,120),rs(-0.35,0.1),rs(8,17),rs(0.8,2.2)])}   /* black rocks just breaking the surface in the trough in front of the wave, off to the sides of the shot: the danger he rides past */
   rocks(G,RL,JAG,0x353330,true);
+  /* the reef going past: black rocks out of the water in the trough in front of the wave and just behind it, carried past with the water, so from the first
+     second of the barrel there are rocks sliding by under him */
+  {const N=26,m=new THREE.InstancedMesh(JAG,new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.75,flatShading:true}),N),f=new THREE.InstancedMesh(FG,new THREE.MeshBasicMaterial({map:FT,transparent:true,opacity:0.7,depthWrite:false}),N);m.frustumCulled=f.frustumCulled=false;f.renderOrder=2;
+   const L=[];for(let i=0;i<N;i++){const front=i<15;L.push({x:rs(-100,140),z:front?rs(8.5,15):rs(-58,-27),s:front?rs(1.0,2.6):rs(2,5),sy:rs(0.5,0.95),r:rs(0,6.3),y:rs(-0.45,-0.1)});m.setColorAt(i,c2.set(0x343230).multiplyScalar(rs(0.85,1.15)))}
+   G.add(m,f);COAST.pass={m,f,L,Q:new THREE.Quaternion(),E:new THREE.Euler(),P:new V3(),S:new V3(),M:new THREE.Matrix4()}}
   spray(G,[[-40,-40,12],[-90,-55,12],[-20,-34,10],[150,-30,9],[200,-50,9],[CX+AX*0.9,CZ+20,14]]);
   /* sea lions hauled out on the rocks */
   {const N=16,m=new THREE.InstancedMesh(new THREE.CapsuleGeometry(0.45,1.4,4,8),new THREE.MeshStandardMaterial({color:0x4a3528,roughness:0.6}),N),h=new THREE.InstancedMesh(new THREE.SphereGeometry(0.32,10,8),new THREE.MeshStandardMaterial({color:0x3e2c21,roughness:0.55}),N);
@@ -2216,6 +2220,18 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
   terr(GL,-900,700,-1100,-560,200,90,hT,(c,x,y,z,ny)=>{const d=S(x)-z;if(d<52&&d>-3&&y>-1){c.copy(SAND);return}c.copy(GRASS).lerp(SCRUB,0.5+0.5*nn(x*1.2,z*1.2));const st=1-sstep(0.35,0.7,ny);c.lerp(BAS2,st*0.9);if(y<1.5)c.lerp(BAS,0.4)});
   const HL=[];for(let i=0;i<120;i++){const x=rs(60,680),z=S(x)-rs(70,260),y=hT(x,z);if(y<1)continue;HL.push([x,y-0.5,z,rs(6,12),rs(6,10),rs(4,14),rs(-0.3,0.3)])}
   huts(GL,HL,[0xf2efe8,0xe6e1d6,0xd9d3c4,0xffffff],[0x8a4a32,0x6e6a66,0x9a5a3a])}
+
+ /* ── JEFFREYS BAY (2026-11-18): behind the wave there is only sea; the town and the hills go to the shore side, in front of the wave, and off to the
+    right of the shot, far down the line, the dark rocky cliff of the point with the boulders at its foot ── */
+ jbayG.scale.z=-1;
+ {const G=jbay2G;const ROC=CL(0x4c4943),ROC2=CL(0x6a655c);
+  const TX=-48,TZ=-58,BX=-460,BZ=-170,VX=BX-TX,VZ=BZ-TZ,L2=VX*VX+VZ*VZ,LL=Math.sqrt(L2);
+  const cl=(x,z)=>{const t=((x-TX)*VX+(z-TZ)*VZ)/L2,tc=clamp(t,0,1),px=TX+VX*tc,pz=TZ+VZ*tc,d=Math.hypot(x-px,z-pz),w=lerp(20,90,Math.pow(tc,0.7))*(1+0.15*nn(x*1.1,z*1.2)),q=d/w;if(q>=1.15)return -6;
+    const top=lerp(14,38,sstep(0,0.6,tc))+3*nn(x*0.3,z*0.3);const prof=q<0.55?1:1-sstep(0.55,1.0,q)*0.92;let h=top*prof+2.2*Math.abs(nn(x*0.8,z*0.7));return q<1?h:lerp(h,-6,sstep(1.0,1.15,q))};   /* a flat-topped cliff, sheer at the sea */
+  terr(G,-540,10,-280,-14,190,92,cl,(c,x,y,z,ny)=>{c.copy(ROC).lerp(ROC2,0.5+0.5*nn(x*1.8,z*1.6));if(ny>0.82&&y>10)c.lerp(CL(0x6f7a48),0.7);else if(ny>0.6&&y>6)c.lerp(CL(0x7a7350),0.3);if(y<1.2)c.multiplyScalar(0.7)},true);
+  const RL=[];for(let i=0;i<150;i++){const t=rs(0,0.95),sd2=rr()<0.6?1:-1,w=lerp(20,90,Math.pow(t,0.7)),o=w*rs(0.9,1.15),s2=rs(1.6,5.2);RL.push([TX+VX*t-VZ/LL*sd2*o,rs(-0.8,0.4)*s2,Math.min(-28,TZ+VZ*t+VX/LL*sd2*o),s2])}
+  for(let i=0;i<20;i++){const a=rs(0,6.3);RL.push([TX+Math.cos(a)*rs(10,24),rs(-0.6,0.5)*3,Math.min(-28,TZ+Math.sin(a)*rs(8,18)),rs(2,5)])}
+  rocks(G,RL,JAG,0x4a4741,true);spray(G,[[TX-6,TZ+14,10],[TX-40,TZ+24,9],[TX-90,TZ+32,9]])}
 
  /* ── RESTAURANTS: a long, perfect left over shallow coral off the south-west corner of Tavarua. The island right behind the wave, white sand,
     coconut palms, the thatched bures and the restaurant deck on its stilts looking straight down the line; the reef dry in places, turquoise over
@@ -2248,11 +2264,14 @@ const COAST={foam:[],bob:[],spray:[],whale:null,t:0};
   spray(G,[[-150,-40,8],[-260,-55,8]])}
 }
 /* the coasts' life each frame: froth breathing round the rocks, spray off the rocks, the boats rocking, the whale */
-function coastTick(dt,time){const any=mataG.visible||rosaG.visible||restG.visible||lobosG.visible;if(!any)return;
+function coastTick(dt,time){const any=mataG.visible||rosaG.visible||restG.visible||lobosG.visible||jbay2G.visible;if(!any)return;
   COAST.foam.forEach(f=>{if(f.g.visible)f.m.material.opacity=0.32+0.34*(0.5+0.5*Math.sin(time*0.9+f.ph))});
   COAST.bob.forEach((b,k)=>{b.position.y=0.3+0.05*Math.sin(time*1.05+k*2.1);b.rotation.x=0.03*Math.sin(time*0.85+k*1.3);b.rotation.z=0.02*Math.sin(time*1.2+k)});
   COAST.spray.forEach(p=>{if(!p.g.visible)return;p.t+=dt;if(p.t>p.per)p.t=-Math.random()*2;const u=p.t/1.6;if(u<0||u>1){p.s.material.opacity=0;return}
     p.s.position.set(p.x,1+p.sz*0.55*Math.sin(u*PI*0.8),p.z);const s=p.sz*(0.4+0.9*sstep(0,0.6,u));p.s.scale.set(s*1.3,s,1);p.s.material.opacity=0.85*Math.pow(1-u,1.4)*sstep(0,0.08,u)});
+  const P=COAST.pass;if(P&&lobosG.visible){const cx=camera.position.x,{Q,E,M}=P;P.L.forEach((r,i)=>{r.x-=CP*dt;if(r.x<cx-110){r.x=cx+90+Math.random()*60;r.r=Math.random()*6.3}
+      Q.setFromEuler(E.set(0,r.r,0));M.compose(P.P.set(r.x,r.y*r.s,r.z),Q,P.S.set(r.s,r.s*r.sy,r.s*1.1));P.m.setMatrixAt(i,M);Q.setFromEuler(E.set(-PI/2,0,r.r));M.compose(P.P.set(r.x,0.09,r.z),Q,P.S.set(r.s*2.7,r.s*2.7,1));P.f.setMatrixAt(i,M)});
+    P.m.instanceMatrix.needsUpdate=true;P.f.instanceMatrix.needsUpdate=true;P.f.material.opacity=0.45+0.3*(0.5+0.5*Math.sin(time*1.7))}   /* the reef slides past at the speed the water streams by */
   const W=COAST.whale;if(W&&rosaG.visible){W.t+=dt;if(W.t>26)W.t=0;const t=W.t,up=sstep(0,1.2,t)*(1-sstep(7.5,9,t));
     W.body.position.y=0;W.g.position.y=lerp(-4,-0.9,up)+0.25*Math.sin(t*1.3);W.g.rotation.z=0.06*Math.sin(t*0.9)+0.35*sstep(8,9.5,t)*(1-sstep(10.5,11.5,t));
     W.fl.visible=t>8.6&&t<11.6;W.fl.position.y=sstep(8.6,9.8,t)*(1-sstep(10.6,11.6,t))*5.2;W.fl.rotation.z=-0.9*sstep(8.6,10,t);
@@ -2355,15 +2374,15 @@ const SPOT_LOOK={2:{wa:[0.0,0.034,0.080],wb:[0.0,0.190,0.300],g1:[0.0,0.28,0.38]
   11:{wa:[0.0,0.040,0.075],wb:[0.0,0.22,0.30],g1:[0.0,0.32,0.40],g2:[0.15,0.98,0.86],fl:[0.18,0.44,0.40],fll:[0.05,0.14,0.15],flk:0.85,fog:[0.62,0.80,0.92],hill:0x2f6a34,hy:0.55,rot:-0.2,tk:0.35,ment:1},   /* Greenbush: Mentawai turquoise over live coral */
   12:{wa:[0.0,0.030,0.060],wb:[0.005,0.15,0.22],g1:[0.01,0.24,0.32],g2:[0.14,0.80,0.80],fl:[0.30,0.30,0.26],fll:[0.13,0.13,0.11],flk:0.7,fog:[0.66,0.76,0.88],hill:0x6f7a48,hy:0.42,rot:0.6,tk:0.5,jbay:1,suit:2},   /* Jeffreys Bay: cool Indian Ocean blue-green, a fullsuit */
   13:{wa:[0.004,0.030,0.045],wb:[0.02,0.14,0.17],g1:[0.03,0.22,0.24],g2:[0.24,0.76,0.70],fl:[0.46,0.42,0.33],fll:[0.26,0.23,0.17],flk:0.78,fog:[0.78,0.76,0.72],hill:0xa8865c,hy:0.55,rot:0.1,tk:0.6,chic:1,suit:2},   /* Chicama: cold Humboldt water, a hazy desert */
-  14:{wa:[0.0,0.032,0.024],wb:[0.0,0.17,0.105],g1:[0.0,0.28,0.16],g2:[0.12,0.88,0.38],fl:[0.44,0.50,0.34],fll:[0.26,0.30,0.19],flk:0.88,fog:[0.68,0.80,0.84],hill:0x2f5a2a,hy:0.6,rot:0.3,tk:0.8,mata:1},   /* Matadeiro: thick emerald Atlantic water over granite */
+  14:{wa:[0.0,0.030,0.018],wb:[0.0,0.16,0.085],g1:[0.0,0.27,0.13],g2:[0.12,0.86,0.30],fl:[0.42,0.50,0.30],fll:[0.25,0.30,0.17],flk:0.88,fog:[0.68,0.80,0.83],hill:0x2f5a2a,hy:0.6,rot:0.3,tk:0.9,mata:1},   /* Matadeiro: thick emerald Atlantic water over granite */
   15:{wa:[0.0,0.033,0.046],wb:[0.0,0.18,0.18],g1:[0.0,0.28,0.25],g2:[0.12,0.90,0.60],fl:[0.47,0.51,0.38],fll:[0.27,0.30,0.21],flk:0.88,fog:[0.68,0.80,0.91],hill:0x4f7a3a,hy:0.5,rot:0.1,tk:0.55,rosa:1},   /* Rosa Norte: clear blue-green water over sand */
   16:{wa:[0.0,0.045,0.085],wb:[0.0,0.25,0.32],g1:[0.0,0.34,0.42],g2:[0.18,1.0,0.90],fl:[0.20,0.50,0.46],fll:[0.05,0.16,0.17],flk:0.88,fog:[0.64,0.80,0.94],hill:0x2f6a34,hy:0.7,rot:0,tk:0.45,rest:1},   /* Restaurants: Fiji's clear turquoise over live coral */
   17:{wa:[0.004,0.030,0.030],wb:[0.02,0.15,0.13],g1:[0.03,0.24,0.20],g2:[0.20,0.80,0.55],fl:[0.40,0.40,0.32],fll:[0.22,0.22,0.17],flk:0.8,fog:[0.66,0.74,0.80],hill:0x3a4a2a,hy:0.5,rot:0,tk:0.6,lobos:1,suit:2},   /* Ilha dos Lobos: cold green South Atlantic, a fullsuit */
   5:{wa:[0.003,0.040,0.055],wb:[0.020,0.180,0.200],g1:[0.02,0.26,0.28],g2:[0.25,0.85,0.70],fl:[0.30,0.32,0.28],fll:[0.12,0.13,0.12],flk:0.7,fog:[0.64,0.74,0.84],hill:0x9a8a62,hy:0.5,rot:0.9}};
 function spotTint(n){const on=SPOT.id!==1,U=waveMat.uniforms,S3=(u,v,k)=>u.value.set(v[0]*k,v[1]*k,v[2]*k);
-  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;uluG.visible=false;campG.visible=false;amzG.visible=false;iceG.visible=false;penG.visible=namG.visible=mentG.visible=jbayG.visible=chicG.visible=mataG.visible=rosaG.visible=restG.visible=lobosG.visible=false;SNOW.pts.visible=false;SUIT.value=0;U.uWDk.value=0;if(typeof RIG!=='undefined'&&RIG.kNeck){RIG.kNeck.material.color.set(0xc48a64);RIG.kNeck.material.emissive.set(0xc48a64)}U.uReef.value=on?1:0;scene.fog.density=SPOT.id===6?0.0007:SPOT.id===7?0.0017:SPOT.id===8?0.0019:SPOT.id===10?0.0012:SPOT.id===13?0.0009:SPOT.id===14?0.0006:SPOT.id===15?0.0007:SPOT.id===17?0.0008:SPOT.id===16?0.0006:0.0011;   /* clear tropical air: the far hills keep their colour */
+  envG.visible=cityG.visible=neonG.visible=!on;tahitiG.visible=on;uluG.visible=false;campG.visible=false;amzG.visible=false;iceG.visible=false;penG.visible=namG.visible=mentG.visible=jbayG.visible=chicG.visible=mataG.visible=rosaG.visible=restG.visible=lobosG.visible=jbay2G.visible=false;SNOW.pts.visible=false;SUIT.value=0;U.uWDk.value=0;if(typeof RIG!=='undefined'&&RIG.kNeck){RIG.kNeck.material.color.set(0xc48a64);RIG.kNeck.material.emissive.set(0xc48a64)}U.uReef.value=on?1:0;scene.fog.density=SPOT.id===6?0.0007:SPOT.id===7?0.0017:SPOT.id===8?0.0019:SPOT.id===10?0.0012:SPOT.id===13?0.0009:SPOT.id===14?0.0006:SPOT.id===15?0.0007:SPOT.id===17?0.0008:SPOT.id===16?0.0006:0.0011;   /* clear tropical air: the far hills keep their colour */
   if(!on)return;
-  const L=SPOT_LOOK[SPOT.id]||SPOT_LOOK[2];tahitiG.visible=!L.cliffs&&!L.camp&&!L.amz&&!L.ice&&!L.nam&&!L.mata&&!L.rosa&&!L.rest&&!L.lobos;uluG.visible=!!L.cliffs;campG.visible=!!L.camp;amzG.visible=!!L.amz;iceG.visible=!!L.ice;SNOW.pts.visible=!!L.ice;penG.visible=!!L.pen;namG.visible=!!L.nam;mentG.visible=!!L.ment;jbayG.visible=!!L.jbay;chicG.visible=!!L.chic;mataG.visible=!!L.mata;rosaG.visible=!!L.rosa;restG.visible=!!L.rest;lobosG.visible=!!L.lobos;
+  const L=SPOT_LOOK[SPOT.id]||SPOT_LOOK[2];tahitiG.visible=!L.cliffs&&!L.camp&&!L.amz&&!L.ice&&!L.nam&&!L.mata&&!L.rosa&&!L.rest&&!L.lobos&&!L.jbay;   /* (J-Bay: only sea behind the wave, no generic hills) */uluG.visible=!!L.cliffs;campG.visible=!!L.camp;amzG.visible=!!L.amz;iceG.visible=!!L.ice;SNOW.pts.visible=!!L.ice;penG.visible=!!L.pen;namG.visible=!!L.nam;mentG.visible=!!L.ment;jbayG.visible=!!L.jbay;jbay2G.visible=!!L.jbay;chicG.visible=!!L.chic;mataG.visible=!!L.mata;rosaG.visible=!!L.rosa;restG.visible=!!L.rest;lobosG.visible=!!L.lobos;
   U.uWDk.value=L.dark?1:0;if(L.suit===2)SUIT.value=0.75;else if(L.suit){SUIT.value=1;if(typeof RIG!=='undefined'&&RIG.kNeck){RIG.kNeck.material.color.set(0x070708);RIG.kNeck.material.emissive.set(0x000000)}}   /* (2: a fullsuit without the hood, the jersey over it) */   /* the arctic: a black hooded wetsuit, gloves and boots */ULU.lights.emissiveIntensity=n?2.4:0.25;ULU.lights.color.set(n?0xffd9a0:0x9a8f80);
   tahitiG.children.forEach(m=>m.material.color.set(L.hill));tahitiG.scale.set(1,L.hy,1);tahitiG.rotation.y=L.rot;
   /* every wave keeps the finish of the first one (the pool's emerald water, glow and foam, just set by setTOD): the spot only tints it a little, and the reef floor a bit more */
@@ -3647,7 +3666,7 @@ function wzGo(n){WZ.s=n===0?0:clamp(n,2,5);document.body.dataset.wz=WZ.s;{const 
   $('wzBack').style.display=WZ.s>=2?'':'none';   /* gone, not just hidden, so the step names line up with the logo and title */if(WZ.s===3||WZ.s===5)progUI();if(WZ.s===4)chUI();if(WZ.s===3){requestAnimationFrame(mapFit);setTimeout(mapFit,520)}if(WZ.s===6)tutUI();bvShow(WZ.s===5)}
 /* the wave map on a phone: centred on the screen and as big as the room under the title allows */
 function mapFit(){const m=document.getElementById('spotMap');if(!m)return;if(!document.body.classList.contains('touch')){const h=document.querySelector('.wzS[data-s="3"] .wzH');if(h)h.style.transform='';m.style.width=m.style.transform='';m.style.left='0px';   /* 2026-11-18 on a computer too: as big as the room under the title allows, centred on the screen, over the surfer if need be */
-    const r=m.getBoundingClientRect();if(r.width<10)return;const hb=h?h.getBoundingClientRect().bottom+8:r.top,bar=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar'))||0,av=innerHeight-bar-hb-14,w=Math.round(Math.max(320,Math.min(innerWidth*0.94,1280,av*2.46)));m.style.width=w+'px';m.style.left=Math.round(innerWidth/2-w/2-r.left)+'px';return}
+    const r=m.getBoundingClientRect();if(r.width<10)return;const hb=h?h.getBoundingClientRect().bottom+8:r.top,bar=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar'))||0,av=innerHeight-bar-hb-14,w=Math.round(Math.max(320,Math.min(innerWidth*0.94,1280,av*2.46)));m.style.width=w+'px';m.style.left=Math.round(innerWidth/2-w/2-r.left)+'px';setTimeout(()=>mapLayout(m),30);return}
   const h=document.querySelector('.wzS[data-s="3"] .wzH'),t=document.querySelector('.wzS[data-s="3"] .tod'),tb=t&&t.style.display!=='none'?40:0;
   m.style.left='0px';m.style.transform='none';if(h){h.style.transform='none';const r=h.getBoundingClientRect();h.style.transform='translateX('+Math.round(innerWidth/2-(r.left+r.width/2))+'px)'}
   const r=m.getBoundingClientRect(),w=Math.round(Math.max(260,Math.min(innerWidth*0.94,(innerHeight-r.top-14-tb)*2.46)));m.style.width=w+'px';m.style.left=Math.round(innerWidth/2-w/2-r.left)+'px'}
@@ -3817,8 +3836,24 @@ function mapRender(root,sel){if(!root)return;
   if(!root.dataset.built){const eq=(WMAP.ytop/WMAP.cell).toFixed(2);root.dataset.built=1;
     root.innerHTML=`<div class="wmIn"><svg class="wmDots" viewBox="0 0 ${WMAP.cols} ${WMAP.rows}" aria-hidden="true"><defs><linearGradient id="wmGr" x1="0" x2="1"><stop offset="0" stop-color="#e3368f"/><stop offset="1" stop-color="#ffab3d"/></linearGradient></defs><path class="wmEq" stroke="url(#wmGr)" d="M0 ${eq}H${WMAP.cols}"/><text class="wmEqT" x="9.5" y="${(+eq-0.6).toFixed(2)}">EQUATOR</text><path class="wmLand" transform="translate(.5 .5)" d="${WMAP.d}"/></svg><div class="wmPins"></div></div><div class="wmTip" hidden></div>`;mapWire(root)}
   root._sel=sel;root.querySelector('.wmPins').innerHTML=SPOTS.map((o,ix)=>{const op=spotOpen(o),[x,y]=wmXY(o.ll[0],o.ll[1]),st=`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%`;
-    return `<i class="wdot${o.id===sel?' sel':''}" style="${st}"></i><button class="wlab${o.lab==='l'?' l':''}${o.id===sel?' sel':''}${op?'':' lock'}${root._tip===o.id?' tip':''}" data-spot="${o.id}" data-note="${ix}" style="${st};--dy:${o.dy||0}px" aria-label="${o.name} · ${o.loc}"><b>${ix+1}</b>${o.short||o.name}</button>`}).join('');
-  if(root._tip)mapTip(root,SPOTS.find(o=>o.id===root._tip),root._tipT)}
+    return `<i class="wdot${o.id===sel?' sel':''}" style="${st}"></i><button data-x="${x.toFixed(3)}" data-y="${y.toFixed(3)}" class="wlab${o.lab==='l'?' l':''}${o.id===sel?' sel':''}${op?'':' lock'}${root._tip===o.id?' tip':''}" data-spot="${o.id}" data-note="${ix}" style="${st};--dy:${o.dy||0}px" aria-label="${o.name} · ${o.loc}"><b>${ix+1}</b>${o.short||o.name}</button>`}).join('');
+  mapLayout(root);setTimeout(()=>mapLayout(root),60);if(root._tip)mapTip(root,SPOTS.find(o=>o.id===root._tip),root._tipT)}
+/* 2026-11-18 the labels never sit on top of one another, on a phone or a computer: each one is measured as it is drawn and, where two would touch, moved up or down
+   (a crowded label also steps out a little), with a thin line back to its pin. The five waves of Santa Catarina and Rio Grande do Sul, almost on one point at this
+   scale, end up as a neat column out over the Atlantic, one line each to the coast */
+function mapLayout(root){const P=root&&root.querySelector('.wmPins');if(!P)return;const W=P.clientWidth,H=P.clientHeight;if(W<40)return;
+  const labs=[...P.querySelectorAll('.wlab')],G=4,M=[];labs.forEach(b=>{b.style.setProperty('--dx','0px');b.style.setProperty('--dy',(b.dataset.dy0||'0')+'px')});
+  labs.forEach(b=>{const px=+b.dataset.x/100*W,py=+b.dataset.y/100*H,w=b.offsetWidth+6,h=b.offsetHeight,L=b.classList.contains('l');M.push({b,px,py,w,h,L,y:py,dx:0})});
+  const crowd=m=>M.filter(o=>o!==m&&Math.abs(o.px-m.px)<w2(m)&&Math.abs(o.py-m.py)<m.h*1.4).length,w2=m=>Math.max(30,m.w*0.9);
+  M.forEach(m=>{if(crowd(m))m.dx=Math.round(m.h*0.9)});   /* in a crowd: step out from the pins so the lines show */
+  const box=m=>{const x0=m.L?m.px-16-m.dx-m.w:m.px+16+m.dx;return [x0,m.y-m.h/2-G/2,x0+m.w,m.y+m.h/2+G/2]},hit=(a,b)=>{const A=box(a),B=box(b);return A[0]<B[2]&&B[0]<A[2]&&A[1]<B[3]&&B[1]<A[3]};
+  M.sort((a,b)=>a.py-b.py);const done=[];for(const m of M){m.y=m.py;for(let k=0;k<40;k++){const o=done.find(d=>hit(m,d));if(!o)break;m.y=o.y+o.h/2+m.h/2+G}done.push(m)}   /* top to bottom: each label slides down below the one it touches */
+  {const up=[...M].sort((p,q)=>q.y-p.y),pl=[];for(const m of up){if(m.y+m.h/2>H-2)m.y=H-2-m.h/2;for(let k=0;k<40;k++){const o=pl.find(d=>hit(m,d));if(!o)break;m.y=o.y-o.h/2-m.h/2-G}pl.push(m)}}   /* nothing below the bottom edge: from the bottom up, the stack climbs instead */
+  for(let it=0;it<2;it++)for(const m of M){for(let k=0;k<40;k++){const d=m.py-m.y;if(Math.abs(d)<1)break;const y0=m.y;m.y+=Math.sign(d)*Math.min(2,Math.abs(d));if(m.y+m.h/2>H-2||m.y-m.h/2<1||M.some(o=>o!==m&&hit(m,o))){m.y=y0;break}}}   /* then each eases back toward its pin wherever there is room */
+  let svg=P.querySelector('.wmLines');if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','wmLines');P.insertBefore(svg,P.firstChild)}let lines='';
+  M.forEach(m=>{const dy=m.y-m.py;m.b.style.setProperty('--dx',m.dx+'px');m.b.style.setProperty('--dy',dy.toFixed(1)+'px');const mv=Math.abs(dy)>2||m.dx>0;m.b.classList.toggle('mv',mv);
+    if(mv){const ex=m.L?m.px-16-m.dx+1:m.px+16+m.dx-1;lines+=`<line x1="${m.px.toFixed(1)}" y1="${m.py.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${m.y.toFixed(1)}"/>`}});svg.innerHTML=lines}
+addEventListener('resize',()=>{['spotMap','wpMap'].forEach(id=>{const r=document.getElementById(id);if(r&&r.dataset.built)mapLayout(r)})});
 function mapTip(root,o,touch){const tip=root.querySelector('.wmTip');root.querySelectorAll('.wlab.tip').forEach(b=>b.classList.remove('tip'));
   if(!o){tip.hidden=true;root._tip=0;return}
   const op=spotOpen(o),ix=SPOTS.indexOf(o),ps=o.sub.split(' · '),what=o.what||ps.slice(1).join(' · ')||ps[0];
@@ -3986,7 +4021,7 @@ const sf={blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,camDir:1
 function hbAt(a){if(a<=game.waveDur){let gr=0;for(const C of SEC)if(C.fol){const t=a-C.t0;gr=Math.max(gr,sstep(-1,3,t)*(1-sstep(C.d,C.d+2.5,t)))}return 1+0.32*(1-sstep(5,13,a))+0.2*gr}
   const u=a-game.waveDur;return (1-0.30*sstep(1.5,10,u))*(1+0.06*Math.sin(a*2.7)*(1-sstep(7,11,u)))}
 function startWave(att){if(!att&&PARTY.on){if(PARTY.done){champShow();return}const p=ptCur();if(p){setLycra(p.lyc);if(STANCE!==p.st)setMirror(p.st)}setTimeout(ptTurnShow,150)}   /* party: the next surfer's jersey and name */
-  qQuiet=performance.now()+2000;if(typeof judgeHide==='function')judgeHide();if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6||SPOT.id===12||SPOT.id===15||SPOT.id===17?1:SPOT.id===2||SPOT.id===3||SPOT.id===10||SPOT.id===11||SPOT.id===13||SPOT.id===14||SPOT.id===16?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
+  qQuiet=performance.now()+2000;if(typeof judgeHide==='function')judgeHide();if(!att&&game.pickSpot&&SPOT.id!==game.pickSpot)setSpot(game.pickSpot);   /* the wave the player picked, whatever the menu was showing */game.waveDur=SPOT.dur||80;if(typeof FAUNA!=='undefined'){FAUNA.dolT=-1;FAUNA.dolOn=false;FAUNA.dol.forEach(D=>D.m.visible=false)}if(typeof setWaveDir==='function')setWaveDir(SPOT.id===4||SPOT.id===6||SPOT.id===12||SPOT.id===15?1:SPOT.id===2||SPOT.id===3||SPOT.id===10||SPOT.id===11||SPOT.id===13||SPOT.id===14||SPOT.id===16||SPOT.id===17?0:STANCE);sf.reef=null;if(reefG)reefG.g.visible=false;SEC.forEach(C=>{if(C.fol){C.c0=C.c00;C.set=false}});game.attract=!!att;boardLook();if(!att&&window.psPlayed)try{psPlayed()}catch(e){}setBack();
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI])}   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&SPOT.id!==8&&SPOT.id!==10&&SPOT.id!==13&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.tod||0,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
   try{window.__qHold=false;if(!game.attract){setQuality(qNextWave());qFloor=QL.length-1}   /* every wave starts at its own level, set before it is seen; the menu screen behind it is drawn at whatever this machine holds (it used to be forced to the top level, which even a fast laptop could not keep up with) */}catch(e){}if(!att)try{qCalStart()}catch(e){}if(!att)try{const rt0=renderer.getRenderTarget();renderer.setRenderTarget(composer.readBuffer);renderer.compile(scene,camera);renderer.setRenderTarget(rt0)}catch(e){}   /* 2026-11-17 built for the off-screen picture the game really draws into: built for the screen (as it was) they were a different set, and the real ones were still being made the first time each thing showed up in the ride */   /* every shader the wave will use is built now, under the cut between waves, not in its first seconds */   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
@@ -4027,7 +4062,7 @@ function tutLShow(cb,o){o=o||{};const tch=document.body.classList.contains('touc
   TL.cb=cb;TL.per=o.per||2.7;TL.i=-1;TL.t0=performance.now();$('tutL').classList.remove('off');tutLStep();clearInterval(TL.tm);TL.tm=setInterval(tutLTick,60);if(!o.inRide){setTimeout(tutWarm,350);setTimeout(()=>{try{qCalStart(true)}catch(e){}},1300)}}
 /* 2026-11-18 the maneuver guide is also the loading screen: while it plays every coast is compiled for the picture the game really draws and its textures go up to the GPU,
    and the picture's quality is measured for the wave picked (quietly, under the guide), so the first ride starts at once and holds steady */
-function tutWarm(){if(tutWarm.done)return;tutWarm.done=1;const G=[tahitiG,uluG,campG,amzG,iceG,penG,namG,mentG,jbayG,chicG,mataG,rosaG,restG,lobosG],was=G.map(g=>g.visible);
+function tutWarm(){if(tutWarm.done)return;tutWarm.done=1;const G=[tahitiG,uluG,campG,amzG,iceG,penG,namG,mentG,jbayG,chicG,mataG,rosaG,restG,lobosG,jbay2G],was=G.map(g=>g.visible);
   try{if(!SUP.g)supMake();G.forEach(g=>g.visible=true);const rt0=renderer.getRenderTarget();renderer.setRenderTarget(composer.readBuffer);renderer.compile(scene,camera);renderer.render(scene,camera);renderer.setRenderTarget(rt0)}catch(e){}
   G.forEach((g,i)=>g.visible=was[i]);if(SUP.g)SUP.g.visible=false}
 function tutLStep(){TL.i++;if(TL.i>=TL.L.length){tutLEnd();return}const [n,k,d]=TL.L[TL.i];$('tlN').textContent=(TL.i+1)+' / '+TL.L.length;$('tlT').textContent=n;$('tlD').innerHTML=d;$('tlSvg').innerHTML=TL_ART[k];const tx=document.querySelector('.tlTxt');if(tx){tx.style.animation='none';void tx.offsetWidth;tx.style.animation=''}}
