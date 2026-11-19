@@ -1,6 +1,6 @@
 # PlaySurf
 
-> PlaySurf is a free indie 3D surfing game that runs in the web browser: surf 17 real waves, from Pipeline, Jeffreys Bay and Fiji to the Amazon river bore, alone or in Party Surf with friends, with no download and no sign-up.
+> PlaySurf is a free indie 3D surfing game that runs in the web browser: surf 18 real waves, from Pipeline, Jeffreys Bay, Fiji and Morocco to the Amazon river bore, alone or in Party Surf with friends, with no download and no sign-up.
 
 PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by Decker Games. It is free, needs no account and no download, and runs in Chrome, Safari, Edge and Firefox on computers, phones and tablets. Players ride real surf spots like a surfer: speed from the bottom turn, snaps, cutbacks, floaters, laybacks, carve 360s, airs and barrels, linked into combos, and five judges score every wave. Rain, sun showers, dawn and night sessions change the conditions. There are 13 waves, a Party Surf mode for 2 to 6 friends on one device, seven boards, a soundtrack of 15 songs and 12 trophies. It is an indie game, made by a surfer. Controls: keyboard (arrows, Space for airs, Shift to brake in the barrel), gamepad or touch.
 
@@ -26,6 +26,7 @@ PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by D
 - [Rosa Norte](https://playsurfgame.com/rosa-norte-surf-game): Praia do Rosa · the left into the channel. Surf Rosa Norte, Praia do Rosa, Brazil, in a free 3D surf game.
 - [Restaurants](https://playsurfgame.com/restaurants-fiji-surf-game): Fiji · the perfect left. Surf Restaurants, Tavarua, Fiji, in a free 3D surf game.
 - [Ilha dos Lobos](https://playsurfgame.com/ilha-dos-lobos-surf-game): Torres · the big-wave slab. Surf Ilha dos Lobos, Torres, Brazil, in a free 3D surf game.
+- [Safi](https://playsurfgame.com/safi-surf-game): Morocco · the endless right barrel. Surf Safi, Morocco, in a free 3D surf game.
 
 ## Party Surf
 - 2 to 6 friends play on one device, four waves each; the judges score every ride and crown a champion.
@@ -33,7 +34,7 @@ PlaySurf (playsurfgame.com), subtitled "The Ultimate Surfing Game", is made by D
 ## The story
 PlaySurf is an indie game, and it started with a long wait. Its creator is a surfer who spent decades hoping for a surf game that felt like the real thing: the drop, the bottom turn that turns into speed, the lip pitching overhead as you line up the barrel. That game never came. So the creator stopped waiting and made it.
 It was made to be played at home, with a son and a wife who surf too. One screen passes from hand to hand in Party Surf sessions: four waves each, judges scoring every ride, and a champion at the end.
-Knowing surfing from the water shaped every part of the game. Each move was ridden, felt and tuned again and again (the timing of a snap, the line through a cutback, the moment to brake and let the barrel catch you) until the riding flowed and had style. PlaySurf keeps growing the same way, wave by wave: today it has 17 real spots, from Pipeline and Jeffreys Bay to Restaurants in Fiji and the Amazon's Pororoca.
+Knowing surfing from the water shaped every part of the game. Each move was ridden, felt and tuned again and again (the timing of a snap, the line through a cutback, the moment to brake and let the barrel catch you) until the riding flowed and had style. PlaySurf keeps growing the same way, wave by wave: today it has 18 real spots, from Pipeline and Jeffreys Bay to Restaurants in Fiji, Safi in Morocco and the Amazon's Pororoca.
 And it is free, on purpose. The idea is to offer PlaySurf to everyone who wants to have fun, and to let people who live far from the beach feel what surfing is like: the drop, the speed off the bottom turn, the moment the lip throws over your head.
 
 ## Guides in other languages
