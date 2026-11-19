@@ -1420,7 +1420,7 @@ const SPOTS=[{id:1,ll:[-27.59,-48.55],loc:'FLORIANÓPOLIS · BRAZIL',lean:-38,st
   {id:12,ll:[-34.03,24.93],loc:'EASTERN CAPE · SOUTH AFRICA',dy:6,short:'J-BAY',name:'JEFFREYS BAY',full:'JEFFREYS BAY',sub:'SOUTH AFRICA · SUPERTUBES',what:'LONG RIGHT POINT · FAST WALLS AND THE SUPERTUBES BARREL · FULLSUIT',hK:1.05,eL:1.4,dur:50,req:{spot:11,nota:7}},
   {id:13,ll:[-7.70,-79.45],loc:'LA LIBERTAD · PERU',lab:'l',name:'CHICAMA',full:'CHICAMA',sub:'PERU · LONGEST LEFT',what:'DESERT POINT · THE LONGEST LEFT IN THE WORLD · ENDLESS WALLS',hK:0.75,eL:0.8,dur:80,req:{spot:12,nota:7}},
   {id:14,ll:[-27.755,-48.497],loc:'FLORIANÓPOLIS · BRAZIL',name:'MATADEIRO',full:'MATADEIRO',sub:'FLORIANÓPOLIS · WEDGING LEFT',what:'GRANITE POINT · A BARREL OFF THE DROP · A RAMP FOR AN AIR · TEN SECONDS',hK:0.9,eL:1.55,dur:10,tri:0.55,req:{spot:13,nota:7}},
-  {id:15,ll:[-28.115,-48.637],loc:'PRAIA DO ROSA · BRAZIL',name:'ROSA NORTE',full:'ROSA NORTE',sub:'SANTA CATARINA · LEFT INTO THE CHANNEL',what:'NORTH CORNER · NO BARREL · TALL WHITE WATER PUSHING BEHIND · WALLS FOR CARVES AND CUTBACKS',hK:0.95,eL:0.8,dur:24,crumble:1,chan:1,fh:4.3,crl:24,req:{spot:14,nota:7}},
+  {id:15,ll:[-28.115,-48.637],loc:'PRAIA DO ROSA · BRAZIL',name:'ROSA NORTE',full:'ROSA NORTE',sub:'SANTA CATARINA · LEFT INTO THE CHANNEL',what:'NORTH CORNER · FAT AT THE PEAK, STANDS UP DOWN THE LINE · WHITE WATER BEHIND · THE CUTBACK WAVE',hK:0.95,eL:0.8,dur:24,crumble:1,chan:1,grow:1,fh:4.3,crl:24,req:{spot:14,nota:7}},
   {id:16,ll:[-17.86,177.19],loc:'TAVARUA · FIJI',lab:'l',name:'RESTAURANTS',full:'RESTAURANTS',sub:'FIJI · PERFECT LEFT',what:'SHALLOW REEF OFF TAVARUA · FAST, MECHANICAL BARRELS · WATCHED FROM THE RESTAURANT',hK:1.05,eL:1.7,dur:20,req:{spot:15,nota:7}},
   {id:17,ll:[-29.35,-49.67],loc:'TORRES · BRAZIL',short:'LOBOS',name:'ILHA DOS LOBOS',full:'ILHA DOS LOBOS',sub:'RIO GRANDE DO SUL · BIG-WAVE SLAB',what:'GIANT BARRELS OFF A BASALT ISLAND · ROCKS ALL AROUND · THIRTY SECONDS INTO THE CHANNEL',hK:2.4,eL:2.2,dur:30,chan:1,req:{spot:16,nota:7}}];
 /* each wave's barrel, true to the real one: tw = how far the lip throws out from the face (the tube's width: Pipeline and Greenbush wide and round, Supertubos and Cloud 9 thick and short, the point breaks tighter),
@@ -1463,20 +1463,21 @@ function secAt(s,age){let v=0;secClose=0;secFoam=0;secJct=0;if(age<0)return 0;
     else if(C.k===2){const j=sstep(0,1.6,t)*Math.pow(Math.sin(PI*u),1.5);if(j>secJct)secJct=j}}
   return v}
 const CEA=new Float32Array(NS),CES=new Float32Array(NS),LANDK=new Float32Array(NS),LANDZ=new Float32Array(NS);
+const GROW={w:1,h:1};   /* 2026-11-19 grow (Rosa Norte): a fat, soft wave at the start, made for cutbacks, standing up taller and steeper as the ride goes on */
 function buildWave(t){
-  secUpdate(game.secAge);const adv=CP*t+game.xOff,rk=game.rhK||0;   // rk: during a roundhouse the curl stops throwing and piles up as foam, so there is a junction to hit
+  secUpdate(game.secAge);{const g=SPOT.grow?sstep(0.30*game.waveDur,0.85*game.waveDur,game.secAge):1;GROW.w=SPOT.grow?lerp(0.74,1.10,g):1;GROW.h=SPOT.grow?lerp(0.90,1.08,g):1}const adv=CP*t+game.xOff,rk=game.rhK||0;   // rk: during a roundhouse the curl stops throwing and piles up as foam, so there is a junction to hit
   /* the shape right at the curl (s = 0), worked out with the same rules as the open wall, so the barrel side behind it blends from exactly that: no step between the tube and the wave */
   let E0;{const s=0,cr=SPOT.crumble?1:0,ef=endFoam(0,game.secAge),sv=secAt(0,game.secAge),ck=closeK(0,game.secAge),fo=Math.max(secFoam,rk,0.45*secJct,0.85*ef,0.95*cr),e=Math.max(clamp(1+0.3/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose))*(1-fo)*(1-cr);
-   const w0=Math.max(wOf(0,48),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1);E0={w,ab:(205+65*e)*DEG,hk:lerp(2.0,4.0,sstep(0,0.42,w))/4.0*(1-0.10*fo)*(1-0.06*ef+0.10*ef*Math.sin(t*2.4))*(1+0.30*secJct),ec:sstep(0.35,0.95,e),fo}}
+   const w0=Math.max(wOf(0,48),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1)*GROW.w;E0={w,ab:(205+65*e)*DEG,hk:lerp(2.0,4.0,sstep(0,0.42,w))/4.0*(1-0.10*fo)*(1-0.06*ef+0.10*ef*Math.sin(t*2.4))*(1+0.30*secJct),ec:sstep(0.35,0.95,e),fo}}
   {const cr=SPOT.crumble?1:0;for(let i=0;i<NS;i++){const s=colS[i];if(s<0){CEA[i]=0;continue}const ef=endFoam(s,game.secAge),sv=secAt(s,game.secAge),ck=closeK(s,game.secAge),fo=Math.max(secFoam,rk*(1-sstep(3.0,7.5,s)),0.45*secJct,0.95*ef,0.95*cr*(1-sstep(3,SPOT.fat?14:(SPOT.crl||11),s)));
      CEA[i]=Math.max(clamp(1-(s-0.3)/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose),ck)*(1-fo)*(1-cr)}
    for(let i=0;i<NS;i++){const s=colS[i];if(s<0.5){CES[i]=CEA[i];continue}let a=0,ws=0;for(let j=Math.max(0,i-10);j<=Math.min(NS-1,i+10);j++){const d=(colS[j]-s)/3.4,w=Math.exp(-d*d);a+=CEA[j]*w;ws+=w}CES[i]=a/ws}}   /* 2026-11-18 (the bump where the barrel ends, on every wave): the curl of each column smoothed along the wave over a few metres, so the lip tapers away into the shoulder instead of ending in a step */
   for(let i=0;i<NS;i++){
-    const s=colS[i],X=s+adv,Lw=0,Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s))*(1-0.42*sstep(62,135,s))*(SPOT.tri?1-SPOT.tri*(s>0?sstep(2,62,s):0.55*sstep(-2,-55,s)):1)*(SPOT.chan?1-0.45*sstep(28,95,s)-0.32*sstep(game.waveDur-5,game.waveDur,game.secAge):1);   /* tri: a peaky wedge, tallest at the peak (Matadeiro); chan: the shoulder backs off into the channel and the wave fades at the end (Rosa Norte) */
+    const s=colS[i],X=s+adv,Lw=0,Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s))*(1-0.42*sstep(62,135,s))*(SPOT.tri?1-SPOT.tri*(s>0?sstep(2,62,s):0.55*sstep(-2,-55,s)):1)*(SPOT.chan?1-0.45*sstep(28,95,s)-(SPOT.grow?0:0.32)*sstep(game.waveDur-5,game.waveDur,game.secAge):1)*GROW.h;   /* tri: a peaky wedge, tallest at the peak (Matadeiro); chan: the shoulder backs off into the channel and the wave fades at the end (Rosa Norte) */
     let o=scA;
     if(s>=0){
       const cr=SPOT.crumble?1:0,ef=endFoam(s,game.secAge),sv=secAt(s,game.secAge),ck=closeK(s,game.secAge),fo=Math.max(secFoam,rk*(1-sstep(3.0,7.5,s)),0.45*secJct,0.95*ef,0.95*cr*(1-sstep(3,SPOT.fat?14:(SPOT.crl||11),s))),e0=Math.max(clamp(1-(s-0.3)/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose),ck)*(1-fo)*(1-cr),e=lerp(e0,CES[i],sstep(0.5,2.5,s))*(1-0.78*(game.lipHold||0)*(()=>{const q=(s-sf.s)/5;return Math.exp(-q*q)})()),fade=1-0.74*sstep(150,205,s);   /* 1118o through the take-off the lip by him holds back (it threw its curtain between him and the camera: no surfer, no board for a second), and lets go as he drops */
-      const w0=Math.max(wOf(s,Lw),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1);   /* the bore is a fat wave, not a steep one */   // blends in with no kink where a section starts
+      const w0=Math.max(wOf(s,Lw),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1)*GROW.w;   /* the bore is a fat wave, not a steep one */   // blends in with no kink where a section starts
       profile(scA,0.28*fade,w,(205+65*e)*DEG,lerp(2.0*fade,4.0,sstep(0,0.42,w))*Hs*(1-0.10*fo)*(1-0.06*ef+0.10*ef*Math.sin(t*2.4+X*0.31))*(1+0.30*secJct)*(1+0.12*ck*(1-fo)),0,0,false,sstep(0.35,0.95,e),fo,s,t);   // turning to white water at the end, the wave also loses height
       colW[i]=w;colFoam[i]=fo;colSecF[i]=Math.max(secFoam,0.45*secJct);colEnd[i]=ef;LANDK[i]=scA.land||0;LANDZ[i]=scA.lz||0;
       if(game.lipHits&&game.lipHits.length){let d=0;for(const h of game.lipHits){const age=t-h.t,dx=(X-h.X)/0.88;if(age<0||age>1.7||Math.abs(dx)>3)continue;d=Math.max(d,h.k*Math.exp(-dx*dx)*sstep(0,0.09,age)*(1-sstep(0.6,1.7,age)))}colDmg[i]=d}else colDmg[i]=0;
@@ -3096,7 +3097,9 @@ function lmEnsure(){if(LM.req||!RIG.ready||!RIG.mesh)return;LM.req=1;
   magLoad('the-local',src=>{const pm=RIG.mesh,pg=pm.geometry,pp=pg.attributes.position,psi=pg.attributes.skinIndex,psw=pg.attributes.skinWeight;
     const g=src.geometry.clone();g.deleteAttribute('skinIndex');g.deleteAttribute('skinWeight');g.computeBoundingBox();pg.computeBoundingBox();
     const a=g.boundingBox,b=pg.boundingBox,k=(b.max.y-b.min.y)/(a.max.y-a.min.y),cx=(a.min.x+a.max.x)/2,cz=(a.min.z+a.max.z)/2,bx=(b.min.x+b.max.x)/2,bz=(b.min.z+b.max.z)/2;
-    const gp=g.attributes.position;for(let i=0;i<gp.count;i++)gp.setXYZ(i,bx+(gp.getX(i)-cx)*k,b.min.y+(gp.getY(i)-a.min.y)*k,bz+(gp.getZ(i)-cz)*k);gp.needsUpdate=true;if(!g.attributes.normal)g.computeVertexNormals();   /* a uniform scale keeps the model's own normals, smooth across its texture seams */
+    const gp=g.attributes.position;for(let i=0;i<gp.count;i++)gp.setXYZ(i,bx+(gp.getX(i)-cx)*k,b.min.y+(gp.getY(i)-a.min.y)*k,bz+(gp.getZ(i)-cz)*k);{const armY=P=>{let sm=0,c=0;for(let i=0;i<P.count;i++){const z=Math.abs(P.getZ(i)-bz),y=P.getY(i);if(z>=0.2&&z<0.36&&y>b.min.y+0.6*(b.max.y-b.min.y)){sm+=y;c++}}return c?sm/c:0};   /* 2026-11-19 fitted by the line of his arms, not his height: his curls made him taller, so the fit sank his shoulders and arms ~6 cm under the pro's joints and every pose read lower, arms hanging */
+      const ya=armY(gp),yb=armY(pp);if(ya>b.min.y&&yb>b.min.y){const r=clamp((yb-b.min.y)/(ya-b.min.y),0.94,1.10);for(let i=0;i<gp.count;i++)gp.setXYZ(i,bx+(gp.getX(i)-bx)*r,b.min.y+(gp.getY(i)-b.min.y)*r,bz+(gp.getZ(i)-bz)*r)}}
+    gp.needsUpdate=true;if(!g.attributes.normal)g.computeVertexNormals();   /* a uniform scale keeps the model's own normals, smooth across its texture seams */
     const C=0.03,key=(x,y,z)=>((Math.floor(x/C)+512)*1048576)+((Math.floor(y/C)+512)*1024)+(Math.floor(z/C)+512),grid=new Map();
     for(let i=0;i<pp.count;i++){const kk=key(pp.getX(i),pp.getY(i),pp.getZ(i));let L=grid.get(kk);if(!L)grid.set(kk,L=[]);L.push(i)}
     const n=gp.count,SI=new Uint16Array(n*4),SW=new Float32Array(n*4),acc=new Map();
@@ -3666,8 +3669,7 @@ function poseRider0(time,dt){
    const c=ARMS.c*st*(1-pr);if(c>0.01){T.q.multiply(T.i.copy(T.slow).invert()).slerp(T.id,1-c);   /* the quick part of the torso's motion carries the arms along: a twist or a lean on a tap
      up or down the face moves shoulders and arms as one piece, the way a surfer's arms ride with his body, instead of the hands staying put while the arm swings round them */
      T.v.subVectors(J.hFt,J.shF).applyQuaternion(T.q);J.hFt.copy(J.shF).add(T.v);T.v.subVectors(J.hBt,J.shB).applyQuaternion(T.q);J.hBt.copy(J.shB).add(T.v)}}
-  if(LOCALU.value>0.5){const rk=0.55*(1-(A.claim||0))*(1-0.8*(A.grab||0))*(1-(A.prone||0))*(AT.drag>0.5?0.3:1)*(1-0.7*(A.flail||0))*(1-0.6*(A.air||0));   /* THE LOCAL: the hands come in closer and hang lower, unless a move needs them (a grab, the rail in the barrel, a claim) */
-    if(rk>0.01){_lcA.subVectors(J.hFt,J.shF);J.hFt.lerp(_lcB.copy(J.shF).addScaledVector(_lcA,0.66).addScaledVector(J.spine,-0.22),rk);_lcA.subVectors(J.hBt,J.shB);J.hBt.lerp(_lcB.copy(J.shB).addScaledVector(_lcA,0.66).addScaledVector(J.spine,-0.22),rk)}}
+  /* 2026-11-19 THE LOCAL holds the pro's posture now, arms and body (the relaxed, lower hands are gone) */
   J.haF.copy(A.hF.step(J.hFt,dt,hf,hz));J.haB.copy(A.hB.step(J.hBt,dt,AT.drag>0.5?5:hf,hz));
   J.shF.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haF,J.shF).normalize().dot(J.spine)));J.shB.addScaledVector(J.spine,0.035*Math.max(0,_d.subVectors(J.haB,J.shB).normalize().dot(J.spine)));
   ik(J.shF,J.haF,0.30,0.26,-0.25*st,-0.75*st+0.5*pr,0.6*st+pr,J.elF,J.tA);J.haF.copy(J.tA);
@@ -3823,7 +3825,7 @@ function dropTick(dt){
   if(game.state!=='ride'||game.replay||!RIG.on){if(DROP.on)dropEnd();return}
   const D=DROP;
   if(!D.on){
-    if(D.done||!D.ready||SPOT.id===8||(SPOT_LOOK[SPOT.id]&&SPOT_LOOK[SPOT.id].suit)||game.waveAge<Math.max(10,game.waveDur*0.35)||game.waveAge>game.waveDur-8)return;   /* no boardshorts local in the arctic */   /* never so late that the wave ends with him still on it */
+    if(D.done||!D.ready||SPOT.id===1||SPOT.id===8||(SPOT_LOOK[SPOT.id]&&SPOT_LOOK[SPOT.id].suit)||game.waveAge<Math.max(10,game.waveDur*0.35)||game.waveAge>game.waveDur-8)return;   /* no boardshorts local in the arctic */   /* never so late that the wave ends with him still on it */
     if(sf.mode!=='ride'||sf.rh||sf.tt||sf.pivot>0||game.inTube||sf.introT>0||sf.s<9||sf.s>40)return;
     const s0=sf.s+22;if(colFoam[Math.round(colIndex(s0))]>0.08||colFoam[Math.round(colIndex(sf.s+12))]>0.08||colFoam[Math.round(colIndex(sf.s+5))]>0.08)return;   // open wall only
     sampleSurf(s0,0,npcS);Object.assign(D,{on:true,ph:'pad',t:0,s:s0,p:0.30*npcS.top,th:-1.0,splashed:false,spl:0,klutz:Math.random()<0.4});   /* 4 times in 10 he blows the take-off on his own */   /* he comes from further down the line, low on the face, paddling flat out to get into it */npcG.visible=npcBoard.visible=true;
@@ -4510,6 +4512,7 @@ function autoPilot(dt){AP.t-=dt;sampleSurf(sf.s,1e6,S_AP);const top=Math.max(S_A
   AP.k=k;input.x=(k.includes('R')?1:0)-(k.includes('L')?1:0);input.y=(k.includes('U')?1:0)-(k.includes('D')?1:0);input.crouch=false;input.stall=false}
 
 function award(name,pts,small){if(/^(Snap|Tail Throw|Roundhouse|Cutback|Off the Lip|Vertical Hit|Carve|Layback|Floater|Long Floater|360|Tail Slide)/.test(name))sfxPlay('spray',{vol:0.65,off:[2.0,2.6,8.0,8.8][Math.floor(Math.random()*4)]+rnd(0,0.3),dur:0.8,rate:rnd(0.95,1.12),fo:0.3});   /* the rail throwing water */
+  if(SPOT.grow&&game.state==='ride'&&!game.attract&&/^(Cutback|Roundhouse)$/.test(name)){pts=Math.round(pts*1.5);name='Rosa '+name}   /* 2026-11-19 the cutback is Rosa's move: half as much again, and it says so */
   if(/Barrel|Air|Spit/.test(name)&&(SPOT.id===1||SPOT.id===2))sfxPlay('crowd',{vol:0.22,off:2,dur:3,fi:0.4,fo:1.2});   /* the stands, the warungs */
   if(game.state!=='ride'||game.attract)return;
   let tot=pts,mult=1;
