@@ -6,116 +6,432 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Painel PlaySurf</title>
 <style>
-:root{--bg:#f4f7f9;--card:#fff;--ink:#10212b;--mute:#5c6f7a;--line:#dfe7ec;--acc:#0a84c6;--acc2:#7cc6ec}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1a21;--card:#14252e;--ink:#e8f1f5;--mute:#93a9b5;--line:#22404e;--acc:#4fb3ea;--acc2:#1f6f99}}
+:root{color-scheme:light;--bg:#f2f5f7;--card:#fff;--ink:#0f1d25;--ink2:#4a5b65;--mute:#6f7f88;--line:#e1e8ec;--grid:#e8edf0;--axis:#c3ccd2;--track:#edf1f4;--s1:#2a78d6;--s1l:#86b6ef;--up:#006300;--down:#b42323;--tag:#e3eefb;--tagInk:#1c5cab;--warn:#fff4dc;--warnInk:#7a4b00}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0b1419;--card:#13212a;--ink:#eef3f5;--ink2:#b9c7ce;--mute:#8a9ca6;--line:#23353f;--grid:#1e2f39;--axis:#36515f;--track:#1a2a33;--s1:#3987e5;--s1l:#184f95;--up:#3ccf3c;--down:#ff8a8a;--tag:#173450;--tagInk:#9ec5f4;--warn:#3a2c0e;--warnInk:#ffd88a}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:860px;margin:0 auto;padding:24px 16px 48px}
-h1{font-size:24px;margin:0 0 4px}
-.sub{color:var(--mute);margin:0 0 20px}
-.periods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.periods button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;font:inherit;cursor:pointer}
-.periods button.on{background:var(--acc);border-color:var(--acc);color:#fff}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-.kpi .l{color:var(--mute);font-size:14px}
-.kpi .v{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:4px}
+main{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+a{color:var(--s1)}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+h1{font-size:24px;margin:0 0 2px}
+.sub{color:var(--ink2);margin:0}
+button{font:inherit;color:inherit}
+.ghost{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.ghost:hover{border-color:var(--axis)}
+.periods{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.periods button{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;cursor:pointer}
+.periods button:hover{border-color:var(--axis)}
+.periods button[aria-pressed="true"]{background:var(--s1);border-color:var(--s1);color:#fff;font-weight:600}
+.range{color:var(--ink2);font-size:14px;margin:0 0 16px}
+.alert{background:var(--warn);color:var(--warnInk);border-radius:10px;padding:10px 14px;font-size:14px;margin:0 0 16px}
+.alert button{background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;color:inherit}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card .kpi{border-radius:12px;background:transparent}
+.kpi .l{color:var(--ink2);font-size:14px}
+.kpi .v{font-size:32px;font-weight:650;line-height:1.15;margin-top:4px}
+.kpi .d{font-size:13px;min-height:19px;margin-top:2px;color:var(--ink2)}
+.kpi .d.up{color:var(--up)}.kpi .d.down{color:var(--down)}
 .kpi .n{color:var(--mute);font-size:13px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:20px}
-.card h2{font-size:17px;margin:0 0 12px}
-.row{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;margin:8px 0;font-size:15px}
-.bar{height:22px;background:var(--line);border-radius:6px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--acc);border-radius:6px;min-width:2px}
-.row .p{text-align:right;font-variant-numeric:tabular-nums}
-.note{color:var(--mute);font-size:14px}
-a{color:var(--acc)}
-.err{color:#c0392b}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.card h2{font-size:17px;margin:0 0 4px}
+.card .lead{color:var(--ink2);font-size:14px;margin:0 0 12px}
+.card .kpis{margin:4px 0 12px}
+.sub3{font-size:15px;margin:16px 0 2px}
+.note{color:var(--mute);font-size:13.5px;margin:10px 0 0}
+.empty{color:var(--ink2);font-size:14.5px;margin:8px 0}
+body.loading .kpis,body.loading .card{opacity:.55;transition:opacity .2s}
+/* barras horizontais */
+.row{display:grid;grid-template-columns:minmax(120px,200px) 1fr 112px;gap:4px 12px;align-items:center;margin:9px 0;font-size:15px}
+.row .lab{min-width:0;overflow-wrap:anywhere}
+.row .lab a{color:inherit;text-decoration:none}
+.row .lab a:hover,.row .lab a:focus-visible{color:var(--s1);text-decoration:underline}
+.row .p{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2);white-space:nowrap}
+.row .p b{color:var(--ink);font-weight:600}
+.bar{height:12px;background:var(--track);border-radius:0 4px 4px 0}
+.bar i{display:block;height:100%;background:var(--s1);border-radius:0 4px 4px 0;min-width:2px}
+.row.other .bar i{background:var(--s1l)}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;line-height:1;padding:3px 6px;border-radius:999px;background:var(--tag);color:var(--tagInk);margin-left:6px;vertical-align:2px;white-space:nowrap}
+.extra{color:var(--ink2);font-size:14.5px;margin:12px 0 0}
+/* gráfico por dia */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--ink2);margin:0 0 10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.hi{background:var(--s1)}.sw.lo{background:var(--s1l)}
+.chart{position:relative}
+.plot{position:relative;height:200px;margin-left:30px}
+.gl{position:absolute;left:0;right:0;border-top:1px solid var(--grid)}
+.gl.base{border-top-color:var(--axis)}
+.gl span{position:absolute;right:100%;margin-right:6px;transform:translateY(-50%);font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.cols{position:absolute;inset:0;display:flex;align-items:flex-end}
+.col{flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:none;border:0;padding:0;cursor:default;position:relative;border-radius:4px}
+.col:hover,.col:focus-visible{background:color-mix(in srgb,var(--s1) 7%,transparent);outline:none}
+.col:focus-visible{box-shadow:inset 0 0 0 2px var(--s1)}
+.stk{width:min(24px,64%);display:flex;flex-direction:column;gap:2px}
+.stk i{display:block;width:100%}
+.stk .hi{background:var(--s1)}.stk .lo{background:var(--s1l)}
+.stk i:first-child{border-radius:4px 4px 0 0}
+.col .val{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px;font-variant-numeric:tabular-nums}
+.xl{display:flex;margin-left:30px;margin-top:6px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.xl span{flex:1 1 0;min-width:0;text-align:center;white-space:nowrap;overflow:visible;line-height:1.25}
+.xl span.sel{color:var(--ink);font-weight:700}
+.xl small{display:block;font-size:11px}
+.tip{position:absolute;top:0;z-index:2;pointer-events:none;background:var(--card);border:1px solid var(--line);box-shadow:0 6px 20px rgba(0,0,0,.14);border-radius:10px;padding:8px 10px;font-size:13px;min-width:180px}
+.tip .tt{display:block;font-weight:600;margin-bottom:4px}
+.tip .tr{display:flex;align-items:center;gap:6px;color:var(--ink2);margin:2px 0}
+.tip .tr strong{color:var(--ink);font-variant-numeric:tabular-nums;min-width:24px;text-align:right}
+.tip .k{width:12px;height:3px;border-radius:2px;display:inline-block}
+.tip .k.hi{background:var(--s1)}.tip .k.lo{background:var(--s1l)}.tip .k.no{background:transparent}
+details{margin-top:12px;font-size:14px}
+summary{cursor:pointer;color:var(--ink2)}
+table{border-collapse:collapse;width:100%;margin-top:8px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--ink2);font-weight:600}
+.foot{color:var(--mute);font-size:13.5px}
+@media (max-width:560px){
+  main{padding:18px 16px 40px}
+  h1{font-size:21px}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:12px}
+  .kpi .v{font-size:26px}
+  .row{grid-template-columns:1fr auto;margin:12px 0}
+  .row .bar{grid-column:1/-1;grid-row:2}
+  .plot{height:170px}
+}
 </style>
 </head>
 <body>
 <main>
-<h1>Painel PlaySurf</h1>
-<p class="sub">Visitas e tempo de permanência em playsurfgame.com</p>
-<div class="periods" id="periods">
-<button data-d="0">Hoje</button><button data-d="7" class="on">7 dias</button><button data-d="30">30 dias</button><button data-d="all">Tudo</button>
-</div>
-<div class="kpis">
-<div class="kpi"><div class="l">Visitantes únicos</div><div class="v" id="uniq">–</div><div class="n">quem volta em outro dia conta de novo</div></div>
-<div class="kpi"><div class="l">Visitas</div><div class="v" id="views">–</div><div class="n">vezes que o jogo foi aberto</div></div>
-<div class="kpi"><div class="l">Tempo médio</div><div class="v" id="avg">–</div><div class="n">estimado, com a aba visível</div></div>
-<div class="kpi"><div class="l">Ficaram 5 min ou mais</div><div class="v" id="p5">–</div><div class="n">das visitas</div></div>
-</div>
-<div class="card">
-<h2>Quem voltou a jogar</h2>
-<div class="kpis">
-<div class="kpi"><div class="l">Sessões jogadas</div><div class="v" id="sTot">–</div><div class="n">vezes que alguém começou a surfar</div></div>
-<div class="kpi"><div class="l">Jogadores</div><div class="v" id="sPpl">–</div><div class="n">aparelhos diferentes que jogaram</div></div>
-<div class="kpi"><div class="l">Voltaram a jogar</div><div class="v" id="sBack">–</div><div class="n" id="sBackN">jogaram 2 vezes ou mais</div></div>
-<div class="kpi"><div class="l">O mais fiel</div><div class="v" id="sMax">–</div><div class="n">sessões no mesmo aparelho</div></div>
-</div>
-<div id="sRows"></div>
-<p class="note">Contado por aparelho, não por IP: o GoatCounter não guarda IPs. O jogo lembra no próprio navegador quantas vezes já foi jogado ali, então a mesma pessoa no celular e no computador conta como duas, e quem limpa os dados do navegador recomeça do zero. Uma sessão começa na primeira onda; voltar em menos de 30 minutos é a mesma sessão. Contado a partir de 16/11/2026; quem já tinha jogado antes entra direto como 2ª sessão.</p>
-</div>
-<div class="card">
-<h2>Quanto tempo as pessoas ficam</h2>
-<div id="rows"></div>
-<p class="note">Cada barra mostra a porcentagem das visitas que ficou pelo menos esse tempo com o jogo aberto e visível. O tempo só passou a ser medido a partir de 13/11/2026.</p>
-</div>
-<div class="card">
-<h2>Acessos por país</h2>
-<div id="countries"><p class="note">Carregando…</p></div>
-<p class="note">País estimado pelo fuso horário do aparelho de cada visitante. Contado a partir de 13/11/2026, então os primeiros dias mostram poucos dados.</p>
-</div>
-<p class="note" id="status"></p>
-<p class="note">Mais detalhes (origem, celular x computador): <a href="https://playsurf.goatcounter.com" target="_blank" rel="noopener">painel completo do GoatCounter</a>.</p>
+<header class="top">
+  <div><h1>Painel PlaySurf</h1><p class="sub">Visitas, tempo de jogo e retorno em playsurfgame.com</p></div>
+  <button class="ghost" id="refresh" type="button">Atualizar</button>
+</header>
+<nav class="periods" id="periods" aria-label="Período">
+  <button type="button" data-p="hoje" aria-pressed="false">Hoje</button>
+  <button type="button" data-p="ontem" aria-pressed="false">Ontem</button>
+  <button type="button" data-p="7" aria-pressed="true">7 dias</button>
+  <button type="button" data-p="30" aria-pressed="false">30 dias</button>
+  <button type="button" data-p="tudo" aria-pressed="false">Tudo</button>
+</nav>
+<p class="range" id="range"></p>
+<div class="alert" id="alert" hidden></div>
+
+<section class="kpis" aria-label="Resumo do período">
+  <div class="kpi"><div class="l">Abriram o jogo</div><div class="v" id="kOpen">–</div><div class="d" id="dOpen"></div><div class="n">visitas à página do jogo</div></div>
+  <div class="kpi"><div class="l">Sessões jogadas</div><div class="v" id="kPlay">–</div><div class="d" id="dPlay"></div><div class="n" id="nPlay">surfaram pelo menos 1 onda</div></div>
+  <div class="kpi"><div class="l">Tempo médio</div><div class="v" id="kAvg">–</div><div class="d" id="dAvg"></div><div class="n">estimado, com a aba visível</div></div>
+  <div class="kpi"><div class="l">Ficaram 5 min ou mais</div><div class="v" id="kP5">–</div><div class="d" id="dP5"></div><div class="n">das visitas ao jogo</div></div>
+</section>
+
+<section class="card">
+  <h2 id="chartTitle">Visitas ao jogo por dia</h2>
+  <div class="legend"><span><i class="sw hi"></i>Ficaram 1 min ou mais</span><span><i class="sw lo"></i>Saíram antes de 1 min</span></div>
+  <div class="chart" id="chart"></div>
+  <details><summary>Ver em tabela</summary><div id="chartTable"></div></details>
+</section>
+
+<section class="card">
+  <h2>Quanto tempo as pessoas ficam</h2>
+  <p class="lead">Parte das visitas ao jogo que ficou pelo menos esse tempo com a aba aberta e visível.</p>
+  <div id="rows"></div>
+</section>
+
+<section class="card">
+  <h2>Quem voltou a jogar</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Jogadores novos</div><div class="v" id="sPpl">–</div><div class="n" id="sPplN">aparelhos na 1ª sessão</div></div>
+    <div class="kpi"><div class="l">Sessões de quem voltou</div><div class="v" id="sBack">–</div><div class="n" id="sBackN">2ª sessão em diante</div></div>
+    <div class="kpi"><div class="l">O mais fiel</div><div class="v" id="sMax">–</div><div class="n">sessões no mesmo aparelho</div></div>
+  </div>
+  <h3 class="sub3">Até que sessão os jogadores chegam</h3>
+  <p class="lead">Desde 16/11, de todos os aparelhos que jogaram, quantos chegaram a cada sessão. Não muda com o período escolhido.</p>
+  <div id="sRows"></div>
+  <p class="extra" id="sHeavy"></p>
+  <p class="note">Contado por aparelho, sem IP e sem cookie: o jogo guarda no próprio navegador quantas vezes já jogou ali. Celular e computador da mesma pessoa contam como dois, e quem limpa os dados do navegador recomeça do zero. A sessão começa na primeira onda; voltar em menos de 30 minutos é a mesma sessão. Contado desde 16/11/2026; quem já jogava antes entrou direto na 2ª sessão.</p>
+</section>
+
+<section class="card">
+  <h2>De onde são os jogadores</h2>
+  <div id="countries"><p class="empty">Carregando…</p></div>
+  <p class="note">País estimado pelo fuso horário do aparelho, sem IP. Conta uma vez por visita ao jogo.</p>
+</section>
+
+<section class="card">
+  <h2>Páginas mais vistas</h2>
+  <div id="pages"><p class="empty">Carregando…</p></div>
+  <p class="note">Visitas a cada página do site. As marcadas com “anúncio” são o destino dos anúncios do Google: cada idioma tem a sua, e o inglês leva direto à página do jogo.</p>
+</section>
+
+<section class="card">
+  <h2>De onde vêm as visitas</h2>
+  <div id="origin"><p class="empty">Carregando…</p></div>
+</section>
+
+<p class="foot" id="status"></p>
+<p class="foot">Mais detalhes (sites de origem, celular x computador, navegadores): <a href="https://playsurf.goatcounter.com" target="_blank" rel="noopener">painel completo do GoatCounter</a>.</p>
 </main>
 <script>
+(function(){
+'use strict';
 var GC='https://playsurf.goatcounter.com/counter/';
-var M=[['30s',30],['1min',60],['3min',180],['5min',300],['10min',600],['20min',1200],['30min',1800]];
+var DATA_START='2026-11-13', SESS_START='2026-11-16';
+var M=[['30s',30,'30 s'],['1min',60,'1 min'],['3min',180,'3 min'],['5min',300,'5 min'],['10min',600,'10 min'],['20min',1200,'20 min'],['30min',1800,'30 min']];
+var SK=['antigo','1','2','3','4','5','6-9','10+'];
+var CC=['AE','AO','AR','AT','AU','BE','BG','BO','BR','CA','CH','CL','CN','CO','CR','CU','CV','CZ','DE','DK','DO','EC','EG','ES','FI','FJ','FR','GB','GR','GT','HK','HR','HU','ID','IE','IL','IN','IT','JP','KE','KR','MA','MX','MY','MZ','NG','NL','NO','NZ','PA','PE','PF','PH','PK','PL','PR','PT','PY','RO','RS','RU','SA','SE','SG','TH','TR','TW','UA','US','UY','VE','VN','XX','ZA'];
+// Eventos de origem: o painel já sabe ler; só aparecem quando o site passar a mandar origem-*.
+var ORIG=[['anuncio','Anúncio do Google'],['google','Busca do Google'],['busca','Outras buscas'],['social','Redes sociais'],['site','Outros sites'],['direto','Direto ou app']];
+// Destinos dos anúncios do Google (um por idioma; o inglês vai para a página do jogo).
+var ADS={'/':1,'/jogo-de-surf':1,'/juego-de-surf':1,'/jeu-de-surf':1,'/surf-spiel':1,'/gioco-di-surf':1,'/ja':1};
+var PAGES_FALLBACK=['/','/free-surf-game','/jogo-de-surf','/juego-de-surf','/jeu-de-surf','/surf-spiel','/gioco-di-surf','/ja','/game-selancar','/wave-pool-surf-game','/uluwatu-surf-game','/cloud-9-surf-game','/pipeline-surf-game','/trestles-surf-game','/campeche-surf-game','/pororoca-surf-game','/thorlakshofn-surf-game','/supertubos-surf-game','/skeleton-bay-surf-game','/greenbush-surf-game','/jeffreys-bay-surf-game','/chicama-surf-game','/matadeiro-surf-game','/rosa-norte-surf-game','/restaurants-fiji-surf-game','/ilha-dos-lobos-surf-game','/contact','/press','/about','/privacy','/terms'];
+var PH_DESK=200, PH_MOB=170;
+
+function $(id){return document.getElementById(id)}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function nf(n){return Number(n||0).toLocaleString('pt-BR')}
+function pct(f){return Math.round(f*100)+'%'}
 function num(s){return parseInt(String(s||'0').replace(/\D/g,''),10)||0}
-function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function get(path,qs){return fetch(GC+encodeURIComponent(path)+'.json'+qs).then(function(r){return r.json()}).then(function(j){return{c:num(j.count),u:num(j.count_unique)}}).catch(function(){return{c:0,u:0}})}
-var CC=["AE", "AO", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CN", "CO", "CR", "CU", "CV", "CZ", "DE", "DK", "DO", "EC", "EG", "ES", "FI", "FJ", "FR", "GB", "GR", "GT", "HK", "HR", "HU", "ID", "IE", "IL", "IN", "IT", "JP", "KE", "KR", "MA", "MX", "MY", "MZ", "NG", "NL", "NO", "NZ", "PA", "PE", "PF", "PH", "PK", "PL", "PR", "PT", "PY", "RO", "RS", "RU", "SA", "SE", "SG", "TH", "TR", "TW", "UA", "US", "UY", "VE", "VN", "XX", "ZA"];
+function pad(n){return String(n).padStart(2,'0')}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function parse(s){var a=s.split('-').map(Number);return new Date(a[0],a[1]-1,a[2])}
+function add(s,n){var d=parse(s);d.setDate(d.getDate()+n);return ymd(d)}
+function dm(s){return s.slice(8)+'/'+s.slice(5,7)}
+var WD=['dom','seg','ter','qua','qui','sex','sáb'];
+function wd(s){return WD[parse(s).getDay()]}
+function today(){return ymd(new Date())}
+function fmtT(sec){if(sec==null)return '–';if(sec<1)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);if(s===60){m++;s=0}return m?(m+' min'+(s?' '+s+' s':'')):s+' s'}
+
+/* ---------- leitura do GoatCounter: fila curta, cache por consulta, 404 = zero ---------- */
+var cache={},queue=[],active=0,failed=0;
+function pump(){while(active<16&&queue.length){(function(job){active++;job.fn().then(job.ok,job.ko).then(function(){active--;pump()})})(queue.shift())}}
+function limited(fn){return new Promise(function(ok,ko){queue.push({fn:fn,ok:ok,ko:ko});pump()})}
+function cnt(path,start){
+  var k=path+'|'+(start||'');
+  if(!cache[k])cache[k]=limited(function(){
+    return fetch(GC+encodeURIComponent(path)+'.json'+(start?'?start='+start:''),{cache:'no-store'}).then(function(r){
+      if(r.status===404)return 0;
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.json().then(function(j){return num(j.count)});
+    });
+  }).catch(function(){failed++;delete cache[k];return 0});
+  return cache[k];
+}
+// Contagem a partir do dia D até agora (dia no futuro = 0).
+function from(path,D){return D>today()?Promise.resolve(0):cnt(path,D)}
+// Contagem no intervalo [A, B) — B vazio = até agora.
+function rng(path,A,B){return Promise.all([from(path,A),B?from(path,B):0]).then(function(r){return Math.max(0,r[0]-r[1])})}
+var pagesP=null;
+function getPages(){
+  if(!pagesP)pagesP=fetch('sitemap.xml',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+    var out=[],re=/<loc>\s*([^<\s]+)\s*<\/loc>/g,m;
+    while((m=re.exec(t))){try{var p=new URL(m[1]).pathname.replace(/\.html$/,'');if(p!=='/painel'&&out.indexOf(p)<0)out.push(p)}catch(e){}}
+    if(!out.length)throw 0;if(out.indexOf('/')<0)out.unshift('/');return out;
+  }).catch(function(){return PAGES_FALLBACK.slice()});
+  return pagesP;
+}
+
+/* ---------- períodos ---------- */
+function period(p){
+  var t=today(),P={p:p,A:null,B:null,pA:null,pB:null,cmp:''};
+  if(p==='hoje'){P.A=t;P.pA=add(t,-1);P.pB=t;P.cmp='ontem inteiro'}
+  else if(p==='ontem'){P.A=add(t,-1);P.B=t;P.pA=add(t,-2);P.pB=P.A;P.cmp='anteontem'}
+  else if(p==='tudo'){P.A=DATA_START}
+  else{var n=+p;P.A=add(t,-(n-1));P.pA=add(P.A,-n);P.pB=P.A;P.cmp=n+' dias antes'}
+  P.clipped=P.A<DATA_START;if(P.clipped)P.A=DATA_START;
+  if(P.pA&&P.pA<DATA_START){P.noPrev=true;P.pA=P.pB=null}
+  P.end=P.B?add(P.B,-1):t;
+  // dias do gráfico: o período (no mínimo 7 dias, para não virar uma barra só), a partir de 13/11, até 90 dias
+  var cEnd=P.end,cStart=P.A;if(cStart>add(cEnd,-6))cStart=add(cEnd,-6);if(cStart<DATA_START)cStart=DATA_START;if(cStart<add(cEnd,-89))cStart=add(cEnd,-89);
+  P.days=[];for(var d=cStart;d<=cEnd;d=add(d,1))P.days.push(d);
+  return P;
+}
+function rangeText(P){
+  var t=today(),s;
+  if(P.p==='hoje')s='Hoje, '+wd(t)+' '+dm(t)+', até agora';
+  else if(P.p==='ontem')s='Ontem, '+wd(P.A)+' '+dm(P.A);
+  else s=dm(P.A)+' a '+dm(P.end)+(P.end===t?' (hoje)':'');
+  if(P.pA)s+=' · comparado com '+(P.pA===add(P.pB,-1)?dm(P.pA):dm(P.pA)+' a '+dm(add(P.pB,-1)));
+  else if(P.clipped&&P.p!=='tudo')s+=' · o painel só tem dados desde '+dm(DATA_START)+', então ainda não dá para comparar';
+  else if(P.p!=='tudo')s+=' · sem comparação: os dados começam em '+dm(DATA_START);
+  return s;
+}
+
+/* ---------- métricas de um intervalo ---------- */
+function avgTime(base,ev){var a=0,pt=0,pf=1;M.forEach(function(m,i){var f=Math.min(1,ev[i]/base);a+=(m[1]-pt)*(pf+f)/2;pt=m[1];pf=f});return a+pf*600}
+function metrics(A,B){
+  return Promise.all([rng('/',A,B)].concat(M.map(function(m){return rng('tempo-'+m[0],A,B)}),SK.map(function(k){return rng('sessao-'+k,A,B)}))).then(function(r){
+    var o={open:r[0],ev:r.slice(1,1+M.length),s:{}};SK.forEach(function(k,i){o.s[k]=r[1+M.length+i]});
+    o.base=Math.max(o.open,o.ev[0]||0);o.avg=o.base?avgTime(o.base,o.ev):null;o.p5=o.base?Math.min(1,o.ev[3]/o.base):null;
+    o.play=SK.slice(1).reduce(function(a,k){return a+o.s[k]},0);return o;
+  });
+}
+
+/* ---------- desenho ---------- */
+function delta(id,cur,prev,P,fmt,isCount,since){
+  var e=$(id);e.className='d';e.textContent='';
+  if(P.p==='tudo')return;
+  if(!prev)return; // a linha do período já diz que não há comparação
+  if(since&&P.pA<since){e.textContent='sem comparação (contado desde '+dm(since)+')';return}
+  var pv=prev.v;
+  if(pv==null){e.textContent=P.cmp+': –';return}
+  if(P.p==='hoje'||!isCount||!pv){e.textContent=P.cmp+': '+fmt(pv);return}
+  var d=Math.round((cur-pv)/pv*100);
+  e.textContent=(d>0?'▲ '+d+'%':d<0?'▼ '+Math.abs(d)+'%':'= igual')+' · '+P.cmp+': '+fmt(pv);
+  if(d>0)e.classList.add('up');else if(d<0)e.classList.add('down');
+}
+function bars(box,list,base,emptyMsg){
+  box.textContent='';
+  if(!base){box.appendChild(el('p','empty',emptyMsg));return}
+  list.forEach(function(x){
+    var row=el('div','row'+(x.other?' other':'')),lab=el('span','lab');
+    if(x.href){var a=el('a',null,x.label);a.href=x.href;a.target='_blank';a.rel='noopener';lab.appendChild(a)}else lab.textContent=x.label;
+    if(x.tag){var t=el('span','tag',x.tag);if(x.tagTitle)t.title=x.tagTitle;lab.appendChild(t)}
+    var f=Math.max(0,Math.min(1,x.n/base)),bar=el('div','bar'),i=el('i');i.style.width=(f*100).toFixed(1)+'%';if(!x.n)i.style.minWidth='0';bar.appendChild(i);
+    var p=el('span','p');p.appendChild(el('b',null,pct(f)));p.appendChild(document.createTextNode(' ('+nf(x.n)+')'));
+    row.appendChild(lab);row.appendChild(bar);row.appendChild(p);box.appendChild(row);
+  });
+}
+var lastChart=null;
+function niceStep(max){var raw=max/3,p=Math.pow(10,Math.floor(Math.log10(raw))),s=[1,2,5,10].map(function(x){return x*p}).filter(function(x){return x>=raw})[0];return Math.max(1,s)}
+function drawChart(days,P){
+  lastChart={days:days,P:P};
+  var box=$('chart');box.textContent='';
+  var PH=window.matchMedia('(max-width:560px)').matches?PH_MOB:PH_DESK;
+  var max=Math.max(1,Math.max.apply(null,days.map(function(x){return x.t}))),step=niceStep(max),top=Math.ceil(max/step)*step;
+  var plot=el('div','plot'),cols=el('div','cols'),xl=el('div','xl'),tip=el('div','tip');tip.hidden=true;tip.setAttribute('role','tooltip');
+  for(var g=0;g<=top;g+=step){var gl=el('div','gl'+(g===0?' base':''));gl.style.bottom=(g/top*100)+'%';gl.appendChild(el('span',null,nf(g)));plot.appendChild(gl)}
+  var iMax=0;days.forEach(function(x,i){if(x.t>=days[iMax].t)iMax=i});
+  var width=box.clientWidth||600,every=Math.max(1,Math.ceil(days.length/Math.max(2,Math.floor((width-30)/46)))),showWd=every===1&&days.length<=14;
+  var sel=(P.p==='hoje'||P.p==='ontem')?P.A:null;
+  days.forEach(function(x,i){
+    var c=el('button','col');c.type='button';
+    var lo=Math.max(0,x.t-x.e),hpx=x.e/top*PH,lpx=lo/top*PH;
+    if(x.e&&hpx<2)hpx=2;if(lo&&lpx<2)lpx=2;
+    c.setAttribute('aria-label',wd(x.d)+' '+dm(x.d)+': '+x.t+' abriram o jogo, '+x.e+' ficaram 1 minuto ou mais, '+lo+' saíram antes');
+    if(x.t&&(i===iMax||i===days.length-1))c.appendChild(el('span','val',nf(x.t)));
+    var s=el('span','stk');
+    if(lo){var a=el('i','lo');a.style.height=lpx+'px';s.appendChild(a)}
+    if(x.e){var b=el('i','hi');b.style.height=hpx+'px';s.appendChild(b)}
+    c.appendChild(s);
+    function show(){tip.textContent='';tip.appendChild(el('span','tt',wd(x.d)+', '+dm(x.d)+(x.d===today()?' (até agora)':'')));
+      [[x.t,'abriram o jogo','no'],[x.e,'ficaram 1 min ou mais','hi'],[lo,'saíram antes de 1 min','lo']].forEach(function(r){var tr=el('div','tr');tr.appendChild(el('i','k '+r[2]));tr.appendChild(el('strong',null,nf(r[0])));tr.appendChild(document.createTextNode(r[1]));tip.appendChild(tr)});
+      // ao lado da coluna, para não cobrir a barra; centralizado só se não couber de nenhum lado
+      tip.hidden=false;var bw=box.clientWidth,cr=c.getBoundingClientRect(),br=box.getBoundingClientRect(),tw=tip.offsetWidth,cl=cr.left-br.left,left=cl+cr.width+4;
+      if(left+tw>bw)left=cl-tw-4;if(left<0)left=Math.max(0,Math.min(bw-tw,cl+cr.width/2-tw/2));tip.style.left=left+'px'}
+    function hide(){tip.hidden=true}
+    c.addEventListener('pointerenter',show);c.addEventListener('pointerleave',hide);c.addEventListener('focus',show);c.addEventListener('blur',hide);
+    cols.appendChild(c);
+    var lab=el('span',x.d===sel?'sel':null);
+    if(i%every===0||i===days.length-1){if(i===days.length-1||days.length-1-i>=every||i===0){lab.textContent=dm(x.d);if(showWd)lab.appendChild(el('small',null,wd(x.d)))}}
+    xl.appendChild(lab);
+  });
+  plot.appendChild(cols);box.appendChild(plot);box.appendChild(xl);box.appendChild(tip);
+  // tabela
+  var tb=$('chartTable'),table=el('table'),thead=el('thead'),hr=el('tr');
+  ['Dia','Abriram o jogo','Ficaram 1 min+','Saíram antes'].forEach(function(h){hr.appendChild(el('th',null,h))});thead.appendChild(hr);table.appendChild(thead);
+  var tbody=el('tbody');days.slice().reverse().forEach(function(x){var tr=el('tr');[wd(x.d)+' '+dm(x.d),nf(x.t),nf(x.e),nf(Math.max(0,x.t-x.e))].forEach(function(v){tr.appendChild(el('td',null,v))});tbody.appendChild(tr)});
+  table.appendChild(tbody);tb.textContent='';tb.appendChild(table);
+}
+var rT;window.addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(function(){if(lastChart)drawChart(lastChart.days,lastChart.P)},150)});
+
 var DN=null;try{DN=new Intl.DisplayNames(['pt-BR'],{type:'region'})}catch(e){}
 function flag(c){return c==='XX'?'🌐':String.fromCodePoint.apply(null,c.split('').map(function(ch){return 127397+ch.charCodeAt(0)}))}
 function cname(c){if(c==='XX')return 'Não identificado';try{return DN?DN.of(c):c}catch(e){return c}}
-function loadCountries(qs){Promise.all(CC.map(function(c){return get('pais-'+c,qs).then(function(r){return{c:c,n:r.c}})})).then(function(list){
-  list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});var tot=list.reduce(function(a,b){return a+b.n},0),el=document.getElementById('countries');
-  if(!tot){el.innerHTML='<p class="note">Ainda sem acessos contados neste período.</p>';return}
-  el.innerHTML=list.slice(0,15).map(function(x){var f=x.n/tot;return '<div class="row"><span>'+flag(x.c)+' '+cname(x.c)+'</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+x.n+')</span></div>'}).join('')})}
-var SK=['antigo','1','2','3','4','5','6-9','10+'];
-function loadSess(qs){Promise.all(SK.map(function(k){return get('sessao-'+k,qs)})).then(function(r){var c={};SK.forEach(function(k,i){c[k]=r[i].c});
-  var tot=SK.slice(1).reduce(function(a,k){return a+c[k]},0),ppl=c['1']+c.antigo,back=c['2'],el=document.getElementById('sRows'),t=function(id,v){document.getElementById(id).textContent=v};
-  t('sTot',tot.toLocaleString('pt-BR'));t('sPpl',ppl.toLocaleString('pt-BR'));t('sBack',back.toLocaleString('pt-BR'));
-  t('sBackN',ppl?Math.round(Math.min(1,back/ppl)*100)+'% dos jogadores jogaram 2 vezes ou mais':'jogaram 2 vezes ou mais');
-  t('sMax',c['10+']?'10+':c['6-9']?'6 a 9':c['5']?'5':c['4']?'4':c['3']?'3':c['2']?'2':ppl?'1':'–');
-  if(!tot){el.innerHTML='<p class="note">Ainda sem sessões contadas neste período. A contagem começa quando a versão do jogo com ela estiver no ar.</p>';return}
-  var L=[['Jogaram 1 vez',ppl-c['2']],['2 vezes',c['2']-c['3']],['3 vezes',c['3']-c['4']],['4 vezes',c['4']-c['5']],['5 vezes ou mais',c['5']]],base=Math.max(ppl,1);
-  el.innerHTML=L.map(function(x){var n=Math.max(0,x[1]),f=n/base;return '<div class="row"><span>'+x[0]+'</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+n+')</span></div>'}).join('')})}
-function fmt(sec){if(!sec)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);return m?(m+' min '+(s?s+' s':'')).trim():s+' s'}
-function load(d){
-  var qs='';
-  if(d!=='all'){var s=new Date();s.setDate(s.getDate()-(+d));qs='?start='+ymd(s)}
-  document.getElementById('status').textContent='Carregando…';loadCountries(qs);loadSess(qs);
-  Promise.all([get('/',qs)].concat(M.map(function(m){return get('tempo-'+m[0],qs)}))).then(function(r){
-    var v=r[0],ev=r.slice(1).map(function(x){return x.c});
-    document.getElementById('uniq').textContent=v.u.toLocaleString('pt-BR');
-    document.getElementById('views').textContent=v.c.toLocaleString('pt-BR');
-    var base=Math.max(v.c,ev[0]||0),html='',avg=0,prevT=0,prevF=1;
-    M.forEach(function(m,i){
-      var f=base?Math.min(1,ev[i]/base):0;
-      avg+=(m[1]-prevT)*(prevF+f)/2;prevT=m[1];prevF=f;
-      html+='<div class="row"><span>'+m[0].replace('min',' min').replace('s',' s')+' ou mais</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%"></i></div><span class="p">'+Math.round(f*100)+'% ('+ev[i]+')</span></div>';
+
+/* ---------- carga ---------- */
+var gen=0,curP='7';
+function load(p,fresh){
+  curP=p;var my=++gen;failed=0;if(fresh){cache={};pagesP=null}
+  var P=period(p),ok=function(){return my===gen};
+  document.body.classList.add('loading');$('status').textContent='Carregando…';$('alert').hidden=true;
+  $('range').textContent=rangeText(P);
+  $('chartTitle').textContent='Visitas ao jogo por dia'+(P.p==='hoje'||P.p==='ontem'?' · últimos '+P.days.length+' dias':'');
+  var tasks=[];
+
+  // Resumo + tempo + sessões
+  var cur=metrics(P.A,P.B),prev=P.pA?metrics(P.pA,P.pB):Promise.resolve(null);
+  tasks.push(Promise.all([cur,prev]).then(function(r){if(!ok())return;var c=r[0],v=r[1];
+    $('kOpen').textContent=nf(c.open);
+    $('kPlay').textContent=nf(c.play);
+    $('kAvg').textContent=fmtT(c.avg);
+    $('kP5').textContent=c.p5==null?'–':pct(c.p5);
+    delta('dOpen',c.open,v&&{v:v.open},P,nf,true);
+    delta('dPlay',c.play,v&&{v:v.play},P,nf,true,SESS_START);
+    delta('dAvg',c.avg,v&&{v:v.avg},P,fmtT,false);
+    delta('dP5',c.p5,v&&{v:v.p5},P,function(x){return x==null?'–':pct(x)},false);
+    $('nPlay').textContent=c.open&&c.play&&P.A>=SESS_START?'surfaram pelo menos 1 onda · '+pct(Math.min(1,c.play/c.open))+' das visitas':P.A<SESS_START?'surfaram pelo menos 1 onda · contado desde '+dm(SESS_START):'surfaram pelo menos 1 onda';
+    // tempo
+    bars($('rows'),M.map(function(m,i){return{label:m[2]+' ou mais',n:c.ev[i]}}),c.base,'Ainda sem visitas ao jogo neste período.');
+    // sessões no período
+    var s=c.s,ppl=s['1']+s.antigo,ret=Math.max(0,c.play-s['1']);
+    $('sPpl').textContent=nf(ppl);
+    $('sPplN').textContent=s.antigo?'aparelhos na 1ª sessão (inclui '+nf(s.antigo)+' que já jogavam antes de 16/11)':'aparelhos na 1ª sessão';
+    $('sBack').textContent=nf(ret);
+    $('sBackN').textContent=c.play?'2ª sessão em diante · '+pct(ret/c.play)+' das sessões':'2ª sessão em diante';
+    $('sMax').textContent=s['10+']?'10+':s['6-9']?'6 a 9':s['5']?'5':s['4']?'4':s['3']?'3':s['2']?'2':s['1']?'1':'–';
+  }));
+
+  // Funil de retorno: sempre desde 16/11 (num período curto ele não fecha)
+  tasks.push(Promise.all(SK.map(function(k){return cnt('sessao-'+k,'')})).then(function(r){if(!ok())return;
+    var s={};SK.forEach(function(k,i){s[k]=r[i]});var ppl=s['1']+s.antigo;
+    bars($('sRows'),[['1ª sessão',ppl],['2ª sessão',s['2']],['3ª sessão',s['3']],['4ª sessão',s['4']],['5ª sessão',s['5']]].map(function(x){return{label:x[0],n:x[1]}}),ppl,'Ainda sem sessões contadas.');
+    var h=s['6-9']+s['10+'];
+    $('sHeavy').textContent=h?'Além da 5ª, os mais fiéis já jogaram mais '+nf(h)+(h===1?' sessão':' sessões')+': '+nf(s['6-9'])+' entre a 6ª e a 9ª e '+nf(s['10+'])+' da 10ª em diante.':'';
+  }));
+
+  // Gráfico por dia (aberturas e quem ficou 1 min+)
+  tasks.push(Promise.all(P.days.map(function(d){var n=add(d,1);return Promise.all([rng('/',d,n),rng('tempo-1min',d,n)]).then(function(r){return{d:d,t:r[0],e:Math.min(r[0],r[1])}})})).then(function(days){if(ok())drawChart(days,P)}));
+
+  // Países: primeiro descobre quais já apareceram alguma vez, depois conta só esses no período
+  tasks.push(Promise.all(CC.map(function(c){return cnt('pais-'+c,'').then(function(n){return n?c:null})})).then(function(seen){
+    seen=seen.filter(Boolean);
+    return Promise.all(seen.map(function(c){return rng('pais-'+c,P.A,P.B).then(function(n){return{c:c,n:n}})}));
+  }).then(function(list){if(!ok())return;
+    list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});
+    var tot=list.reduce(function(a,b){return a+b.n},0),top=list.slice(0,10).map(function(x){return{label:flag(x.c)+' '+cname(x.c),n:x.n}}),rest=list.slice(10);
+    if(rest.length)top.push({label:'Outros '+rest.length+' países',n:rest.reduce(function(a,b){return a+b.n},0),other:true});
+    bars($('countries'),top,tot,'Ainda sem visitas ao jogo neste período.');
+  }));
+
+  // Páginas
+  tasks.push(getPages().then(function(pages){
+    return Promise.all(pages.map(function(pg){return cnt(pg,'').then(function(n){return n?pg:null})}));
+  }).then(function(seen){
+    seen=seen.filter(Boolean);
+    return Promise.all(seen.map(function(pg){return rng(pg,P.A,P.B).then(function(n){return{pg:pg,n:n}})}));
+  }).then(function(list){if(!ok())return;
+    list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});
+    var tot=list.reduce(function(a,b){return a+b.n},0);
+    bars($('pages'),list.map(function(x){return{label:x.pg==='/'?'Jogo (página inicial)':x.pg.slice(1),href:x.pg,n:x.n,tag:ADS[x.pg]?'anúncio':'',tagTitle:'Destino de um anúncio do Google'}}),tot,'Nenhuma página vista neste período.');
+  }));
+
+  // Origem (só quando o site mandar eventos origem-*)
+  tasks.push(Promise.all(ORIG.map(function(o){return cnt('origem-'+o[0],'')})).then(function(all){
+    var any=all.some(Boolean),box=$('origin');
+    if(!any){if(!ok())return;box.textContent='';
+      var p1=el('p','empty');p1.appendChild(document.createTextNode('O contador público do GoatCounter, que este painel usa, não informa de onde veio cada visita. A origem (Google, Bing, outros sites, anúncios) está em “Referrers” no '));
+      var a=el('a',null,'painel completo do GoatCounter');a.href='https://playsurf.goatcounter.com';a.target='_blank';a.rel='noopener';p1.appendChild(a);p1.appendChild(document.createTextNode('.'));
+      box.appendChild(p1);
+      box.appendChild(el('p','note','Enquanto isso, um aumento nas páginas marcadas com “anúncio” desde 19/11 tende a vir da campanha. Quando o site passar a mandar a origem de cada visita, ela aparece aqui separada em anúncio, busca do Google, outras buscas, redes sociais, outros sites e acesso direto.'));
+      return;}
+    return Promise.all(ORIG.map(function(o){return rng('origem-'+o[0],P.A,P.B)})).then(function(r){if(!ok())return;
+      var tot=r.reduce(function(a,b){return a+b},0);
+      bars(box,ORIG.map(function(o,i){return{label:o[1],n:r[i]}}).filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n}),tot,'Ainda sem visitas com origem contada neste período.');
+      box.appendChild(el('p','note','Origem da primeira página vista em cada visita. “Anúncio do Google” é quem chegou por um clique em anúncio; “Direto ou app” é quem digitou o endereço, usou um favorito ou abriu por um app que não informa a origem.'));
     });
-    avg+=prevF*600;
-    document.getElementById('rows').innerHTML=html;
-    document.getElementById('avg').textContent=base?fmt(avg):'–';
-    document.getElementById('p5').textContent=base?Math.round(Math.min(1,ev[3]/base)*100)+'%':'–';
-    document.getElementById('status').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. Os números podem levar alguns minutos para aparecer.';
+  }));
+
+  Promise.all(tasks).then(function(){if(!ok())return;
+    document.body.classList.remove('loading');
+    $('status').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. O GoatCounter guarda essas contagens em cache por alguns minutos, então as visitas mais recentes podem demorar a aparecer.';
+    if(failed){var al=$('alert');al.textContent=failed+(failed===1?' consulta':' consultas')+' ao GoatCounter '+(failed===1?'falhou':'falharam')+', então alguns números podem estar abaixo do real. ';var b=el('button',null,'Tentar de novo');b.type='button';b.onclick=function(){load(curP,false)};al.appendChild(b);al.hidden=false}
   });
 }
-document.getElementById('periods').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});load(b.dataset.d)});
+
+$('periods').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;[].forEach.call(this.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',String(x===b))});load(b.dataset.p)});
+$('refresh').addEventListener('click',function(){load(curP,true)});
 load('7');
+})();
 </script>
 </body>
 </html>
