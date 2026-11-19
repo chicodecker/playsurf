@@ -2652,7 +2652,7 @@ const PROG=(()=>{let d={};try{d=JSON.parse(localStorage.getItem('playsurf_prog')
 function progSave(){try{localStorage.setItem('playsurf_prog',JSON.stringify(PROG))}catch(e){}}
 PROG.pro2=0;   /* 2026-11-19 PRO 2 is gone (the user): whoever had picked him rides THE PRO */PROG.theo2=0;PROG.local=0;PROG.haole=0;PROG.talent=0;   /* 2026-11-19 THEO 2, THE LOCAL, THE HAOLE and THE TALENT are gone too (the user): THE KID is Theo's own sculpted surfer again (it looked more like him), the others ride THE PRO */
 /* 2026-11-19 six more surfers in their own 3D bodies (Magnific design -> Tripo H3.1, cut to 26k triangles), each with a board of his own (picked with him, and open for him even before it is won) and a riding style of his own. sc: size on the board (THE PRO's proportions for the men, THE GIRL's for the women) */
-const NX={legend:{id:'chLegend',board:'long',sc:1.06},charger:{id:'chCharger',board:'gun',sc:0.95},shredder:{id:'chShredder',board:'drd',sc:0.98},flyer:{id:'chFlyer',board:'fish',sc:0.93}};
+const NX={legend:{id:'chLegend',board:'long',sc:1.006},charger:{id:'chCharger',board:'gun',sc:0.95},shredder:{id:'chShredder',board:'drd',sc:0.98},flyer:{id:'chFlyer',board:'fish',sc:0.93}};   /* 2026-11-19 (the user) THE LEGEND 10 cm shorter: 1.95 m -> 1.85 m (sc 1.06 -> 1.006) */
 if(PROG.nx&&!NX[PROG.nx])PROG.nx='';   /* 2026-11-19 (the user) THE INFLUENCER and THE LIFEGUARD left the line-up: a game saved on one of them starts on THE PRO again */
 function nxSig(){return PROG.nx&&NX[PROG.nx]?NX[PROG.nx].board:null}
 const BOARDS=[   /* the PRO MODEL comes first and is open from the start: every game begins on it */
