@@ -507,6 +507,20 @@ var Z={"America/Sao_Paulo":"BR","America/Bahia":"BR","America/Fortaleza":"BR","A
 var cc=Z[tz]||(tz.indexOf('America/Argentina/')===0?'AR':tz.indexOf('America/Indiana/')===0||tz.indexOf('America/Kentucky/')===0?'US':tz.indexOf('Australia/')===0?'AU':'');
 if(!cc){var l=(navigator.language||'').split('-');cc=(l[1]||'').toUpperCase()}if(!/^[A-Z]{2}$/.test(cc))cc='XX';
 var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearInterval(id);g.count({path:'pais-'+cc,title:'País '+cc,event:true})}else if(++n>40)clearInterval(id)},500)})();</script>
+<script>/* PlaySurf: origem da visita em categorias (anuncio, google, busca, social, site, direto), contada como evento no GoatCounter. Só a categoria: sem dado pessoal, sem user agent, sem cookie. Só na primeira página da visita (navegação dentro do site, recarregar e voltar não contam). */(function(){var d=document,L=location,q=L.search,m=/^([a-z][a-z0-9+.-]*):\/\/([^\/?#:@]+)/i.exec(d.referrer||''),a=!!m&&m[1].toLowerCase()=='android-app',h=m?m[2].toLowerCase().replace(/^www\./,''):'',o;
+if(h&&h==L.hostname.replace(/^www\./,''))return;
+try{var t=performance.getEntriesByType('navigation')[0];if(t&&(t.type=='reload'||t.type=='back_forward'))return}catch(e){}
+if(!h&&(m=/[?&]utm_source=([^&#]+)/.exec(q)))try{h=decodeURIComponent(m[1]).toLowerCase().replace(/^www\./,'')}catch(e){}
+var T='(\\.[a-z]{2,4}(\\.[a-z]{2})?)?$';
+o=/[?&](gclid|gbraid|wbraid|gad_source|gad_campaignid)=/.test(q)?'anuncio'
+:a?(/googlequicksearchbox/.test(h)?'google':/facebook|instagram|twitter|reddit|youtube|tiktok|zhiliaoapp|whatsapp|linkedin|pinterest|threads|discord|telegram|snapchat/.test(h)?'social':'direto')
+:!h?(/[?&]fbclid=/.test(q)?'social':'direto')
+:RegExp('(^|\\.)google'+T).test(h)?'google'
+:RegExp('(^|\\.)(bing|duckduckgo|yahoo|yandex|ecosia|baidu|naver|brave|qwant|startpage|seznam|sogou|chatgpt|openai|perplexity)'+T+'|^(copilot\\.microsoft\\.com|claude\\.ai)$').test(h)?'busca'
+:RegExp('(^|\\.)(facebook|instagram|twitter|reddit|youtube|tiktok|whatsapp|linkedin|pinterest|threads|discord|telegram|snapchat|twitch|tumblr|quora|messenger|kwai|bsky)'+T+'|(^|\\.)(t\\.co|x\\.com|t\\.me|fb\\.me|fb\\.com|vk\\.com|lnkd\\.in|youtu\\.be|redd\\.it|pin\\.it)$').test(h)?'social'
+:'site';
+function go(){var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearInterval(id);g.count({path:'origem-'+o,title:'Origem '+o,event:true})}else if(++n>60)clearInterval(id)},500)}
+d.prerendering?d.addEventListener('prerenderingchange',go,{once:true}):go()})();</script>
 <script>/* PlaySurf: sessões jogadas por aparelho (eventos GoatCounter). Sem IP e sem cookie: só um número guardado no próprio navegador diz se é a 1ª, 2ª, 3ª... vez que este aparelho joga.
    Uma sessão conta quando a primeira onda começa; voltar em menos de 30 min é a mesma sessão. Quem já tinha jogado antes disto existir entra como 2ª sessão (e é contado uma vez como 'antigo'). */
 (function(){var K='playsurf_sess',GAP=1800000,s={n:0,t:0},q=[],done=0,old=0,tries=0;try{s=JSON.parse(localStorage.getItem(K)||'null')||s}catch(e){}
@@ -2889,10 +2903,11 @@ function svModel(bk){if(SV.m[bk])return SV.m[bk];const B=bk==='pro'?(RIG.ready&&
       P[i*3+1]=yp+dz*s+dy*c;P[i*3+2]=bz+sg*(zp+dz*c-dy*s);if(N){const nz=N[i*3+2]*sg,ny=N[i*3+1];N[i*3+1]=nz*s+ny*c;N[i*3+2]=sg*(nz*c-ny*s)}}}
   g.setAttribute('position',new THREE.BufferAttribute(P,3));if(N)g.setAttribute('normal',new THREE.BufferAttribute(N,3));else g.computeVertexNormals();
   let map=null;const im=(B.map||B.mesh.material.map)&&(B.map||B.mesh.material.map).image;if(im){const cv=document.createElement('canvas');cv.width=cv.height=1024;cv.getContext('2d').drawImage(im,0,0,1024,1024);map=new THREE.CanvasTexture(cv);map.flipY=false}   /* its own copy of the texture, smaller, for this little canvas */
-  const G=new THREE.Group(),mesh=new THREE.Mesh(g,B.plain?new THREE.MeshStandardMaterial({map,roughness:0.62,metalness:0}):bod3Mat(map,!!B.text,!!B.face,true));   /* in their own clothes here, whatever wave is loaded behind */mesh.position.set(-bx,0,-bz);G.add(mesh);
+  const G=new THREE.Group(),mesh=new THREE.Mesh(g,B.plain?new THREE.MeshStandardMaterial({map,roughness:0.62,metalness:0}):childMat(bod3Mat(map,!!B.text,!!B.face,true),B,bx));   /* in their own clothes here, whatever wave is loaded behind */mesh.position.set(-bx,0,-bz);G.add(mesh);
   if(B.hatM){const hmc=B.hatM.material.clone();hmc.onBeforeCompile=B.hatM.material.onBeforeCompile;const h=new THREE.Mesh(B.hatM.geometry,hmc);h.position.copy(mesh.position);G.add(h)}
   if(B.prop){const d=B.prop.G.clone(),vi=B.prop.vi;d.position.set(P[vi*3]-bx,P[vi*3+1],P[vi*3+2]-bz);d.scale.setScalar(1/(RIG.s||1.84));d.visible=true;G.add(d)}   /* the caipirinha, in the hand that hangs down now */
-  G.userData.top=top;G.rotation.y=0;return SV.m[bk]=G}
+  G.userData.top=top;if(bk==='theo2'&&RIG.mesh){const pg=RIG.mesh.geometry;if(!pg.boundingBox)pg.computeBoundingBox();const sc=1.28/((RIG.s||1.8)*top);G.scale.setScalar(sc);G.userData.top=Math.max(top*sc,pg.boundingBox.max.y)}   /* 2026-11-19 THEO 2 at his real size against a grown-up's frame: filling it like the adults, he read as a teenager */
+  G.rotation.y=0;return SV.m[bk]=G}
 function svPick(i,pin){SV.i=(i+SV_L.length)%SV_L.length;if(pin)SV.pin=SV.i;SV.hold=0;document.querySelectorAll('.surfBtns .pbtn').forEach(b=>b.classList.toggle('pv',b.id===SV_L[SV.i][0]));const n=document.getElementById('svName');if(n){n.textContent=SV_L[SV.i][2];n.classList.add('on')}
   try{for(const k of [SV_L[SV.i][1],SV_L[(SV.i+1)%SV_L.length][1]])if(k!=='pro')bodyEnsure(k)}catch(e){}}
 function svShow(on){const cv=document.getElementById('svView');SV.on=!!on&&!!cv;if(!SV.on){cancelAnimationFrame(SV.raf);SV.raf=0;document.querySelectorAll('.surfBtns .pbtn.pv').forEach(b=>b.classList.remove('pv'));return}
@@ -3213,13 +3228,24 @@ function localNeck(){if(RIG.lNeck)return RIG.lNeck;const F=FACE_SIGN,G=new THREE
    same bones: every move, the replays and the camera work as they are. While his body is on, the surfer's mesh, the painted curls and the necklace stay hidden */
 /* 2026-11-19 the surfers' own 3D bodies (Tripo H3.1 from their Magnific pictures, cut to 26k triangles), each bound to the pro's skeleton and fitted by the line of the arms */
 function theo2On(){return kidOn()&&!!PROG.theo2}function pro2On(){return !kidOn()&&!PROG.girl&&!PROG.local&&!PROG.haole&&!PROG.talent&&!!PROG.pro2}function haoleOn(){return !kidOn()&&!PROG.girl&&!PROG.local&&!!PROG.haole}function talentOn(){return !kidOn()&&!PROG.girl&&!PROG.local&&!PROG.haole&&!!PROG.talent}   /* 2026-11-19 THE HAOLE (a sunburnt tourist in arm floaties, caipirinha in hand) and THE TALENT (a skinny blond kid who surfs shirtless in baggy shorts) */   /* 2026-11-19 THEO 2 and PRO 2: the same two surfers in their own 3D bodies, side by side with the made-up ones, to compare */
-const BODIES={local:{file:'the-local',on:()=>localOn(),text:1,hand:0.78,head:0.76,chinNeck:1,hr:1},girl:{file:'the-girl',on:()=>girlOn(),slim:0.92,head:0.9,face:1,smileK:1.5,hat:1},theo2:{file:'theo-2',on:()=>theo2On(),slim:0.86,face:1,smileK:2.0,head:0.8,chinNeck:1,noseLo:0.25,mouthK:0.144,eyeK:0.17,eyes:0.72},pro2:{file:'pro-2',on:()=>pro2On(),slim:1.07,loose:1,head:0.76,chinNeck:1,hr:1},haole:{file:'the-haole',on:()=>haoleOn(),armUp:1,drink:1,noSuit:1,head:0.67,chinNeck:1,hr:1},talent:{file:'the-talent',on:()=>talentOn(),armUp:1,loose:1,noSuit:1,head:0.76,chinNeck:1,hr:1}   /* 2026-11-19 THE LOCAL, PRO 2, THE HAOLE and THE TALENT drawn to THE PRO's proportions: their heads ~17% of their height came from the 3D generator's cartoon style, now ~13% like his */};   /* THE TALENT surfs shirtless, always, and THE HAOLE keeps his holiday shirt on: no wetsuit on the cold waves */
+const BODIES={local:{file:'the-local',on:()=>localOn(),text:1,hand:0.78,head:0.76,chinNeck:1,hr:1},girl:{file:'the-girl',on:()=>girlOn(),slim:0.92,head:0.9,face:1,smileK:1.5,hat:1},theo2:{file:'theo-2',on:()=>theo2On(),slim:0.86,face:1,smileK:2.0,head:1.0,chinNeck:1,noseLo:0.25,mouthK:0.144,eyeK:0.17,eyes:0.94,child:1,baseSmile:0.6,mouthW:1.12},pro2:{file:'pro-2',on:()=>pro2On(),slim:1.07,loose:1,head:0.76,chinNeck:1,hr:1},haole:{file:'the-haole',on:()=>haoleOn(),armUp:1,drink:1,noSuit:1,head:0.67,chinNeck:1,hr:1},talent:{file:'the-talent',on:()=>talentOn(),armUp:1,loose:1,noSuit:1,head:0.76,chinNeck:1,hr:1}   /* 2026-11-19 THE LOCAL, PRO 2, THE HAOLE and THE TALENT drawn to THE PRO's proportions: their heads ~17% of their height came from the 3D generator's cartoon style, now ~13% like his */};   /* THE TALENT surfs shirtless, always, and THE HAOLE keeps his holiday shirt on: no wetsuit on the cold waves */
 for(const k of Object.keys(BODIES))Object.assign(BODIES[k],{mesh:null,ready:false,req:0});
 const LM=BODIES.local;
 let INKT=null;function inkTex(){if(INKT)return INKT;const c=document.createElement('canvas');c.width=512;c.height=160;const x=c.getContext('2d');x.fillStyle='#000';x.font='900 118px Impact, "Arial Black", "Helvetica Neue", sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('FUCK OFF',256,84,500);   /* THE LOCAL's loose tee, a worn black print */
   x.globalCompositeOperation='destination-out';let sd=7;const r=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};for(let i=0;i<1100;i++){x.globalAlpha=0.2+0.6*r();x.beginPath();x.arc(r()*512,r()*160,0.5+2.0*r(),0,6.283);x.fill()}
   INKT=new THREE.CanvasTexture(c);INKT.anisotropy=4;return INKT}
 const EXPU={smile:{value:0},focus:{value:0}},EXP={smile:0,focus:0,until:-9};
+function childMat(m,B,bx){if(!B||!B.child||!B._lm||!m)return m;const L=B._lm,eY=L.nY+(B.eyeK||0.15)*L.H,ob=m.onBeforeCompile;m.defines=m.defines||{};m.defines.CHILD=1;   /* 2026-11-19 THEO 2 seven, not thirteen: the texture's grown-up shading under his eyes, beside his nose and round his mouth softened, rosy cheeks, and a milk tooth missing from his grin */
+  const U={uCF:{value:new THREE.Vector4(L.neckY,eY-0.02*L.H,L.nb-0.34*L.H,bx)},uCk:{value:new THREE.Vector4(L.nY-0.04*L.H,0.21*L.H,0.11*L.H,0.10*L.H)},uTooth:{value:B._tooth||new THREE.Vector4(9,9,9,9)}};
+  m.onBeforeCompile=sh=>{ob(sh);Object.assign(sh.uniforms,U);sh.fragmentShader='uniform vec4 uCF;uniform vec4 uCk;uniform vec4 uTooth;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+     {float cf=(vMN.x-uCF.w)*FSX,fk=smoothstep(uCF.x,uCF.x+0.012,vMY)*(1.-smoothstep(uCF.y-0.01,uCF.y,vMY))*smoothstep(uCF.z,uCF.z+0.02,cf);
+      if(fk>0.01){vec2 o=vec2(0.0035,0.);vec3 av=(texture2D(map,vMapUv+o).rgb+texture2D(map,vMapUv-o).rgb+texture2D(map,vMapUv+o.yx).rgb+texture2D(map,vMapUv-o.yx).rgb+diffuseColor.rgb*2.)/6.;
+        float tl=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,av,0.65*fk*(1.-smoothstep(0.35,0.6,tl)));}
+      float ck=0.;for(int s=0;s<2;s++){float sg=s==0?1.:-1.;vec2 d=vec2((vMY-uCk.x)/uCk.z,(vMN.z-sg*uCk.y)/uCk.w);ck=max(ck,1.-dot(d,d));}ck=clamp(ck,0.,1.)*smoothstep(uCF.z,uCF.z+0.02,cf);
+      diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(1.08,0.84,0.82),0.38*ck*ck);
+      float tk=smoothstep(uTooth.x-0.0005,uTooth.x+0.0005,vMN.z)*(1.-smoothstep(uTooth.y-0.0005,uTooth.y+0.0005,vMN.z))*smoothstep(uTooth.z-0.0006,uTooth.z+0.0006,vMY)*(1.-smoothstep(uTooth.w-0.0006,uTooth.w+0.0006,vMY))*step(uCF.z,cf);
+      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.11,0.025,0.03),tk*smoothstep(0.25,0.45,dot(diffuseColor.rgb,vec3(.3,.59,.11))));}`)};
+  const k0=m.customProgramCacheKey;m.customProgramCacheKey=()=>(k0?k0.call(m):'')+'-child';return m}
 const SUIT0={value:0};function bod3Mat(map,text,face,noSuit){if(map){map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4}
   const mat=new THREE.MeshStandardMaterial({map,roughness:0.62,metalness:0,envMapIntensity:0.9});mat.defines={};if(text)mat.defines.INK=1;if(face)mat.defines.FACE=1;   /* the game's finish on their own bodies: matte hair, the rim light, the fullsuit on the cold waves */
   mat.onBeforeCompile=sh=>{sh.uniforms.uSuit=noSuit?SUIT0:SUIT;sh.uniforms.uRim=RIM;if(text)sh.uniforms.uInk={value:inkTex()};if(face){sh.uniforms.uSmile=EXPU.smile;sh.uniforms.uFocus=EXPU.focus}
@@ -3269,6 +3295,22 @@ function bodyEnsure(k){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.mesh)ret
           if(B.mouthW){const d=Math.hypot(y-mY,z)/mR;if(d<1){const w=1-d*d;z*=1+(B.mouthW-1)*w}}
           const bs=B.baseSmile||0;gp.setXYZ(i,gp.getX(i)+dS[i*3]*bs,y+dS[i*3+1]*bs,bz+z+dS[i*3+2]*bs)}}}
 
+    if(B.child&&B._lm){const {nY,H,mY,nb}=B._lm,nk=B._lm.neckY,eY=nY+(B.eyeK||0.15)*H,FS=FACE_SIGN,ss=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t)};   /* 2026-11-19 THEO 2 seven, not thirteen (the user): a child's face on his own head. Rounder, fuller skull above the brows, a small button nose, a short narrow chin, bigger eyes, round cheeks */
+      let hx=0,hn=0,ht=-9;for(let i=0;i<gp.count;i++){const y=gp.getY(i);if(y>eY&&Math.abs(gp.getZ(i)-bz)<0.12){hx+=gp.getX(i);hn++}if(y>ht)ht=y}hx=hn?hx/hn:bx;const hY=(eY+ht)/2,eZ=0.15*H,eR=0.10*H;
+      for(let i=0;i<gp.count;i++){let x=gp.getX(i),y=gp.getY(i),z=gp.getZ(i)-bz;if(y<nk-0.15*H)continue;const f=(x-bx)*FS;
+        {const w=ss(eY-0.05*H,eY+0.30*H,y),k=1+0.10*w;x=hx+(x-hx)*k;z*=k;y=hY+(y-hY)*(1+0.06*w)}   /* the skull */
+        if(f>nb-0.45*H){const front=ss(nb-0.45*H,nb-0.25*H,f);
+          {const d=Math.hypot((y-nY)/(0.13*H),z/(0.11*H));if(d<1){const w=(1-d*d)*front,pr=Math.max(0,f-(nb-0.16*H));x-=FS*pr*0.60*w;z*=1-0.34*w;y+=0.018*H*w}}   /* the nose: short, small, a little turned up */
+          {const w=ss(mY+0.02*H,nk+0.02*H,y)*ss(nk-0.10*H,nk,y)*front;x-=FS*0.03*H*w;z*=1-0.16*w;y+=0.06*H*w}   /* the chin and jaw: shorter and narrower */
+          for(const sg of [1,-1]){const d=Math.hypot((y-eY)/(1.25*eR),(z-sg*eZ)/(1.25*eR));if(d<1){const w=(1-d*d)*front;y=eY+(y-eY)*(1+0.36*w);z=sg*eZ+(z-sg*eZ)*(1+0.36*w)}}   /* bigger eyes */
+          for(const sg of [1,-1]){const d=Math.hypot((y-(nY-0.03*H))/(0.17*H),(z-sg*0.22*H)/(0.15*H));if(d<1){const w=(1-d*d)*front;z+=sg*0.04*H*w;x+=FS*0.02*H*w}}}   /* round cheeks */
+        gp.setXYZ(i,x,y,bz+z)}}
+    if(B.child&&B._lm)try{const L=B._lm,im=src.material.map&&src.material.map.image,ua=g.attributes.uv,ix=g.index?g.index.array:null;if(im&&ua){const S=1024,cv=document.createElement('canvas');cv.width=cv.height=S;const c2=cv.getContext('2d',{willReadFrequently:true});c2.drawImage(im,0,0,S,S);const D=c2.getImageData(0,0,S,S).data,fl=src.material.map.flipY,Zs=[],Ys=[],nt=ix?ix.length/3:gp.count/3;   /* 2026-11-19 where his two big front teeth are painted: the white of the texture inside the mouth, sampled across its triangles */
+      for(let t=0;t<nt;t++){const a=ix?ix[t*3]:t*3,b=ix?ix[t*3+1]:t*3+1,c=ix?ix[t*3+2]:t*3+2;if(Math.abs(gp.getY(a)-L.mY)>0.3*L.H)continue;
+        for(let i=0;i<=6;i++)for(let j=0;j<=6-i;j++){const u=i/6,v=j/6,w=1-u-v,X=gp.getX(a)*w+gp.getX(b)*u+gp.getX(c)*v,Y=gp.getY(a)*w+gp.getY(b)*u+gp.getY(c)*v,Z=gp.getZ(a)*w+gp.getZ(b)*u+gp.getZ(c)*v-bz;
+          if(Math.abs(Y-L.mY)>0.10*L.H||(X-bx)*FACE_SIGN<L.nb-0.30*L.H||Math.abs(Z)>0.2*L.H)continue;const uu=ua.getX(a)*w+ua.getX(b)*u+ua.getX(c)*v,vv=ua.getY(a)*w+ua.getY(b)*u+ua.getY(c)*v;
+          const px=Math.min(S-1,Math.max(0,Math.floor((uu-Math.floor(uu))*S))),py=Math.min(S-1,Math.max(0,Math.floor((fl?1-vv:vv)*S))),q=(py*S+px)*4,lu=(0.3*D[q]+0.59*D[q+1]+0.11*D[q+2])/255;if(lu>0.62&&Math.abs(D[q]-D[q+2])<60){Zs.push(Z);Ys.push(Y)}}}
+      if(Zs.length>40){Zs.sort((p,q)=>p-q);Ys.sort((p,q)=>p-q);const pc=(A,f)=>A[Math.floor(f*(A.length-1))],zc=pc(Zs,0.5);B._tooth=new THREE.Vector4(bz+zc+0.002*L.H,bz+zc+0.045*L.H,pc(Ys,0.06),pc(Ys,0.94))}}}catch(e){}   /* one of the two: the gap of a lost milk tooth */
     if(B.hand&&B.hand<1){let zmax=0;for(let i=0;i<gp.count;i++)zmax=Math.max(zmax,Math.abs(gp.getZ(i)-bz));let wz=0,wa=1e9;   /* 2026-11-19 smaller hands (THE LOCAL): each hand shrunk toward its wrist, found as the thinnest slice of the arm out past the elbow */
       for(let z0=0.62*zmax;z0<zmax-0.035;z0+=0.004){let n=0,y0=9,y1=-9,x0=9,x1=-9;for(let i=0;i<gp.count;i++){const az=Math.abs(gp.getZ(i)-bz);if(az>=z0&&az<z0+0.004){const y=gp.getY(i),x=gp.getX(i);if(y<y0)y0=y;if(y>y1)y1=y;if(x<x0)x0=x;if(x>x1)x1=x;n++}}if(n>4){const ar=(y1-y0)*(x1-x0);if(ar<wa){wa=ar;wz=z0}}}
       if(wz>0)for(const sg of [1,-1]){let cx=0,cy=0,n=0;for(let i=0;i<gp.count;i++){const dz=(gp.getZ(i)-bz)*sg;if(dz>=wz&&dz<wz+0.006){cx+=gp.getX(i);cy+=gp.getY(i);n++}}if(!n)continue;cx/=n;cy/=n;const cz=bz+sg*wz;
@@ -3323,7 +3365,7 @@ function bodyEnsure(k){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.mesh)ret
         const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.BufferAttribute(P,3));fg.setAttribute('color',new THREE.Float32BufferAttribute(col,3));fg.computeVertexNormals();
         G.add(new THREE.Mesh(fg,new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.42,metalness:0})));
         G.visible=false;scene.add(G);B.prop={G,vi:ni,vo:no,side:-1}}}
-    const M=new THREE.SkinnedMesh(g,bod3Mat(src.material.map,!!B.text,!!B.face,!!B.noSuit));M.frustumCulled=false;M.castShadow=M.receiveShadow=true;riderG.add(M);M.bind(pm.skeleton,new THREE.Matrix4());M.visible=false;g.computeBoundingBox();B.top=g.boundingBox.max.y;B.mesh=M;B.ready=true;try{kidApply()}catch(e){bodySync()}})}
+    const M=new THREE.SkinnedMesh(g,childMat(bod3Mat(src.material.map,!!B.text,!!B.face,!!B.noSuit),B,bx));M.frustumCulled=false;M.castShadow=M.receiveShadow=true;riderG.add(M);M.bind(pm.skeleton,new THREE.Matrix4());M.visible=false;g.computeBoundingBox();B.top=g.boundingBox.max.y;B.mesh=M;B.ready=true;try{kidApply()}catch(e){bodySync()}})}
 function bodySync(){let act=null;for(const k of Object.keys(BODIES)){if(k==='act')continue;const B=BODIES[k],on=B.on()&&B.ready&&RIG.on;if(B.mesh)B.mesh.visible=on;if(B.hatM)B.hatM.visible=on;if(B.prop)B.prop.G.visible=on;if(on)act=k}
   if(RIG.mesh)RIG.mesh.visible=RIG.on&&!act;BODIES.act=act;
   if(act==='local'){LOCALU.value=0;if(RIG.lHair)RIG.lHair.visible=false;if(RIG.lNeck)RIG.lNeck.visible=false}
@@ -3332,7 +3374,8 @@ function bodySync(){let act=null;for(const k of Object.keys(BODIES)){if(k==='act
   return act}
 const _prV=new THREE.Vector3(),_prS=new THREE.Vector3();function propTick(){for(const k in BODIES){const B=BODIES[k];if(!B||!B.prop||!B.mesh)continue;const G=B.prop.G;if(!G.visible)continue;_prS.subVectors(J.haB,J.elB).normalize();_prV.copy(J.haB).addScaledVector(_prS,0.06);riderG.localToWorld(_prV);G.position.copy(_prV);   /* in his back hand, the one he holds up: the hand joint, a little out into the palm */riderG.getWorldScale(_prS);G.scale.setScalar(_prS.y);G.rotation.set(0.12,riderG.rotation.y,0.08)}}   /* 2026-11-19 props held in a hand (THE HAOLE's caipirinha) follow the hand but stay upright */
 function expTick(dt){propTick();const now=game.waveAge||0,ride=game.state==='ride'&&(sf.mode==='ride'||sf.mode==='air'),sm=now<EXP.until||game.state==='end'?1:0,fo=ride&&!sm&&(sf.V>7.2||game.inTube||!!sf.rh||!!sf.cv||!!sf.c360)?1:0;   /* 2026-11-19 THE GIRL's face: fired up on the wave, smiling after a move */
-  EXP.smile=damp(EXP.smile,sm,sm?8:2.5,dt);EXP.focus=damp(EXP.focus,fo,4,dt);EXPU.smile.value=EXP.smile;EXPU.focus.value=EXP.focus*(1-EXP.smile)}
+  {const kid=BODIES.act==='theo2';if(kid){const s1=sf.mode==='wipe'?0.25:1;EXP.smile=damp(EXP.smile,s1,3,dt);EXP.focus=damp(EXP.focus,0,6,dt)}else{EXP.smile=damp(EXP.smile,sm,sm?8:2.5,dt);EXP.focus=damp(EXP.focus,fo,4,dt)}}   /* 2026-11-19 THEO 2 grins the whole wave (the user: 'sorrir muito'); only a wipeout takes most of it away */
+  EXPU.smile.value=EXP.smile;EXPU.focus.value=EXP.focus*(1-EXP.smile)}
 function lmEnsure(){bodyEnsure('local')}
 function lmSync(){return bodySync()}
 function localApply(){const l=localOn()?1:0,was=LOCALU.value;LOCALU.value=l;RIG.local=l;if(l)try{lmEnsure()}catch(e){}SKINT.value.setRGB(l?0.62:1,l?0.50:1,l?0.42:1);if(l&&RIG.ready&&RIG.b&&RIG.b.head){localHair();localNeck()}if(RIG.lHair)RIG.lHair.visible=!!l;if(RIG.lNeck)RIG.lNeck.visible=!!l;lmSync();if(l){LYC.c.value.set(0.10,0.13,0.045);LYC.t.value.set(0.90,0.88,0.80)}else if(was&&typeof setLycra==='function')setLycra(PROG.lyc||'red')}
@@ -3340,7 +3383,7 @@ function kidApply0(){const k=kidOn()?1:0;KIDU.value=k;RIG.kid=k;if(k)kidBones();
   if(RIG.mesh){const mt=RIG.mesh.material;if(!RIG.baseMap)RIG.baseMap=mt.map;if(k&&!RIG.kidMap)RIG.kidMap=kidTexBuild();const want=k&&RIG.kidMap?RIG.kidMap:RIG.baseMap;if(mt.map!==want){mt.map=want}
     if(k&&!RIG.kHead&&RIG.b.head)kidHeadBuild();if(RIG.kHead)RIG.kHead.visible=!!k;
     if(RIG.mesh.receiveShadow!==!k){RIG.mesh.receiveShadow=!k;mt.needsUpdate=true}}   /* the kid takes no shadows on himself (like his head): at his size the shadow map only left dark blotches under the arms */
-  girlApply();const T2=BODIES.theo2,sc=k?(theo2On()&&T2.ready?1.46/((RIG.s||1.8)*(T2.top||1.1)):1.334/(RIG.kTop||1.9)):girlOn()?0.95:localOn()?1.20:haoleOn()?1.15:talentOn()?1.10:pro2On()?1.12:1;   /* 2026-11-19 the grown-up 3D surfers taller, with heads of a normal size (less of a cartoon): THE LOCAL still the tallest */   /* 2026-11-19 PRO 2: taller, more athletic */   /* 2026-11-19 THE LOCAL stands taller */   /* 2026-11-18 15% bigger on the board (1.16 -> 1.33 m with his hair) */riderG.scale.set(sc,sc,sc*(riderG.scale.z<0?-1:1))}   /* the softboard is ridden by Theo, five years old (2026-11-18: a year younger), top of his hair included */
+  girlApply();const T2=BODIES.theo2,sc=k?(theo2On()&&T2.ready?1.28/((RIG.s||1.8)*(T2.top||1.1)):1.334/(RIG.kTop||1.9)):girlOn()?0.95:localOn()?1.20:haoleOn()?1.15:talentOn()?1.10:pro2On()?1.12:1;   /* 2026-11-19 the grown-up 3D surfers taller, with heads of a normal size (less of a cartoon): THE LOCAL still the tallest */   /* 2026-11-19 PRO 2: taller, more athletic */   /* 2026-11-19 THE LOCAL stands taller */   /* 2026-11-18 15% bigger on the board (1.16 -> 1.33 m with his hair) */riderG.scale.set(sc,sc,sc*(riderG.scale.z<0?-1:1))}   /* the softboard is ridden by Theo, five years old (2026-11-18: a year younger), top of his hair included */
 softColor();buildBoard(BOARD);
 
 /* ───────────────────────── rider ───────────────────────── */
