@@ -2812,10 +2812,10 @@ function kidHeadMod(mat){mat.onBeforeCompile=sh=>{
      float pos=max(max(smoothstep(-0.03,0.04,p.y),smoothstep(0.12,-0.06,p.x)*smoothstep(-0.32,-0.20,p.y)),smoothstep(0.22,0.28,abs(p.z))*smoothstep(-0.22,-0.14,p.y));   /* (the locks over the temples too) */
      float hm=(1.-smoothstep(0.54,0.60,br))*smoothstep(0.10,0.18,L)*pos;hm=max(hm,khNape(p));
      float fz0=smoothstep(0.06,0.16,p.x)*(1.-smoothstep(0.22,0.30,abs(p.z)));
-     float yE=0.066+0.085*p.z+0.016*(khn(vec3(p.z*48.,1.7,0.))-0.5)-0.012*pow(abs(sin(p.z*38.+0.6)),3.);
-     float hf=smoothstep(yE-0.005,yE+0.005,p.y);hm=mix(hm,hf,fz0);   /* over the forehead the hair is his fringe, swept over to his left, with a ragged edge */
+     float yE=0.034+0.012*(khn(vec3(p.z*48.,1.7,0.))-0.5)-0.030*pow(abs(sin(p.z*30.+0.6)),3.)+0.014*smoothstep(0.14,0.26,abs(p.z));
+     float hf=smoothstep(yE-0.005,yE+0.005,p.y);hm=mix(hm,hf,fz0);   /* over the forehead the hair is his fringe, all combed forward: straight across, a little lower, the ends falling in points (2026-11-18: it used to be swept over to his left) */
      diffuseColor.rgb=mix(diffuseColor.rgb,SK,fz0*(1.-hf)*smoothstep(-0.075,-0.05,p.y));   /* the forehead under it, clear skin */
-     if(hm>0.){float n1=khn(vec3(p.z*30.,p.y*4.5,p.x*30.)),n2=khn(p*5.+3.1),n3=khn(vec3(p.z*70.,p.y*9.,p.x*70.));
+     if(hm>0.){float n1=khn(vec3(p.z*32.,p.y*4.5,p.x*4.5)),n2=khn(p*5.+3.1),n3=khn(vec3(p.z*72.,p.y*9.,p.x*9.));   /* the strands run from the crown forward over the top and down over the forehead: all combed forward */
        float m=clamp(smoothstep(0.48,0.85,0.50*n1+0.30*n2+0.20*n3)*0.70+0.45*smoothstep(0.08,0.32,p.y)+0.25*smoothstep(0.10,0.30,p.x)*smoothstep(-0.02,0.15,p.y)*(1.-smoothstep(0.16,0.24,abs(p.z)))+0.05-0.22*smoothstep(0.18,0.26,abs(p.z))*(1.-smoothstep(0.10,0.20,p.y)),0.,1.);   /* the sides, over the ears, a little darker */
        m=clamp(m*1.2+0.12,0.,1.);m=m*m*(3.-2.*m);vec3 hc=mix(vec3(0.50,0.40,0.27),vec3(0.95,0.86,0.63),m)*clamp(0.94+0.22*(L-0.36)+0.14*(n3-0.5),0.84,1.10);   /* 2026-11-17 blond with darker brown parts (it read as ginger: too much red in both ends); the dark strands take more room */
        diffuseColor.rgb=mix(diffuseColor.rgb,pow(hc,vec3(2.2)),hm);}
@@ -2870,6 +2870,7 @@ function kidReshape(ge){if(ge.userData.kidR)return;ge.userData.kidR=1;const P=ge
     if(x>0.29&&az<0.11&&y>-0.31&&y<-0.06){const k=cl((0.11-az)/0.04)*cl((y+0.31)/0.04)*cl((-0.06-y)/0.04);nx+=((0.29+(x-0.29)*0.72)-x)*k}   /* a small child's nose (2026-11-18 smaller still: 0.90 -> 0.72) */
     if(x>0.22&&y>-0.10&&y<0.07&&az<0.30){const k=cl((y+0.10)/0.05)*cl((0.07-y)/0.05)*cl((0.30-az)/0.06);nx-=(x-0.22)*0.40*k}   /* 2026-11-18 no heavy brow ridge: the brow line pushed back flat, a child's smooth forehead (it read as a caveman) */
     if(y>0.05&&x>0.05){const k=cl((y-0.05)/0.10)*cl((x-0.05)/0.10)*(1-cl((y-0.30)/0.10));nx+=0.025*k}   /* and a rounder, fuller forehead */
+    if(y>0.10){const k=cl((y-0.10)/0.14)*cl((x+0.25)/0.35)*(1-cl((az-0.30)/0.08));nx+=0.035*k;if(x>0.12&&y<0.24)ny-=0.012*cl((x-0.12)/0.08)*cl((0.24-y)/0.06)}   /* 2026-11-18 the hair on top combed forward: its volume leans to the front and the fringe comes down over the brow */
     {const e=((y+0.335)/0.13)**2+(z/0.23)**2,mk=(1-sst(FP[5],1.0,e))*sst(0.08,0.11,x)*(1-sst(-0.255,-0.22,y));
       if(mk>0){const mm=Math.max(0,-0.345-ny),px=FP[0]+FP[1]*(ny+0.20)-FP[2]*mm*mm-0.362*(1-Math.sqrt(Math.max(0,1-(z/FP[4])**2)));nx+=(px-nx)*mk}}   /* 2026-11-18 (c) the caricature's open grin closed into a child's profile: the upper lip just under the nose, set back from its tip, and the little chin tucking in under the lower lip (it used to be pushed out flat, level with the nose: a caveman's muzzle) */
     {const r=cl((-0.18-ny)/0.12)*cl((x+0.02)/0.12);ny+=FP[3]*r}   /* and all of the face under the nose brought up: the mouth close under the nose, as a small boy's is */
