@@ -199,9 +199,25 @@ body.touch #pop{bottom:auto;top:calc(var(--bar,5.5vh) + 11vh)}
 body.touch #tube{bottom:auto;top:calc(var(--bar,5.5vh) + 10vh)}
 .thelp{display:none;margin:10px 0 0 4px;font-size:12px;letter-spacing:.14em;line-height:1.6;opacity:.85;max-width:620px}
 body.touch .thelp{display:block}
-#rotate{position:absolute;inset:0;z-index:70;display:none;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:#0c3e52;color:#fff;font-size:15px;letter-spacing:.3em;font-weight:700;text-align:center;padding:24px;line-height:1.6}
-#rotate b{font-size:64px;display:block;animation:rot 2.4s ease-in-out infinite}
-@keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+#rotate{position:absolute;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:max(28px,env(safe-area-inset-top,0px)) 28px max(28px,env(safe-area-inset-bottom,0px));background:radial-gradient(ellipse at 50% 38%,#162c5c,#040a18 74%);color:#fff;text-align:center;overflow:hidden}   /* 2026-11-19 the turn-your-phone screen, dressed like the loading tour and the menu card: navy, the pink-to-orange brush, the logo, a drawn phone that turns */
+#rotate::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--ps-grad)}
+.rtBox{display:flex;flex-direction:column;align-items:center;width:min(340px,100%)}
+.rtLogo{display:block;width:min(58vw,250px);height:auto;margin-bottom:clamp(18px,5vh,44px);filter:drop-shadow(0 6px 22px rgba(255,79,158,.25))}
+.rtArt{display:block;width:min(52vw,210px);height:auto;overflow:visible}
+.rtTxt{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:clamp(14px,4vh,34px)}
+.rtTxt i{font:800 11px/1 var(--ps-f);font-style:italic;letter-spacing:.3em;color:var(--ps-acc)}
+.rtTxt b{font:900 clamp(32px,10vw,46px)/.95 var(--ps-f);font-style:italic;letter-spacing:-.01em;padding:0 .1em;background:var(--ps-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rtTxt p{font:600 14px/1.5 var(--ps-f);letter-spacing:.02em;opacity:.85;margin:0;max-width:280px}
+.rtPh{transform-box:view-box;transform-origin:0 0;animation:rtTurn 3.4s cubic-bezier(.65,0,.35,1) infinite}
+.rtArc,.rtHd{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.rtArc{stroke-dasharray:140;stroke-dashoffset:140;animation:rtArc 3.4s ease-in-out infinite}.rtHd{opacity:0;animation:rtHd 3.4s linear infinite}
+.rtWv{stroke-dasharray:130;stroke-dashoffset:130;animation:rtWv 3.4s ease-out infinite}
+@keyframes rtTurn{0%,18%{transform:rotate(0)}44%,84%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+@keyframes rtArc{0%,10%{stroke-dashoffset:140;opacity:1}38%,74%{stroke-dashoffset:0;opacity:1}88%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes rtHd{0%,34%{opacity:0}40%,74%{opacity:1}88%,100%{opacity:0}}
+@keyframes rtWv{0%,44%{stroke-dashoffset:130;opacity:1}66%,88%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@media (prefers-reduced-motion:reduce){.rtPh{animation:none;transform:rotate(-90deg)}.rtArc,.rtWv{animation:none;stroke-dashoffset:0}.rtHd{animation:none;opacity:1}}
+@media (max-height:560px){.rtLogo{width:min(44vw,190px);margin-bottom:14px}.rtArt{width:min(36vw,150px)}.rtTxt{margin-top:10px}.rtTxt b{font-size:30px}}
 #ld{position:fixed;inset:0;z-index:300;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:auto;transition:opacity .6s}   /* the black splash: only the logo and a loading bar, before the first screen */
 #ld.off{opacity:0;pointer-events:none}#ld img{width:min(58vw,520px);height:auto;filter:drop-shadow(0 6px 26px rgba(255,79,158,.28))}#ld b{font-size:10px;letter-spacing:.34em;color:#fff;opacity:.55}#ld i{display:block;width:min(40vw,260px);height:3px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}#ld u{display:block;height:100%;width:4%;background:var(--ps-grad);transition:width .25s}
 @media (orientation:portrait){body.touch #rotate{display:flex}body.touch #psAd{display:none!important}}
@@ -309,7 +325,7 @@ h1,.wzH,#pop .p b,#hud b,.tutCard b,#end .nota,.pkBox b,.wpBox h3,.spBox h3,#pau
 .prog,#end .prg,#end .heat,#end .unl div{font-weight:700;font-style:italic;font-stretch:104%;letter-spacing:.14em}
 .tr b{font-weight:800;font-style:italic;letter-spacing:.08em}.grid b{font-weight:800;letter-spacing:.02em}
 #music b{font-weight:800;font-style:italic;letter-spacing:.02em}#music span{font-weight:600;letter-spacing:.14em}
-#rotate,#fsSwipe b{font-weight:800;font-style:italic;font-stretch:104%;letter-spacing:.2em}
+#fsSwipe b{font-weight:800;font-style:italic;font-stretch:104%;letter-spacing:.2em}
 #end .nota small{font-weight:700;font-style:italic;font-stretch:112%;letter-spacing:.3em}
 #muteBtn{left:auto;right:max(3vw,env(safe-area-inset-right,0px))}#muteBtn{display:none!important}#mMute{display:flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0!important;border-right:1px solid rgba(255,255,255,.18)!important;margin-right:2px}#mMute svg{width:18px;height:18px;display:block}#mMute.off{color:var(--ps-acc)!important;opacity:1!important}   /* the mute switch: a speaker icon at the head of the music player */body:not(.riding) #waveBtn{display:none!important}body:not(.riding) #muteBtn{bottom:calc(var(--bar,5.5vh) + 1.5vh)}   /* CHANGE WAVE only while surfing; on the menus the sound switch drops into its corner */#keys{bottom:calc(var(--bar,5.5vh) + 2vh + 64px)}   /* the sound switch stacks over CHANGE WAVE on the right, away from the menu column and the score card */
 #rep{left:50%;right:auto;transform:translateX(-50%);top:calc(var(--bar,5.5vh) + 2.2vh + 10px);font-size:18px}   /* REPLAY sits top centre, under the wave bar, clear of the music player */
@@ -900,7 +916,7 @@ body:not(.touch) #spotMap{margin:0;min-width:0}
     <div class="tlRow"><div class="tlArt"><svg id="tlSvg" viewBox="0 0 320 180" aria-hidden="true"></svg><video id="tlVid" muted playsinline loop preload="auto" aria-hidden="true"></video><span class="tlRep" id="tlRepL">&#9679; REPLAY · SIDE CAM</span></div><div class="tlTxt"><i id="tlN">1 / 7</i><b id="tlT">SNAP</b><div id="tlKey" class="tlKey"><small id="tlKw">PRESS</small><kbd id="tlKb">&#8595;</kbd><em id="tlKx"></em></div><p id="tlD"></p></div></div>
     <div class="tlBar"><u id="tlU"></u></div><div class="tlNav"><button id="tlPrev" type="button">&#8249; BACK</button><span id="tlDots" class="tlDots"></span><button id="tlNext" type="button">NEXT MOVE &#8250;</button></div><span class="tlLd">LOADING THE WAVE</span></div></div>
   <div id="ld"><div class="psMark"><img src="playsurf-logo.webp?v=5" alt="PlaySurf" width="1026" height="163"><b class="psChip">BETA</b></div><i><u id="ldU"></u></i><b>LOADING</b></div>
-  <div id="rotate"><b>&#128241;</b>TURN YOUR PHONE SIDEWAYS<br><small>PLAYSURF IS PLAYED IN LANDSCAPE</small></div>
+  <div id="rotate" aria-label="Turn your phone sideways"><div class="rtBox"><img class="rtLogo" src="playsurf-logo.webp?v=5" alt="PlaySurf" width="1026" height="163"><svg class="rtArt" viewBox="-100 -100 200 200" aria-hidden="true"><defs><linearGradient id="rtG" x1="0" x2="1"><stop offset="0" stop-color="#e3368f"/><stop offset=".48" stop-color="#f75a78"/><stop offset="1" stop-color="#ffab3d"/></linearGradient><linearGradient id="rtS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#21507f"/><stop offset="1" stop-color="#0b1e3c"/></linearGradient><clipPath id="rtC"><rect x="-27" y="-53" width="54" height="106" rx="8"/></clipPath></defs><path class="rtArc" d="M56 -58A80 80 0 0 0 -56 -58"/><path class="rtHd" d="M-46.3 -60.4L-56 -58L-53.3 -67.6"/><g class="rtPh"><rect x="-34" y="-61" width="68" height="122" rx="14" fill="#0a1630" stroke="#fff" stroke-width="3"/><rect x="-27" y="-53" width="54" height="106" rx="8" fill="url(#rtS)"/><g clip-path="url(#rtC)"><g transform="rotate(90)"><path d="M-53 9C-38 9-30 4-20 -3C-10 -10 2 -15 10 -9C4 -10 0 -6 1 -1C3 7 16 10 53 9V27H-53Z" fill="rgba(111,230,255,.16)"/><path class="rtWv" d="M-53 9C-38 9-30 4-20 -3C-10 -10 2 -15 10 -9C4 -10 0 -6 1 -1C3 7 16 10 53 9" fill="none" stroke="url(#rtG)" stroke-width="3.2" stroke-linecap="round"/><ellipse cx="-14" cy="-2" rx="6" ry="1.8" fill="#fff" transform="rotate(-28 -14 -2)"/><circle cx="-13" cy="-8.5" r="2.6" fill="#ffd23a"/></g></g><rect x="-7" y="-58.5" width="14" height="3" rx="1.5" fill="#fff" opacity=".5"/></g></svg><div class="rtTxt"><i>LANDSCAPE MODE</i><b>TURN YOUR PHONE</b><p>PlaySurf is played sideways. Rotate your phone to paddle out.</p></div></div></div>
   <button id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
   <div id="fsSwipe"><div class="fsHand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><b>SWIPE UP TO HIDE THE BROWSER BAR</b><span>REAL FULL SCREEN ON IPHONE: SHARE &#9656; ADD TO HOME SCREEN, THEN OPEN PLAYSURF FROM THE ICON</span><button id="fsX" aria-label="Close">&#10005;</button></div>
   <div id="rep">REPLAY</div>
@@ -1745,17 +1761,20 @@ const partMat=new THREE.ShaderMaterial({
   fragmentShader:`precision highp float;uniform sampler2D uNoise;uniform vec3 uTint;varying float vA;varying float vB;varying vec2 vS;varying float vF;varying float vK;varying vec2 vDir;
     void main(){vec2 c=gl_PointCoord-.5;float d=length(c)*2.;
       if(vK>0.5){float al=dot(c,vDir),ac=dot(c,vec2(-vDir.y,vDir.x));   /* 2026-11-18 a streak of the water fan: a thin sheet of water drawn out along its flight, in fine parallel strands with gaps between them */
+        if(abs(al)>=0.5||abs(ac)>=0.3)discard;   /* perf 2026-11-19: outside its strip the streak is fully clear (sh = 0): skip the texture reads there */
         float st=texture2D(uNoise,vec2(ac*3.2+vS.x*7.,al*0.25+vS.y)).a,st2=texture2D(uNoise,vec2(ac*7.5+vS.y*5.,al*0.4)).b;
         float strands=smoothstep(0.42,0.70,st*0.65+st2*0.35);
         float sh=(1.-smoothstep(0.30,0.50,abs(al)))*(1.-smoothstep(0.10,0.30,abs(ac)))*(0.35+0.65*strands);
         vec3 lit=mix(vec3(0.62,0.78,0.88),vec3(1.04,1.02,0.98),0.35+0.65*vB)*(0.78+0.30*strands);
         gl_FragColor=vec4(lit*uTint,sh*vA*1.5);return;}
+      if(vF<0.5?d>1.005:d>1.27)discard;   /* perf 2026-11-19: a spray drop is fully clear past its round edge (exp(-2.8 d^2) - 0.06 <= 0), a lump of white water past 1.27 (its widest lobe with the most noise): the square's corners skip the shading */
       float n=texture2D(uNoise,gl_PointCoord*0.20+vS).b,n2=texture2D(uNoise,gl_PointCoord*0.55+vS*1.7).a;
       float edge=d+(n-0.5)*0.55+(n2-0.5)*0.25;
       float aD=0.;float hb=1.;
       if(vF>0.5){vec2 ca=c/max(d*0.5,1e-3);float lb=texture2D(uNoise,ca*0.06+vS*3.1).a,lb2=texture2D(uNoise,ca*0.12+vS*5.3).b;
         float r=0.60+0.34*lb+0.10*(lb2-0.5);   /* a churned, lobed outline: never a disc */
         edge=d/r+(n-0.5)*0.34+(n2-0.5)*0.18;
+        if(edge>=1.02)discard;   /* perf 2026-11-19: outside its lobed outline the lump is fully clear (aD = 0): no need for the two reads of its holes */
         float hq=texture2D(uNoise,gl_PointCoord*0.85+vS*2.3).a,hq2=texture2D(uNoise,gl_PointCoord*1.9+vS*4.1).b;
         hb=smoothstep(0.18,0.55,hq*0.65+hq2*0.35+0.25*(1.-d));   /* aerated: holes of clear water through the thinner parts */
         aD=smoothstep(1.02,0.45,edge)*mix(0.60,1.,hb);}                                    // white water: a churned mass of foam with a broken, splashy edge
@@ -3382,7 +3401,7 @@ function bodyEnsure(k,force){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.me
         const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.BufferAttribute(P,3));fg.setAttribute('color',new THREE.Float32BufferAttribute(col,3));fg.computeVertexNormals();
         G.add(new THREE.Mesh(fg,new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.42,metalness:0})));
         G.visible=false;scene.add(G);B.prop={G,vi:ni,vo:no,side:-1}}}
-    const M=new THREE.SkinnedMesh(g,childMat(bod3Mat(src.material.map,!!B.text,!!B.face,!!B.noSuit),B,bx));M.frustumCulled=false;M.castShadow=M.receiveShadow=true;riderG.add(M);M.bind(pm.skeleton,new THREE.Matrix4());M.visible=false;g.computeBoundingBox();B.top=g.boundingBox.max.y;B.mesh=M;B.ready=true;try{kidApply()}catch(e){bodySync()}})}
+    const M=new THREE.SkinnedMesh(g,childMat(bod3Mat(src.material.map,!!B.text,!!B.face,!!B.noSuit),B,bx));M.frustumCulled=false;M.castShadow=M.receiveShadow=true;riderG.add(M);M.bind(pm.skeleton,new THREE.Matrix4());M.visible=false;g.computeBoundingBox();B.top=g.boundingBox.max.y;B.mesh=M;B.ready=true;try{const rt0=renderer.getRenderTarget(),n0=renderer.info.programs.length;renderer.setRenderTarget(composer.readBuffer);for(const o of [M,B.hatM,B.prop&&B.prop.G])if(o)renderer.compile(o,camera,scene);renderer.setRenderTarget(rt0);for(const q of renderer.info.programs.slice(n0))if(q.getUniforms)q.getUniforms()}catch(e){}   /* perf 2026-11-19: a surfer's own body (and hat, and drink) is compiled the moment it has loaded, usually on the menu: it used to be compiled on the first frame it was drawn, often in the first seconds of a ride (a 300-400 ms freeze) */try{kidApply()}catch(e){bodySync()}})}
 function bodySync(){let act=null;for(const k of Object.keys(BODIES)){if(k==='act')continue;const B=BODIES[k],on=B.on()&&B.ready&&RIG.on;if(B.mesh)B.mesh.visible=on;if(B.hatM)B.hatM.visible=on;if(B.prop)B.prop.G.visible=on;if(on)act=k}
   if(RIG.mesh)RIG.mesh.visible=RIG.on&&!act;BODIES.act=act;
   if(act==='local'){LOCALU.value=0;if(RIG.lHair)RIG.lHair.visible=false;if(RIG.lNeck)RIG.lNeck.visible=false}
@@ -6422,14 +6441,15 @@ addEventListener('resize',resize);resize();
 // Steady frames matter more than sharp ones: resolution follows what the machine can hold at a locked cadence.
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
-const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return 1.2*(c?Math.min(devicePixelRatio,2.25):Math.min(Math.max(devicePixelRatio,1.5),2.0))})();   /* 2026-11-18 everything 20% sharper (the ceiling and every level below) */   /* sharper ceiling: a computer with a plain 1x screen draws at up to 1.5x and scales down (clean edges), a Retina screen at its full 2x; a phone uses up to 2.25x of its own pixels. The controller below still only climbs there while the frame rate holds */
-const QL=[[2.4,true,4],[2.4,false,0],[2.1,false,0],[1.8,false,0],[1.56,false,0],[1.38,false,0],[1.2,false,0],[1.08,false,0],[0.96,false,0],[0.84,false,0]];   /* 2026-11-17 resolution, depth of field in replays, multisampling. Multisampling only at the very top: on a fast laptop it cost as much as the whole rest of the frame */
+const QBASE=(()=>{let c=false;try{c=matchMedia('(pointer:coarse)').matches}catch(e){}return (c?Math.min(devicePixelRatio,2.25):Math.min(Math.max(devicePixelRatio,1.5),2.0))})();   /* 2026-11-18 everything 20% sharper (the ceiling and every level below) */   /* perf 2026-11-19 (the user's choice): the 20% is taken back. A Retina screen is drawn at its own 2x again (2.4x drew 44% more pixels than the screen has, the main reason frames ran past 16 ms on an M4), a plain screen at 1.5x, a phone at its own density */   /* sharper ceiling: a computer with a plain 1x screen draws at up to 1.5x and scales down (clean edges), a Retina screen at its full 2x; a phone uses up to 2.25x of its own pixels. The controller below still only climbs there while the frame rate holds */
+const QL=[[2.4,true,0],[2.4,false,0],[2.1,false,0],[1.8,false,0],[1.56,false,0],[1.38,false,0],[1.2,false,0],[1.08,false,0],[0.96,false,0],[0.84,false,0]];   /* perf 2026-11-19: no 4x multisampling at the top level any more. On top of a picture already drawn 1.2x larger than the screen it changed nothing you could see, and it made every frame ~5x slower on the GPU (M4: 9 -> 44 ms); the menu could climb into it and the replay with it */   /* 2026-11-17 resolution, depth of field in replays, multisampling. Multisampling only at the very top: on a fast laptop it cost as much as the whole rest of the frame */
 const QCOARSE=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})(),QKEY='playsurf_q2';
 const QMIN=QCOARSE?6:(devicePixelRatio>=1.5?3:6);   /* 2026-11-17 (c) the wave and the surfer are never drawn softer than this (1.3x on a sharp computer screen, 1x otherwise): a soft picture under crisp lettering looked broken. Past it, the frame rate gives way instead */
 let qLite=false,qCalKey='',qCalRun=false;
 /* 2026-11-17 (d) before a new wave (another spot, day or night, or window size) the game measures this machine on the wave itself, under a short LOADING card:
    from the sharpest level down, a few frames each, timed to the end of the graphics chip's work, and keeps the sharpest one that draws in 15 ms (60 a second with room to spare) */
 function qCalibrate(){const gl=renderer.getContext(),px=new Uint8Array(4),sync=()=>{gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,px)},a=[];let pick=QMIN;
+  try{for(const p of renderer.info.programs)if(p.getUniforms)p.getUniforms()}catch(e){}   /* perf 2026-11-19: the programs startWave() set compiling for every object of the scene (the hidden ones too) are finished and linked here, under the card: the graphics driver may leave that until a program is first drawn, i.e. in the middle of the ride (a 50-700 ms freeze) */
   setQuality(1);for(let i=0;i<5;i++){tick(1e-4,true);sync()}   /* warm up first: buffers and shaders get ready on the first frames */
   for(let l=1;l<=QMIN;l++){setQuality(l);for(let i=0;i<2;i++){tick(1e-4,true);sync()}a.length=0;for(let i=0;i<5;i++){const t0=performance.now();tick(1e-4,true);sync();a.push(performance.now()-t0)}a.sort((x,y)=>x-y);if(a[2]<=14){pick=l;break}}   /* 2026-11-19 14 ms, not 15: a little more room, so a burst of spray does not tip a ride down to 30 frames a second */
   setQuality(pick);qSave();return pick}
@@ -6454,7 +6474,7 @@ setQuality(qRideL===null?QDEF:qRideL);   /* where this machine settled last time
 // one step down that really changes something (on a 1x screen several levels share the same resolution)
 function qStepDown(n){const l0=qLevel;let ok=false;n=n||1;for(let l=l0+1;l<=qFloor&&n>0;l++)if(setQuality(l)){ok=true;n--}if(!ok)setQuality(l0);return ok}   /* n steps that each change something */
 function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.visibilityState!=='visible'||TR.on||performance.now()<qQuiet){qBuf.length=0;qWin=0;return}   /* a wave starting or a cut between waves is not the machine being slow */
-  const inRide=game.state==='ride'&&!game.attract&&!game.replay;
+  const inRide=game.state==='ride'&&!game.attract&&!game.replay,frozen=!game.attract&&(game.state==='ride'||game.state==='end'||!!game.replay);   /* perf 2026-11-19: the end of the ride and its replay keep the picture too. The replay used to try a sharper level every second and a half: each step re-sized every render target (a 40-140 ms freeze) and could reach the heaviest level, so the replay stuttered while the player watched it */
   qBuf.push(ms);qWin+=ms;if(qWin<(qProbe?(inRide?1300:2000):(inRide?1000:1500)))return;   /* in a ride it decides within a second */
   qBuf.sort((a,b)=>a-b);const k=Math.max(1,Math.floor(qBuf.length*0.9));let sum=0;for(let i=0;i<k;i++)sum+=qBuf[i];const avg=sum/k;qBuf.length=0;qWin=0;   // the slowest 10% (a wave starting, a burst of spray) would make every judgement noisy
   if(qWarm>0){qWarm--;return}                                // the first seconds compile shaders and fill buffers
@@ -6469,11 +6489,11 @@ function autoQuality(ms,T,nMin){if(window.__qHold)return;if(ms>250||document.vis
   if(cadHold>0)cadHold--;const cadOk=prN>=30&&prOk>=prN*0.95;prOk=prN=0;
   if(!slow&&!qProbe&&cadN>nMin&&cadHold<=0&&cadOk&&qLevel<=6){   // a faster cadence only while the picture stays sharp
    cadN--;cadHold=4;qCool=Math.max(qCool,3);return}
-  if(inRide&&slow&&!qLite){qLite=true;bloom.enabled=false;qRB++;return}
-  if(inRide&&slow&&!pThin){pThin=1;qRB++;return}   /* then fewer spray drops; only after that the slower cadence */   /* 2026-11-17 (c) inside a ride: first the glow and part of the spray, never the resolution */
-  if(slow&&!qProbe&&(inRide||qLevel>=QMIN||qLevel>=qFloor)&&(cadN+1)*rafD<=34){cadN++;if(inRide)qRB++;   /* 2026-11-17 soft already and still dropping frames: a steady slower cadence (30 a second on a 60 Hz screen) reads far better than a ragged 40-50 */cadHold=cadBack;cadBack=Math.min(cadBack*2,40);qLock=false;qFloor=QL.length-1;qFloorT=0;qCool=2;qBack=3;return}
+  if(frozen&&slow&&!qLite){qLite=true;bloom.enabled=false;if(inRide)qRB++;return}
+  if(frozen&&slow&&!pThin){pThin=1;if(inRide)qRB++;return}   /* then fewer spray drops; only after that the slower cadence */   /* 2026-11-17 (c) inside a ride: first the glow and part of the spray, never the resolution */
+  if(slow&&!qProbe&&(frozen||qLevel>=QMIN||qLevel>=qFloor)&&(cadN+1)*rafD<=34){cadN++;if(inRide)qRB++;   /* 2026-11-17 soft already and still dropping frames: a steady slower cadence (30 a second on a 60 Hz screen) reads far better than a ragged 40-50 */cadHold=cadBack;cadBack=Math.min(cadBack*2,40);qLock=false;qFloor=QL.length-1;qFloorT=0;qCool=2;qBack=3;return}
   if(inRide){if(slow)qRB++;else if(avg<T*1.03)qRO++}   /* what the ride showed: may the next wave try a step sharper? */
-  if(inRide){if(slow)qRB++;qUp=0;return}   /* the picture never changes in a ride */
+  if(frozen){if(inRide&&slow)qRB++;qUp=0;return}   /* the picture never changes in a ride (nor at its end, nor in its replay) */
   if(slow){if(qUp){qLock=true;qLockT=40}const l0=qLevel;const pr0=renderer.getPixelRatio();if(qLevel<qFloor&&qStepDown(avg>T*1.45?2:1)){qProbe={l:l0,avg,pr:pr0};qBack=Math.min(qBack*2,16);qCool=qBack}qUp=0;qSave()}   // dropping frames: step down (two steps when far off), then check it helped
   else if(avg<T*1.03){qUp=0;if(!inRide&&!qLock&&qLevel>0&&--qCool<0){qUp=setQuality(qLevel-1)?1:0;qCool=game.attract?Math.min(qBack,1):qBack}else if(!inRide)qSave()}}  // holding the cadence comfortably: try one step up (never in a ride; quicker on the menu, where it is looking for this machine's level)
 
