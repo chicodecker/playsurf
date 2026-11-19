@@ -130,6 +130,20 @@ footer .brand img{height:22px;width:auto;margin-bottom:10px}footer .brand a{marg
  .hero .in{padding-bottom:64px}h1{max-width:7.6em}:lang(ja) h1{max-width:9em}.lead{max-width:31em}footer .in{grid-template-columns:1.2fr 1fr 1fr}.panel{padding:30px 30px}.waves.n6{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}</style>
 <script data-goatcounter="https://playsurf.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>/* PlaySurf: origem da visita em categorias (anuncio, google, busca, social, site, direto), contada como evento no GoatCounter. Só a categoria: sem dado pessoal, sem user agent, sem cookie. Só na primeira página da visita (navegação dentro do site, recarregar e voltar não contam). */(function(){var d=document,L=location,q=L.search,m=/^([a-z][a-z0-9+.-]*):\/\/([^\/?#:@]+)/i.exec(d.referrer||''),a=!!m&&m[1].toLowerCase()=='android-app',h=m?m[2].toLowerCase().replace(/^www\./,''):'',o;
+if(h&&h==L.hostname.replace(/^www\./,''))return;
+try{var t=performance.getEntriesByType('navigation')[0];if(t&&(t.type=='reload'||t.type=='back_forward'))return}catch(e){}
+if(!h&&(m=/[?&]utm_source=([^&#]+)/.exec(q)))try{h=decodeURIComponent(m[1]).toLowerCase().replace(/^www\./,'')}catch(e){}
+var T='(\\.[a-z]{2,4}(\\.[a-z]{2})?)?$';
+o=/[?&](gclid|gbraid|wbraid|gad_source|gad_campaignid)=/.test(q)?'anuncio'
+:a?(/googlequicksearchbox/.test(h)?'google':/facebook|instagram|twitter|reddit|youtube|tiktok|zhiliaoapp|whatsapp|linkedin|pinterest|threads|discord|telegram|snapchat/.test(h)?'social':'direto')
+:!h?(/[?&]fbclid=/.test(q)?'social':'direto')
+:RegExp('(^|\\.)google'+T).test(h)?'google'
+:RegExp('(^|\\.)(bing|duckduckgo|yahoo|yandex|ecosia|baidu|naver|brave|qwant|startpage|seznam|sogou|chatgpt|openai|perplexity)'+T+'|^(copilot\\.microsoft\\.com|claude\\.ai)$').test(h)?'busca'
+:RegExp('(^|\\.)(facebook|instagram|twitter|reddit|youtube|tiktok|whatsapp|linkedin|pinterest|threads|discord|telegram|snapchat|twitch|tumblr|quora|messenger|kwai|bsky)'+T+'|(^|\\.)(t\\.co|x\\.com|t\\.me|fb\\.me|fb\\.com|vk\\.com|lnkd\\.in|youtu\\.be|redd\\.it|pin\\.it)$').test(h)?'social'
+:'site';
+function go(){var n=0,id=setInterval(function(){var g=window.goatcounter;if(g&&g.count){clearInterval(id);g.count({path:'origem-'+o,title:'Origem '+o,event:true})}else if(++n>60)clearInterval(id)},500)}
+d.prerendering?d.addEventListener('prerenderingchange',go,{once:true}):go()})();</script>
 </head>
 <body>
 <a class="skip" href="#main">Zum Inhalt springen</a>
