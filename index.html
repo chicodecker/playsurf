@@ -3739,8 +3739,7 @@ function padTick(dt){if(!RIG.ready||!RIG.mesh)return;const P=PAD;
     const u=((P.t*13)%(2*PI))/(2*PI)*12,i0=Math.floor(u)%12;padApply(NPCP.pad[i0],NPCP.pad[(i0+1)%12],u-Math.floor(u));
     P.spl+=dt;if(P.spl>0.25){P.spl=0;P.g.updateMatrixWorld(true);_pdv.set(0.35,0.05,0).applyMatrix4(P.g.matrixWorld);splash(4,_pdv,0.5)}
     if(P.t>1.5){P.ph='fall';P.t=0;P.p0.copy(P.g.position);P.q0.copy(P.g.quaternion);sampleSurf(P.s,P.p,SPD);P.W.set(-SPD.tp.x,0,-SPD.tp.z);if(P.W.lengthSq()<1e-4)P.W.set(0,0,1);P.W.normalize();P.ax.crossVectors(UPV,P.W).normalize();
-      sampleSurf(P.s,0,SPD);P.by=SPD.pos.y;if(typeof lipBurst==='function')lipBurst(0.5,P.s);hudMsg('OUCH!','a paddler got caught inside');sfxNoise(0.5,1400,0.18);
-      if(!audio.muted&&'speechSynthesis' in window&&!speechSynthesis.speaking){try{const u2=new SpeechSynthesisUtterance('Noooo!');u2.lang='en-US';u2.rate=0.9;u2.pitch=0.8;speechSynthesis.speak(u2)}catch(e){}}}}
+      sampleSurf(P.s,0,SPD);P.by=SPD.pos.y;if(typeof lipBurst==='function')lipBurst(0.5,P.s);}}   /* 1118q no OUCH: no text, no thump, no voice when the paddler is caught inside (the user's call) */
   else if(P.ph==='fall'){const t=P.t,y=P.p0.y+2.4*t-4.9*t*t;   /* sucked up with the lip and thrown over the falls, head over heels; the board goes higher still */
     P.g.position.copy(P.p0).addScaledVector(P.W,3.4*t);P.g.position.y=Math.max(y,P.by-0.5);P.g.quaternion.copy(P.q0).premultiply(_pdq.setFromAxisAngle(P.ax,-t*7.5));
     padApply(NPCP.pop[4]);padFlail(t*1.3);
@@ -4389,9 +4388,13 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/prk-peixe-vivo.mp3',t:'Peixe Vivo',b:'Punk Rock Kids',k:1,c:'music/cover-prk.jpg'},{f:'music/prk-samba-lele.mp3',t:'Samba Lelê',b:'Punk Rock Kids',k:1,c:'music/cover-prk.jpg'}];
 const musCov=T=>T.c||('music/cover-'+T.f.split('/').pop().slice(0,2)+'.jpg');
 const MUS={el:new Audio(),i:0,on:false,hold:false,order:[],k:0,theo:0};MUS.el.addEventListener('timeupdate',()=>{const p=document.getElementById('mProg'),d=MUS.el.duration;if(p&&d>0)p.style.width=(100*MUS.el.currentTime/d).toFixed(1)+'%'});   /* the gradient line under the title follows the song */   /* the songs play shuffled, from the very first one, a new order every time round */
-function musShuffle(not,open){const o=TRACKS.map((_,i)=>i).filter(i=>MUS.theo?!!TRACKS[i].k:!TRACKS[i].k);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}   /* on Theo's waves only his band's songs, on everyone else's only the rest */
-  if(open){const j=o.findIndex(i=>TRACKS[i].k===2);if(j>0)[o[0],o[j]]=[o[j],o[0]]}else if(o.length>1&&o[0]===not){const j=1+Math.floor(Math.random()*(o.length-1));[o[0],o[j]]=[o[j],o[0]]}MUS.order=o;MUS.k=0}   /* open: a Theo wave starts on one of the three */
-function musTheo(){const th=kidOn()?1:0,T=TRACKS[MUS.i];if(th){if(!MUS.theo||!(T&&T.k===2&&!MUS.el.ended)){MUS.theo=1;musShuffle(-1,true);musicSet(MUS.order[0])}}else if(MUS.theo){MUS.theo=0;musShuffle(MUS.i);musicSet(MUS.order[0])}}   /* 1118o every Theo wave opens with one of the three (one already playing is kept); off Theo, back to the surf soundtrack */
+function musShuffle(not,open){const sh=o=>{for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}return o};
+  const gen=sh(TRACKS.map((_,i)=>i).filter(i=>!TRACKS[i].k));let o;
+  if(MUS.theo){const kid=sh(TRACKS.map((_,i)=>i).filter(i=>!!TRACKS[i].k));if(open){const j=kid.findIndex(i=>TRACKS[i].k===2);if(j>0)[kid[0],kid[j]]=[kid[j],kid[0]]}
+    o=[];const n=Math.max(kid.length,gen.length);for(let i=0;i<n;i++){if(i<kid.length)o.push(kid[i]);if(i<gen.length)o.push(gen[i])}}   /* 1118q on Theo's waves his band and the surf soundtrack take turns, a Punk Rock Kids song, then one of the others, and so on */
+  else o=gen;   /* everyone else: the surf soundtrack only, never Punk Rock Kids */
+  if(!open&&o.length>1&&o[0]===not){const j=1+Math.floor(Math.random()*(o.length-1));[o[0],o[j]]=[o[j],o[0]]}MUS.order=o;MUS.k=0}   /* open: a Theo wave starts on one of the three */
+function musTheo(){const th=kidOn()?1:0,T=TRACKS[MUS.i];if(th){if(!MUS.theo||!(T&&T.k===2&&!MUS.el.ended)){MUS.theo=1;musShuffle(-1,true);musicSet(MUS.order[0])}}else if(MUS.theo){MUS.theo=0;musShuffle(MUS.i);if(T&&T.k)musicSet(MUS.order[0]);else MUS.k=-1}}   /* off Theo a band song stops at once; a surf song already playing carries on */   /* 1118o every Theo wave opens with one of the three (one already playing is kept); off Theo, back to the surf soundtrack */
 musShuffle(-1);MUS.i=MUS.order[0];{const T=TRACKS[MUS.i];$('mTitle').textContent=T.t;$('mBand').textContent=T.b;const c=$('mCov');if(c){c.src=musCov(T);c.alt=T.t+' cover'}}   /* the first song is on the player from the first screen, ready to play */
 function musStep(d){const n=MUS.order.length;if(d>0&&MUS.k>=n-1)musShuffle(MUS.i);else MUS.k=((MUS.k+d)%n+n)%n;musicSet(MUS.order[MUS.k])}
 const M_PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>',M_PAUSE='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></svg>';
