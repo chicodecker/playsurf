@@ -4725,7 +4725,8 @@ function startWave(att){if(!att&&PARTY.on){if(PARTY.done){champShow();return}con
   if(!att)try{musTheo()}catch(e){}   /* Theo's own songs on his waves */   /* (THE LOCAL always in his faded olive) */   /* a different jersey every wave */
   {const w=att?'':(SPOT.id!==1&&SPOT.id!==2&&SPOT.id!==8&&SPOT.id!==10&&SPOT.id!==13&&Math.random()<0.28?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.tod||0,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
   try{window.__qHold=false;if(!game.attract){setQuality(qNextWave());qFloor=QL.length-1}   /* every wave starts at its own level, set before it is seen; the menu screen behind it is drawn at whatever this machine holds (it used to be forced to the top level, which even a fast laptop could not keep up with) */}catch(e){}if(!att)try{qCalStart()}catch(e){}if(!att)try{const rt0=renderer.getRenderTarget();renderer.setRenderTarget(composer.readBuffer);renderer.compile(scene,camera);renderer.setRenderTarget(rt0)}catch(e){}   /* 2026-11-17 built for the off-screen picture the game really draws into: built for the screen (as it was) they were a different set, and the real ones were still being made the first time each thing showed up in the ride */   /* every shader the wave will use is built now, under the cut between waves, not in its first seconds */   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
-  game.state='ride';game.waveAge=0;game.chEnd=-99;game.jsEnd=-99;game.jsN=0;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.lipHold=1;game.wo=null;game.woNext=0;game.fin='';game.finale=0;game.closeFate=null;game.exPlan=null;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
+  game.state='ride';game.waveAge=0;camInit=false;lastShot='';camShotT=9;camBlend=0;   /* 2026-11-19 QA: every wave starts with its own opening shot, cut clean (the camera used to glide in from where the last replay left it, the surfer off the frame for the first half second) */
+  game.chEnd=-99;game.jsEnd=-99;game.jsN=0;endSignPlace();game.mkN=0;game.chN=0;game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.lipHold=1;game.wo=null;game.woNext=0;game.fin='';game.finale=0;game.closeFate=null;game.exPlan=null;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
   Object.assign(sf,{ko:null,belly:false,standT:0,pmS:0,pmN:0,pmT:-9,pumpK:0,layAt:-9,layT:0,glideT:0,laySplash:false,bsHit:0,bsRec:0,blendT:0,foamAt:-9,fV:0,hit:0,flip:0,layT:0,cov:0,fFoam:false,tubeShot:false,camDir:1,tt:null,slip:0,slipHold:0,slipMax:0,s:17,V:CP,th:-0.3,rail:0,steer:0,lamG:0,om:0,mode:'ride',visible:true,lam:0,h:0,spin:0,spinVis:0,tube:0,tubeMin:9,pivot:0,introT:2.1,autoTube:0,lipK:0.6,lipO:-1,crestT:0,upT:0,dnT:0,lastTop:-9,cb:null,burst:0,splashed:false,airShot:null,fallAt:0,openT:1.9,openC:0,openCam:true,openTube:false,endCl:false,claimV:0,celebN:'',exV:0,exT:0,exLand:false,straight:false,ffU:0,ffArm:0,ffDrop:0,ffDec:0,wobT:0,koVy:0,koDive:0,snapRet:0,pivPrev:0});
   buildWave(game.t);sampleSurf(sf.s,0,S);sf.p=0.99*S.top;wake.length=0;
@@ -5713,10 +5714,11 @@ const JFLAG={NAM:'<rect width="30" height="20" fill="#009543"/><polygon points="
   POR:'<rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#ff0000"/><circle cx="12" cy="10" r="3.6" fill="#ffcc00"/>',
   IDN:'<rect width="30" height="10" fill="#ce1126"/><rect y="10" width="30" height="10" fill="#fff"/>',
   ESP:'<rect width="30" height="20" fill="#aa151b"/><rect y="5" width="30" height="10" fill="#f1bf00"/>',
+  MAR:'<rect width="30" height="20" fill="#c1272d"/><path d="M15 5.3L17.94 14.35L10.24 8.75L19.76 8.75L12.06 14.35Z" fill="none" stroke="#006233" stroke-width="0.9" stroke-linejoin="miter"/>',
   ISL:'<rect width="30" height="20" fill="#02529c"/><rect x="8" width="5" height="20" fill="#fff"/><rect y="7.5" width="30" height="5" fill="#fff"/><rect x="9.25" width="2.5" height="20" fill="#dc1e35"/><rect y="8.75" width="30" height="2.5" fill="#dc1e35"/>',
   PHL:'<rect width="30" height="10" fill="#0038a8"/><rect y="10" width="30" height="10" fill="#ce1126"/><polygon points="0,0 17,10 0,20" fill="#fff"/><circle cx="5.5" cy="10" r="2.2" fill="#fcd116"/>',
   AUS:'<rect width="30" height="20" fill="#00247d"/><rect width="15" height="10" fill="#00247d"/><path d="M0,0L15,10M15,0L0,10" stroke="#fff" stroke-width="2"/><path d="M7.5,0V10M0,5H15" stroke="#fff" stroke-width="3"/><path d="M7.5,0V10M0,5H15" stroke="#cf142b" stroke-width="1.6"/><circle cx="7.5" cy="15" r="1.6" fill="#fff"/><circle cx="23" cy="5" r="1" fill="#fff"/><circle cx="20" cy="10" r="1" fill="#fff"/><circle cx="26" cy="9" r="1" fill="#fff"/><circle cx="23" cy="16" r="1.1" fill="#fff"/>'};
-const SPOT_FLAG={1:'BRA',2:'IDN',3:'USA',4:'PHL',5:'USA',6:'BRA',7:'BRA',8:'ISL',9:'POR',10:'NAM',11:'IDN',12:'RSA',13:'PER',14:'BRA',15:'BRA',16:'FIJ',17:'BRA'};
+const SPOT_FLAG={1:'BRA',2:'IDN',3:'USA',4:'PHL',5:'USA',6:'BRA',7:'BRA',8:'ISL',9:'POR',10:'NAM',11:'IDN',12:'RSA',13:'PER',14:'BRA',15:'BRA',16:'FIJ',17:'BRA',18:'MAR'};   /* 2026-11-19 QA: Safi's judge panel has Morocco's flag at home (it fell back to Brazil) */
 const jFlag=c=>`<svg viewBox="0 0 30 20" aria-hidden="true">${JFLAG[c]||JFLAG.BRA}</svg>`;
 function judgeCard(js,lo,hi,fin){const el=$('jcard');if(!el)return;const home=SPOT_FLAG[SPOT.id]||'BRA',pool=Object.keys(JFLAG).filter(c=>c!==home);
   for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}const panel=pool.slice(0,4);panel.splice(Math.floor(Math.random()*5),0,home);
@@ -5769,7 +5771,7 @@ function endRide(kind){
       const clips=best.map(m=>{const n=m.name,tube=/Barrel/.test(n),air=/^Air|flip/i.test(n),lng=/Floater|Cutback|Roundhouse/.test(n),d=m.dur||2.4;
         const pre=tube?Math.min(3.2,d+0.8):air?2.0:lng?2.3:1.5,post=tube?0.7:air?0.9:lng?0.8:1.1,sc=tube?m.t-d/2:air?m.t-0.6:lng?m.t-1.0:m.t,sw=tube?d/2+0.3:air?0.8:lng?1.0:0.55;
         return {a:clamp(m.t-pre,a0,a1),b:clamp(m.t+post,a0,a1),tube,sc,sw,slow:tube?0.5:0.3,name:n}}).filter(c=>c.b-c.a>0.6);
-      {let k=Math.floor(Math.random()*2);clips.forEach(c=>{c.cam=REPLAY_SHOTS[k++%2]});const dc=clips.filter(c=>!c.tube);if(dc.length)dc[Math.min(1,dc.length-1)].cam='drone'}   /* and one take from the drone */   // clip to clip it alternates chase / side
+      {let k=Math.floor(Math.random()*2);clips.forEach(c=>{const sh=REPLAY_SHOTS[k++%2];c.cam=c.tube?'tele':sh});   /* 2026-11-19 QA: a barrel is replayed from the channel, as the opening barrels are filmed live: the chase camera ended up behind the closing curtain at Pipeline (the frame all white, the surfer gone), and a GoPro could not keep up with him on the drop into the opening barrel */const dc=clips.filter(c=>!c.tube);if(dc.length)dc[Math.min(1,dc.length-1)].cam='drone'}   /* and one take from the drone */   // clip to clip it alternates chase / side
       game.replay={rt:clips.length?clips[0].a:a0,i:0,rate:clips.length?0.8:1,clips:clips.length?clips:null,ci:0};camInit=false;wake.length=0;A.hF.init=false;A.hB.init=false;
       if(clips.length){game.hl=true;return}}
     if(game.showCard)game.showCard()},kind==='wipe'?2600:2450)}   /* the replay waits for the judges' card */
@@ -6064,6 +6066,21 @@ function riderCut(){const U=waveMat.uniforms,on=sf.visible&&riderG.visible&&boar
   if(RIG.on&&RIG.b&&RIG.b.head&&RIG.b.head.bone){(RIG.kid&&RIG.kHead?_rcB.setFromMatrixPosition(RIG.kHead.matrixWorld):_rcB.setFromMatrixPosition(RIG.b.head.bone.matrixWorld))}else _rcB.copy(boardG.position).addScaledVector(_rcU,1.45*sc);
   if(_rcB.distanceTo(U.uRA.value)>2.4)_rcB.copy(U.uRA.value).addScaledVector(_rcU,1.3*sc);U.uRB.value.copy(_rcB);
   const bh=Math.max(0.3,((boardG.userData.look&&boardG.userData.look.L)||1.84)*0.5-0.24);U.uBA.value.copy(boardG.position).addScaledVector(_rcX,bh);U.uBB.value.copy(boardG.position).addScaledVector(_rcX,-bh);U.uRR.value=0.27*sc;U.uBR.value=0.11}   /* the board's cut stays inside its own outline: it used to reach 20 cm past the nose and left a little square hole in the water there */
+/* 2026-11-19 QA: the body never goes into the wall. Leaning hard into a turn, the taller surfers (THE LOCAL, THE HAOLE, PRO 2, THE TALENT) put their
+   head 20 to 60 cm into the face; the water's cut around the body (riderCut) is a capsule along him, so seen from the side the face in front of the
+   head stayed drawn and he rode headless. Each frame the head (last pose) is tested against the wave's own cross-section at that column; if it is in
+   the water he is tilted out of it about the board's long axis, so his feet stay where they are on the deck. Fast in, slow out: no pop. */
+const _wl=new V3(),_wm=new V3(),_wq=new THREE.Quaternion();
+function wallLean(dt){let tgt=0;
+  if((sf.mode==='ride'||sf.mode==='float')&&sf.visible&&J.head){_wl.copy(J.head).multiply(riderG.scale).applyQuaternion(riderG.quaternion);
+    const hx=riderG.position.x+_wl.x,hy=riderG.position.y+_wl.y,hz=riderG.position.z+_wl.z,i=Math.round(colIndex(hx)),mg=0.13*Math.abs(riderG.scale.x);   /* mg: about the head's own radius, so all of it stays out, not just its centre */
+    if(i>=0&&i<NS){const o=i*NV;let d=1e9,ny=0,nz=0;
+      for(let a=0,b=NV-1;a<NV;b=a++){const ya=PY[o+a],za=PZ[o+a],dy=PY[o+b]-ya,dz=PZ[o+b]-za,L=dy*dy+dz*dz;const t=L>1e-9?clamp(((hy-ya)*dy+(hz-za)*dz)/L,0,1):0,py=ya+t*dy,pz=za+t*dz,e=Math.hypot(py-hy,pz-hz);if(e<d){d=e;ny=py-hy;nz=pz-hz}}
+      const inW=wIns(i,hy,hz),need=inW?d+mg:mg-d;   /* how far the head has to move out of the water: in it, its depth plus the margin; just outside, what is missing of the margin */
+      if(need>0.01&&d>1e-4&&d<1.5){const k=inW?1:-1;ny*=k/d;nz*=k/d;const f=sf.f,fr=f.dot(_wl);_wm.copy(_wl).addScaledVector(f,-fr);const rl=_wm.length();
+        if(rl>0.2){_wm.crossVectors(f,_wl);const ml=_wm.length(),cs=ml>1e-6?(_wm.y*ny+_wm.z*nz)/ml:0;if(Math.abs(cs)>0.25)tgt=Math.sign(cs)*Math.min(0.7,need/(rl*Math.abs(cs)))}}}}
+  const w=A.wl||0;A.wl=Math.abs(tgt)>Math.abs(w)||Math.sign(tgt)!==Math.sign(w)&&tgt!==0?damp(w,tgt,22,dt):damp(w,tgt,4,dt);
+  if(Math.abs(A.wl)>1e-4)riderG.quaternion.premultiply(_wq.setFromAxisAngle(sf.f,A.wl))}
 function placeSurfer(dt,time){
   RB=BACK&&sf.mode!=='reef'&&sf.mode!=='gag'?1:0;riderG.scale.z=Math.abs(riderG.scale.z)*(RB?-1:1);LYC.f.value=MIRROR^RB;   // backside is drawn mirrored (the jersey print flipped back so it reads); walking on the reef he is himself again
   shadowM.visible=false;
@@ -6258,6 +6275,7 @@ function placeSurfer(dt,time){
   if(!A.bpPrev){A.bpPrev=boardG.position.clone();A.bvel=new V3();A.bqPrev=boardG.quaternion.clone();A.rqPrev=riderG.quaternion.clone();A.bw=new V3();A.rw=new V3()}
   else if(dt>1e-4){A.bvel.copy(boardG.position).sub(A.bpPrev).multiplyScalar(1/dt);angVel(A.bqPrev,boardG.quaternion,dt,A.bw);angVel(A.rqPrev,riderG.quaternion,dt,A.rw);
     A.bpPrev.copy(boardG.position);A.bqPrev.copy(boardG.quaternion);A.rqPrev.copy(riderG.quaternion)}
+  wallLean(dt);
   if(sf.mode==='air'&&sf.np){const u=clamp(sf.airT/sf.airDur,0,1),th=1.32*sstep(0.04,0.30,u)*(1-sstep(0.62,0.94,u));AT.npTh=th;   // nose pick: the nose comes up to the sky around the back foot, held while it turns, then down for the landing
     _a.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,th));_b.set(-0.54,0,0).applyQuaternion(boardG.quaternion).add(boardG.position);boardG.position.add(_a).sub(_b)}
   else AT.npTh=0;
@@ -6356,7 +6374,19 @@ function camDry(v){if(game.state==='menu')return 0;const i=Math.round(colIndex(v
   if(!ins(v.y,v.z))return 0;
   for(let d=0.06;d<=3.2;d+=0.06){if(!ins(v.y,v.z+d)){v.z+=d+0.12;return 1}if(!ins(v.y,v.z-d)){v.z-=d+0.12;return 1}}
   for(let d=0.1;d<=4;d+=0.1)if(!ins(v.y+d,v.z)){v.y+=d+0.12;return 1}return 0}
+/* 2026-11-19 QA: the camera never goes through the surfer. Out of a barrel the GoPro hangs 1.6 m behind him; when he turned back (a cutback off the
+   bottom, a kick out) or a glide between two shots crossed his line, the lens passed through his body: the frame filled with a shoulder from inside,
+   the rest of him behind the near plane. Like camDry for the water: the body is a capsule from his feet to his head; a lens inside it is moved out to
+   its surface, and the camera's own path (camP) takes the same step, so it does not try to fly back in. */
+const _ccA=new V3(),_ccB=new V3(),_ccD=new V3();
+function camClear(){if(game.state==='menu'||!sf.visible||!riderG.visible||!J.head)return 0;const sc=Math.abs(riderG.scale.x)||1,R=0.75*sc;
+  _ccA.copy(riderG.position);_ccB.copy(J.head).multiply(riderG.scale).applyQuaternion(riderG.quaternion).add(riderG.position);
+  const c=camera.position;_ccD.subVectors(_ccB,_ccA);const L=_ccD.lengthSq(),t=L>1e-6?clamp(_ccD.dot(_ccB.subVectors(c,_ccA))/L,0,1):0;_ccA.addScaledVector(_ccD,t);   /* the nearest point of his body's axis */
+  _ccD.subVectors(c,_ccA);const d=_ccD.length();if(d>=R)return 0;
+  if(d>1e-3)_ccD.multiplyScalar(1/d);else{_ccD.subVectors(c,camL);const l=_ccD.length();if(l>1e-3)_ccD.multiplyScalar(1/l);else _ccD.set(0,0,1)}   /* right on his axis: back out the way the camera looks from */
+  _ccD.multiplyScalar(R-d);c.add(_ccD);camP.add(_ccD);c.y=Math.max(c.y,0.45);return 1}
 function updateCamera(dt,time){
+  if(!camInit&&game.state!=='menu'&&(game.replay||game.attract||game.waveAge<0.2)){sf.camDir=clamp(Math.cos(sf.th)*1.4,-1,1);sf.tubeK=game.inTube&&sf.tube>0.35?1:0;sf.tubeKv=0;sf.airK=sf.mode==='air'?1:0;sf.airKv=0;_gT.set(sf.f.x,0,sf.f.z);if(_gT.lengthSq()>1e-4)_gfS.copy(_gT.normalize());_guS.copy(sf.up);camBlend=0}   /* 2026-11-19 QA: a cut in a replay (or a new wave) starts framed for where he is going now: camDir and the barrel/air springs are not in the recording, and carried over from the end of the ride the chase camera opened on the wrong side, the surfer off the frame for a moment */
   {_gT.set(sf.f.x,0,sf.f.z);if(_gT.lengthSq()>1e-4){_gT.normalize();_gfS.lerp(_gT,1-Math.exp(-3.2*dt)).normalize()}_guS.lerp(sf.up,1-Math.exp(-2.6*dt)).normalize()}   /* the board's heading and tilt, smoothed over ~0.3 s for the GoPro */
   let fov=30,rp=3.2,rl=7,kind='menu';const p=sf.mode==='kickout'&&sf.ko&&riderG.visible?riderG.position:sf.mode==='wipe'||sf.mode==='kickout'?sf.wPos:sf.pos;
   if(game.state==='menu'){const a=time*0.11;cT1.set(19+Math.sin(a)*5,1.5+Math.sin(a*1.7)*0.35,17+Math.cos(a)*2.5);cT2.set(3.5,1.75,0.4);fov=27}
@@ -6364,7 +6394,7 @@ function updateCamera(dt,time){
     {const op=false,pk=game.inTube&&sf.tube>0.35?1:0;   // the close in-barrel view only once he has really been covered for a moment, never just because a lip is throwing nearby
      const w=pk>sf.tubeK?4.6:4.0;sf.tubeKv=(sf.tubeKv||0)+((pk-sf.tubeK)*w*w-2*w*(sf.tubeKv||0))*dt;sf.tubeK=clamp(sf.tubeK+sf.tubeKv*dt,0,1);if(sf.tubeK<=0||sf.tubeK>=1)sf.tubeKv=0}   // a critically damped spring: the barrel framing starts and settles from rest, never with a kick
     {const at=sf.mode==='air'?1:0,w=5.5;sf.airKv=(sf.airKv||0)+((at-sf.airK)*w*w-2*w*(sf.airKv||0))*dt;sf.airK=clamp(sf.airK+sf.airKv*dt,0,1);if(sf.airK<=0||sf.airK>=1)sf.airKv=0}
-    if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];if(cc.kind===undefined||cc.kt!==cc.a)cc.kind=sf.mode==='gag'?'beach':cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'follow':cc.cam),cc.kt=cc.a;kind=cc.kind}   /* 2026-11-18 the shot is chosen when the clip starts and kept to its end: no cut halfway through */
+    if(game.replay&&game.replay.clips){const rc=game.replay;const cc=rc.clips[rc.ci];if(cc.kind===undefined||cc.kt!==cc.a)cc.kind=sf.mode==='gag'?'beach':cc.tube?cc.cam:(game.inTube||sf.tubeK>0.5?'tele':cc.cam),cc.kt=cc.a;kind=cc.kind}   /* 2026-11-18 the shot is chosen when the clip starts and kept to its end: no cut halfway through */
     else if(game.replay)kind=sf.mode==='gag'?'beach':game.inTube||sf.tubeK>0.5?'tele':REPLAY_SHOTS[Math.floor(game.replay.rt/4.2)%REPLAY_SHOTS.length];
     else if(game.attract)kind=REEL.cam||'tele';   /* behind the menu: the chase camera, or the side camera when he rides backside */   // start screen: two wide shots from far off, the whole wave and the place around it
     else{if(sf.openCam&&game.waveAge>2.5&&!(sf.openT>0)){sf.openCam=false;if(game.cam!==1)camInit=false}   // side view for the drop and the bottom turn, then the chase   // the opening is filmed from the side, until he is out of the barrel
@@ -6403,6 +6433,7 @@ function updateCamera(dt,time){
   camera.position.set(camP.x+hx+sx_*shk*0.09,Math.max(camP.y+hy+sy_*shk*0.09,0.45),camP.z);
   {const ce=A.ceZ=damp(A.ceZ||0,sf.endCl&&game.state==='ride'&&!game.attract&&sf.mode!=='reef'&&sf.mode!=='gag'?1:0,1.1,dt);if(ce>0.001){_ce.set(camera.position.x-camL.x,camera.position.y-camL.y,camera.position.z-camL.z);camera.position.addScaledVector(_ce,0.38*ce);camera.position.y=Math.max(camera.position.y,0.45)}}   /* the celebration: the camera steps back so all of him and the wave show */
   {const y0=camera.position.y,z0=camera.position.z;if(camDry(camera.position)){camP.y+=camera.position.y-y0;camP.z+=camera.position.z-z0}}   /* aesthetic: never inside the wave (see camDry) */
+  if(camClear()){const y1=camera.position.y,z1=camera.position.z;if(camDry(camera.position)){camP.y+=camera.position.y-y1;camP.z+=camera.position.z-z1}}   /* 2026-11-19 QA: and never inside the surfer (and, moved out of him, still not in the water) */
   const roll=Math.sin(time*0.7)*0.012+Math.sin(time*1.9)*0.004;camera.up.set(Math.sin(roll),Math.cos(roll),0);
   {const nr=lastShot==='gopro'||sf.tubeK>0.3?0.08:0.3;if(camera.near!==nr){camera.near=nr;camera.updateProjectionMatrix()}}   /* close to the wall in the barrel: never clip the water */
   camGP=damp(camGP,lastShot==='gopro'?1:0,5,dt);if(camGP>0.01)camera.up.lerp(_guS,0.28*camGP).normalize();gradePass.uniforms.uFish.value=camGP*0.36;   // the GoPro rolls with the board; fisheye lens
