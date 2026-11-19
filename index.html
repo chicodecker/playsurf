@@ -650,6 +650,9 @@ body.gmShow:not(.touch) #gmBtn{display:flex}
 @media (max-height:520px){#gm .gmCard{padding:14px 18px}#gm .gmHead{margin-bottom:10px}#gm .gmSurf{margin-bottom:12px}#gm .gmSurf button{min-height:54px;padding:10px 12px}#gm .gmGrid button{min-height:48px}}
 .surfBtns .pbtn{position:relative;padding-right:92px}.surfBtns .chAv{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(0,0,0,.28);background:#cfe3f0;pointer-events:none}   /* each surfer's picture, small, on the right of the button */
 body.touch .surfBtns .pbtn{padding-right:70px}body.touch .surfBtns .chAv{width:46px;height:46px;right:10px}
+#ldv{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(4,12,24,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .16s}#ldv.on{opacity:1;pointer-events:auto}   /* 2026-11-19 quick loading screens in the gaps (before CHOOSE YOUR SURFER, before a wave), so nothing heavy runs while you surf */
+#ldv .ldBox{display:flex;flex-direction:column;align-items:center;gap:12px;color:#fff;font:900 15px/1 var(--ps-f);font-style:italic;letter-spacing:.16em;text-shadow:0 2px 10px rgba(0,0,0,.45)}#ldv .ldWave{width:52px;height:52px;border-radius:50%;border:4px solid rgba(255,255,255,.18);border-top-color:#6fe6ff;border-right-color:#ff4f9e;animation:ldSpin .75s linear infinite}@keyframes ldSpin{to{transform:rotate(360deg)}}
+#ldv .ldBar{width:min(220px,60vw);height:4px;border-radius:2px;background:rgba(255,255,255,.18);overflow:hidden}#ldv .ldBar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#6fe6ff,#ff4f9e);transition:width .2s}
 .svRow{display:flex;align-items:center;gap:20px}.svStage{flex:none;position:relative;width:clamp(150px,20vw,260px);height:clamp(230px,50vh,430px);pointer-events:none}.svStage canvas{display:block;width:100%;height:100%}   /* 2026-11-19 the surfers in 3D, turning, beside their buttons */
 #svName{position:absolute;left:0;right:0;bottom:4px;text-align:center;font:900 16px/1 var(--ps-f);font-style:italic;letter-spacing:.08em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.5);opacity:0;transition:opacity .25s}#svName.on{opacity:1}
 .surfBtns .pbtn.pv{box-shadow:0 0 0 2px rgba(255,255,255,.85),0 6px 22px rgba(0,0,0,.25)}
@@ -2874,7 +2877,7 @@ function gmFill(){const k=gmSurfNow();document.querySelectorAll('#gm .gmSurf but
 function gmOpen(){if(game.attract||(game.state!=='ride'&&game.state!=='end'))return;if(game.state==='ride'&&!game.paused){game.paused=true;GM.paused=true}gmFill();$('gm').classList.remove('off')}
 function gmClose(){$('gm').classList.add('off');if(GM.paused){GM.paused=false;game.paused=false;const pz=$('pause');if(pz)pz.style.display='none'}}
 function gmSurf(k){if(k==='kid'||k==='theo2'){PROG.softRider='theo';PROG.girl=0;PROG.local=0;PROG.pro2=0;PROG.haole=0;PROG.talent=0;PROG.theo2=k==='theo2'?1:0;setBoard('soft');game.kidSel=1}else{PROG.softRider='pro';PROG.girl=k==='girl'?1:0;PROG.local=k==='local'?1:0;PROG.pro2=k==='pro2'?1:0;PROG.haole=k==='haole'?1:0;PROG.talent=k==='talent'?1:0;PROG.theo2=0;if(BOARD.id==='soft')setBoard('classic')}
-  progSave();boardLook();try{theoPage()}catch(_){}try{chUI()}catch(_){}try{musTheo()}catch(_){}gmFill()}
+  progSave();boardLook();try{theoPage()}catch(_){}try{chUI()}catch(_){}try{musTheo()}catch(_){}gmFill();riderPrep(null,200)}
 function riderSwap(){PROG.softRider=PROG.softRider==='pro'?'theo':'pro';progSave();game.kidSel=1;boardLook();theoPage();try{toast(PROG.softRider==='pro'?'PRO SURFER ON THE SOFTBOARD':'THEO IS BACK ON HIS BOARD')}catch(_){}}   /* CHANGE SURFER: Theo or the grown-up on the softboard, even in the middle of a wave */
 /* the board step: the chosen board turning in 3D, drawn by a small renderer of its own, only while that step is on screen */
 const BV={r:null,s:null,c:null,g:null,inner:null,on:false,raf:0,t:0,last:0,w:0,h:0,pr:0};
@@ -2892,6 +2895,17 @@ function bvShow(on){const cv=document.getElementById('bdView');BV.on=!!on&&!!cv;
     BV.g.rotation.y=0.16*Math.sin(BV.t*0.45);if(BV.inner){BV.inner.rotation.x=1.2+BV.t*0.85;BV.inner.scale.x=MIRROR?-1:1}   // turning on its long axis: deck, rail, bottom and fins, round and round
     BV.r.render(BV.s,BV.c)};
   BV.raf=requestAnimationFrame(loop)}
+/* 2026-11-19 quick loading screens: the heavy preparation (a 3D body is ~0.2-0.5 s of work) runs behind a short veil in the gaps, never in the middle of a wave */
+const LD={el:null};function ldEl(){if(LD.el)return LD.el;const d=document.createElement('div');d.id='ldv';d.setAttribute('aria-hidden','true');d.innerHTML='<div class="ldBox"><div class="ldWave"></div><b class="ldTxt">LOADING</b><div class="ldBar"><span></span></div></div>';document.body.appendChild(d);return LD.el=d}
+const ldYield=()=>new Promise(r=>setTimeout(r,16));
+async function ldRun(txt,steps,minMs){const el=ldEl(),bar=el.querySelector('.ldBar span');el.querySelector('.ldTxt').textContent=txt;bar.style.width='0%';el.classList.add('on');const t0=performance.now();await ldYield();await ldYield();   /* the veil is up before the work starts */
+  for(let i=0;i<steps.length;i++){try{await steps[i]()}catch(e){console.warn('loading:',e)}bar.style.width=Math.round((i+1)/steps.length*100)+'%';await ldYield()}
+  const left=(minMs||0)-(performance.now()-t0);if(left>0)await new Promise(r=>setTimeout(r,left));el.classList.remove('on')}
+function bodyReady(k,ms){return new Promise(res=>{const t0=performance.now(),go=()=>{const B=BODIES[k];if(!B)return res(false);if(RIG.ready)try{bodyEnsure(k,1)}catch(e){}if(B.ready)return res(true);if(performance.now()-t0>(ms||9000))return res(false);setTimeout(go,60)};go()})}
+const SURF_BODY={girl:'girl',local:'local',pro2:'pro2',theo2:'theo2',haole:'haole',talent:'talent'};
+function riderPrep(cb,minMs){const k=SURF_BODY[typeof gmSurfNow==='function'?gmSurfNow():''];if(!k||(BODIES[k]&&BODIES[k].ready)){if(cb)cb();return}ldRun('LOADING',[()=>bodyReady(k)],minMs||300).then(()=>{if(cb)cb()})}   /* the surfer you picked, ready before the wave starts */
+let SVP=null;function svPrep(){const need=[...new Set(SV_L.map(e=>e[1]))].filter(k=>k!=='pro'&&BODIES[k]&&!BODIES[k].ready);if(!need.length){svShow(true);return}if(SVP)return;
+  SVP=ldRun('LOADING SURFERS',need.map(k=>()=>bodyReady(k)).concat([()=>{for(const e of SV_L)try{svModel(e[1])}catch(_){}},()=>{if(!SV.r){svShow(true);svShow(false)}if(SV.r&&SV.s){const G=new THREE.Group();for(const k in SV.m)G.add(SV.m[k]);SV.s.add(G);try{SV.r.compile(SV.s,SV.c)}catch(_){}SV.s.remove(G);for(const k in SV.m)G.remove(SV.m[k]);SV.cur=null}}]),350)   /* and the turntable's shaders compiled behind the veil too */.then(()=>{SVP=null;if(WZ.s===4)svShow(true)})}   /* every surfer of the page, before it opens */
 /* 2026-11-19 CHOOSE YOUR SURFER in 3D: the remade bodies turning like the boards do, arms down; it shows the surfer under the pointer, or goes round them all */
 const SV={r:null,s:null,c:null,g:null,on:false,raf:0,t:0,last:0,w:0,h:0,pr:0,i:0,pin:-1,hold:0,cur:null,m:{}};
 const SV_L=[['chPro','pro','THE PRO'],['chKid','theo2','THE KID'],['chGirl','girl','THE GIRL'],['chLocal','local','THE LOCAL'],['chPro2','pro2','PRO 2'],['chTheo2','theo2','THEO 2'],['chHaole','haole','THE HAOLE'],['chTalent','talent','THE TALENT']];
@@ -3263,7 +3277,7 @@ const SUIT0={value:0};function bod3Mat(map,text,face,noSuit){if(map){map.colorSp
       .replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.roughness=mix(mix(material.roughness,0.86,hairK),0.80,suitK);material.specularColor*=(1.-0.8*hairK)*mix(1.,0.10,suitK);')
       .replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g)*(1.-0.55*suitK)*(1.-0.9*hairK)*0.72;}\n#include <opaque_fragment>')};
   return mat}
-function bodyEnsure(k){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.mesh)return;B.req=1;
+function bodyEnsure(k,force){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.mesh)return;if(!force&&game.state==='ride'&&!game.attract&&!game.paused&&!B.on())return;B.req=1;   /* (2026-11-19 not while a wave is being surfed: that waits for a gap) */
   magLoad(B.file,src=>{const pm=RIG.mesh,pg=pm.geometry,pp=pg.attributes.position,psi=pg.attributes.skinIndex,psw=pg.attributes.skinWeight;
     const g=src.geometry.clone();g.deleteAttribute('skinIndex');g.deleteAttribute('skinWeight');g.computeBoundingBox();pg.computeBoundingBox();
     const a=g.boundingBox,b=pg.boundingBox,k=(b.max.y-b.min.y)/(a.max.y-a.min.y),cx=(a.min.x+a.max.x)/2,cz=(a.min.z+a.max.z)/2,bx=(b.min.x+b.max.x)/2,bz=(b.min.z+b.max.z)/2;
@@ -3300,8 +3314,9 @@ function bodyEnsure(k){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.mesh)ret
       for(let i=0;i<gp.count;i++){let x=gp.getX(i),y=gp.getY(i),z=gp.getZ(i)-bz;if(y<nk-0.15*H)continue;const f=(x-bx)*FS;
         {const w=ss(eY-0.05*H,eY+0.30*H,y),k=1+0.10*w;x=hx+(x-hx)*k;z*=k;y=hY+(y-hY)*(1+0.06*w)}   /* the skull */
         if(f>nb-0.45*H){const front=ss(nb-0.45*H,nb-0.25*H,f);
-          {const d=Math.hypot((y-nY)/(0.13*H),z/(0.11*H));if(d<1){const w=(1-d*d)*front,pr=Math.max(0,f-(nb-0.16*H));x-=FS*pr*0.60*w;z*=1-0.34*w;y+=0.018*H*w}}   /* the nose: short, small, a little turned up */
-          {const w=ss(mY+0.02*H,nk+0.02*H,y)*ss(nk-0.10*H,nk,y)*front;x-=FS*0.03*H*w;z*=1-0.16*w;y+=0.06*H*w}   /* the chin and jaw: shorter and narrower */
+          {const d=Math.hypot((y-nY)/(0.13*H),z/(0.11*H));if(d<1){const w=(1-d*d)*front,pr=Math.max(0,f-(nb-0.16*H));x-=FS*pr*0.18*w;z*=1-0.18*w;y+=0.012*H*w}}   /* the nose: a little smaller and turned up, but it still stands out in profile (2026-11-19: pushed back 60% it left his profile dished in) */
+          {const w=ss(mY+0.02*H,nk+0.02*H,y)*ss(nk-0.10*H,nk,y)*front;z*=1-0.12*w;y+=0.035*H*w}   /* the chin and jaw: a little shorter and narrower, not pushed back */
+          {const d=Math.hypot((y-mY)/(0.07*H),z/(0.13*H));if(d<1){const w=(1-d*d)*front;x-=FS*0.024*H*w}}   /* the grin sits a touch back, under the nose, so the profile runs nose, lips, chin */
           for(const sg of [1,-1]){const d=Math.hypot((y-eY)/(1.25*eR),(z-sg*eZ)/(1.25*eR));if(d<1){const w=(1-d*d)*front;y=eY+(y-eY)*(1+0.36*w);z=sg*eZ+(z-sg*eZ)*(1+0.36*w)}}   /* bigger eyes */
           for(const sg of [1,-1]){const d=Math.hypot((y-(nY-0.03*H))/(0.17*H),(z-sg*0.22*H)/(0.15*H));if(d<1){const w=(1-d*d)*front;z+=sg*0.04*H*w;x+=FS*0.02*H*w}}}   /* round cheeks */
         gp.setXYZ(i,x,y,bz+z)}}
@@ -3316,15 +3331,17 @@ function bodyEnsure(k){const B=BODIES[k];if(!B||B.req||!RIG.ready||!RIG.mesh)ret
       if(wz>0)for(const sg of [1,-1]){let cx=0,cy=0,n=0;for(let i=0;i<gp.count;i++){const dz=(gp.getZ(i)-bz)*sg;if(dz>=wz&&dz<wz+0.006){cx+=gp.getX(i);cy+=gp.getY(i);n++}}if(!n)continue;cx/=n;cy/=n;const cz=bz+sg*wz;
         for(let i=0;i<gp.count;i++){const dz=(gp.getZ(i)-bz)*sg;if(dz<=wz)continue;const t=Math.min(1,(dz-wz)/0.012),k=1-(1-B.hand)*t*t*(3-2*t);gp.setXYZ(i,cx+(gp.getX(i)-cx)*k,cy+(gp.getY(i)-cy)*k,cz+(gp.getZ(i)-cz)*k)}}}
     gp.needsUpdate=true;if(!g.attributes.normal)g.computeVertexNormals();   /* a uniform scale keeps the model's own normals, smooth across its texture seams */
-    const C=0.03,key=(x,y,z)=>((Math.floor(x/C)+512)*1048576)+((Math.floor(y/C)+512)*1024)+(Math.floor(z/C)+512),grid=new Map();
-    for(let i=0;i<pp.count;i++){const kk=key(pp.getX(i),pp.getY(i),pp.getZ(i));let L=grid.get(kk);if(!L)grid.set(kk,L=[]);L.push(i)}
-    const n=gp.count,SI=new Uint16Array(n*4),SW=new Float32Array(n*4),acc=new Map();
-    for(let i=0;i<n;i++){const x=gp.getX(i),y=gp.getY(i),z=gp.getZ(i),ix=Math.floor(x/C),iy=Math.floor(y/C),iz=Math.floor(z/C);const best=[];
-      for(let r=1;r<=12&&best.length<6;r++){best.length=0;for(let dx=-r;dx<=r;dx++)for(let dy=-r;dy<=r;dy++)for(let dz=-r;dz<=r;dz++){const L=grid.get(((ix+dx+512)*1048576)+((iy+dy+512)*1024)+(iz+dz+512));if(!L)continue;
-        for(const j of L){const d=(pp.getX(j)-x)**2+(pp.getY(j)-y)**2+(pp.getZ(j)-z)**2;best.push([d,j])}}}
-      best.sort((p,q)=>p[0]-q[0]);acc.clear();const m=Math.min(6,best.length);
-      for(let t=0;t<m;t++){const [d,j]=best[t],w0=1/(Math.sqrt(d)+0.004);for(let c=0;c<4;c++){const w=psw.getComponent(j,c);if(w<=0)continue;const bi=psi.getComponent(j,c);acc.set(bi,(acc.get(bi)||0)+w*w0)}}
-      const top=[...acc.entries()].sort((p,q)=>q[1]-p[1]).slice(0,4);let sum=0;top.forEach(e=>sum+=e[1]);top.forEach((e,c)=>{SI[i*4+c]=e[0];SW[i*4+c]=sum>0?e[1]/sum:0})}
+    const C=0.03,grid=new Map(),pc=pp.count,PA=new Float32Array(pc*3),PI=new Uint16Array(pc*4),PW=new Float32Array(pc*4);   /* 2026-11-19 the same weight transfer as before, ~10x faster (it froze the page for 1.4-3.4 s a body): flat arrays, the six nearest kept in order as they come (no sorting), the search widened shell by shell */
+    for(let i=0;i<pc;i++){const x=pp.getX(i),y=pp.getY(i),z=pp.getZ(i);PA[i*3]=x;PA[i*3+1]=y;PA[i*3+2]=z;for(let c=0;c<4;c++){PI[i*4+c]=psi.getComponent(i,c);PW[i*4+c]=psw.getComponent(i,c)}
+      const kk=((Math.floor(x/C)+512)*1048576)+((Math.floor(y/C)+512)*1024)+(Math.floor(z/C)+512);let L=grid.get(kk);if(!L)grid.set(kk,L=[]);L.push(i)}
+    const n=gp.count,SI=new Uint16Array(n*4),SW=new Float32Array(n*4),bd=new Float64Array(6),bj=new Int32Array(6),ab=new Int32Array(24),aw=new Float64Array(24);
+    for(let i=0;i<n;i++){const x=gp.getX(i),y=gp.getY(i),z=gp.getZ(i),ix=Math.floor(x/C),iy=Math.floor(y/C),iz=Math.floor(z/C);let cnt=0;bd.fill(Infinity);
+      for(let r=1;r<=12&&cnt<6;r++)for(let dx=-r;dx<=r;dx++)for(let dy=-r;dy<=r;dy++)for(let dz=-r;dz<=r;dz++){if(r>1&&dx>-r&&dx<r&&dy>-r&&dy<r&&dz>-r&&dz<r)continue;const L=grid.get(((ix+dx+512)*1048576)+((iy+dy+512)*1024)+(iz+dz+512));if(!L)continue;
+        for(let q=0;q<L.length;q++){const jj=L[q],ex=PA[jj*3]-x,ey=PA[jj*3+1]-y,ez=PA[jj*3+2]-z,d=ex*ex+ey*ey+ez*ez;cnt++;if(d<bd[5]){let p=5;while(p>0&&bd[p-1]>d){bd[p]=bd[p-1];bj[p]=bj[p-1];p--}bd[p]=d;bj[p]=jj}}}
+      const m=Math.min(6,cnt);let na=0;
+      for(let t=0;t<m;t++){const jj=bj[t],w0=1/(Math.sqrt(bd[t])+0.004);for(let c=0;c<4;c++){const w=PW[jj*4+c];if(w<=0)continue;const bi=PI[jj*4+c];let a=0;while(a<na&&ab[a]!==bi)a++;if(a===na){ab[na]=bi;aw[na]=0;na++}aw[a]+=w*w0}}
+      let sum=0;for(let c=0;c<4;c++){let bk=-1,bv=0;for(let a=0;a<na;a++)if(aw[a]>bv){bv=aw[a];bk=a}if(bk<0)break;SI[i*4+c]=ab[bk];SW[i*4+c]=bv;sum+=bv;aw[bk]=-1}
+      if(sum>0)for(let c=0;c<4;c++)SW[i*4+c]/=sum}
     g.setAttribute('skinIndex',new THREE.Uint16BufferAttribute(SI,4));g.setAttribute('skinWeight',new THREE.Float32BufferAttribute(SW,4));
     if(B.hat&&B._lm&&RIG.b&&RIG.b.head){const {nY,H,topY}=B._lm,baseY=nY+0.27*H;let cx=0,cz=0,n=0;for(let i=0;i<gp.count;i++){const y=gp.getY(i);if(y>baseY&&Math.abs(gp.getZ(i)-bz)<0.2){cx+=gp.getX(i);cz+=gp.getZ(i);n++}}   /* 2026-11-19 a little sun hat for THE GIRL: a soft surf bucket hat with a turquoise band, sized on her own head and hair */
       if(n){cx/=n;cz/=n;let rx=0,rz=0;for(let i=0;i<gp.count;i++){const y=gp.getY(i);if(y>baseY&&Math.abs(gp.getZ(i)-bz)<0.2){rx=Math.max(rx,Math.abs(gp.getX(i)-cx));rz=Math.max(rz,Math.abs(gp.getZ(i)-cz))}}rx*=0.97;rz*=0.97;
@@ -4264,7 +4281,7 @@ $('goLeft').addEventListener('click',e=>{e.stopPropagation();setMirror(0);e.curr
 var WZ={s:1};
 function wzGo(n){WZ.s=n===0?0:clamp(n,2,5);document.body.dataset.wz=WZ.s;{const t=document.querySelector('.wzTop');if(t)t.style.visibility=WZ.s===0?'hidden':''}   /* the device is detected on its own and the jersey changes by itself: stance, wave, board, surf */   /* 1 device, 2 stance, 3 wave, 4 board, 5 jersey, 6 turns */if(typeof adBreakNext==='function')adBreakNext(WZ.s);document.querySelectorAll('.wzS').forEach(e=>e.classList.toggle('on',+e.dataset.s===WZ.s));
   document.querySelectorAll('.wzDots i').forEach(e=>{const k=+e.dataset.s;e.classList.toggle('on',k===WZ.s);e.classList.toggle('done',k<WZ.s)});
-  $('wzBack').style.display=WZ.s>=2?'':'none';   /* gone, not just hidden, so the step names line up with the logo and title */if(WZ.s===3||WZ.s===5)progUI();if(WZ.s===4)chUI();if(WZ.s===3){requestAnimationFrame(mapFit);setTimeout(mapFit,520)}if(WZ.s===6)tutUI();bvShow(WZ.s===5);try{svShow(WZ.s===4)}catch(e){}}
+  $('wzBack').style.display=WZ.s>=2?'':'none';   /* gone, not just hidden, so the step names line up with the logo and title */if(WZ.s===3||WZ.s===5)progUI();if(WZ.s===4)chUI();if(WZ.s===3){requestAnimationFrame(mapFit);setTimeout(mapFit,520)}if(WZ.s===6)tutUI();bvShow(WZ.s===5);try{if(WZ.s===4)svPrep();else svShow(false)}catch(e){}}
 /* the wave map on a phone: centred on the screen and as big as the room under the title allows */
 function mapFit(){const m=document.getElementById('spotMap');if(!m)return;if(!document.body.classList.contains('touch')){const h=document.querySelector('.wzS[data-s="3"] .wzH');if(h)h.style.transform='';m.style.width=m.style.transform='';m.style.left='0px';   /* 2026-11-18 on a computer too: as big as the room under the title allows, centred on the screen, over the surfer if need be */
     const r=m.getBoundingClientRect();if(r.width<10)return;const hb=h?h.getBoundingClientRect().bottom+8:r.top,bar=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar'))||0,av=innerHeight-bar-hb-14,w=Math.round(Math.max(320,Math.min(innerWidth*0.94,1280,av*2.46)));m.style.width=w+'px';m.style.left=Math.round(innerWidth/2-w/2-r.left)+'px';setTimeout(()=>mapLayout(m),30);return}
@@ -4651,7 +4668,7 @@ function startWave(att){if(!att&&PARTY.on){if(PARTY.done){champShow();return}con
   sfxNoise(1.2,900,0.25);if((SPOT.id===5||SPOT.id===3||SPOT.id===1||SPOT.id===8||SPOT.id===9)&&!window.__manual)pickOpen()}   /* the pool, Lower Trestles and Pipeline break both ways: pick a side before the drop */
 function startAttract(){startWave(true)}
 function beginPlay(){if(tutLNeed()){tutLShow(beginPlay0);return}if(game.homeGuide){game.homeGuide=false;tutLShow(beginPlay0,{per:2.0});return}   /* 2026-11-18 after going back home, the guide again before the first wave, quicker, with SKIP */beginPlay0()}
-function beginPlay0(){trCancel();ADS.rode=true;initAudio();game.ts=1;startWave();musicGo()}
+function beginPlay0(){initAudio();riderPrep(beginPlay1)}function beginPlay1(){trCancel();ADS.rode=true;initAudio();game.ts=1;startWave();musicGo()}   /* (initAudio first, inside the click, so the sound still unlocks if a loading screen comes before the wave) */
 /* 2026-11-18 the first time on a device, before the first wave: a quick tour of the six main moves, dressed as the loading screen (a drawing of the line on the wave, and how to do it) */
 function tutLNeed(){try{return !localStorage.getItem('playsurf_tutL')}catch(e){return false}}
 const TL={tm:0,i:0,cb:null,t0:0};
