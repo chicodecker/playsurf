@@ -3053,7 +3053,30 @@ function localNeck(){if(RIG.lNeck)return RIG.lNeck;const F=FACE_SIGN,G=new THREE
   for(let i=0;i<36;i++){const t=i/36*2*PI,front=Math.max(0,Math.cos(t)),b=new THREE.Mesh(bg,bm[i%3===0?1:0]);b.position.set(cx*F+F*rx*Math.cos(t)*(1+0.12*front),cy-dip*front*front,cz+rz*Math.sin(t));b.scale.setScalar(i%3===0?0.0032:0.0026);G.add(b)}
   const tg=new THREE.ConeGeometry(0.0042,0.015,8);tg.rotateX(PI);const tooth=new THREE.Mesh(tg,new THREE.MeshStandardMaterial({color:0xf3eee2,roughness:0.45}));tooth.position.set(cx*F+F*rx*1.13,cy-dip-0.009,cz);tooth.rotation.z=-F*0.25;G.add(tooth);
   RIG.lNeck=G;return G}
-function localApply(){const l=localOn()?1:0,was=LOCALU.value;LOCALU.value=l;RIG.local=l;SKINT.value.setRGB(l?0.62:1,l?0.50:1,l?0.42:1);if(l&&RIG.ready&&RIG.b&&RIG.b.head){localHair();localNeck()}if(RIG.lHair)RIG.lHair.visible=!!l;if(RIG.lNeck)RIG.lNeck.visible=!!l;if(l){LYC.c.value.set(0.10,0.13,0.045);LYC.t.value.set(0.90,0.88,0.80)}else if(was&&typeof setLycra==='function')setLycra(PROG.lyc||'red')}
+/* 1118r THE LOCAL from his Magnific design: a Tripo body of his own (models/the-local.glb, T-pose, rigged the same way as the surfer) laid over
+   the game surfer's own skeleton. Every vertex takes the skin weights of the nearest points of the surfer's body, so he is carried by exactly the
+   same bones: every move, the replays and the camera work as they are. While his body is on, the surfer's mesh, the painted curls and the necklace stay hidden */
+const LM={mesh:null,ready:false,req:0};
+function lmEnsure(){if(LM.req||!RIG.ready||!RIG.mesh)return;LM.req=1;
+  magLoad('the-local',src=>{const pm=RIG.mesh,pg=pm.geometry,pp=pg.attributes.position,psi=pg.attributes.skinIndex,psw=pg.attributes.skinWeight;
+    const g=src.geometry.clone();g.deleteAttribute('skinIndex');g.deleteAttribute('skinWeight');g.computeBoundingBox();pg.computeBoundingBox();
+    const a=g.boundingBox,b=pg.boundingBox,k=(b.max.y-b.min.y)/(a.max.y-a.min.y),cx=(a.min.x+a.max.x)/2,cz=(a.min.z+a.max.z)/2,bx=(b.min.x+b.max.x)/2,bz=(b.min.z+b.max.z)/2;
+    const gp=g.attributes.position;for(let i=0;i<gp.count;i++)gp.setXYZ(i,bx+(gp.getX(i)-cx)*k,b.min.y+(gp.getY(i)-a.min.y)*k,bz+(gp.getZ(i)-cz)*k);gp.needsUpdate=true;g.computeVertexNormals();
+    const C=0.03,key=(x,y,z)=>((Math.floor(x/C)+512)*1048576)+((Math.floor(y/C)+512)*1024)+(Math.floor(z/C)+512),grid=new Map();
+    for(let i=0;i<pp.count;i++){const kk=key(pp.getX(i),pp.getY(i),pp.getZ(i));let L=grid.get(kk);if(!L)grid.set(kk,L=[]);L.push(i)}
+    const n=gp.count,SI=new Uint16Array(n*4),SW=new Float32Array(n*4),acc=new Map();
+    for(let i=0;i<n;i++){const x=gp.getX(i),y=gp.getY(i),z=gp.getZ(i),ix=Math.floor(x/C),iy=Math.floor(y/C),iz=Math.floor(z/C);const best=[];
+      for(let r=1;r<=4&&best.length<6;r++){best.length=0;for(let dx=-r;dx<=r;dx++)for(let dy=-r;dy<=r;dy++)for(let dz=-r;dz<=r;dz++){const L=grid.get(((ix+dx+512)*1048576)+((iy+dy+512)*1024)+(iz+dz+512));if(!L)continue;
+        for(const j of L){const d=(pp.getX(j)-x)**2+(pp.getY(j)-y)**2+(pp.getZ(j)-z)**2;best.push([d,j])}}}
+      best.sort((p,q)=>p[0]-q[0]);acc.clear();const m=Math.min(6,best.length);
+      for(let t=0;t<m;t++){const [d,j]=best[t],w0=1/(Math.sqrt(d)+0.004);for(let c=0;c<4;c++){const w=psw.getComponent(j,c);if(w<=0)continue;const bi=psi.getComponent(j,c);acc.set(bi,(acc.get(bi)||0)+w*w0)}}
+      const top=[...acc.entries()].sort((p,q)=>q[1]-p[1]).slice(0,4);let sum=0;top.forEach(e=>sum+=e[1]);top.forEach((e,c)=>{SI[i*4+c]=e[0];SW[i*4+c]=sum>0?e[1]/sum:0})}
+    g.setAttribute('skinIndex',new THREE.Uint16BufferAttribute(SI,4));g.setAttribute('skinWeight',new THREE.Float32BufferAttribute(SW,4));
+    const map=src.material.map;if(map){map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4}
+    const mat=new THREE.MeshStandardMaterial({map,roughness:0.62,metalness:0,envMapIntensity:0.9});
+    const M=new THREE.SkinnedMesh(g,mat);M.frustumCulled=false;M.castShadow=M.receiveShadow=true;riderG.add(M);M.bind(pm.skeleton,new THREE.Matrix4());M.visible=false;LM.mesh=M;LM.ready=true;lmSync()})}
+function lmSync(){const on=localOn()&&LM.ready&&RIG.on;if(LM.mesh)LM.mesh.visible=on;if(RIG.mesh)RIG.mesh.visible=RIG.on&&!on;LM.on=on;if(on){LOCALU.value=0;if(RIG.lHair)RIG.lHair.visible=false;if(RIG.lNeck)RIG.lNeck.visible=false}}
+function localApply(){const l=localOn()?1:0,was=LOCALU.value;LOCALU.value=l;RIG.local=l;if(l)try{lmEnsure()}catch(e){}SKINT.value.setRGB(l?0.62:1,l?0.50:1,l?0.42:1);if(l&&RIG.ready&&RIG.b&&RIG.b.head){localHair();localNeck()}if(RIG.lHair)RIG.lHair.visible=!!l;if(RIG.lNeck)RIG.lNeck.visible=!!l;lmSync();if(l){LYC.c.value.set(0.10,0.13,0.045);LYC.t.value.set(0.90,0.88,0.80)}else if(was&&typeof setLycra==='function')setLycra(PROG.lyc||'red')}
 function kidApply0(){const k=kidOn()?1:0;KIDU.value=k;RIG.kid=k;if(k)kidBones();
   if(RIG.mesh){const mt=RIG.mesh.material;if(!RIG.baseMap)RIG.baseMap=mt.map;if(k&&!RIG.kidMap)RIG.kidMap=kidTexBuild();const want=k&&RIG.kidMap?RIG.kidMap:RIG.baseMap;if(mt.map!==want){mt.map=want}
     if(k&&!RIG.kHead&&RIG.b.head)kidHeadBuild();if(RIG.kHead)RIG.kHead.visible=!!k;
@@ -3391,7 +3414,7 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
  {const ld=new GLTFLoader();ld.setMeshoptDecoder(MeshoptDecoder);ld.load('surfer.glb',g=>{try{RIG.init(g)}catch(e){console.warn('surfista 3D:',e)}},undefined,e=>console.warn('surfista 3D:',e))}   // the surfer model is its own compressed file (WebP texture, meshopt geometry)
 }
 function setRider(n){RIG.on=!!n&&RIG.ready;const p=!RIG.on;[legF,legB,shoF,shoB,armF,armB,torso].forEach(t=>t.mesh.visible=p);[RP.head,RP.haF,RP.haB,RP.ftF,RP.ftB].forEach(o=>o.visible=p);
-  if(RIG.mesh)RIG.mesh.visible=RIG.on;if(RIG.ready)try{localStorage.setItem('surfpool_rider_moreno',RIG.on?'1':'0')}catch(e){}
+  if(RIG.mesh)RIG.mesh.visible=RIG.on;if(typeof lmSync==='function')try{lmSync()}catch(e){}if(RIG.ready)try{localStorage.setItem('surfpool_rider_moreno',RIG.on?'1':'0')}catch(e){}
   const a=$('rdN'),c=$('rdC');if(a){a.classList.toggle('on',RIG.on);c.classList.toggle('on',!RIG.on)}}
 function setLimb(m,a,b){_d.subVectors(b,a);const l=_d.length()||1e-4;m.position.copy(a);m.scale.set(1,l,1);m.quaternion.setFromUnitVectors(UPV,_d.multiplyScalar(1/l))}
 function ik(a,t,l1,l2,hx,hy,hz,mid,end){
