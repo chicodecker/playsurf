@@ -681,6 +681,10 @@ body.touch .surfBtns .pbtn{padding-right:70px}body.touch .surfBtns .chAv{width:4
 .surfBtns .chAv{display:none!important}.surfBtns .pbtn,body.touch .surfBtns .pbtn{padding-right:14px}   /* 2026-11-19 no photos in CHOOSE YOUR SURFER */
 /* 2026-11-19 many more surfers: CHOOSE YOUR SURFER as a compact grid of name chips beside the turning surfer (four columns on a computer, three on a narrow window, five on a phone held sideways) */
 .surfBtns{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;flex:1;min-width:0;max-width:780px}.surfBtns .pbtn.big{font-size:15px!important;padding:8px 10px!important;min-height:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;line-height:1.1}.surfBtns .pbtn.big i{font-size:9.5px!important;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@media (max-width:899px){.surfBtns{grid-template-columns:repeat(3,minmax(0,1fr))!important}.surfBtns .pbtn.big{font-size:14px!important}}@media (max-width:1099px){.surfBtns .pbtn.big{font-size:14px!important}}@media (max-height:820px){.surfBtns .pbtn.big{padding:6px 8px!important}}@media (max-width:639px){.surfBtns{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}.surfBtns .pbtn.big{font-size:12px!important;padding:7px 4px!important}.surfBtns .pbtn.big i{display:none}}@media (max-height:540px) and (min-width:560px){.surfBtns{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important}.surfBtns .pbtn.big{font-size:11.5px!important;padding:6px 4px!important}.surfBtns .pbtn.big i{display:none}}
+/* 2026-11-20 (the user) the surfers in groups, MEN / WOMEN / KIDS: a small heading across the grid above each group */
+.surfBtns .svGrp{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:8px 0 0;padding:0 2px;font:900 12px/1 var(--ps-f);font-style:italic;letter-spacing:.22em;color:rgba(255,255,255,.82);text-shadow:0 1px 8px rgba(0,0,0,.45)}.surfBtns .pbtn.big{min-width:0}.surfBtns .pbtn.big i{letter-spacing:.08em}   /* (each chip inside its own grid cell: the old 240px minimum of the big buttons made them overlap the next one, badly on a phone; the subtitles a touch tighter so they still fit their chip) */
+.surfBtns .svGrp:first-child{margin-top:0}.surfBtns .svGrp::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.38),rgba(255,255,255,0))}@media (max-width:639px){.surfBtns .svGrp{font-size:10.5px;margin-top:5px}.surfBtns .pbtn.big{letter-spacing:.02em;padding-left:2px!important;padding-right:2px!important}}@media (max-height:540px){.surfBtns .svGrp{font-size:9.5px;margin-top:3px;letter-spacing:.18em;gap:7px}.surfBtns .pbtn.big{letter-spacing:.02em;padding-left:2px!important;padding-right:2px!important}}
+#svLd{position:absolute;left:50%;top:42%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:3px solid rgba(255,255,255,.16);border-top-color:#6fe6ff;border-right-color:#ff4f9e;opacity:0;transition:opacity .2s;animation:ldSpin .75s linear infinite;animation-play-state:paused}.svStage.svWait #svLd{opacity:1;animation-play-state:running}   /* (2026-11-20) the surfer in front still on his way: a small spinner on the stage, nothing else waits */
 /* and the same surfers in the wave's MENU: smaller chips, four across (five on a phone held sideways) */
 #gm .gmSurf{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}#gm .gmSurf button{min-height:50px;padding:8px 10px 7px;gap:3px;border-radius:12px}#gm .gmSurf button b{font-size:13px}#gm .gmSurf button small{font-size:8.5px;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}#gm .gmSurf button.sel::after{width:14px;height:14px;right:7px;top:7px}@media (max-width:639px){#gm .gmSurf{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}#gm .gmSurf button{min-height:0;padding:7px 8px}#gm .gmSurf button small{display:none}#gm .gmSurf button b{font-size:11.5px}}@media (max-height:540px){#gm .gmSurf{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}#gm .gmSurf button{min-height:0;padding:6px 7px}#gm .gmSurf button small{display:none}#gm .gmSurf button b{font-size:11px}}
 </style>
@@ -1153,8 +1157,8 @@ body.wcPgOn #menu{visibility:hidden}
         <div class="tod"><button id="todD" class="on">☀ DAY</button><button id="todS"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.5h18M7 17.5a5 5 0 0 1 10 0M12 7.2v2.2M5.3 10.4l1.5 1.5M18.7 10.4l-1.5 1.5M5 21h14"/></svg> SUNSET</button><button id="todN">☾ NIGHT</button></div>
         <div class="pbtns wzGo" style="display:none"><button id="wzNext3" class="pbtn big">NEXT &#9654;</button></div></section>
       <section class="wzS" data-s="4"><h2 class="wzH">CHOOSE YOUR SURFER</h2>
-        <div class="svRow"><div class="svStage" id="svStage"><canvas id="svView" aria-label="The surfer, turning"></canvas><div id="svName" aria-hidden="true"></div></div>
-        <div class="pbtns surfBtns"><button id="chPro" class="pbtn big">THE PRO<i>PRO MODEL · FULL POWER</i><img class="chAv" src="img/ch-pro.jpg" alt="" width="64" height="64"></button><button id="chKid" class="pbtn big wv">THE CRAFT<i>PIXEL SOFTBOARD</i><img class="chAv" src="img/ch-kid.jpg" alt="" width="64" height="64"></button><button id="chTheo2" class="pbtn big wv">THE KID<i>THEO · ON HIS SOFTBOARD</i></button><button id="chGirl" class="pbtn big wv">THE GIRL<i>STUBBY · HER OWN STYLE</i><img class="chAv" src="img/ch-girl.jpg" alt="" width="64" height="64"></button><button id="chLegend" class="pbtn big wv">THE LEGEND<i>LONGBOARD · CLASSIC STYLE</i></button><button id="chCharger" class="pbtn big wv">THE CHARGER<i>BIG WAVE GUN · FEARLESS</i></button><button id="chShredder" class="pbtn big wv">THE PUNK<i>NO RULES · PUNK ATTACK</i></button><button id="chFlyer" class="pbtn big wv">THE GEISHA<i>SAKURA · AIR TIME</i></button><button id="chCruiser" class="pbtn big wv">THE MOM<i>LONGBOARD · FAMILY RIDE</i></button><button id="chChamp" class="pbtn big wv">THE CHAMP<i>WORLD TOUR · GOLD EDITION</i></button><button id="chRobot" class="pbtn big wv">THE ROBOT<i>HOVER FOIL · SURF UNIT 01</i></button><button id="chCowboy" class="pbtn big wv">THE COWBOY<i>RODEO · WILD WEST</i></button><button id="chPirate" class="pbtn big wv">THE PIRATE<i>JOLLY ROGER · SEVEN SEAS</i></button><button id="chBallerina" class="pbtn big wv">THE BALLERINA<i>EN POINTE · BALLET</i></button><button id="chAstronaut" class="pbtn big wv">THE ASTRONAUT<i>HOVER FOIL · ZERO GRAVITY</i></button><button id="chViking" class="pbtn big wv">THE VIKING<i>BIG WAVE GUN · RAIDER</i></button><button id="chChef" class="pbtn big wv">THE CHEF<i>EGG · HOUSE SPECIAL</i></button><button id="chBoss" class="pbtn big wv">THE BOSS<i>LONGBOARD · OUT OF OFFICE</i></button><button id="chDj" class="pbtn big wv">THE DJ<i>RETRO TWIN · DROP THE BEAT</i></button></div></div></section>
+        <div class="svRow"><div class="svStage" id="svStage"><canvas id="svView" aria-label="The surfer, turning"></canvas><div id="svName" aria-hidden="true"></div><div id="svLd" aria-hidden="true"></div></div>
+        <div class="pbtns surfBtns"><h3 class="svGrp">MEN</h3><button id="chPro" class="pbtn big">THE PRO<i>PRO MODEL · FULL POWER</i><img class="chAv" src="img/ch-pro.jpg" alt="" width="64" height="64"></button><button id="chLegend" class="pbtn big wv">THE LEGEND<i>LONGBOARD · CLASSIC STYLE</i></button><button id="chShredder" class="pbtn big wv">THE PUNK<i>NO RULES · PUNK ATTACK</i></button><button id="chRobot" class="pbtn big wv">THE ROBOT<i>HOVER FOIL · SURF UNIT 01</i></button><button id="chCowboy" class="pbtn big wv">THE COWBOY<i>RODEO · WILD WEST</i></button><button id="chAstronaut" class="pbtn big wv">THE ASTRONAUT<i>HOVER FOIL · ZERO GRAVITY</i></button><button id="chViking" class="pbtn big wv">THE VIKING<i>BIG WAVE GUN · RAIDER</i></button><button id="chChef" class="pbtn big wv">THE CHEF<i>EGG · HOUSE SPECIAL</i></button><button id="chBoss" class="pbtn big wv">THE BOSS<i>LONGBOARD · OUT OF OFFICE</i></button><button id="chDj" class="pbtn big wv">THE DJ<i>RETRO TWIN · DROP THE BEAT</i></button><h3 class="svGrp">WOMEN</h3><button id="chGirl" class="pbtn big wv">THE GIRL<i>STUBBY · HER OWN STYLE</i><img class="chAv" src="img/ch-girl.jpg" alt="" width="64" height="64"></button><button id="chCharger" class="pbtn big wv">THE CHARGER<i>BIG WAVE GUN · FEARLESS</i></button><button id="chFlyer" class="pbtn big wv">THE GEISHA<i>SAKURA · AIR TIME</i></button><button id="chCruiser" class="pbtn big wv">THE MOM<i>LONGBOARD · FAMILY RIDE</i></button><button id="chChamp" class="pbtn big wv">THE CHAMP<i>WORLD TOUR · GOLD EDITION</i></button><button id="chPirate" class="pbtn big wv">THE PIRATE<i>JOLLY ROGER · SEVEN SEAS</i></button><button id="chBallerina" class="pbtn big wv">THE BALLERINA<i>EN POINTE · BALLET</i></button><h3 class="svGrp">KIDS</h3><button id="chTheo2" class="pbtn big wv">THE KID<i>THEO · ON HIS SOFTBOARD</i></button><button id="chKid" class="pbtn big wv">THE CRAFT<i>PIXEL SOFTBOARD</i><img class="chAv" src="img/ch-kid.jpg" alt="" width="64" height="64"></button></div></div></section>
       <section class="wzS" data-s="5"><h2 class="wzH">CHOOSE YOUR BOARD</h2>
         <div class="bdStage" id="bdStage"><canvas id="bdView" aria-label="The board, turning"></canvas><div id="bdSeal" aria-hidden="true"><span><small>THEO BONUS</small>SPECIAL EDITION</span></div></div>
         <div class="playRow"><div class="pbtns"><button id="bdPrev" class="pbtn wv sm" aria-label="Previous board">&#9664;</button><button id="bdName" class="pbtn wv sel sm">CLASSIC</button><button id="bdNext" class="pbtn wv sm" aria-label="Next board">&#9654;</button><button id="bdRider" class="pbtn sm" style="display:none" aria-label="Change surfer">&#8644; THEO</button><span id="bdInfo" class="bdInfo"></span></div></div>
@@ -3636,14 +3640,19 @@ async function ldRun(txt,steps,minMs){const el=ldEl(),bar=el.querySelector('.ldB
 function bodyReady(k,ms){return new Promise(res=>{const t0=performance.now(),go=()=>{const B=BODIES[k];if(!B)return res(false);if(RIG.ready)try{bodyEnsure(k,1)}catch(e){}if(B.ready)return res(true);if(performance.now()-t0>(ms||9000))return res(false);setTimeout(go,60)};go()})}
 const SURF_BODY={girl:'girl',local:'local',pro2:'pro2',theo2:'theo2',haole:'haole',talent:'talent',legend:'legend',charger:'charger',shredder:'shredder',flyer:'flyer',cruiser:'cruiser',champ:'champ',robot:'robot',cowboy:'cowboy',pirate:'pirate',ballerina:'ballerina',astronaut:'astronaut',viking:'viking',chef:'chef',boss:'boss',dj:'dj'};
 function riderPrep(cb,minMs){const k=SURF_BODY[typeof gmSurfNow==='function'?gmSurfNow():''];if(!k||(BODIES[k]&&BODIES[k].ready)){if(cb)cb();return}ldRun('LOADING',[()=>bodyReady(k)],minMs||300).then(()=>{if(cb)cb()})}   /* the surfer you picked, ready before the wave starts */
-let BPF=0;function bodyPrefetch(){if(BPF)return;BPF=1;const c=navigator.connection;if(c&&(c.saveData||/2g/.test(c.effectiveType||'')))return;   /* 2026-11-20 the chooser's surfers downloaded quietly, two at a time, a few seconds after the game is up: CHOOSE YOUR SURFER then only builds them (not on data saver or 2G) */
-  const ks=[...new Set(SV_L.map(e=>e[1]))].filter(k=>BODIES[k]&&BODIES[k].file);let i=0;const next=()=>{while(i<ks.length){const B=BODIES[ks[i++]];if(B.ready||B.req||MAGP[B.file])continue;magFetch(B.file).then(next,next);return}};next();next()}
-let SVP=null;function svPrep(){const need=[...new Set(SV_L.map(e=>e[1]))].filter(k=>k!=='pro'&&BODIES[k]&&!BODIES[k].ready);if(!need.length){svShow(true);return}if(SVP)return;for(const k of need){const B=BODIES[k];if(!B.req)try{magFetch(B.file,1)}catch(_){}}   /* the downloads not already done by bodyPrefetch, all at once */
-  SVP=ldRun('LOADING SURFERS',need.map(k=>()=>bodyReady(k)).concat([()=>{for(const e of SV_L)try{svModel(e[1])}catch(_){}},()=>{if(!SV.r){svShow(true);svShow(false)}if(SV.r&&SV.s){const G=new THREE.Group();for(const k in SV.m)G.add(SV.m[k]);SV.s.add(G);try{SV.r.compile(SV.s,SV.c)}catch(_){}SV.s.remove(G);for(const k in SV.m)G.remove(SV.m[k]);SV.cur=null}}]),350)   /* and the turntable's shaders compiled behind the veil too */.then(()=>{SVP=null;if(WZ.s===4)svShow(true)})}   /* every surfer of the page, before it opens */
+/* 2026-11-20 (the user: "carregue cada um sozinho, pra nao pesar tanto no inicio") CHOOSE YOUR SURFER opens at once, with no LOADING veil: a body is downloaded and built only when it is needed, for the surfer under the pointer or with the focus, or the one the turntable comes round to; one at a time, so a quick sweep over the buttons doesn't start them all; nothing is downloaded for the chooser while the game starts */
+const SVQ={k:null,t:0,lite:!!(navigator.connection&&(navigator.connection.saveData||/2g/.test(navigator.connection.effectiveType||'')))};   /* (on data saver or 2G the turntable stays on the surfer you point at, it doesn't go round downloading the others) */
+function svPrep(){svShow(true)}
+function svNeed(k){const B=k&&k!=='pro'&&k!=='kid'?BODIES[k]:null;return B&&B.file&&!B.ready?B:null}   /* (THE PRO and THE CRAFT are made from the rig the game already has) */
+function svLoad(){if(!SV.on||!RIG.ready)return;if(SVQ.k){const Q=BODIES[SVQ.k];if(Q&&!Q.ready&&performance.now()-SVQ.t<25000)return;SVQ.k=null}const k=SV_L[SV.i][1],B=svNeed(k);if(B&&!B.req){SVQ.k=k;SVQ.t=performance.now();try{bodyEnsure(k)}catch(e){}if(!B.req)SVQ.k=null}}   /* the one on its way finishes first, then whoever is in front by then */
+function svAhead(){if(SVQ.lite||SVQ.k)return;const B=svNeed(SV_L[(SV.i+1)%SV_L.length][1]);if(B&&!B.req&&!MAGP[B.file])try{magFetch(B.file)}catch(e){}}   /* the turntable about to move on: the next one's download starts a second early (built when he comes round) */
+function svWait(on){const st=document.getElementById('svStage');if(!st)return;on=!!on&&!st.classList.contains('svKid');if(st.classList.contains('svWait')!==on)st.classList.toggle('svWait',on)}   /* (not over THE CRAFT's drawn portrait) */
 /* 2026-11-19 CHOOSE YOUR SURFER in 3D: the remade bodies turning like the boards do, arms down; it shows the surfer under the pointer, or goes round them all */
 const SV={r:null,s:null,c:null,g:null,on:false,raf:0,t:0,last:0,w:0,h:0,pr:0,i:0,pin:-1,hold:0,cur:null,m:{}};
-const SV_L=[['chPro','pro','THE PRO'],['chKid','kid','THE CRAFT'],['chTheo2','theo2','THE KID'],   /* 2026-11-20 (the user) the old THE KID is THE CRAFT now, and THEO 2 is THE KID */
-  ['chGirl','girl','THE GIRL'],['chLegend','legend','THE LEGEND'],['chCharger','charger','THE CHARGER'],['chShredder','shredder','THE PUNK'],['chFlyer','flyer','THE GEISHA'],['chCruiser','cruiser','THE MOM'],['chChamp','champ','THE CHAMP'],['chRobot','robot','THE ROBOT'],['chCowboy','cowboy','THE COWBOY'],['chPirate','pirate','THE PIRATE'],['chBallerina','ballerina','THE BALLERINA'],['chAstronaut','astronaut','THE ASTRONAUT'],['chViking','viking','THE VIKING'],['chChef','chef','THE CHEF'],['chBoss','boss','THE BOSS'],['chDj','dj','THE DJ']];
+const SV_L=[   /* 2026-11-20 (the user: "separe homens e mulheres") in the chooser's order, MEN, WOMEN, KIDS: the turntable goes round them group by group */
+  ['chPro','pro','THE PRO'],['chLegend','legend','THE LEGEND'],['chShredder','shredder','THE PUNK'],['chRobot','robot','THE ROBOT'],['chCowboy','cowboy','THE COWBOY'],['chAstronaut','astronaut','THE ASTRONAUT'],['chViking','viking','THE VIKING'],['chChef','chef','THE CHEF'],['chBoss','boss','THE BOSS'],['chDj','dj','THE DJ'],
+  ['chGirl','girl','THE GIRL'],['chCharger','charger','THE CHARGER'],['chFlyer','flyer','THE GEISHA'],['chCruiser','cruiser','THE MOM'],['chChamp','champ','THE CHAMP'],['chPirate','pirate','THE PIRATE'],['chBallerina','ballerina','THE BALLERINA'],
+  ['chTheo2','theo2','THE KID'],['chKid','kid','THE CRAFT']];   /* (2026-11-20, the user) the old THE KID is THE CRAFT now, and THEO 2 is THE KID */
 function kidSnap(){if(!RIG.ready||!RIG.mesh||!RIG.b||!RIG.b.head||typeof RIG.pose!=='function')return null;const m=RIG.mesh,wk=RIG.kid,wu=KIDU.value;let G=null;   /* THE KID as he surfs, frozen: the rig put in the kid's shape and pose once, skinned on the CPU, his own head beside it */
   try{kidBones();if(!RIG.kHead)kidHeadBuild();if(!RIG.kidMap)RIG.kidMap=kidTexBuild();if(!RIG.kHead||!RIG.kidMap)return null;RIG.kid=1;KIDU.value=1;const sv={};for(const q of ['prone','flail','air','claim','grab','lay','throw'])sv[q]=A[q];const sa={};for(const q of ['crouch','rail','intent','vup','drag','claim','tw','look','shiftX','lay','snap'])sa[q]=AT[q];   /* standing tall on his board for the picture: no paddling, no move, no fall */
     A.prone=0;A.flail=0;A.air=0;A.claim=0;A.grab=0;A.lay=0;A.throw=0;AT.crouch=0.25;AT.rail=0;AT.intent=0;AT.vup=0;AT.drag=0;AT.claim=0;AT.tw=0.4;AT.look=0;AT.shiftX=0;AT.lay=0;AT.snap=0;for(let f=0;f<40;f++){RIG.kid=1;poseRider(game.t||0,1/30)}RIG.kid=1;KIDU.value=1;RIG.pose();Object.assign(A,sv);Object.assign(AT,sa);riderG.updateMatrixWorld(true);m.skeleton.bones.forEach(b=>b.updateMatrixWorld(true));m.skeleton.update();
@@ -3684,7 +3693,7 @@ function svModel(bk){if(SV.m[bk])return SV.m[bk];if(bk==='kid'){const K=kidSnap(
   G.rotation.y=0;return SV.m[bk]=G}
 function svPick(i,pin){SV.i=(i+SV_L.length)%SV_L.length;if(pin)SV.pin=SV.i;SV.hold=0;document.querySelectorAll('.surfBtns .pbtn').forEach(b=>b.classList.toggle('pv',b.id===SV_L[SV.i][0]));const n=document.getElementById('svName');if(n){n.textContent=SV_L[SV.i][2];n.classList.add('on')}
   {const st=document.getElementById('svStage'),kd=SV_L[SV.i][1]==='kid'&&!svModel('kid');   /* (the drawn portrait only if his 3D snapshot could not be made) */if(st){st.classList.toggle('svKid',kd);if(kd&&!SV.kidImg)try{const c=document.createElement('canvas');c.width=c.height=256;kidPortrait(c.getContext('2d'),128,128,118,0);SV.kidImg=1;st.style.setProperty('--svKid','url('+c.toDataURL('image/png')+')')}catch(e){}}}   /* 2026-11-19 THE KID has no body of his own to turn here (his surfer is the pro's body remade): his drawn portrait instead */
-  try{for(const k of [SV_L[SV.i][1],SV_L[(SV.i+1)%SV_L.length][1]])if(k!=='pro')bodyEnsure(k)}catch(e){}}
+  svLoad()}
 function svShow(on){const cv=document.getElementById('svView');SV.on=!!on&&!!cv;if(!SV.on){cancelAnimationFrame(SV.raf);SV.raf=0;document.querySelectorAll('.surfBtns .pbtn.pv').forEach(b=>b.classList.remove('pv'));return}
   if(!SV.r){try{SV.r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:'low-power'})}catch(e){SV.on=false;return}
     SV.r.setClearColor(0x000000,0);SV.r.outputColorSpace=THREE.SRGBColorSpace;SV.r.toneMapping=THREE.ACESFilmicToneMapping;SV.r.toneMappingExposure=1.05;
@@ -3692,13 +3701,14 @@ function svShow(on){const cv=document.getElementById('svView');SV.on=!!on&&!!cv;
     SV.c=new THREE.PerspectiveCamera(20,0.6,0.05,40);SV.g=new THREE.Group();SV.s.add(SV.g);
     SV_L.forEach(([id],k)=>{const b=document.getElementById(id);if(!b)return;b.addEventListener('mouseenter',()=>svPick(k,1));b.addEventListener('focus',()=>svPick(k,1));b.addEventListener('mouseleave',()=>{SV.pin=-1;SV.hold=0})})}
   {const now=typeof gmSurfNow==='function'?gmSurfNow():'pro',k=Math.max(0,SV_L.findIndex(e=>e[0]==={pro:'chPro',kid:'chKid',girl:'chGirl',local:'chLocal',pro2:'chPro2',theo2:'chTheo2',haole:'chHaole',talent:'chTalent',legend:'chLegend',charger:'chCharger',shredder:'chShredder',flyer:'chFlyer',cruiser:'chCruiser',champ:'chChamp',robot:'chRobot',cowboy:'chCowboy',pirate:'chPirate',ballerina:'chBallerina',astronaut:'chAstronaut',viking:'chViking',chef:'chChef',boss:'chBoss',dj:'chDj'}[now]));svPick(k,0)}
-  if(SV.raf)return;SV.last=performance.now();
+  svWait(!svModel(SV_L[SV.i][1]));if(SV.raf)return;SV.last=performance.now();
   const loop=now=>{if(!SV.on){SV.raf=0;return}SV.raf=requestAnimationFrame(loop);if(now-SV.last<28)return;const dt=Math.min(0.05,(now-SV.last)/1000);SV.last=now;SV.t+=dt;
     const w=cv.clientWidth|0,h=cv.clientHeight|0;if(w<8||h<8)return;const pr=Math.min(devicePixelRatio,2);
     if(w!==SV.w||h!==SV.h||pr!==SV.pr){SV.w=w;SV.h=h;SV.pr=pr;SV.r.setPixelRatio(pr);SV.r.setSize(w,h,false);SV.c.aspect=w/h;SV.c.updateProjectionMatrix()}
-    try{if(RIG.ready&&SV_L[SV.i][1]!=='pro')bodyEnsure(SV_L[SV.i][1])}catch(e){}
-    const M=svModel(SV_L[SV.i][1]);if(M!==SV.cur){if(SV.cur)SV.g.remove(SV.cur);if(M){SV.g.add(M);M.rotation.y=-FACE_SIGN*PI/2+0.5}SV.cur=M}
-    if(M){SV.hold+=dt;if(SV.pin<0&&SV.hold>3.2)svPick(SV.i+1,0);M.rotation.y+=dt*0.9;   /* round and round; a new surfer every few seconds */
+    svLoad();
+    const M=svModel(SV_L[SV.i][1]);if(M!==SV.cur){if(SV.cur)SV.g.remove(SV.cur);if(M){SV.g.add(M);M.rotation.y=-FACE_SIGN*PI/2+0.5}SV.cur=M;svWait(!M)}
+    if(!M){SV.wt=(SV.wt||0)+dt;if(SV.wt>15&&SV.pin<0&&!SVQ.lite){SV.wt=0;svPick(SV.i+1,0)}}else SV.wt=0;   /* (a body that never comes: the turntable moves on after 15 s) */
+    if(M){SV.hold+=dt;if(SV.pin<0&&SV.hold>2.1)svAhead();if(SV.pin<0&&SV.hold>3.2&&!SVQ.lite)svPick(SV.i+1,0);M.rotation.y+=dt*0.9;   /* round and round; a new surfer every few seconds */
       const H=M.userData.top||1,tn=Math.tan(SV.c.fov*PI/360),d=Math.max(H*0.56/tn,0.34/(tn*SV.c.aspect));SV.c.position.set(0,H*0.56,d);SV.c.lookAt(0,H*0.5,0)}
     SV.r.render(SV.s,SV.c)};
   SV.raf=requestAnimationFrame(loop)}
@@ -4626,7 +4636,7 @@ const RIG={ready:false,on:false,s:1,spine:[],arm:[],leg:[],b:{}};
        suitK=(1.-fo)*(1.-lycK*(1.-hood));diffuseColor.rgb=mix(diffuseColor.rgb,neo,suitK);}   /* the competition jersey stays on top of a fullsuit */`).replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.clearcoat*=(1.-max(faceK,neckK))*(1.-0.97*max(lycK,kidK))*(1.-hairK);material.roughness=mix(material.roughness,0.84,hairK);material.specularColor*=1.-0.8*hairK;material.roughness=mix(material.roughness,0.80,suitK);material.clearcoat=mix(material.clearcoat,0.0,suitK);material.specularColor*=mix(1.,0.10,suitK);totalEmissiveRadiance+=uKidSkin*0.10*kidK;totalEmissiveRadiance*=1.-0.94*suitK;material.roughness=mix(mix(material.roughness,0.75,max(faceK,neckK*0.8)),0.74,lycK);\n #ifdef USE_SHEEN\n material.sheenColor=mix(mix(mix(material.sheenColor,uLyc*0.22+0.03,lycK),vec3(0.0),kidK),vec3(0.0),suitK);   /* a soft fabric sheen, no shine stealing the eye */\n #endif\n')};   /* no wet shine on the face: it picked out every bump */
    {const ob=mesh.material.onBeforeCompile;mesh.material.onBeforeCompile=sh=>{ob(sh);sh.uniforms.uRim=RIM;
      sh.fragmentShader='uniform vec3 uRim;\n'+sh.fragmentShader.replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=uRim*rv*rv*rv*(0.6+0.4*diffuseColor.g)*(1.-0.55*suitK)*(1.-0.9*hairK)*0.72;}\n#include <opaque_fragment>')}}
-   girlShader(mesh.material);RIG.mesh=mesh;RIG.ready=true;setTimeout(()=>{try{for(const k of Object.keys(BODIES))if(k!=='act'&&BODIES[k].on())bodyEnsure(k)}catch(e){}},0);setTimeout(()=>{try{bodyPrefetch()}catch(e){}},4000);   /* 2026-11-19 a surfer chosen on an earlier visit gets their 3D body as soon as the rig is up (THE GIRL came back as the old made-over pro until clicked again) */let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
+   girlShader(mesh.material);RIG.mesh=mesh;RIG.ready=true;setTimeout(()=>{try{for(const k of Object.keys(BODIES))if(k!=='act'&&BODIES[k].on())bodyEnsure(k)}catch(e){}},0);   /* 2026-11-19 a surfer chosen on an earlier visit gets their 3D body as soon as the rig is up (THE GIRL came back as the old made-over pro until clicked again) */let pref='1';try{pref=localStorage.getItem('surfpool_rider_moreno')||'1'}catch(e){}
    setRider(true)};   // always the 3D surfer
  // the surfer model travels inside this file (base64, at the end of the page): it loads the same from a local server, a double-clicked file or a preview
  {const ld=new GLTFLoader();ld.setMeshoptDecoder(MeshoptDecoder);ld.load('surfer.glb',g=>{try{RIG.init(g)}catch(e){console.warn('surfista 3D:',e)}},undefined,e=>console.warn('surfista 3D:',e))}   // the surfer model is its own compressed file (WebP texture, meshopt geometry)
@@ -6178,7 +6188,12 @@ const EXITS=[
   {id:'bomb',ex:14},                  /* a jump and a cannonball into the water */
   {id:'tossFwd',ex:15},               /* off the back, the board thrown out ahead of him */
   {id:'tossSide',ex:16},              /* the board thrown off to one side, him over the other way */
-  {id:'paint',ex:17}];                /* 2026-11-19 a drone comes in, hovers, aims... and shoots him in the chest with a paintball: over he goes, backwards */
+  {id:'paint',ex:17},
+  {id:'gLip',ex:21,gag:'lip'},        /* 2026-11-20 the new funny endings, batch 1: the lip lands on his head */
+  {id:'gSnap',ex:21,gag:'snap'},      /* the board snaps in two */
+  {id:'gRescue',ex:21,gag:'rescue',npc:1},   /* the lifeguard's jet ski rescue, gone wrong */
+  {id:'gNet',ex:21,gag:'net',npc:1},  /* a fisherman's cast net */
+  {id:'gSkip',ex:21,gag:'skip'}];     /* a skipping stone, legs up */                /* 2026-11-19 a drone comes in, hovers, aims... and shoots him in the chest with a paintball: over he goes, backwards */
 function pickExit(){const used=game.exHist||(game.exHist=[]),npcOk=typeof npcMesh!=='undefined'&&npcMesh&&NPCP.pop[3];let c=EXITS.filter(e=>used.indexOf(e.id)<0&&(!e.npc||npcOk)&&(!e.gag||!game.attract));if(!c.length)c=EXITS.filter(e=>!e.gag);const e=c[Math.floor(Math.random()*c.length)];used.push(e.id);if(used.length>8)used.shift();game.exPlan=e;game.lastExit=e.ex;return e.ex}
 const _trAx=new V3(0.6,0,-0.8).normalize(),_kd=new V3();   /* the trust fall goes over backwards and toward the tail, so it reads from the beach */
 function koStart(v){const T={6:'flip',7:'trust',9:'grab',10:'pencil',14:'bomb',15:'tossF',16:'tossS',17:'paint'}[v];sf.mode='kickout';sf.ko=T;sf.wT=0;sf.wPos.copy(sf.pos);sf.wQ.copy(boardG.quaternion);sampleSurf(sf.s,sf.p,S);
@@ -6287,7 +6302,7 @@ function gProps(){if(GG.ok)return;GG.ok=1;const M=(c,r,m)=>new THREE.MeshStandar
   GG.stars=[];for(let i=0;i<5;i++)GG.stars.push(gSprite(x=>{x.translate(64,64);x.beginPath();for(let k=0;k<10;k++){const r=k%2?22:54,a=-PI/2+k*PI/5;x.lineTo(Math.cos(a)*r,Math.sin(a)*r)}x.closePath();x.fillStyle='#ffd83a';x.fill();x.lineWidth=7;x.strokeStyle='#7a4a00';x.stroke()},0.13));
   GG.zz=[];for(let i=0;i<3;i++)GG.zz.push(gSprite(x=>{x.font='900 100px Impact, Arial Black, sans-serif';x.textAlign='center';x.textBaseline='middle';x.lineWidth=12;x.strokeStyle='#1b2a3a';x.strokeText('Z',64,68);x.fillStyle='#ffffff';x.fillText('Z',64,68)},0.3))}
 function gDrone(){if(!GG.drone&&typeof DRONE!=='undefined'&&DRONE.g){GG.drone=DRONE.g.clone(true);GG.drone.visible=false;scene.add(GG.drone)}return GG.drone}
-function gHide(){if(!GG.shown)return;GG.shown=0;for(const k of ['jet','gull','fin','duck','phone','flash','drone'])if(GG[k])GG[k].visible=false;(GG.stars||[]).forEach(s=>s.visible=false);(GG.zz||[]).forEach(s=>s.visible=false);if(GG.npc){GG.npc=0;if(!DROP.on)npcG.visible=false}}
+function gHide(){if(!GG.shown)return;GG.shown=0;gHide2();for(const k of ['jet','gull','fin','duck','phone','flash','drone'])if(GG[k])GG[k].visible=false;(GG.stars||[]).forEach(s=>s.visible=false);(GG.zz||[]).forEach(s=>s.visible=false);if(GG.npc){GG.npc=0;if(!DROP.on)npcG.visible=false}}
 function gStars(c,t,on){(GG.stars||[]).forEach((s,i)=>{s.visible=on;if(!on)return;const a=t*5+i*2*PI/5;s.position.set(c.x+Math.cos(a)*0.26,c.y+0.18+0.05*Math.sin(t*9+i),c.z+Math.sin(a)*0.26);s.material.rotation=t*3+i})}
 function gZz(c,t,on){(GG.zz||[]).forEach((s,i)=>{const u=(t*0.6+i/3)%1;s.visible=on;if(!on)return;s.position.set(c.x+0.25*u+0.05*Math.sin(t*2+i),c.y+0.25+0.9*u,c.z+0.1*u);s.scale.setScalar(0.12+0.24*u);s.material.opacity=Math.min(1,u*5)*(1-u)})}
 function gFlash(p,k){const f=GG.flash;f.visible=k>0.01;if(!f.visible)return;f.position.copy(p);f.scale.setScalar(0.25+1.1*k);f.material.opacity=k}
@@ -6516,7 +6531,307 @@ const GAG={
     if(gEv(0.3+T)){const q=_g6.copy(G.b0).addScaledVector(G.W,0.7*T).setY(G.wy);gSpl(q,260,2.6);for(let i=0;i<90;i++)emit(q.x+rnd(-0.6,0.6),G.wy+rnd(0,0.4),q.z+rnd(-0.6,0.6),rnd(-1,1)-CP*0.3,rnd(5,10),rnd(-1,1),rnd(1.0,1.6),0.25,rnd(0.8,1.6),0.5,8,1.0);game.shake=Math.max(game.shake||0,1.0);if(!sfxPlay('splash',{vol:1}))sfxNoise(1.0,700,0.4)}
     if(gEv(3.0))gSay('Ta-da!',1.2,1.0)}}
 };
-function gagStart(id){const D=GAG[id];if(!D)return false;if(D.npc&&!(npcMesh&&NPCP.pop[3]))return false;gProps();
+/* ── 2026-11-20 the new funny endings, batch 1: the lip comes down on his head, the board snaps in two, a clumsy jet ski rescue, a fisherman's cast net, a skipping stone.
+   Props are built here in code (all of Magnific's 3D generators cost credits). Same frame as the gags above: G.W toward the beach, G.L along it. ── */
+const GG2={ok:0,list:[],hv:null,hvB:null};
+const _hA=new V3(),_hB=new V3(),_hD=new V3(),_hqH=new THREE.Quaternion(),_hqB=new THREE.Quaternion(),_h1=new V3(),_h2=new V3(),_h3=new V3(),_h4=new V3(),_h5=new V3(),_h6=new V3(),_h7=new V3(),_h8=new V3(),_h9=new V3(),_hq=new THREE.Quaternion(),_hq2=new THREE.Quaternion(),_hm=new THREE.Matrix4();
+const g2M=(c,r,m,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:r==null?0.5:r,metalness:m||0},o||{}));
+function g2Add(o){o.visible=false;o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.frustumCulled=false}});scene.add(o);GG2.list.push(o);return o}
+function gHide2(){for(const o of GG2.list)o.visible=false}
+const g2L=o=>o.sub(riderG.position).applyQuaternion(_hq2.copy(riderG.quaternion).invert()).divide(riderG.scale);   /* a world point into his own frame (for the hands) */
+function g2Tex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t}
+/* sounds, made on the spot (no files): a twang, a slide whistle, the crack of a board, an engine */
+function g2Tone(type,f0,f1,dur,vol,dl,vib){const C=audio.ctx;if(!C||game.attract)return;const t=C.currentTime+(dl||0),o=C.createOscillator(),g=C.createGain();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
+  if(vib){const l=C.createOscillator(),lg=C.createGain();l.frequency.value=vib[0];lg.gain.value=vib[1];l.connect(lg);lg.connect(o.frequency);l.start(t);l.stop(t+dur+0.05)}
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+0.012);g.gain.setValueAtTime(vol,t+dur*0.55);g.gain.exponentialRampToValueAtTime(0.001,t+dur);o.connect(g);g.connect(audio.master);o.start(t);o.stop(t+dur+0.05)}
+const g2Boing=p=>{p=p||1;g2Tone('triangle',120*p,340*p,0.07,0.15);g2Tone('triangle',340*p,90*p,0.45,0.15,0.07,[17,30*p])};
+const g2Whistle=up=>g2Tone('sine',up?520:1800,up?1800:430,0.8,0.06,0,[6,20]);
+function g2Crack(){sfxNoise(0.06,9500,0.55);sfxNoise(0.25,480,0.38);g2Tone('square',170,55,0.14,0.05)}
+const g2Slap=()=>{sfxNoise(0.05,6000,0.5);sfxNoise(0.12,1400,0.3)};
+function g2Motor(dur,f0,f1,vol,lfo){const C=audio.ctx;if(!C||game.attract)return;const t=C.currentTime,o=C.createOscillator(),o2=C.createOscillator(),lp=C.createBiquadFilter(),g=C.createGain(),am=C.createGain();
+  o.type='sawtooth';o2.type='square';o.frequency.setValueAtTime(f0,t);o.frequency.linearRampToValueAtTime(f1,t+dur*0.7);o2.frequency.setValueAtTime(f0*0.502,t);o2.frequency.linearRampToValueAtTime(f1*0.502,t+dur*0.7);
+  lp.type='lowpass';lp.frequency.value=Math.max(f0,f1)*4;lp.Q.value=1.5;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+0.3);g.gain.setValueAtTime(vol,t+dur-0.6);g.gain.linearRampToValueAtTime(0,t+dur);
+  if(lfo){const l=C.createOscillator(),lg=C.createGain();l.type='square';l.frequency.value=lfo;lg.gain.value=0.5;am.gain.value=0.5;l.connect(lg);lg.connect(am.gain);l.start(t);l.stop(t+dur+0.05)}else am.gain.value=1;
+  o.connect(lp);o2.connect(lp);lp.connect(am);am.connect(g);g.connect(audio.master);o.start(t);o2.start(t);o.stop(t+dur+0.05);o2.stop(t+dur+0.05)}
+/* white water bursting out of a point (n bits, how wide, how high) */
+function g2Burst(p,n,w,up,big){const wy=sf.gag?sf.gag.wy:p.y;for(let i=0;i<n;i++){const a=rnd(PI*2),r=rnd(0.2,1)*w;emit(p.x+Math.cos(a)*r*0.4,Math.max(wy,p.y)+rnd(-0.1,0.4),p.z+Math.sin(a)*r*0.4,Math.cos(a)*r*2.2-CP*0.3,rnd(0.4,1)*up,Math.sin(a)*r*2.2,rnd(0.8,1.6),rnd(0.3,0.6)*big,rnd(1.0,2.4)*big,rnd(0.7,1.0),5.5,1.4,1)}}
+function g2Ring(p,R,n,pow){for(let i=0;i<n;i++){const a=i/n*PI*2;_h9.set(p.x+Math.cos(a)*R,p.y,p.z+Math.sin(a)*R);splash(4,_h9,pow)}}
+/* a hull lofted from cross-sections: secFn(u) gives the half ring (keel up to the middle of the deck) as [y,z] pairs; u along x from x0 to x0+len; the canvas maps u across and the ring down */
+function g2Loft(N,x0,len,secFn,mat){const pos=[],uv=[],idx=[];let K=0;
+  for(let i=0;i<=N;i++){const u=i/N,x=x0+len*u,s=secFn(u),ring=[...s,...s.slice(1,s.length-1).reverse().map(([y,z])=>[y,-z]),s[0]];K=ring.length;ring.forEach(([y,z],j)=>{pos.push(x,y,z);uv.push(u,1-j/(K-1))})}
+  for(let i=0;i<N;i++)for(let j=0;j<K-1;j++){const a=i*K+j,b=a+1,c=a+K,d=c+1;idx.push(a,c,b,b,c,d)}
+  for(const [i,sg] of [[0,-1],[N,1]]){const c0=pos.length/3;let cy=0;for(let j=0;j<K-1;j++)cy+=pos[(i*K+j)*3+1];pos.push(x0+len*i/N,cy/(K-1),0);uv.push(i/N,0.5);for(let j=0;j<K-1;j++){const a=i*K+j,b=a+1;if(sg<0)idx.push(c0,a,b);else idx.push(c0,b,a)}}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return new THREE.Mesh(g,mat)}
+/* a rope: n points, a thin four-sided tube rebuilt every frame through the points it is given */
+function g2Rope(n,r,col){const g=new THREE.BufferGeometry(),P=new Float32Array(n*4*3),I=[];for(let i=0;i<n-1;i++)for(let k=0;k<4;k++){const a=i*4+k,b=i*4+(k+1)%4;I.push(a,a+4,b,b,a+4,b+4)}
+  g.setAttribute('position',new THREE.BufferAttribute(P,3).setUsage(THREE.DynamicDrawUsage));g.setIndex(I);const m=new THREE.Mesh(g,g2M(col,0.85,0,{flatShading:true,side:THREE.DoubleSide}));m.userData={n,r,pts:Array.from({length:n},()=>new V3())};return g2Add(m)}
+function g2RopeSet(m,A,B,sag,wob){const {n,r,pts}=m.userData,P=m.geometry.attributes.position.array;m.visible=true;
+  for(let i=0;i<n;i++){const s=i/(n-1);pts[i].lerpVectors(A,B,s);pts[i].y-=sag*4*s*(1-s);if(wob)pts[i].y+=wob*Math.sin(s*PI*3+clockT*9)*s*(1-s)}
+  for(let i=0;i<n;i++){_h7.subVectors(pts[Math.min(n-1,i+1)],pts[Math.max(0,i-1)]).normalize();_h8.crossVectors(_h7,UPV);if(_h8.lengthSq()<1e-6)_h8.set(1,0,0);_h8.normalize();_h9.crossVectors(_h8,_h7).normalize();
+    for(let k=0;k<4;k++){const a=k*PI/2,cx=Math.cos(a)*r,cy=Math.sin(a)*r,o=(i*4+k)*3;P[o]=pts[i].x+_h8.x*cx+_h9.x*cy;P[o+1]=pts[i].y+_h8.y*cx+_h9.y*cy;P[o+2]=pts[i].z+_h8.z*cx+_h9.z*cy}}
+  m.geometry.attributes.position.needsUpdate=true}
+function g2Props(){if(GG2.ok)return;GG2.ok=1;
+  {/* the lifeguards' rescue jet ski (bow toward +x, waterline at y=0): a lofted fibreglass hull in red and white with RESCUE on both sides, black seat, smoked screen, bars, an amber beacon on a pole */
+   const tex=g2Tex(1024,256,(x,W,H)=>{const V=j=>j/14*H;x.fillStyle='#eef0f2';x.fillRect(0,0,W,H);x.fillStyle='#d1231a';x.fillRect(0,V(2.5),W,V(6.0)-V(2.5));x.fillRect(0,V(8.0),W,V(11.5)-V(8.0));
+     x.fillStyle='#ffc61a';x.fillRect(0,V(2.5)-5,W,6);x.fillRect(0,V(11.5)-1,W,6);x.fillStyle='#22262b';x.fillRect(0,V(6.0),W,V(8.0)-V(6.0));
+     x.fillStyle='#b81d15';x.fillRect(W*0.62,V(6.0),W*0.38,V(8.0)-V(6.0));
+     x.font='900 50px Arial Black, Impact, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillStyle='#ffffff';x.strokeStyle='#7a0f0a';x.lineWidth=3;
+     x.setTransform(1,0,0,-0.5,W*0.42,V(4.15));x.strokeText('RESCUE',0,0);x.fillText('RESCUE',0,0);x.setTransform(-1,0,0,0.5,W*0.42,V(9.85));x.strokeText('RESCUE',0,0);x.fillText('RESCUE',0,0);x.setTransform(1,0,0,1,0,0);
+     x.fillStyle='#ffffff';for(const yy of [V(4.15),V(9.85)]){x.fillRect(W*0.71-10,yy-4,20,8);x.fillRect(W*0.71-4,yy-9,8,18)}});
+   const g=new THREE.Group(),sec=u=>{const w=0.56*(u<0.55?0.9+0.1*Math.sin(u/0.55*PI/2):Math.pow(Math.max(0,Math.cos((u-0.55)/0.45*PI/2)),0.75)*0.97+0.03),
+     d=0.30*(u<0.62?1:1-0.8*Math.pow((u-0.62)/0.38,1.5))*(u<0.06?0.8+3.3*u:1),h=0.27+0.07*sstep(0.5,0.88,u)-0.16*sstep(0.9,1.0,u);
+     return [[-d,0],[-d*0.62,w*0.42],[-d*0.22,w*0.84],[0.0,w],[h*0.5,w*0.99],[h*0.88,w*0.88],[h,w*0.52],[h+0.015,0]]};
+   const hull=g2Loft(20,-1.45,3.0,sec,new THREE.MeshPhysicalMaterial({map:tex,roughness:0.34,clearcoat:0.9,clearcoatRoughness:0.12}));hull.position.y=0.02;g.add(hull);
+   const red=new THREE.MeshPhysicalMaterial({color:0xd1231a,roughness:0.3,clearcoat:1,clearcoatRoughness:0.1}),blk=g2M(0x16181b,0.75),mtl=g2M(0x9aa2aa,0.3,0.8);
+   const hood=new THREE.Mesh(new THREE.SphereGeometry(1,28,14,0,PI*2,0,PI/2),red);hood.scale.set(0.78,0.2,0.43);hood.position.set(0.62,0.31,0);g.add(hood);
+   const con=new THREE.Mesh(new THREE.SphereGeometry(1,22,12,0,PI*2,0,PI/2),g2M(0x2a2e33,0.45));con.scale.set(0.3,0.3,0.31);con.position.set(0.10,0.32,0);g.add(con);
+   const scr=new THREE.Mesh(new THREE.SphereGeometry(1,20,10,0,PI,0,PI/2),new THREE.MeshPhysicalMaterial({color:0x101a22,roughness:0.05,transparent:true,opacity:0.72,clearcoat:1}));scr.rotation.y=PI/2;scr.scale.set(0.34,0.17,0.2);scr.position.set(0.28,0.47,0);g.add(scr);
+   const seat=new THREE.Mesh(new THREE.CapsuleGeometry(0.17,0.9,6,16),blk);seat.rotation.z=PI/2;seat.scale.set(0.72,1,1.12);seat.position.set(-0.6,0.40,0);g.add(seat);
+   const pip=new THREE.Mesh(new THREE.CapsuleGeometry(0.175,0.9,4,16),g2M(0x8b9096,0.5));pip.rotation.z=PI/2;pip.scale.set(0.2,1.01,1.13);pip.position.set(-0.6,0.33,0);g.add(pip);
+   const ris=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.04,0.32,10),blk);ris.position.set(0.10,0.55,0);ris.rotation.z=0.35;g.add(ris);
+   const bar=new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.74,10),mtl);bar.rotation.x=PI/2;bar.position.set(0.03,0.70,0);g.add(bar);
+   for(const s of [1,-1]){const gr=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.15,12),blk);gr.rotation.x=PI/2;gr.position.set(0.03,0.70,0.31*s);g.add(gr);
+     const mi=new THREE.Mesh(new THREE.SphereGeometry(0.05,10,8),blk);mi.scale.set(0.4,0.7,1);mi.position.set(0.30,0.56,0.27*s);g.add(mi)}
+   const gb=new THREE.Mesh(new THREE.TorusGeometry(0.13,0.016,6,14,PI),mtl);gb.position.set(-1.12,0.33,0);gb.rotation.y=PI/2;g.add(gb);
+   const noz=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.09,0.2,14),blk);noz.rotation.z=PI/2;noz.position.set(-1.5,-0.1,0);g.add(noz);
+   const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.5,6),mtl);pole.position.set(-1.18,0.58,0.30);g.add(pole);
+   GG2.jetL=new THREE.MeshStandardMaterial({color:0xff9a1a,emissive:0xff8a00,emissiveIntensity:2,roughness:0.3});const bl=new THREE.Mesh(new THREE.SphereGeometry(0.045,12,8),GG2.jetL);bl.position.set(-1.18,0.85,0.30);g.add(bl);
+   GG2.jet=g2Add(g)}
+  {/* the rescue tube: an orange foam torpedo with black clips at the ends */
+   const g=new THREE.Group(),b=new THREE.Mesh(new THREE.CapsuleGeometry(0.075,0.6,6,14),g2M(0xff4a14,0.55));b.rotation.z=PI/2;g.add(b);
+   for(const s of [1,-1]){const c=new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,0.06,8),g2M(0x111111,0.4));c.rotation.z=PI/2;c.position.x=0.4*s;g.add(c)}
+   GG2.tube=g2Add(g)}
+  GG2.rope=g2Rope(18,0.011,0xf2e6c8);GG2.rope2=g2Rope(14,0.013,0x6b5a3e);
+  {/* the cast net (tarrafa): a cone of mesh, its rim weighted with lead; positions are set every frame */
+   const R=12,S=36,pos=new Float32Array((R+1)*(S+1)*3),uv=[],idx=[];for(let r=0;r<=R;r++)for(let s=0;s<=S;s++){uv.push(s/S*11,r/R*6)}
+   for(let r=0;r<R;r++)for(let s=0;s<S;s++){const a=r*(S+1)+s,b=a+1,c=a+S+1,d=c+1;idx.push(a,c,b,b,c,d)}
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3).setUsage(THREE.DynamicDrawUsage));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);
+   const tx=g2Tex(128,128,(x,W)=>{x.clearRect(0,0,W,W);x.strokeStyle='#ffffff';x.lineWidth=12;x.beginPath();x.moveTo(0,0);x.lineTo(W,W);x.moveTo(W,0);x.lineTo(0,W);x.moveTo(-W/2,W/2);x.lineTo(W/2,W*1.5);x.stroke();
+     x.beginPath();x.moveTo(W/2,-W/2);x.lineTo(W*1.5,W/2);x.moveTo(W/2,W*1.5);x.lineTo(W*1.5,W/2);x.moveTo(-W/2,W/2);x.lineTo(W/2,-W/2);x.stroke();x.fillStyle='#ffffff';for(const [a,b] of [[0,0],[W/2,W/2],[W,0],[0,W],[W,W]]){x.beginPath();x.arc(a,b,11,0,PI*2);x.fill()}});
+   tx.wrapS=tx.wrapT=THREE.RepeatWrapping;const m=new THREE.Mesh(g,g2M(0xcfc6a6,0.9,0,{map:tx,alphaTest:0.45,side:THREE.DoubleSide,flatShading:true}));m.userData={R,S};GG2.net=g2Add(m);
+   const lw=new THREE.InstancedMesh(new THREE.SphereGeometry(0.03,8,6),g2M(0x3a3d40,0.4,0.6),S);lw.instanceMatrix.setUsage(THREE.DynamicDrawUsage);GG2.lead=g2Add(lw)}
+  {/* fish caught in the net with him: silver, flapping */
+   GG2.fish=[];for(let i=0;i<3;i++){const g=new THREE.Group(),b=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),g2M(0xb9c4cc,0.25,0.6));b.scale.set(0.16,0.05,0.035);g.add(b);
+     const tl=new THREE.Mesh(new THREE.ConeGeometry(0.05,0.09,4),g2M(0x8f9aa3,0.3,0.5));tl.rotation.z=PI/2;tl.scale.set(1,1,0.3);tl.position.x=-0.19;g.add(tl);GG2.fish.push(g2Add(g))}}
+  {/* the fishing boat (TAINHA I): a painted wooden hull, a little wheelhouse, a mast with a boom over the side for hauling in */
+   const tex=g2Tex(1024,256,(x,W,H)=>{const V=j=>j/14*H;x.fillStyle='#b8392b';x.fillRect(0,0,W,H);x.fillStyle='#1f5fa8';x.fillRect(0,V(2.3),W,V(5.6)-V(2.3));x.fillRect(0,V(8.4),W,V(11.7)-V(8.4));
+     x.fillStyle='#f4f1e8';x.fillRect(0,V(4.6),W,V(5.6)-V(4.6));x.fillRect(0,V(8.4),W,V(9.4)-V(8.4));x.fillStyle='#a77b4f';x.fillRect(0,V(5.6),W,V(8.4)-V(5.6));
+     x.strokeStyle='rgba(60,35,15,0.5)';x.lineWidth=2;for(let k=1;k<6;k++){const y=V(5.6)+(V(8.4)-V(5.6))*k/6;x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke()}
+     x.font='900 46px Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillStyle='#ffffff';x.setTransform(1,0,0,-0.55,W*0.7,V(3.5));x.fillText('TAINHA I',0,0);x.setTransform(-1,0,0,0.55,W*0.7,V(10.5));x.fillText('TAINHA I',0,0);x.setTransform(1,0,0,1,0,0)});
+   const g=new THREE.Group(),sec=u=>{const w=1.05*(u<0.6?0.86+0.14*Math.sin(u/0.6*PI/2):Math.pow(Math.max(0,Math.cos((u-0.6)/0.4*PI/2)),0.8)*0.98+0.02),d=0.62*(u<0.7?1:1-0.5*(u-0.7)/0.3),h=0.42+0.25*Math.pow(Math.max(0,u-0.6)/0.4,2);
+     return [[-d,0],[-d*0.7,w*0.35],[-d*0.3,w*0.75],[0,w*0.95],[h*0.6,w],[h,w*0.93],[h+0.02,w*0.5],[h+0.04,0]]};
+   const hull=g2Loft(22,-3.1,6.4,sec,g2M(0xffffff,0.62,0,{map:tex}));g.add(hull);
+   const wh=g2M(0xf2efe6,0.6),bl=g2M(0x1f5fa8,0.5),wd=g2M(0x8a5e36,0.8),gl=g2M(0x1a2833,0.15,0.3);
+   const cab=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.15,1.3),wh);cab.position.set(-1.4,1.0,0);g.add(cab);const rf=new THREE.Mesh(new THREE.BoxGeometry(1.6,0.08,1.5),bl);rf.position.set(-1.4,1.62,0);g.add(rf);
+   for(const s of [1,-1]){const w=new THREE.Mesh(new THREE.PlaneGeometry(0.9,0.42),gl);w.position.set(-1.4,1.18,0.651*s);if(s<0)w.rotation.y=PI;g.add(w)}
+   const fw=new THREE.Mesh(new THREE.PlaneGeometry(1.0,0.4),gl);fw.position.set(-0.69,1.18,0);fw.rotation.y=PI/2;g.add(fw);
+   const mast=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.07,3.6,10),wd);mast.position.set(0.9,2.2,0);g.add(mast);
+   const boom=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.05,2.6,10),wd);boom.position.set(0.9,3.3,1.2);boom.rotation.x=PI/2-0.45;g.add(boom);
+   const pul=new THREE.Mesh(new THREE.TorusGeometry(0.07,0.02,6,12),g2M(0x333333,0.4,0.6));pul.position.set(0.9,3.85,2.35);g.add(pul);
+   const sty=new THREE.Mesh(new THREE.CylinderGeometry(0.008,0.008,2.6,4),g2M(0x222222,0.6));sty.position.set(0.9,3.75,1.15);sty.rotation.x=PI/2-1.12;g.add(sty);
+   const win=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.12,0.4,12),g2M(0x9a9a9a,0.4,0.7));win.rotation.x=PI/2;win.position.set(0.5,0.75,0.3);g.add(win);
+   const fl=new THREE.Mesh(new THREE.PlaneGeometry(0.5,0.32),g2M(0xffd21f,0.7,0,{side:THREE.DoubleSide}));fl.position.set(0.9,3.85,-0.25);fl.rotation.y=PI/2;g.add(fl);GG2.flag=fl;
+   GG2.boatTip=new V3(0.9,3.85,2.35);GG2.boat=g2Add(g)}
+  {/* the end of a snapped board: foam, the wooden stringer down the middle, the glass torn at the edges */
+   GG2.capTex=g2Tex(256,64,(x,W,H)=>{x.fillStyle='#f3ead2';x.fillRect(0,0,W,H);for(let i=0;i<400;i++){x.fillStyle=`rgba(${200+rnd(40)|0},${190+rnd(40)|0},${150+rnd(40)|0},0.5)`;x.fillRect(rnd(W),rnd(H),2,2)}
+     x.fillStyle='#9c6a38';x.fillRect(W/2-5,0,10,H);x.strokeStyle='#ffffff';x.lineWidth=5;x.strokeRect(2,2,W-4,H-4)})}}
+/* the board in two: copies of the board's own meshes, each cut by a clipping plane at the break, and an end cap where it tore */
+function g2Halves(){if(GG2.hv&&GG2.hvB===BOARD&&GG2.hvN===boardG.children.length)return GG2.hv;
+  if(GG2.hv)GG2.hv.forEach(h=>{scene.remove(h);h.traverse(o=>{if(o.isMesh&&o.userData.cl&&o.material.dispose)o.material.dispose()})});
+  renderer.localClippingEnabled=true;const L=BOARD.L||2;GG2.hv=[1,-1].map(sd=>{const h=boardG.clone(true),pl=new THREE.Plane();h.userData={pl,sd};
+    h.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.clippingPlanes=[pl];o.material.clipShadows=true;o.userData.cl=1;o.castShadow=true}});
+    const th=BOARD.shp?BOARD.shp.T:0.066,wd=(BOARD.W||0.5)*0.97,sh=new THREE.Shape();for(let k=0;k<=24;k++){const a=k/24*PI*2,j=1+(k%2?0.06:-0.04);sh[k?'lineTo':'moveTo'](Math.cos(a)*wd/2*j,Math.sin(a)*th*0.52*j)}
+    const cap=new THREE.Mesh(new THREE.ShapeGeometry(sh),new THREE.MeshStandardMaterial({map:GG2.capTex,roughness:0.9,side:THREE.DoubleSide}));const uv=cap.geometry.attributes.uv,ps=cap.geometry.attributes.position;
+    for(let i=0;i<uv.count;i++)uv.setXY(i,0.5+ps.getX(i)/wd,0.5+ps.getY(i)/(th*1.1));cap.rotation.y=PI/2;cap.position.set(0,th*0.06,0);h.add(cap);
+    h.visible=false;scene.add(h);GG2.list.push(h);return h});GG2.hvB=BOARD;GG2.hvN=boardG.children.length;return GG2.hv}
+function g2HalfPut(h,pos,q){h.position.copy(pos);h.quaternion.copy(q);h.scale.copy(boardG.scale);h.visible=true;h.updateMatrixWorld(true);
+  _h7.set(h.userData.sd,0,0).applyQuaternion(q).normalize();h.userData.pl.setFromNormalAndCoplanarPoint(_h7,pos)}   /* the break is at the half's own origin: the nose half keeps +x, the tail half -x */
+/* a standing pose blended to a target: the board-half pose from its break point B, the board's turn Q, and its fold angle about its own z (nose up for the nose half) */
+function g2Fold(h,B,Q,ang){_hq.copy(Q).multiply(_hq2.setFromAxisAngle(ZV,ang*h.userData.sd));g2HalfPut(h,B,_hq)}
+/* the net: apex a, rim centre c, rim radius rr, and how far it has closed into a bag (0..1) below the apex with length bl */
+function g2NetSet(a,c,rr,close,bl,t){const N=GG2.net,{R,S}=N.userData,P=N.geometry.attributes.position.array;N.visible=true;GG2.lead.visible=true;
+  for(let r=0;r<=R;r++){const f=r/R;for(let s=0;s<=S;s++){const an=s/S*PI*2,o=(r*(S+1)+s)*3,wv=0.05*Math.sin(an*5+t*6+f*4)*f;
+    const ox=Math.cos(an),oz=Math.sin(an),rad0=rr*f*(1+wv),y0=lerp(a.y,c.y,Math.pow(f,0.8))+0.25*Math.sin(PI*f)*rr*0.25;
+    const bagR=(0.62*Math.sin(PI*Math.min(1,f*1.15))+0.12)*(1+0.08*Math.sin(an*3+t*5)),y1=a.y-bl*f;
+    const px=lerp(c.x+ox*rad0+(a.x-c.x)*(1-f),a.x+ox*bagR,close),pz=lerp(c.z+oz*rad0+(a.z-c.z)*(1-f),a.z+oz*bagR,close);
+    P[o]=px;P[o+1]=lerp(y0,y1,close);P[o+2]=pz;if(r===R&&s<S){_hm.makeTranslation(px,P[o+1],pz);GG2.lead.setMatrixAt(s,_hm)}}}
+  N.geometry.attributes.position.needsUpdate=true;GG2.lead.instanceMatrix.needsUpdate=true}
+/* the jet ski on the water at p, heading yaw (its +x), with roll and pitch; the lifeguard on it; the beacon flashing */
+function g2JetPut(p,yaw,pitch,roll,t){const j=GG2.jet;j.visible=true;j.position.copy(p);gQ(j.quaternion,yaw,0,0);if(pitch)j.quaternion.multiply(_hq.setFromAxisAngle(ZV,pitch));if(roll)j.quaternion.multiply(_hq.setFromAxisAngle(XV,roll));
+  GG2.jetL.emissiveIntensity=Math.sin(t*12)>0?3:0.2;_h6.set(-0.42,0.30,0).applyQuaternion(j.quaternion).add(p);_hq2.copy(j.quaternion).multiply(_hq.setFromAxisAngle(UPV,-PI/2));gNpcDrive(_h6,_hq2)}
+function g2Wake(p,dir,spd,wy){if(spd<0.5)return;const n=Math.min(12,2+spd|0),k=Math.min(1,spd/6);for(let i=0;i<n;i++){const s=rnd(-1,1),b=rnd(0,1);emit(p.x-dir.x*(1.4+b*0.6)+dir.z*s*0.45,wy+0.04,p.z-dir.z*(1.4+b*0.6)-dir.x*s*0.45,-dir.x*spd*rnd(0.1,0.4)+dir.z*s*rnd(0.8,2.2),rnd(0.3,2.4)*k,-dir.z*spd*rnd(0.1,0.4)-dir.x*s*rnd(0.8,2.2),rnd(0.4,1.1),rnd(0.1,0.2),rnd(0.25,0.7),rnd(0.35,0.6),6,1.6,i%3?1:0)}}
+/* the pose helpers: on his back floating; prone and flying (Superman); the arms flailing */
+const g2ArmsUp=(J_,U,w,sp)=>{gP(_h6,J_.shF,J_,U,0.12,0.30+(sp||0),0.50);J_.hFt.lerp(_h6,w);gP(_h6,J_.shB,J_,U,0.12,-0.30-(sp||0),0.50);J_.hBt.lerp(_h6,w)};
+const g2Flail=(J_,t,w,sp)=>{const a=t*(sp||13);gP(_h6,J_.shF,J_,J_.spine,0.30*Math.cos(a),0.36,0.30*Math.sin(a)+0.12);J_.hFt.lerp(_h6,w);gP(_h6,J_.shB,J_,J_.spine,0.30*Math.cos(a+2.4),-0.36,0.30*Math.sin(a+2.4)+0.12);J_.hBt.lerp(_h6,w)};
+const g2Kick=(J_,t,w,sp)=>{const a=Math.sin(t*(sp||14));J_.ftF.lerp(_h6.set(J_.pel.x+0.16,J_.pel.y-0.80,J_.pel.z+0.22*a),w);J_.ftB.lerp(_h6.set(J_.pel.x-0.16,J_.pel.y-0.80,J_.pel.z-0.22*a),w)};
+Object.assign(GAG,{
+  /* 1 the lip: proud as anything, arms up for the beach... the lip throws over behind him and lands right on his head. Up he comes, spits a fountain, the board
+     comes down out of the sky with a slap beside him, he keels over backwards, and a hand comes up out of the water: all good */
+  lip:{name:'Lip to the Head',dur:7.0,cam:(t,G)=>{const k=sstep(0.75,1.1,t)*(1-sstep(2.3,2.9,t));return [lerp(4.4,2.3,k),lerp(1.15,0.95,k),lerp(1.4,5.0,k),0,lerp(40,50,k)]},f(G,t){const sc=G.sc,u=sstep(0,0.45,t),gy=G.wy-0.85*sc;
+    const p=_h1.copy(G.b0),hit=1.56;
+    if(t<hit){gPut(G,p,G.yaw,0,0,Math.min(1,u*1.4));gBoardOn();const cl=sstep(0.3,0.65,t),lk=sstep(1.18,1.36,t);
+      AT.crouch=lerp(0.30-0.05*cl+0.035*Math.sin(t*9)*cl*(1-lk),0.92,sstep(1.42,hit,t));AT.gz=lerp(-0.15*cl,-0.55,lk);AT.shrug=0.5*lk;
+      GAGP.arms=(J_,U)=>g2ArmsUp(J_,U,cl*(1-0.6*lk),0.06*Math.sin(t*7))}
+    else if(t<3.25){riderG.visible=false;boardG.visible=t>2.3;p.copy(G.c).setY(gy-1.2)}
+    else if(t<4.75){const k=sstep(3.25,3.5,t);p.copy(G.c).setY(lerp(gy-1.0,gy,k)+0.04*Math.sin(t*2.5));gPut(G,p,G.yaw+0.15*Math.sin(t*1.7),0,0);
+      AT.crouch=0.36;AT.hroll=0.28*Math.sin(t*4.5)*(1-sstep(4.0,4.3,t));AT.gz=t<3.9?0.10:lerp(0.10,-0.45,sstep(3.9,4.05,t))*(1-sstep(4.15,4.3,t));AT.lean=0.06*Math.sin(t*3.3);
+      const fl=sstep(4.14,4.22,t)*(1-sstep(4.45,4.7,t));AT.shrug=fl;GAGP.arms=(J_,U)=>{const sp=sstep(3.5,3.6,t)*(1-sstep(3.95,4.05,t));gP(_h6,J_.shF,J_,U,0.32,0.10,-0.18+0.10*sp);J_.hFt.lerp(_h6,0.5*sp+fl);gP(_h6,J_.shB,J_,U,0.32,-0.10,-0.18);J_.hBt.lerp(_h6,fl)}}
+    else{const fb=gFall(t,4.75,5.3);p.copy(G.c).setY(lerp(gy,G.wy-0.34*sc,sstep(4.75,5.3,t)));gPut(G,p,G.yaw,fb,0);AT.crouch=0.2;AT.gz=-0.1;
+      const up=sstep(5.75,6.05,t);GAGP.arms=(J_,U)=>{if(t<5.3){gP(_h6,J_.shF,J_,U,0.30,0.42,0.30);J_.hFt.lerp(_h6,1);gP(_h6,J_.shB,J_,U,0.30,-0.42,0.30);J_.hBt.lerp(_h6,1)}
+        else{gP(_h6,J_.shF,J_,J_.spine,0.66,0.06,0.04+0.03*Math.sin(t*6));J_.hFt.lerp(_h6,up)}}}
+    if(t>=hit&&t<3.25)gPut(G,p,G.yaw,0,0);
+    /* the board: lost in the foam, shot up out of it, down flat beside him */
+    if(t>=hit){const tb=t-2.3,bx=_h2.copy(G.c).addScaledVector(G.L,1.05).addScaledVector(G.W,0.2);
+      if(tb<0)boardG.visible=false;else if(tb<1.84){boardG.position.copy(bx);boardG.position.y=G.wy+0.06+9*tb-4.9*tb*tb;gQ(boardG.quaternion,G.yaw+tb*3,PI/2*(1-sstep(1.2,1.84,tb))-0.1,tb*6)}
+      else gBoardFloat(G,bx,G.yaw+0.3,t,3)}
+    /* the lip itself */
+    g2LipSet(G,clamp((t-0.62)/0.95,0,1),t);
+    if(t>hit&&t<3.4&&Math.random()<0.7)g2Burst(_h3.copy(G.c).addScaledVector(G.W,0.3),3,1.6,2.5*(1-sstep(hit,3.4,t))+0.5,1.2);
+    G.fc.copy(G.c).setY(G.wy+0.85*sc+0.5*sstep(1.2,1.5,t)*(1-sstep(2.6,3.3,t)));
+    if(gEv(1.1))sfxNoise(1.6,500,0.18);if(gEv(1.32))g2Whistle(false);
+    if(gEv(hit)){const q=_h3.copy(G.c).setY(G.wy+0.4);g2Burst(q,240,2.2,7,1.6);gSpl(q,180,2.4);game.shake=Math.max(game.shake||0,1.0);game.slowT=Math.max(game.slowT,0.55);if(!sfxPlay('splash',{vol:1}))sfxNoise(1.1,700,0.45);sfxNoise(1.8,240,0.35)}
+    if(gEv(2.3))gSpl(_h3.copy(G.c).addScaledVector(G.L,1.05),40,1.2);
+    if(gEv(3.25)){gSpl(_h3.copy(G.c),60,1.1);sfxNoise(0.5,900,0.2)}
+    if(gEv(4.14)){gSpl(_h3.copy(G.c).addScaledVector(G.L,1.05),120,1.6);g2Slap()}
+    if(gEv(5.3)){gSpl(_h3.copy(G.c).addScaledVector(G.W,-1.2),110,1.4);if(!sfxPlay('splash',{vol:0.7}))sfxNoise(0.8,600,0.3)}
+    if(gEv(5.8))g2Tone('sine',660,990,0.18,0.05)},
+    post(G,t){const hd=gW(_h4.copy(J.head));gStars(hd,t,t>3.5&&t<4.6);
+      if(t>3.52&&t<3.9){_h5.copy(G.W);for(let i=0;i<4;i++)emit(hd.x+_h5.x*0.12,hd.y-0.06,hd.z+_h5.z*0.12,_h5.x*rnd(2.2,3.0)+rnd(-0.2,0.2),rnd(2.6,3.4),_h5.z*rnd(2.2,3.0)+rnd(-0.2,0.2),rnd(0.5,0.8),0.06,0.16,0.8,9,0.4,0)}}},
+  /* 2 the board snaps: two big pumps to show off, CRACK, he drops into the V, the nose springs up and smacks him in the face. He fishes out both halves,
+     looks at them, looks at us, fits them back together... holds it up like a trophy... and it falls apart in his hands */
+  snap:{name:'Snapped!',dur:6.6,cam:[4.3,1.05,1.7,0,40],f(G,t){const sc=G.sc,u=sstep(0,0.45,t),gy=G.wy-0.85*sc,cr=0.95,slap=1.38,hv=g2Halves(),p=_h1.copy(G.b0);
+    boardG.visible=false;const Qb=_hqB.copy(G.bq0).slerp(gQ(_hq,G.yaw,0,0),Math.min(1,u*1.4)),bs=boardG.scale.x||1,dL=_hD.copy(G.L);
+    /* the pumps, the crack and the drop into the water */
+    const pm=t<cr?Math.max(0,Math.sin((t-0.45)/0.25*PI))*sstep(0.45,0.5,t):0;
+    if(t<cr){p.y+=0.10*pm;gPut(G,p,G.yaw,0,0,Math.min(1,u*1.4));AT.crouch=0.30+0.45*(1-pm)*sstep(0.4,0.5,t)}
+    else{const k=sstep(cr,1.4,t);p.copy(G.b0).lerp(_h3.copy(G.c).setY(gy),k);gPut(G,p,G.yaw,0,0);AT.crouch=lerp(0.6,0.34,k)}
+    const B=_hA.copy(G.bp0).lerp(G.b0,Math.min(1,u*1.4));let aN=t<cr?0.04*Math.sin(t*40)*pm:0,aT=aN;
+    if(t>=cr){B.y-=0.32*sstep(cr,1.3,t)*(1-sstep(1.45,1.75,t));aN=t<slap?2.25*sstep(cr,slap,t):lerp(2.25,0.06,sstep(slap+0.08,1.75,t));aT=0.6*sstep(cr,1.3,t)*(1-sstep(1.45,1.75,t))}
+    const hold=sstep(2.05,2.55,t),flo=i=>{gBoardFloat(G,_h5.copy(G.b0).addScaledVector(G.L,i?-0.12:0.12),G.yaw+(i?-0.12:0.1),t,i+1)};
+    if(t<1.75){g2Fold(hv[0],B,Qb,aN);g2Fold(hv[1],B,Qb,aT)}
+    else if(t<2.05){for(let i=0;i<2;i++){flo(i);g2HalfPut(hv[i],boardG.position,boardG.quaternion)}}
+    else if(t<4.55){/* in his hands: apart, then fitted back together, then up over his head */const A=g2HoldA(G,t,sc),Q=g2HoldQ(G,t),sp=0.85*(1-sstep(3.45,3.95,t));
+      for(let i=0;i<2;i++){const sd=i?-1:1;_h6.copy(A).addScaledVector(dL,sd*sp*0.5);if(hold<1){flo(i);_h6.lerp(boardG.position,1-hold);_hq.copy(boardG.quaternion).slerp(Q,hold)}else _hq.copy(Q);g2HalfPut(hv[i],_h6,_hq)}
+      _hB.copy(A);_h4.copy(J.shF).sub(J.shB).multiply(riderG.scale).applyQuaternion(riderG.quaternion);const swp=_h4.dot(dL)<0;
+      GAGP.arms=(J_,U)=>{for(let i=0;i<2;i++){const sd=i?-1:1;_h6.copy(_hB).addScaledVector(dL,sd*(sp*0.5+0.24*bs));g2L(_h6);((i===1)!==swp?J_.hBt:J_.hFt).lerp(_h6,hold)}}}
+    else{/* and it falls apart again */const tf=t-4.55;for(let i=0;i<2;i++){const h=hv[i],sd=i?-1:1,A=g2HoldA(G,4.55,sc);A.addScaledVector(dL,sd*(0.25+0.9*tf));A.y=Math.max(G.wy+0.06,A.y+1.2*tf-4.9*tf*tf);
+      _hq.copy(g2HoldQ(G,4.55)).multiply(_hq2.setFromAxisAngle(ZV,-sd*Math.min(1.4,tf*5)));if(A.y<=G.wy+0.07){gBoardFloat(G,A,G.yaw+0.3*sd,t,i+1);A.copy(boardG.position);_hq.copy(boardG.quaternion)}g2HalfPut(h,A,_hq)}}
+    /* his face and body through it all */
+    if(t>=cr&&t<2.05){AT.gz=t<slap?-0.2:lerp(-0.55,0,sstep(slap+0.15,2.0,t));AT.lean=t>slap?-0.10*(1-sstep(slap,1.9,t)):0;GAGP.arms=(J_,U)=>g2ArmsUp(J_,U,sstep(cr,1.1,t)*(1-sstep(1.6,2.0,t)),0.1)}
+    if(t>=2.05&&t<4.55){AT.gz=t<3.0?0.38:t<3.45?lerp(0.38,-0.05,sstep(3.0,3.15,t)):-0.2;AT.shrug=sstep(3.05,3.2,t)*(1-sstep(3.35,3.5,t));AT.crouch=0.34-0.04*sstep(3.95,4.3,t)}
+    if(t>=4.55){const dsp=sstep(4.95,5.3,t);AT.crouch=0.34+0.14*dsp;AT.gz=0.25*dsp+0.08*Math.sin(t*5)*dsp;AT.hroll=0.12*Math.sin(t*4)*dsp;
+      GAGP.arms=(J_,U)=>{gP(_h6,J_.head,J_,U,0.04,0.14,0.10);J_.hFt.lerp(_h6,dsp);gP(_h6,J_.head,J_,U,0.04,-0.14,0.10);J_.hBt.lerp(_h6,dsp)}}
+    G.fc.copy(G.c).setY(G.wy+0.75*sc);
+    if(gEv(0.55)||gEv(0.8))sfxNoise(0.12,900,0.18);
+    if(gEv(cr)){g2Crack();game.shake=Math.max(game.shake||0,0.35);game.slowT=Math.max(game.slowT,0.35);for(let i=0;i<40;i++)emit(B.x+rnd(-0.15,0.15),B.y+0.05,B.z+rnd(-0.15,0.15),rnd(-1.5,1.5),rnd(1.5,4),rnd(-1.5,1.5),rnd(0.5,1.0),0.04,0.07,0.95,9,0.3,0)}
+    if(gEv(1.1))gSpl(_h3.copy(G.c),70,1.2);if(gEv(slap)){g2Slap();game.shake=Math.max(game.shake||0,0.25)}if(gEv(1.75))gSpl(_h3.copy(G.b0).addScaledVector(G.L,0.3),50,0.9);
+    if(gEv(3.95))g2Tone('sine',784,1175,0.25,0.05);if(gEv(slap))g2Boing(0.8);if(gEv(4.55))sfxNoise(0.1,3000,0.2);if(gEv(4.9)){gSpl(_h3.copy(G.c).addScaledVector(G.L,1.0),40,0.9);gSpl(_h3.copy(G.c).addScaledVector(G.L,-1.0),40,0.9)}if(gEv(5.1))g2Whistle(false)},
+    post(G,t){const hd=gW(_h4.copy(J.head));gStars(hd,t,t>1.38&&t<2.1)}},
+  /* 3 the rescue: off the board, floating on his back, waving. The lifeguard roars in, skids to a stop and soaks him, throws the tube... onto his head.
+     He grabs it, the ski takes off flat out, and off he goes, dragged face first across the water, bouncing, skipping, rolling */
+  rescue:{name:'Rescue Gone Wrong',dur:8.4,npc:1,cam:(t,G)=>{const a=sstep(0.9,2.0,t),k=sstep(3.6,4.4,t);return [lerp(lerp(5.6,7.6,a),9.6,k),lerp(lerp(1.5,1.9,a),1.9,k),lerp(lerp(-1.2,-2.6,a),1.0,k),0,lerp(42,47,k)]},f(G,t){const sc=G.sc,u=sstep(0,0.55,t),hd=_h9.copy(G.L),jy=Math.atan2(-hd.z,hd.x);
+    const fl=_h1.copy(G.c);fl.y=G.wy+0.03*Math.sin(t*2.2);
+    /* the ski: in fast along the beach on the far side, a skid broadside, a stop; then off flat out */
+    const S0=_h2.copy(G.c).addScaledVector(G.W,-3.3).addScaledVector(G.L,1.9),ja=clamp((t-0.9)/1.5,0,1),e=1-Math.pow(1-ja,2.2),Jp=_h3.copy(S0).addScaledVector(G.L,-20*(1-e));
+    const go=Math.max(0,t-3.75),gd=go<1.8?2.6*go*go:2.6*3.24+9.4*(go-1.8);Jp.addScaledVector(hd,gd);Jp.y=G.wy+0.04*Math.sin(t*2.6);
+    const skid=sstep(1.9,2.3,t)*(1-sstep(3.75,4.3,t)),yaw=jy+0.9*skid;const spd=t<2.4?20*2.2*Math.pow(1-ja,1.2)/1.5:go>0?Math.min(9.4,5.2*go):0;
+    if(t>0.85)g2JetPut(Jp,yaw,go>0?0.12*sstep(0,0.3,go)*(1-sstep(1.2,2,go)):-0.05*skid,-0.12*skid+0.03*Math.sin(t*2.1),t);
+    if(t>0.85)g2Wake(Jp,_h4.set(Math.cos(yaw),0,-Math.sin(yaw)),spd,G.wy);
+    /* the tube: on the ski, thrown, onto his head, then in his hands */
+    const tbS=_h4.set(-0.3,0.95,0.25).applyQuaternion(GG2.jet.quaternion).add(Jp),hdW=_h5.copy(fl).addScaledVector(G.W,0).setY(G.wy+0.35),tt=clamp((t-2.65)/0.38,0,1);
+    const tube=GG2.tube;tube.visible=t>0.85;let tubeP=_h6;
+    if(t<2.65)tubeP.copy(tbS);else if(t<3.03){tubeP.lerpVectors(tbS,hdW,tt);tubeP.y+=1.4*Math.sin(PI*tt)}else if(t<3.3){const k=sstep(3.03,3.3,t);tubeP.copy(hdW).addScaledVector(G.W,0.35*k);tubeP.y+=0.35*Math.sin(PI*k)}
+    /* him */
+    if(t<3.75){const ro=sstep(3.35,3.7,t);gPut(G,fl,G.yaw+PI/2,PI/2*u,0,u);if(ro>0){gQ(_hq,G.yaw+PI/2,PI/2,0);_hq.multiply(_hq2.setFromAxisAngle(UPV,PI*ro));riderG.quaternion.copy(_hq)}A.air=u;
+      GAGP.legs=J_=>{J_.ftF.lerp(_h7.set(J_.pel.x+0.32,J_.pel.y-0.78,J_.pel.z),u);J_.ftB.lerp(_h7.set(J_.pel.x-0.32,J_.pel.y-0.78,J_.pel.z),u)};
+      const wv=sstep(0.9,1.2,t)*(1-sstep(2.1,2.3,t)),gr=sstep(3.2,3.45,t);
+      GAGP.arms=J_=>{gP(_h7,J_.shF,J_,J_.spine,0.12+0.40*wv,0.44-0.22*wv+0.14*wv*Math.sin(t*12),0.22+0.12*wv);if(gr>0)_h7.lerp(g2L(_h8.copy(tubeP)),gr);J_.hFt.lerp(_h7,u);gP(_h7,J_.shB,J_,J_.spine,0.08,-0.46,0.22);if(gr>0)_h7.lerp(g2L(_h8.copy(tubeP)),gr);J_.hBt.lerp(_h7,u)};
+      if(t>=3.3)tubeP.copy(hdW).addScaledVector(G.W,0.35)}
+    else{/* towed: behind the stern on the rope, face down, arms out in front holding the tube, bouncing; a skip and a roll in the middle */
+      const st=_h7.set(-1.5,0.05,0).applyQuaternion(GG2.jet.quaternion).add(Jp),rl=Math.min(3.0,_h8.copy(hdW).addScaledVector(G.W,0.35).distanceTo(st)),yk=sstep(3.75,3.95,t);
+      tubeP.copy(st).addScaledVector(hd,-rl);tubeP.lerp(_h8.copy(hdW).addScaledVector(G.W,0.35),1-yk);tubeP.y=G.wy+0.12;
+      const ska=clamp((t-5.6)/0.65,0,1);const P=_h8.copy(tubeP).addScaledVector(hd,-2.1*sc);P.lerp(fl,1-yk);P.y=G.wy+0.06+0.10*Math.abs(Math.sin(t*8))+(t>5.6&&t<6.25?1.1*Math.sin(PI*ska):0);
+      gQ(_hq,Math.atan2(-hd.x,-hd.z),-PI/2*(0.85+0.15*yk),0);if(t>5.6&&t<6.25)_hq.premultiply(_hq2.setFromAxisAngle(hd,PI*2*sstep(0,1,ska)));
+      if(yk<1){gQ(_hq2,G.yaw+PI/2,PI/2,0);_hq2.multiply(_hqH.setFromAxisAngle(UPV,PI));_hq.copy(_hq2.slerp(_hq,yk))}riderG.position.copy(P);riderG.quaternion.copy(_hq);A.air=1;A.prone=0;
+      GAGP.arms=J_=>{_h7.copy(tubeP);g2L(_h7);J_.hFt.lerp(_h7,1);J_.hBt.lerp(_h7,1)};GAGP.legs=J_=>g2Kick(J_,t,1,15);
+      if(Math.random()<0.8){const f=_h7.copy(P).addScaledVector(hd,1.75*sc);for(let i=0;i<4;i++)emit(f.x,G.wy+0.1,f.z,hd.x*rnd(1,3)+rnd(-2,2)-CP*0.3,rnd(1.2,3),hd.z*rnd(1,3)+rnd(-2,2),rnd(0.4,0.9),0.15,rnd(0.5,1.1),0.6,8,1.2,1)}}
+    tube.position.copy(tubeP);gQ(tube.quaternion,jy+(t>3.75?0:t*2),0,t>2.65&&t<3.3?t*9:0);
+    /* the rope from the stern to the tube: slack, then bar-tight */
+    if(t>2.65){const st=_h7.set(-1.5,0.12,0).applyQuaternion(GG2.jet.quaternion).add(Jp);g2RopeSet(GG2.rope,st,tubeP,t<3.75?0.5*(1-sstep(3.6,3.85,t)):0.02,t<3.75?0.03:0)}
+    gBoardFloat(G,_h7.copy(G.c).addScaledVector(G.L,-1.3).addScaledVector(G.W,0.3+0.12*t),G.yaw+0.3,t,0,sstep(0,0.6,t));
+    G.fc.copy(t<3.75?_h7.copy(G.c).lerp(Jp,0.3*sstep(1,2.4,t)):_h7.copy(riderG.position).lerp(Jp,0.5));G.fc.y=G.wy+0.6;
+    if(gEv(0.45)){gSpl(fl,60,1.1);sfxNoise(0.6,800,0.2)}if(gEv(0.6))g2Motor(2.4,95,140,0.06);
+    if(gEv(2.15)){const sp=_h7.copy(Jp);for(let i=0;i<55;i++)emit(sp.x+rnd(-0.4,0.4),G.wy+0.2,sp.z+rnd(-0.4,0.4),G.W.x*rnd(2.5,4.5)+rnd(-1,1),rnd(2.5,4.5),G.W.z*rnd(2.5,4.5)+rnd(-1,1),rnd(0.6,1.0),0.12,rnd(0.35,0.7),0.75,9,0.6,0);sfxNoise(1.2,1400,0.25)}
+    if(gEv(2.5))gSpl(fl,90,1.3);if(gEv(3.03)){g2Boing(1);gSpl(hdW,20,0.5)}if(gEv(3.7))g2Motor(4.6,80,190,0.08);if(gEv(3.85)){gSpl(riderG.position,80,1.4);sfxNoise(0.4,2400,0.25)}if(gEv(6.25)){gSpl(riderG.position,120,1.6);if(!sfxPlay('splash',{vol:0.7}))sfxNoise(0.8,600,0.3)}},
+    post(G,t){_h4.copy(J.head);gW(_h4);gStars(_h4,t,t>3.03&&t<3.6)}},
+  /* 4 the cast net: waist deep, waving to the beach, as a fishing boat chugs up. The fisherman throws his tarrafa: it opens into a perfect circle in the air
+     and comes down right over him, the leads splashing in a ring. The net purses shut, he's dragged across the water in it, hauled up dangling from the boom
+     with the fish, and the boat putters off with its catch of the day */
+  net:{name:'Catch of the Day',dur:8.6,npc:1,cam:(t,G)=>{const k=sstep(4.4,6.0,t);return [lerp(7.4,8.6,k),lerp(1.8,2.6,k),lerp(4.6,1.5,k),0,lerp(46,48,k)]},f(G,t){const sc=G.sc,u=sstep(0,0.5,t),gy=G.wy-0.85*sc,bx=GG2.boat;
+    const hd=_h9.copy(G.L).negate(),by=Math.atan2(-hd.z,hd.x),Bs=_h2.copy(G.c).addScaledVector(G.W,-2.6).addScaledVector(G.L,5.6),ba=clamp(t/1.6,0,1),be=1-Math.pow(1-ba,2);
+    const Bp=_h3.copy(Bs).addScaledVector(G.L,9*(1-be));const go=Math.max(0,t-5.9);Bp.addScaledVector(hd,0.45*go*go+0.2*go).addScaledVector(G.W,-0.12*go*go);Bp.y=G.wy-0.05+0.06*Math.sin(t*1.3);
+    bx.visible=true;bx.position.copy(Bp);gQ(bx.quaternion,by,0,0.03*Math.sin(t*1.1));bx.quaternion.multiply(_hq.setFromAxisAngle(ZV,0.02*Math.sin(t*0.9)));
+    GG2.flag.rotation.x=0.3*Math.sin(t*7);
+    const tip=_h4.copy(GG2.boatTip).applyQuaternion(bx.quaternion).add(Bp);
+    /* the fisherman, on the near side by the winch */
+    _h5.set(0.2,0.52,0.75).applyQuaternion(bx.quaternion).add(Bp);_hq2.copy(bx.quaternion).multiply(_hq.setFromAxisAngle(UPV,PI));gNpcDrive(_h5,_hq2);
+    /* the net: a bundle in his hands, an arc through the air opening into a circle, down over the man, pursed shut, dragged, hauled up */
+    const hp=_h6.copy(G.c).setY(gy),apex=_hA,rim=_hB;let rr=0,close=0,bl=1.9*sc;
+    const ta=clamp((t-1.7)/0.75,0,1),fall=sstep(2.45,2.7,t),pur=sstep(2.9,3.6,t),drg=clamp((t-3.6)/1.2,0,1),hoist=sstep(4.7,5.6,t);
+    const bagP=_h1.copy(hp).lerp(_h5.copy(tip).setY(G.wy),sstep(0,1,drg)*0.88);
+    if(t<2.45){apex.lerpVectors(_h5.set(0.2,1.5,1.0).applyQuaternion(bx.quaternion).add(Bp),_h1.copy(hp).setY(G.wy+2.6),ta);apex.y+=2.0*Math.sin(PI*ta);rr=2.4*sstep(0.45,0.95,ta);rim.copy(apex);rim.y-=0.4+0.5*sstep(0.4,1,ta)}
+    else{apex.copy(hp).setY(lerp(G.wy+2.6,gy+1.95*sc,fall));rr=2.4*(1-0.85*pur);rim.copy(hp).setY(lerp(G.wy+1.2,G.wy-0.05,fall));close=pur;
+      if(t>3.6){apex.copy(bagP).setY(G.wy+1.25*sc+lerp(0,3.85-1.25*sc-0.9,hoist));if(hoist>0){const sw=0.35*Math.sin((t-4.7)*3.2)*Math.exp(-(t-5.2)*0.4);apex.addScaledVector(G.W,sw);apex.lerp(_h5.copy(tip).addScaledVector(UPV,-0.9),hoist);apex.addScaledVector(G.W,sw*hoist)}close=1}}
+    if(t>1.7)g2NetSet(apex,rim,rr,close,bl,t);
+    if(t>2.9){_h5.copy(tip);g2RopeSet(GG2.rope2,_h5,apex,t<3.6?0.6*(1-pur):0.02,0)}else if(t>1.7)g2RopeSet(GG2.rope2,_h5.set(0.2,1.5,1.0).applyQuaternion(bx.quaternion).add(Bp),apex,0.8,0.05);
+    /* him: waving, then the net on him, then curled up in the bag */
+    if(t<3.6){gPut(G,_h5.copy(hp).setY(lerp(G.rp0.y,gy,u)+0.04*Math.sin(t*2)),G.yaw,0,0,Math.min(1,u*1.5));AT.crouch=0.36;const wv=sstep(0.5,0.8,t)*(1-sstep(2.2,2.45,t)),cf=sstep(2.6,2.8,t);
+      AT.gz=lerp(-0.1,-0.4,sstep(2.2,2.4,t)*(1-cf))+0.2*cf;AT.hroll=0.18*Math.sin(t*6)*cf;
+      GAGP.arms=(J_,U)=>{if(cf<0.01){gP(_h5,J_.shF,J_,U,0.16,0.36+0.12*Math.sin(t*11),0.48);J_.hFt.lerp(_h5,wv);gP(_h5,J_.shB,J_,U,0.16,-0.36-0.12*Math.sin(t*11+1),0.48);J_.hBt.lerp(_h5,wv)}
+        else{const s=Math.sin(t*9);gP(_h5,J_.shF,J_,U,0.30,0.30+0.1*s,0.25+0.12*s);J_.hFt.lerp(_h5,cf);gP(_h5,J_.shB,J_,U,0.30,-0.30-0.1*s,0.25-0.12*s);J_.hBt.lerp(_h5,cf)}}}
+    else{const P=_h5.copy(apex).addScaledVector(UPV,-1.75*sc);if(hoist<0.5)P.y=Math.max(P.y,gy-0.1);gQ(_hq,G.yaw+0.4*Math.sin(t*1.3)*hoist,0,0.25*Math.sin((t-4.7)*3.2)*hoist);riderG.position.copy(P);riderG.quaternion.copy(_hq);
+      AT.crouch=0.75;AT.gz=0.1;A.air=1;GAGP.arms=(J_,U)=>{gP(_h7,J_.shF,J_,U,0.18,0.18,0.42);J_.hFt.lerp(_h7,1);gP(_h7,J_.shB,J_,U,0.18,-0.18,0.42);J_.hBt.lerp(_h7,1)};
+      GAGP.legs=J_=>{J_.ftF.lerp(_h7.set(J_.pel.x+0.2,J_.pel.y-0.55,J_.pel.z-0.18+0.1*Math.sin(t*7)),1);J_.ftB.lerp(_h7.set(J_.pel.x-0.2,J_.pel.y-0.55,J_.pel.z-0.18-0.1*Math.sin(t*7)),1)};
+      if(drg<1&&Math.random()<0.8)g2Burst(_h7.copy(P).setY(G.wy),3,0.6,1.8,0.7);
+      if(hoist>0.2&&Math.random()<0.9)emit(P.x+rnd(-0.4,0.4),P.y+rnd(0.1,0.6),P.z+rnd(-0.4,0.4),rnd(-0.3,0.3),rnd(-1,0),rnd(-0.3,0.3),rnd(0.5,1.0),0.05,0.12,0.8,9,0.2,0)}
+    /* the fish in the bag with him */
+    GG2.fish.forEach((f,i)=>{f.visible=t>3.6;if(!f.visible)return;f.position.copy(apex).addScaledVector(UPV,-0.5-0.45*i).addScaledVector(G.L,(i-1)*0.32).addScaledVector(G.W,0.3);gQ(f.quaternion,t*2+i*2,Math.sin(t*14+i*3)*0.6,PI/2+Math.sin(t*9+i)*0.4)});
+    gBoardFloat(G,_h7.copy(G.c).addScaledVector(G.L,-1.3).addScaledVector(G.W,0.3+0.1*t),G.yaw+0.4,t,0,sstep(0,0.6,t));
+    G.fc.copy(G.c).lerp(Bp,t<4.4?0.28:lerp(0.28,0.7,sstep(4.4,6,t)));G.fc.y=G.wy+0.9+0.9*hoist;
+    if(gEv(0.2))g2Motor(6.0,46,52,0.05,7);if(gEv(1.7))sfxNoise(0.4,1800,0.12);if(gEv(1.95))game.slowT=Math.max(game.slowT,0.45);
+    if(gEv(2.7)){g2Ring(_h5.copy(hp).setY(G.wy),2.3,24,0.5);sfxNoise(0.6,1600,0.22)}if(gEv(2.85))g2Whistle(false);if(gEv(3.6))sfxNoise(0.8,700,0.2);if(gEv(4.7)){g2Burst(_h5.copy(bagP).setY(G.wy),60,0.8,4,1);sfxNoise(0.6,900,0.2)}if(gEv(5.9))g2Motor(2.7,48,62,0.06,9)}},
+  /* 5 the skipping stone: a huge leap off the board... flat on his belly, he skips across the water like a stone, once, twice, three times, four,
+     and plants head first, legs sticking up out of the water; the board comes down out of the sky and sticks in beside him like a flag */
+  skip:{name:'Skipping Stone',dur:6.8,cam:(t,G)=>{const k=sstep(2.9,3.6,t);return [lerp(2.4,2.2,k),lerp(1.25,0.85,k),lerp(8.2,4.4,k),0,lerp(lerp(40,44,sstep(0.3,1.5,t)),40,k)]},f(G,t){const sc=G.sc,u=sstep(0,0.3,t),T0=0.35;
+    /* the flight and the skips: bounce times and heights worked out from the launch */
+    const SK=[[T0,0,7.0,5.0],[T0+1.02,7.14,6.0,3.4],[T0+1.71,11.3,5.0,2.2],[T0+2.16,13.5,4.0,1.2],[T0+2.4,14.5,0,0]];
+    let k=0;for(let i=0;i<SK.length-1;i++)if(t>=SK[i][0])k=i;const s=SK[k],ts=Math.max(0,t-s[0]),p=_h1.copy(G.b0);let pit=0,fly=t>=T0&&t<SK[4][0];
+    if(t<T0){gPut(G,p,G.yaw,0,0,Math.min(1,u*1.6));gBoardOn();AT.crouch=0.95*sstep(0,0.3,t)}
+    else if(fly){const x=s[1]+s[2]*ts,y=Math.max(0,s[3]*ts-4.9*ts*ts);p.addScaledVector(G.W,x);p.y=G.wy+0.12+y;pit=-PI/2*(k?1:sstep(0,0.4,ts));gPut(G,p,G.yaw,pit,0.08*Math.sin(t*9),1);A.air=1;
+      GAGP.arms=J_=>k?g2Flail(J_,t,1,15):(gP(_h6,J_.shF,J_,J_.spine,0.02,0.07,0.62),J_.hFt.lerp(_h6,1),gP(_h6,J_.shB,J_,J_.spine,0.02,-0.07,0.62),J_.hBt.lerp(_h6,1));GAGP.legs=J_=>g2Kick(J_,t,k?1:0,12)}
+    else{const tp=t-SK[4][0],fl=sstep(0,0.3,tp),x=14.5+1.2*(1-Math.exp(-tp*5));p.addScaledVector(G.W,x);p.y=G.wy+lerp(0.12,0.95*sc,fl)+0.03*Math.sin(t*2);
+      const fall=sstep(5.7,6.25,t);p.y-=0.85*sc*fall;gPut(G,p,G.yaw,-PI/2-PI/2*fl,1.15*fall*G.side,1);A.air=1;
+      GAGP.legs=J_=>{const sc2=sstep(3.2,3.6,t)*(1-sstep(4.4,4.6,t)),v=sstep(4.6,4.9,t);const a=Math.sin(t*16)*sc2;J_.ftF.set(J_.pel.x+0.14+0.30*v,J_.pel.y-0.82+0.06*a,J_.pel.z+0.20*a);J_.ftB.set(J_.pel.x-0.14-0.30*v,J_.pel.y-0.82-0.06*a,J_.pel.z-0.20*a)};
+      GAGP.arms=J_=>{gP(_h6,J_.shF,J_,J_.spine,0.1,0.30,-0.2);J_.hFt.lerp(_h6,1);gP(_h6,J_.shB,J_,J_.spine,0.1,-0.30,-0.2);J_.hBt.lerp(_h6,1)}}
+    /* the board: kicked away up and back at the launch, comes round and spears in nose first beside his legs */
+    const tb=t-T0,bl=_h2.copy(G.b0).addScaledVector(G.W,16.75).addScaledVector(G.L,-0.25);
+    if(t<T0)0;else if(tb<4.2){const k2=tb/4.2,end=sstep(0.72,1,k2);boardG.position.copy(G.b0).lerp(bl,sstep(0,1,k2));boardG.position.y=Math.max(G.wy-0.6,G.wy+0.06+11.5*tb-2.74*tb*tb+0.4*end);gQ(boardG.quaternion,G.yaw+tb*1.6,0.25*Math.sin(tb*3)*(1-end),-PI/2+0.18-(1-end)*tb*5)}
+    else{const w=Math.exp(-(tb-4.2)*3)*Math.sin((tb-4.2)*14);boardG.position.copy(bl).setY(G.wy+0.46);gQ(boardG.quaternion,G.yaw+6.72,0.08*w,-PI/2+0.18+0.12*w)}
+    G.fc.copy(t<T0?G.b0:p).setY(G.wy+0.8);if(!fly&&t>=T0)G.fc.copy(G.b0).addScaledVector(G.W,15.2).setY(G.wy+0.8);
+    if(gEv(T0)){sfxNoise(0.25,2400,0.2);g2Whistle(true);gSpl(G.b0,40,0.9)}
+    for(let i=1;i<5;i++)if(gEv(SK[i][0])){const q=_h3.copy(G.b0).addScaledVector(G.W,SK[i][1]).setY(G.wy);gSpl(q,i<4?110-15*i:160,i<4?1.5-0.2*i:1.8);g2Ring(q,0.5,10,0.5);if(i<4)g2Boing(1+i*0.25);else{if(!sfxPlay('splash',{vol:0.8}))sfxNoise(0.8,700,0.35);game.shake=Math.max(game.shake||0,0.4)}}
+    if(gEv(T0+4.2)){gSpl(bl,70,1.2);sfxNoise(0.15,1800,0.3);g2Tone('triangle',220,180,0.3,0.06,0,[22,25])}if(gEv(6.15)){gSpl(_h3.copy(G.b0).addScaledVector(G.W,15.6),60,1.0);g2Whistle(false)}}}
+});
+/* the lip: the white water behind him stands up (k<0: rising) and throws over (0..1): a curtain of foam flung forward from the crest, landing right on him */
+function g2LipSet(G,k,t){const sc=G.sc;if(k<=0||k>=1)return;const th=k<0.25,n=th?28:90;
+  for(let i=0;i<n;i++){const a=rnd(-1,1),cw=-2.7-0.9*a*a,y=G.wy+(th?rnd(0.6,2.6):2.85+rnd(-0.1,0.12))*sc*(1-0.3*a*a),x=G.c.x+G.W.x*cw+G.L.x*a*3.6,z=G.c.z+G.W.z*cw+G.L.z*a*3.6;
+    if(th)emit(x,y,z,G.W.x*rnd(0.2,0.8),rnd(2.5,4.5),G.W.z*rnd(0.2,0.8),rnd(0.6,1.0),0.4,rnd(1.0,2.0),0.9,7,0.6,1);
+    else{const vw=3.7+rnd(-0.12,0.15)-0.5*a*a,vy=2.3+rnd(-0.12,0.2);emit(x,y,z,G.W.x*vw,vy,G.W.z*vw,rnd(0.9,1.3),rnd(0.3,0.5),rnd(0.8,1.5),0.95,11.5,0.08,1);
+      if(i%4==0)emit(x,y+0.15,z,G.W.x*(vw+0.6),vy+0.8,G.W.z*(vw+0.6),rnd(0.5,0.8),0.05,0.12,0.9,11,0.2,0)}}}
+/* the hold: where his two hands keep the halves (in front of his chest, then over his head) and how they're turned (along the beach, deck toward him and up) */
+function g2HoldA(G,t,sc){return _h3.copy(G.c).addScaledVector(G.W,lerp(0.42,0.30,sstep(3.95,4.3,t))).setY(G.wy-0.85*sc+lerp(1.48,2.08,sstep(3.95,4.3,t))*sc)}
+function g2HoldQ(G,t){_h7.copy(G.L);_h8.copy(G.W).multiplyScalar(-0.55).addScaledVector(UPV,0.84).normalize();_h9.crossVectors(_h7,_h8).normalize();_h8.crossVectors(_h9,_h7);_hm.makeBasis(_h7,_h8,_h9);return _hqH.setFromRotationMatrix(_hm)}
+function gagStart(id){const D=GAG[id];if(!D)return false;if(D.npc&&!(npcMesh&&NPCP.pop[3]))return false;gProps();g2Props();
   sampleSurf(sf.s,Math.max(sf.p,0.3),S);const W=new V3(-S.tp.x,0,-S.tp.z);if(W.lengthSq()<1e-4)W.set(0,0,1);W.normalize();const L=new V3(-W.z,0,W.x);
   sampleSurf(sf.s,2,S2);const wy=Math.min(boardG.position.y-0.04,S2.pos.y*0.3-0.2+0.6),sc=Math.abs(riderG.scale.y)||1,c=riderG.position.clone().setY(wy).addScaledVector(W,1.6);
   if(DROP.on)dropEnd();
@@ -7630,7 +7945,7 @@ function shot(kind,p,tk,ak){
     cT2.set(p.x+lerp(1.6,0.4,tk),p.y+lerp(1.25,0.7,tk)-ak*sf.h*0.45-(sf.openCam?1.1:0)*(1-tk),p.z*0.8);
     if(game.attract&&game.state!=='menu'){_bd.subVectors(cT2,cT1).cross(UPV).normalize().multiplyScalar(-3.6*(MIRROR?-1:1));cT1.add(_bd);cT2.add(_bd)}   /* behind the menu: framed so he rides on the right third, clear of the buttons */
     return lerp(18.5,48,tk)+ak*2.5}   /* on the drop it aims lower: the wave fills the frame, less sky */
-  if(kind==='beach'&&sf.mode==='gag'&&sf.gag){const G=sf.gag,C=(GAG[G.id]&&GAG[G.id].cam)||[7,1.5,0,0,40];cT1.copy(p).addScaledVector(G.W,C[0]).addScaledVector(G.L,C[2]);cT1.y=G.wy+C[1];cT2.copy(p);return C[4]}   /* the gags: each frames its own scene from the beach side */
+  if(kind==='beach'&&sf.mode==='gag'&&sf.gag){const G=sf.gag;let C=(GAG[G.id]&&GAG[G.id].cam)||[7,1.5,0,0,40];if(typeof C==='function')C=C(Math.min(sf.wT,G.dur+1.2),G);cT1.copy(p).addScaledVector(G.W,C[0]).addScaledVector(G.L,C[2]);cT1.y=G.wy+C[1];cT2.copy(p);return C[4]}   /* the gags: each frames its own scene from the beach side */
   if(kind==='beach'){sampleSurf(sf.s,Math.max(sf.p,0.3),SCam);_bd.copy(SCam.tp).setY(0);if(_bd.lengthSq()<1e-4)_bd.set(0,0,1);_bd.normalize().multiplyScalar(-1);   // on the beach side, facing him as he comes in
     if(sf.mode==='reef'){cT1.copy(p).addScaledVector(_bd,3.7);cT1.y=p.y+1.25;cT2.set(p.x,p.y+0.80,p.z);return 38}   /* the walk out over the reef: close, face on */
     cT1.copy(p).addScaledVector(_bd,7.5);cT1.y=p.y+1.5;cT2.set(p.x,p.y+0.95,p.z);return 44}
