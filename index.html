@@ -2293,6 +2293,7 @@ function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
   let cz=0,cy=0,ym=0,zm=0;z[NF]=0;y[NF]=0;
   let jm=0;for(let j=1;j<=NQ;j++){let f=.5*(a[j-1]+a[j])*TRK;const i=Math.floor(f);f-=i;const ks=i&TRM,kc=(i+TRQ)&TRM;cz-=(SINT[kc]+(SINT[kc+1]-SINT[kc])*f)/NQ;cy+=(SINT[ks]+(SINT[ks+1]-SINT[ks])*f)/NQ;z[NF+j]=cz;y[NF+j]=cy;if(cy>ym){ym=cy;zm=cz;jm=j}}
   if(jm>0&&jm<NQ){const y0=y[NF+jm-1],y1=y[NF+jm],y2=y[NF+jm+1],dd=y0-2*y1+y2;if(dd<-1e-9){const t=clamp(0.5*(y0-y2)/dd,-0.5,0.5),z0_=z[NF+jm-1],z1=z[NF+jm],z2=z[NF+jm+1];ym=y1-0.25*(y0-y2)*t;zm=z1+0.5*t*(z2-z0_)+0.5*t*t*(z2-2*z1+z0_)}}   /* 2026-11-18 the crest found between the samples, not on one of them: picked from the samples, it jumped from one to the next along the barrel and shifted the whole wall sideways in steps (the bump between the tube and the wave) */
+  if(a[NQ]>PI){const wC=sstep(PI,PI+0.4,a[NQ]);ym=lerp(y[NF+NQ],ym,wC);zm=lerp(z[NF+NQ],zm,wC)}   /* 1121 the crest slides from the lip's tip to the top of the curl as the lip goes past the vertical: picked as the highest point it jumped from moving with the tip to standing still exactly where the barrel ends, and the whole wave, scaled and placed by it, bent there (the step at the end of the tube) */
   const L=Ht/Math.max(ym,0.03),zs=zA-zm*L,aEnd=a[NQ];
   const occC=isFoam?0:sstep(2.6,3.5,aEnd);
   let arc=0;const dA=L/NQ,fA=isFoam||aEnd>=2.3?0:0.42*(0.45+0.55*crumb)*sstep(0.25,0.7,w),fB=isFoam||aEnd<2.3?0:(0.30+0.55*crumb)*sstep(2.3,2.9,aEnd)*0.85;
@@ -2323,7 +2324,7 @@ function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
   let top=L;for(let j=1;j<=NQ;j++)if(a[j]>=1.45){const f=(1.45-a[j-1])/(a[j]-a[j-1]);top=(j-1+f)/NQ*L;break}
   // the falling lip: thrown from the tip of the curl, it arcs over and falls to the base of the wave, closing the tube
   const kT=NF+NQ,tipZ=z[kT],tipY=y[kT],tipFoam=inf[kT*4+1],arcTip=arc,cZ=o.cZ,cY=o.cY,cA=o.cA,VERT=1.5*PI;
-  const kc=(!isFoam&&ec>0)?sstep(-0.10,-0.42,Math.sin(aEnd)):0,curOK=kc>0;let Lc=0;cZ[0]=tipZ;cY[0]=tipY;cA[0]=aEnd;   /* the curtain grows in as the lip comes over, instead of switching on at one angle (that was the shake and the step before a barrel) */
+  const aK=PAE>0?PAE:aEnd,kc=(!isFoam&&ec>0)?sstep(-0.03,-0.62,Math.sin(aK)):0,curOK=kc>0;   /* 1121 the curtain fades over twice the angle, and by the lip angle smoothed along the wave (AES): where the barrel ends the angle falls 0.2 rad a column, and the curtain dropped out within one column (the step at the end of the tube) */let Lc=0;cZ[0]=tipZ;cY[0]=tipY;cA[0]=aEnd;   /* the curtain grows in as the lip comes over, instead of switching on at one angle (that was the shake and the step before a barrel) */
   if(curOK){let D=0;for(let c=0;c<NC;c++){const t=(c+0.5)/NC;D-=fsin(aEnd+(VERT-aEnd)*(1-(1-t)*(1-t)))/NC}
     Lc=kc*ec*Math.max(0,tipY-0.04)/Math.max(D,0.2)}
   const cOn=sstep(0,0.4,Lc),airK=1-0.7*sstep(0.8,1,ec),ragK=-cOn*airK*0.8;   /* (a plain number now: it used to be a small function made afresh for each of the ~300 columns, every frame) */   /* the curtain crumbles away toward its lower edge, in chunks, even when it is thrown all the way */
@@ -2340,7 +2341,7 @@ function profile(o,As,w,Ab,Ht,zA,foamK,isFoam,ec,fo,X,tt){
   for(let k=0;k<NR;k++){const dk=(k+1)/NR*tot,r=R_RET+k;let iz,iy,aa,uc=0;const onC=dk<=Lc&&Lc>1e-4;
     if(onC){const fc=(Lc-dk)/Lc*NC,c0=Math.min(Math.floor(fc),NC-1),f=fc-c0;iz=lerp(cZ[c0],cZ[c0+1],f);iy=lerp(cY[c0],cY[c0+1],f);aa=lerp(cA[c0],cA[c0+1],f);uc=fc/NC}
     else{const qq=1-(dk-Lc)/L,fj=qq*NQ,j0=Math.max(0,Math.min(Math.floor(fj),NQ-1)),f=fj-j0;iz=lerp(z[NF+j0],z[NF+j0+1],f);iy=lerp(y[NF+j0],y[NF+j0+1],f);aa=lerp(a[j0],a[j0+1],f)}
-    const d=thF*Math.min(0.6,0.04+0.22*dk);
+    const d=thF*Math.min(Math.max(0.06,0.6*sstep(2.3,4.3,aK)),0.04+0.22*dk);   /* 1121 the lip's thickness grows and shrinks with how far it throws, over 2 rad of lip angle: its top stood 0.6 m over the crest along the barrel and dropped within 2 m where the barrel ended (the bump at the end of the tube seen from the side) */
     z[r]=iz-fsin(aa)*d;y[r]=iy-fcos(aa)*d;
     const fb=back>0.01?(dk-Lc)/back:0;
     inf[r*4]=arcTip+(Lc-dk)*0.6;inf[r*4+1]=isFoam?1:(onC?0.06+0.96*sstep(0.84,0.90,uc):thF*(0.50-0.4*fb));   /* the inside of the falling lip the same: clear water, the white line only along its edge */
@@ -2419,7 +2420,8 @@ function secAt(s,age){let v=0;secClose=0;secFoam=0;secJct=0;if(age<0)return 0;
     if(C.k===0&&c>=3){const e=dK*sstep(0,C.drop?1.0:C.fol?4.0:1.4,t)*sstep(3,9,c)*sstep(0,0.24,u)*(1-sstep(0.72,1,u))*(1-C.m);if(e>v){v=e;secClose=sstep(0.10,0.32,u)*(1-sstep(0.46,0.80,u))}}   // long ramps: the wave changes shape gradually at both ends
     else if(C.k===2){const j=sstep(0,1.6,t)*Math.pow(Math.sin(PI*u),1.5);if(j>secJct)secJct=j}}
   return v}
-const CEA=new Float32Array(NS),CES=new Float32Array(NS),LANDK=new Float32Array(NS),LANDZ=new Float32Array(NS);
+let PAE=0;   /* 1121 the smoothed lip angle of the column being built, for the curtain and the lip's thickness (drawing only) */
+const CESA=new Float32Array(NS),AES=new Float32Array(NS),CEA=new Float32Array(NS),CES=new Float32Array(NS),LANDK=new Float32Array(NS),LANDZ=new Float32Array(NS);
 const GROW={w:1,h:1};   /* 2026-11-19 grow (Rosa Norte): a fat, soft wave at the start, made for cutbacks, standing up taller and steeper as the ride goes on */
 function buildWave(t){
   secUpdate(game.secAge);{const g=SPOT.grow?sstep(0.30*game.waveDur,0.85*game.waveDur,game.secAge):1;GROW.w=SPOT.grow?lerp(0.74,1.10,g):1;GROW.h=SPOT.grow?lerp(0.90,1.08,g):1}const adv=CP*t+game.xOff,rk=game.rhK||0;   // rk: during a roundhouse the curl stops throwing and piles up as foam, so there is a junction to hit
@@ -2428,8 +2430,10 @@ function buildWave(t){
    const w0=Math.max(wOf(0,48),fo*0.9,0.95*secJct),svw=Math.max(sv,ck),w=(w0+(1-w0)*svw*svw)*sstep(0.25,0.6,game.Hbase)*(SPOT.fat?0.86:1)*GROW.w;E0={w,ab:(205+65*e)*DEG,hk:lerp(2.0,4.0,sstep(0,0.42,w))/4.0*(1-0.10*fo)*(1-0.06*ef+0.10*ef*Math.sin(t*2.4))*(1+0.30*secJct),ec:sstep(0.35,0.95,e),fo}}
   {const cr=SPOT.crumble?1:0;for(let i=0;i<NS;i++){const s=colS[i];if(s<0){CEA[i]=0;continue}const ef=endFoam(s,game.secAge),sv=secAt(s,game.secAge),ck=closeK(s,game.secAge),fo=Math.max(secFoam,rk*(1-sstep(3.0,7.5,s)),0.45*secJct,0.95*ef,0.95*cr*(1-sstep(3,SPOT.fat?14:(SPOT.crl||11),s)));
      CEA[i]=Math.max(clamp(1-(s-0.3)/(9.5*SPOT.eL),0,1)*(1-secJct),sv*(0.45+0.55*secClose),ck)*(1-fo)*(1-cr)}
-   for(let i=0;i<NS;i++){const s=colS[i];if(s<0.5){CES[i]=CEA[i];continue}let a=0,ws=0;for(let j=Math.max(0,i-10);j<=Math.min(NS-1,i+10);j++){const d=(colS[j]-s)/3.4,w=Math.exp(-d*d);a+=CEA[j]*w;ws+=w}CES[i]=a/ws}}   /* 2026-11-18 (the bump where the barrel ends, on every wave): the curl of each column smoothed along the wave over a few metres, so the lip tapers away into the shoulder instead of ending in a step */
-  for(let i=0;i<NS;i++){
+   {if(!CESA[1]){for(let i=1;i<NS;i++)CESA[i]=Math.exp(-(colS[i]-colS[i-1])/1.7)}let c0=0;for(let i=0;i<NS;i++)if(colS[i]>=0){c0=CEA[i];break}for(let i=0;i<NS;i++)CES[i]=colS[i]<0?c0:CEA[i];
+    for(let p=0;p<2;p++){for(let i=1;i<NS;i++){const a=CESA[i];CES[i]=CES[i-1]*a+CES[i]*(1-a)}for(let i=NS-2;i>=0;i--){const a=CESA[i+1];CES[i]=CES[i+1]*a+CES[i]*(1-a)}}
+    for(let i=0;i<NS;i++)AES[i]=colAEnd[i];for(let p=0;p<2;p++){for(let i=1;i<NS;i++){const a=CESA[i];AES[i]=AES[i-1]*a+AES[i]*(1-a)}for(let i=NS-2;i>=0;i--){const a=CESA[i+1];AES[i]=AES[i+1]*a+AES[i]*(1-a)}}}}   /* 1121 the curl smoothed along the wave with no window to step in and out of (two forward and backward exponential passes, about the old width), the columns behind the curl counting as the curl itself: no bump just inside the tube, no step where it ends */   /* 2026-11-18 (the bump where the barrel ends, on every wave): the curl of each column smoothed along the wave over a few metres, so the lip tapers away into the shoulder instead of ending in a step */
+  for(let i=0;i<NS;i++){PAE=AES[i];
     const s=colS[i],X=s+adv,Lw=0,Hs=SPOT.hK*game.Hbase*(1+0.08*Math.sin(X*0.061+2.0)+0.022*Math.sin(X*0.31+0.7)+0.012*Math.sin(X*0.83+2.9))*(0.05+0.95*(1-sstep(140,200,s))*sstep(-175,-125,s))*(1-0.42*sstep(62,135,s))*(SPOT.tri?1-SPOT.tri*(s>0?sstep(2,62,s):0.55*sstep(-2,-55,s)):1)*(SPOT.chan?1-0.45*sstep(28,95,s)-(SPOT.grow?0:0.32)*sstep(game.waveDur-5,game.waveDur,game.secAge):1)*GROW.h;   /* tri: a peaky wedge, tallest at the peak (Matadeiro); chan: the shoulder backs off into the channel and the wave fades at the end (Rosa Norte) */
     let o=scA;
     if(s>=0){
@@ -2489,14 +2493,14 @@ waveGeo.setAttribute('aInfo',new THREE.BufferAttribute(gInf,4).setUsage(THREE.Dy
  waveGeo.setIndex(new THREE.BufferAttribute(idx,1));waveGeo.addGroup(0,n0,0);waveGeo.addGroup(n0,k-n0,1)}
 const waveDef={
   uniforms:{uSun:{value:SUN},uNight:TOD,uDawn:DAWN,uDusk:DUSK,uRain:RAIN,uPl:PLU,uNoise:{value:noiseTex},uTime:{value:0},uX:{value:0},uPool:{value:new THREE.Vector4(62,0.866,0.5,0)},
-    uWDk:{value:0},uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uBR:{value:0.11},uRR:{value:0},uRU:{value:new V3(0,1,0)},uRip:{value:ripTex},uFoamT:{value:foamTex},uHzC:{value:scene.fog.color}},
+    uWDk:{value:0},uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uBR:{value:0.11},uRR:{value:0},uRU:{value:new V3(0,1,0)},uRip:{value:ripTex},uFoamT:{value:foamTex},uHzC:{value:scene.fog.color},uScn:{value:new THREE.Vector4(1,1,1,0)},uScnH:{value:new THREE.Vector4(0.5,0.5,0.5,1)}},
   vertexShader:`attribute vec4 aInfo;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     void main(){vP=position;vN=normal;vI=aInfo;gl_Position=projectionMatrix*viewMatrix*vec4(position,1.);}`,
   fragmentShader:`precision highp float;
     uniform sampler2D uNoise;uniform float uTime;uniform float uX;uniform vec4 uPool;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef,uShdK,uWDk;uniform vec4 uShd;
     ${SKY_GLSL}
-    uniform sampler2D uRip;uniform sampler2D uFoamT;uniform vec3 uHzC;
+    uniform sampler2D uRip;uniform sampler2D uFoamT;uniform vec3 uHzC;uniform vec4 uScn;uniform vec4 uScnH;
     uniform vec3 uRA;uniform vec3 uRB;uniform vec3 uBA;uniform vec3 uBB;uniform float uRR;uniform float uBR;uniform vec3 uRU;
     float capD(vec3 p,vec3 a,vec3 b){vec3 ab=b-a;float t=clamp(dot(p-a,ab)/max(dot(ab,ab),1e-5),0.,1.);return length(p-a-ab*t);}
     void main(){
@@ -2522,10 +2526,11 @@ const waveDef={
       vec4 r1=texture2D(uRip,uv*vec2(0.16,0.13)+vec2(0.017,0.011)*uTime+w1*0.05);vec2 w3=r1.rg-0.5;   /* WAVE SKIN ripples: a layer about 6 m across (it also stands in for the old third noise layer) and one about 2 m, drifting different ways */
       float df=1./(1.+dist*0.02);
 #ifdef SKIN_LITE
-      vec4 r2=r1;vec2 rs=w3*0.40*mix(1.0,0.9,steep);
+      vec4 r2=r1,r3=r1;vec2 rs=w3*0.40*mix(1.0,0.9,steep);
 #else
-      vec4 r2=texture2D(uRip,uv*mix(vec2(0.47,0.43),vec2(0.42,0.045),steep)+vec2(-0.031,0.024)*uTime+w2*0.08);   /* on the face the fine layer is drawn out up the slope: lines of water running up the wall */
-      vec2 rs=w3*mix(0.32,0.28,steep)+(r2.rg-0.5)*mix(0.21*df,0.40,steep);
+      vec4 r2=texture2D(uRip,uv*vec2(0.47,0.43)+vec2(-0.031,0.024)*uTime+w2*0.08);
+      vec4 r3=vec4(0.5,0.5,0.45,0.5);if(steep>0.03)r3=textureGrad(uRip,uv*vec2(0.42,0.045)+vec2(-0.031,0.024)*uTime,dUx*vec2(0.42,0.045),dUy*vec2(0.42,0.045));   /* 1121 the lines up the face: the fine layer drawn out up the slope, read at ONE fixed scale (scaling the coordinate by the slope tore it into horizontal bands) */   /* on the face the fine layer is drawn out up the slope: lines of water running up the wall */
+      vec2 rs=w3*mix(0.32,0.28,steep)+mix((r2.rg-0.5)*0.21*df,(r3.rg-0.5)*0.40,steep);
 #endif
       vec2 sl=(w1*0.60+w2*0.62)*mix(0.33,0.20,steep)+rs;
 #else
@@ -2553,20 +2558,20 @@ const waveDef={
       float nz=texture2D(uNoise,uv*0.09+w1*0.05).b;
 #ifdef SKIN
       float hf=clamp(vP.y/4.0,0.,1.);
-      vec3 body=mix(uWA*0.50,uWB*1.05,smoothstep(0.08,1.0,hf)*0.92+0.03);   /* WAVE SKIN depth: deep, dark blue at the foot of the wall, lighter going up */
-      body*=mix(mix(0.70,1.,smoothstep(0.0,0.50,hf)),1.,1.-steep);   /* darker still at the foot of a steep face */
-      body=mix(body,mix(uWB,uG1,0.6)*1.15,smoothstep(0.35,0.95,sss)*0.55);   /* green-turquoise toward the lip */
+      vec3 body=mix(uWA*0.52,uWB*1.05,smoothstep(-0.10,1.05,hf)*0.92+0.03);   /* 1121 one smooth gradient, deep at the foot, lighter all the way up */   /* WAVE SKIN depth: deep, dark blue at the foot of the wall, lighter going up */
+      body*=0.86+0.14*smoothstep(-0.15,0.75,hf);   /* darker still at the foot of a steep face */
+      body=mix(body,mix(uWB,uG1,0.6)*1.15,smoothstep(0.10,1.0,sss)*0.55);   /* green-turquoise toward the lip */
       float lv=n1.b;   /* the lip is thicker or thinner in long patches along the wave */
       body*=mix(vec3(0.90,1.05,0.97),vec3(1.05,0.95,1.04),smoothstep(0.25,0.75,lv));   /* and the colour drifts along the wave: greener here, bluer there */
       float tl=0.5+0.5*sin((lv*2.7+nz*0.6)*6.2832);   /* and thicker and thinner bands inside them, smooth */
       float thin=clamp(sss*sss*(0.55+0.65*lv+0.25*nz)*(0.82+0.36*tl)*(0.9+0.2*r1.b),0.,1.);
       vec3 glow=mix(uG1,uG2,clamp(thin*1.1,0.,1.))*mix(vec3(1.),vec3(0.70,1.10,0.86),smoothstep(0.02,0.25,uG2.b-uG2.r))*thin*(0.75+1.20*back+0.3*back*back)*(0.85+0.3*clamp(0.5-dot(N,L),0.,1.));   /* the light through the thin lip: a luminous aqua green seen from every camera, brighter still against the sun (the green only on blue or green water: the Pororoca's brown keeps its own colour) */
-      glow+=mix(uG2,vec3(1.),0.3)*smoothstep(0.90,0.995,sss)*(0.18+0.40*back)*(0.75+0.5*tl);   /* a clear rim along the very top of the lip */
+      glow+=mix(uG2,vec3(1.),0.3)*smoothstep(0.72,1.0,sss)*(0.14+0.34*back)*(0.75+0.5*tl);   /* a clear rim along the very top of the lip */
       glow/=1.+0.25*max(max(glow.r,glow.g),glow.b);   /* a soft knee: it glows without burning to white or flooding the bloom */
       body+=glow+uWB*0.22*max(dot(N,L),0.);
-      body*=1.+(0.60*(r2.b-0.45)*steep*(1.-0.75*thin)+0.9*dot(N-Ng,normalize(L+V+vec3(0.,0.6,0.))));   /* the ripples and the lines running up the face shade the body of the water too */
+      body*=1.+(0.45*(r3.b-0.45)*steep*(1.-0.75*thin)+0.9*dot(N-Ng,normalize(L+V+vec3(0.,0.6,0.))));   /* the ripples and the lines running up the face shade the body of the water too */
 #ifndef SKIN_LITE
-      body+=refl*0.45*smoothstep(0.30,0.95,hf)*steep*(1.-0.6*thin)*max(r2.b-0.45,0.);   /* the high part of the wall catches the sky on the crests of its ripples */
+      body+=refl*0.45*smoothstep(0.30,0.95,hf)*steep*(1.-0.6*thin)*max(r3.b-0.45,0.);   /* the high part of the wall catches the sky on the crests of its ripples */
 #endif
 #else
       float hf=clamp(vP.y/4.0,0.,1.);
@@ -2598,7 +2603,7 @@ const waveDef={
 #ifdef SKIN
       if(sd>0.3)spec+=smoothstep(0.3,0.6,sd)*smoothstep(0.86,0.99,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,8.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*(1.-0.8*uDusk)*4.;   /* WAVE SKIN: the sun glitter in fine sparks, not a soft glow */
 #ifndef SKIN_LITE
-      if(steep>0.05)spec+=pow(sd,60.)*smoothstep(0.55,0.85,r2.b)*steep*(1.-occ)*(1.-0.5*thin)*(1.-0.8*uDusk)*2.5;   /* and the sun glinting on the ripples of the face */
+      if(steep>0.05)spec+=pow(sd,60.)*smoothstep(0.55,0.85,r3.b)*steep*(1.-occ)*(1.-0.5*thin)*(1.-0.8*uDusk)*2.5;   /* and the sun glinting on the ripples of the face */
 #endif
 #else
       if(sd>0.12)spec+=smoothstep(0.12,0.3,sd)*smoothstep(0.80,0.97,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,3.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*5.;   // sun glitter dancing on the water
@@ -2687,8 +2692,14 @@ const waveDef={
           col=mix(ac,ac*0.5,occ*0.4);
           foamC=mix(vec3(0.32,0.95,0.18),vec3(0.75,1.40,0.42),clamp(fsh*0.6+hgt*0.5,0.,1.))*min(lit,1.1);}}
       if(uWDk>0.)col=mix(col,vec3(dot(col,vec3(.3,.59,.11)))*vec3(0.80,0.94,1.0),0.35*uWDk)*(1.-0.45*uWDk);   /* the arctic: dark slate water under a grey sky, the foam left white */
+#ifdef SKIN
+      {float lw=dot(col,vec3(0.2126,0.7152,0.0722));col=mix(vec3(lw),col,mix(1.,uScnH.w-0.14,uScn.w))*mix(vec3(1.),uScn.rgb,uScn.w);col=mix(col,uScnH.rgb*1.15,0.08*uScn.w);foamC*=mix(vec3(1.),uScn.rgb,0.4*uScn.w);}   /* 1121 the water takes the tone of the wave's painted scenery: as saturated as the picture, tinted by its mean colour, a touch of its haze */
+#endif
       col=mix(col,foamC,fm);
       vec3 fogC=skyC(normalize(vec3(-V.x,0.03,-V.z)));
+#ifdef SKIN
+      fogC=mix(fogC,uScnH.rgb,0.35*uScn.w);   /* 1121 far out, the water fades into the haze of the painted scenery */
+#endif
       col=mix(col,fogC,(1.-exp(-dist*0.0010))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
       if(any(isnan(col))||any(isinf(col)))col=fogC;
       gl_FragColor=vec4(col,1.);}`,
@@ -3825,7 +3836,11 @@ function bgpMesh(i){if(BGP.m[i])return BGP.m[i];const N=96,pos=[],uv=[],idx=[];f
     vertexShader:'uniform float uAz,uSpan,uH0,uH1;varying vec2 vU;void main(){vU=uv;float a=uAz-(position.x-0.5)*uSpan,e=mix(uH0,uH1,position.y);vec3 d=vec3(sin(a)*cos(e),sin(e),cos(a)*cos(e));vec4 p=projectionMatrix*viewMatrix*vec4(cameraPosition+d*1000.,1.);gl_Position=p;gl_Position.z=p.w*0.999999;}',
     fragmentShader:'uniform sampler2D map;uniform vec3 uFog;uniform float uHz,uNight,uDawn,uFl,uFr;varying vec2 vU;void main(){vec4 c=texture2D(map,vU);if(c.a<0.02)discard;float edge=smoothstep(0.,uFl,vU.x)*smoothstep(1.,1.-uFr,vU.x);vec3 col=c.rgb*0.9;col=mix(col,uFog,uHz);col*=mix(vec3(1.),vec3(0.94,0.68,0.54),uDawn*0.6);col=mix(col,col*0.10+vec3(0.004,0.006,0.012),uNight);gl_FragColor=vec4(col,c.a*edge);}'});
   const M=new THREE.Mesh(g,mt);M.frustumCulled=false;M.renderOrder=-20;M.visible=false;scene.add(M);return BGP.m[i]=M}
-function bgpSet(id){const L=BGP.S[id]||[];BGP.m.forEach(M=>M.visible=false);for(const f in BGP.tx)if(!L.some(C=>C.f===f)){BGP.tx[f].dispose();delete BGP.tx[f]}   /* only this wave's pictures stay on the GPU */
+/* 1121 each wave's water takes the tone of its painted scenery (the user: "a mesma tonalidade e padrao cromatico do cenario"): per wave the picture's mean colour
+   over its own brightness (the tint), how saturated the water may be (from the picture's saturation) and the colour of the picture's lowest band (the haze
+   the far water fades into); measured from img/cen-XX.webp by build/wave-fix/scn.py. Waves without a picture (the pool) are left as they were */
+function scnSet(id){const T={2:[0.955,1.023,0.906,0.83,0.361,0.384,0.348],3:[0.886,1.027,1.065,0.87,0.370,0.404,0.378],4:[0.875,1.040,0.971,0.86,0.251,0.297,0.279],5:[0.994,1.003,0.983,0.83,0.307,0.319,0.314],6:[0.839,1.042,1.056,0.89,0.271,0.347,0.367],7:[1.013,1.020,0.765,0.94,0.296,0.294,0.219],8:[0.926,1.012,1.097,0.85,0.303,0.322,0.334],9:[1.040,0.996,0.923,0.80,0.481,0.452,0.418],10:[1.155,0.971,0.835,0.91,0.361,0.339,0.319],11:[0.856,1.043,0.995,0.90,0.172,0.226,0.223],12:[0.992,1.009,0.935,0.83,0.363,0.362,0.331],13:[1.074,0.985,0.927,0.79,0.523,0.485,0.455],14:[0.867,1.043,0.961,0.89,0.262,0.295,0.278],15:[0.900,1.031,0.990,0.84,0.273,0.313,0.299],16:[0.868,1.037,1.024,0.94,0.286,0.330,0.302],17:[0.969,1.011,0.980,0.78,0.402,0.420,0.414],18:[1.254,0.957,0.673,0.95,0.568,0.431,0.306]},c=T[id],U=waveMat.uniforms;if(!c||window.__scnOff){U.uScn.value.set(1,1,1,0);return}U.uScn.value.set(c[0],c[1],c[2],0.8);U.uScnH.value.set(c[4],c[5],c[6],c[3])}
+function bgpSet(id){try{scnSet(id)}catch(e){}const L=BGP.S[id]||[];BGP.m.forEach(M=>M.visible=false);for(const f in BGP.tx)if(!L.some(C=>C.f===f)){BGP.tx[f].dispose();delete BGP.tx[f]}   /* only this wave's pictures stay on the GPU */
   if(window.__bgpOff)return;
   L.forEach((C,i)=>{const M=bgpMesh(i),U=M.material.uniforms;M.userData.f=C.f;M.userData.az=C.az;
     const go=t=>{if(SPOT.id!==id||M.userData.f!==C.f||M.userData.az!==C.az)return;const W=t.image.width,H=t.image.height,S=Math.abs(C.span);U.map.value=t;U.uAz.value=C.az;U.uSpan.value=C.span;U.uH0.value=-(C.hb||4)/W*S;U.uH1.value=U.uH0.value+H/W*S;U.uHz.value=C.hz;U.uFl.value=C.fl||0.06;U.uFr.value=C.fr||0.06;M.visible=true};
