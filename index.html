@@ -1324,7 +1324,7 @@ body.wcOn #gm .gmSurf button:not([data-s="pro"]):not([data-s="girl"]):not([data-
   <div id="ptTag"></div>
   <div id="keys">
     <k>←</k><k>↑</k><k>↓</k><k>→</k> STEER ON THE WALL<br>
-    <k>←</k> CARVE · <k>E</k> OPEN CARVE · <k>OPTION</k> CUTBACK · <k>G</k> CARVE 360 · <k>R</k> FLOATER · <k>F</k> NOSE PICK<br>
+    <k>←</k> CARVE · <k>E</k> OPEN CARVE · <k>OPTION</k> CUTBACK · <k>R</k> FLOATER<br>
     <k>↓</k> AT THE TOP: TAP = SNAP · HOLD = TAIL THROW · <k>SHIFT</k> = LAYBACK<br>
     IN THE AIR: <k>←</k><k>→</k> SPIN · <k>↑</k><k>↓</k> FLIP · <k>SPACE</k>+<k>←</k> ALLEY-OOP<br>
     <k>SPACE</k> CROUCH · AIR AT THE LIP · GRAB<br>
@@ -5852,7 +5852,7 @@ addEventListener('keydown',e=>{
   if(!$('manual').classList.contains('off'))return;
   if(e.code==='KeyU'&&BOARD.id==='soft'){riderSwap();return}
   if(e.code==='KeyC')camNext(1);
-  if(e.code==='KeyN'&&SPOT.id===1){setTOD(game.night?0:1);game.nightPref=game.tod}if(e.code==='KeyG'&&game.state==='ride'&&sf.mode==='ride'&&!sf.c360&&!sf.rh&&!game.inTube&&sf.introT<=0&&!(sf.openT>0)&&!(sf.autoTube>0))sf.c360={t:0,acc:0,pth:sf.th,up:true};if(e.code==='KeyF')game.npReq=game.waveAge;if(e.code==='Space'&&game.state==='ride'&&!game.attract&&sf.mode==='ride')game.airReq=game.waveAge;   /* 2026-11-19 (the user: airs not working) AIR held ready for a moment, see the lip */
+  if(e.code==='KeyN'&&SPOT.id===1){setTOD(game.night?0:1);game.nightPref=game.tod}if(e.code==='Space'&&game.state==='ride'&&!game.attract&&sf.mode==='ride')game.airReq=game.waveAge;   /* 2026-11-19 (the user: airs not working) AIR held ready for a moment, see the lip */
   
   if(e.code==='Digit1')setCam(0);if(e.code==='Digit2')setCam(1);if(e.code==='Digit3')setCam(2);
   if(e.code==='Escape'&&game.state==='end'&&!game.attract){toMenu();return}
@@ -5955,19 +5955,19 @@ function mapFit(){const m=document.getElementById('spotMap'),sc=document.querySe
   const z=mapSize(m,W,H,hs,tw);sc.style.setProperty('--c1',z.mw+'px');sc.style.setProperty('--c2',z.lw+'px');sc.style.setProperty('--cg',z.cg+'px')}
 addEventListener('resize',()=>{if(WZ.s===3)mapFit()});
 const KTIPS=[['<k>←</k><k>↑</k><k>↓</k><k>→</k>','STEER ON THE WALL'],['<k>↓</k> AT THE TOP','TAP = SNAP · HOLD = TAIL THROW'],['<k>←</k> WITH SPEED','CARVE'],['<k>E</k> WITH SPEED','OPEN CARVE'],['<k>OPTION</k>','CUTBACK'],['<k>SPACE</k> AT THE LIP','AIR'],['<k>SHIFT</k> IN A SNAP','LAYBACK'],
-  ['<k>G</k>','CARVE 360'],['IN THE AIR <k>←</k><k>→</k>','SPIN · <k>↑</k><k>↓</k> FLIP'],['<k>SPACE</k>+<k>←</k>','ALLEY-OOP'],['<k>F</k>','NOSE PICK'],['<k>SHIFT</k> LOW ON THE WAVE','BRAKE · WAIT FOR THE BARREL'],['<k>C</k> CAMERA · <k>P</k> PAUSE','<k>[</k><k>]</k> MUSIC']];
+  ['IN THE AIR <k>←</k><k>→</k>','SPIN · <k>↑</k><k>↓</k> FLIP'],['<k>SPACE</k>+<k>←</k>','ALLEY-OOP'],['<k>SHIFT</k> LOW ON THE WAVE','BRAKE · WAIT FOR THE BARREL'],['<k>C</k> CAMERA · <k>P</k> PAUSE','<k>[</k><k>]</k> MUSIC']];
 /* the maneuver guide: a button (H) that pauses the wave and lists every command, for the keyboard or for the touch screen */
 const MAN={d:[['RIDING',[['STEER ON THE WALL','<k>←</k><k>↑</k><k>↓</k><k>→</k>'],['ACCELERATE','HOLD <k>→</k> FORWARD'],['PUMP FOR SPEED','<k>↑</k><k>↓</k><k>↑</k><k>↓</k> FAST, ON THE FACE'],['CROUCH','<k>SPACE</k>'],['BRAKE · WAIT FOR THE BARREL','<k>SHIFT</k> LOW ON THE WAVE']]],
-  ['TURNS',[['CARVE','<k>←</k> WITH SPEED'],['CUTBACK','<k>OPTION</k>'],['CARVE 360','<k>G</k>'],['SNAP','<k>↓</k> AT THE TOP · HOLD LONGER, MORE TAIL'],['TAIL THROW','HOLD <k>↓</k> AT THE TOP'],['LAYBACK','<k>SHIFT</k> IN A SNAP'],['FLOATER','<k>R</k>']]],
-  ['AIRS',[['AIR','<k>SPACE</k> AT THE LIP'],['FULL ROTATION','IN THE AIR <k>←</k> OR <k>→</k>'],['BACKFLIP','IN THE AIR <k>↑</k> OR <k>↓</k>'],['ALLEY-OOP','<k>SPACE</k> + <k>←</k>'],['NOSE PICK','<k>F</k>']]],
+  ['TURNS',[['CARVE','<k>←</k> WITH SPEED'],['CUTBACK','<k>OPTION</k>'],['SNAP','<k>↓</k> AT THE TOP · HOLD LONGER, MORE TAIL'],['TAIL THROW','HOLD <k>↓</k> AT THE TOP'],['LAYBACK','<k>SHIFT</k> IN A SNAP'],['FLOATER','<k>R</k>']]],
+  ['AIRS',[['AIR','<k>SPACE</k> AT THE LIP'],['FULL ROTATION','IN THE AIR <k>←</k> OR <k>→</k>'],['BACKFLIP','IN THE AIR <k>↑</k> OR <k>↓</k>'],['ALLEY-OOP','<k>SPACE</k> + <k>←</k>']]],
   ['GAME',[['MANEUVER GUIDE','<k>H</k>'],['CAMERA','<k>C</k>'],['PAUSE','<k>P</k>'],['SOUND','<k>M</k>'],['MUSIC','<k>[</k> <k>]</k> · <k>K</k> STOP']]]],
  t:[['RIDING',[['STEER ON THE WALL','STICK'],['ACCELERATE','HOLD THE STICK → FORWARD'],['PUMP FOR SPEED','STICK UP · DOWN, FAST, ON THE FACE'],['BRAKE · WAIT FOR THE BARREL','BRAKE']]],
   ['TURNS',[['CARVE','CARVE, WITH SPEED'],['CUTBACK','CUTBACK'],['SNAP','SNAP AT THE TOP · HOLD LONGER, MORE TAIL'],['TAIL THROW','HOLD SNAP'],['LAYBACK','LAYBACK']]],
   ['AIRS',[['AIR','AIR AT THE LIP'],['FULL ROTATION','IN THE AIR: STICK ← →'],['BACKFLIP','IN THE AIR: STICK ↑ ↓']]],
   ['GAME',[['CHANGE WAVE','WAVE'],['CAMERA','CAMERA'],['PAUSE','❚❚']]]]};
 MAN.g=[['RIDING',[['STEER ON THE WALL','<k>LEFT STICK</k> OR <k>D-PAD</k>'],['ACCELERATE','HOLD THE STICK → FORWARD'],['PUMP FOR SPEED','STICK UP · DOWN, FAST'],['CROUCH','<k class="gA">A</k>'],['BRAKE · WAIT FOR THE BARREL','<k class="gB">B</k> OR <k>RT</k>']]],
-  ['TURNS',[['CARVE','STICK BACK, WITH SPEED'],['CUTBACK','<k class="gX">X</k>'],['CARVE 360','<k>LB</k>'],['SNAP','STICK DOWN AT THE TOP · HOLD LONGER, MORE TAIL'],['TAIL THROW','HOLD DOWN AT THE TOP'],['LAYBACK','<k class="gB">B</k> IN A SNAP'],['FLOATER','<k>RB</k>']]],
-  ['AIRS',[['AIR','<k class="gA">A</k> AT THE LIP'],['FULL ROTATION','STICK ← → IN THE AIR'],['BACKFLIP','STICK ↑ ↓ IN THE AIR'],['ALLEY-OOP','<k class="gA">A</k> + STICK BACK'],['NOSE PICK','<k>LT</k>']]],
+  ['TURNS',[['CARVE','STICK BACK, WITH SPEED'],['CUTBACK','<k class="gX">X</k>'],['SNAP','STICK DOWN AT THE TOP · HOLD LONGER, MORE TAIL'],['TAIL THROW','HOLD DOWN AT THE TOP'],['LAYBACK','<k class="gB">B</k> IN A SNAP'],['FLOATER','<k>RB</k>']]],
+  ['AIRS',[['AIR','<k class="gA">A</k> AT THE LIP'],['FULL ROTATION','STICK ← → IN THE AIR'],['BACKFLIP','STICK ↑ ↓ IN THE AIR'],['ALLEY-OOP','<k class="gA">A</k> + STICK BACK']]],
   ['GAME',[['MANEUVER GUIDE','<k>SELECT</k>'],['CAMERA','<k class="gY">Y</k>'],['PAUSE','<k>START</k>'],['MENUS','<k>D-PAD</k> · <k class="gA">A</k> PRESS · <k class="gB">B</k> BACK']]]];
 let mnPaused=false;
 function manOpen(){if(game.attract||game.state!=='ride')return;if(!$('tutL').classList.contains('off'))return;if(!game.paused){game.paused=true;mnPaused=true}   /* 2026-11-18 the button plays the animated guide, one maneuver at a time, the game paused; it picks up again when it ends */
@@ -6053,8 +6053,6 @@ function gpLoop(){requestAnimationFrame(gpLoop);const g=gpPad();if(!g){if(GP.foc
   const sc=gpScope(),riding=game.state==='ride'&&!game.attract&&!sc;if(WC.drone){if(ed(0)||ed(9)||ed(1))wcDroneEnd();return}
   if(riding){if(GP.focus){GP.focus.classList.remove('gpF');GP.focus=null}
     if(ed(3))camNext(1);   /* Y camera */
-    if(ed(4)&&sf.mode==='ride'&&!sf.c360&&!sf.rh&&!game.inTube&&sf.introT<=0&&!(sf.openT>0)&&!(sf.autoTube>0))sf.c360={t:0,acc:0,pth:sf.th,up:true};   /* LB carve 360 */
-    if(ed(6))game.npReq=game.waveAge;   /* LT nose pick */
     if(ed(0)&&sf.mode==='ride')game.airReq=game.waveAge;   /* A air, held ready for a moment */
     if(ed(8))manOpen();   /* SELECT the maneuver guide */
     if(ed(9)){game.paused=!game.paused;$('pause').style.display=game.paused?'flex':'none'}   /* START pause */
@@ -6082,12 +6080,10 @@ function tutUI(){const t=document.body.classList.contains('touch'),K=x=>`<span c
     ['Carve',M(`with speed, tap ${K('←')}: up the face, then the whole rail laid over in one big arc of spray`,`with speed, tap ${K('CARVE')}: up the face, then the whole rail laid over in one big arc of spray`)],
     ['Cutback',M(`out on the shoulder, tap ${K('OPTION')}: a long carve back to the foam and off it`,`out on the shoulder, tap ${K('CUTBACK')}: a long carve back to the foam and off it`)],
     ['Open Carve',M(`with speed, tap ${K('E')}: it opens wide like a cutback and closes like the carve, back down the line`,`with speed, tap ${K('OPEN CARVE')}: it opens wide like a cutback and closes like the carve`)],
-    ['Carve 360',M(`${K('G')}: up to the lip and one full turn in the white of it`,`${K('CARVE 360')} on the open face`)],
     ['Barrel',M(`when the lip throws, stay on the wall; ${K('SHIFT')} brakes to get deeper, ${K('→')} pumps for speed`,`when the lip throws, stay on the wall; ${K('BRAKE')} to get deeper`)],
     ['Floater',M(`${K('R')}, or come into a crumbling section sideways: up on top of the lip and across it`,`come into a crumbling section sideways: up on top of the foam and across it`)],
     ['Air',M(`hit the lip fast with ${K('SPACE')}; in the air ${K('←')}${K('→')} spin, ${K('↑')}${K('↓')} flip, ${K('SPACE')} grabs`,`hit the lip fast with ${K('AIR')}; the stick spins and flips you, ${K('AIR')} grabs`)],
-    ['Alley-Oop',M(`take off with ${K('SPACE')} holding ${K('←')}: a full turn in the air, back over the curl`,`take off with ${K('AIR')} and the stick held ${K('←')}: a full turn in the air, back over the curl`)],
-    ['Nose Pick',M(`at the lip, ${K('F')}: an air revo, nose to the sky, 180 and back round`,`at the lip, ${K('NOSE PICK')}: an air revo, nose to the sky, 180 and back round`)]];
+    ['Alley-Oop',M(`take off with ${K('SPACE')} holding ${K('←')}: a full turn in the air, back over the curl`,`take off with ${K('AIR')} and the stick held ${K('←')}: a full turn in the air, back over the curl`)]];
   if(t){const keep=['Bottom Turn','Snap','Carve','Open Carve','Air','Alley-Oop','Cutback','Floater','Layback','Barrel'];for(let i=L.length-1;i>=0;i--)if(!keep.includes(L[i][0]))L.splice(i,1)}
   TUT.L=L;$('tutDots').innerHTML=L.map((_,i)=>`<i data-i="${i}"></i>`).join('');tutShow(TUT.i%L.length);clearInterval(TUT.tm);TUT.tm=setInterval(()=>{if(WZ.s===6&&game.attract)tutShow(TUT.i+1)},3600)}   // one move at a time in the middle, on a loop
 var TUT={L:[],i:0,tm:0};
@@ -6734,11 +6730,11 @@ function tipTick(){const el=$('tip');if(!el)return;const t=document.body.classLi
   if(TIPS.n<2||k===TIPS.cur)return;TIPS.cur=k;
   const bk=MIRROR?'\u2192':'\u2190',fw=MIRROR?'\u2190':'\u2192',I=(n,key)=>`<span>${n}${key?`<kbd>${key}</kbd>`:''}</span>`;
   const L={bt:t?[I('BOTTOM TURN','STICK \u2191')]:[I('BOTTOM TURN','\u2191')],
-    lip:t?[I('SNAP','SNAP'),I('AIR','AIR'),I('CARVE','CARVE'),I('CUTBACK','CUT BACK')]:[I('SNAP','\u2193'),I('CARVE',bk),I('AIR','SPACE'),I('CUTBACK','OPTION'),I('CARVE 360','G'),I('NOSE PICK','F')],
+    lip:t?[I('SNAP','SNAP'),I('AIR','AIR'),I('CARVE','CARVE'),I('CUTBACK','CUT BACK')]:[I('SNAP','\u2193'),I('CARVE',bk),I('AIR','SPACE'),I('CUTBACK','OPTION')],
     lipF:t?[I('HIT THE FOAM','SNAP')]:[I('FLOATER','R'),I('SNAP','\u2193')],
     cut:t?[I('BACK TO THE FOAM','CUT BACK'),I('OPEN CARVE','OPEN CARVE')]:[I('CUTBACK','OPTION'),I('OPEN CARVE','E')],
     flo2:t?[I('FOAM AHEAD','SNAP')]:[I('FLOATER','R')],
-    carve:t?[I('CARVE','CARVE'),I('OPEN CARVE','OPEN CARVE')]:[I('CARVE',bk),I('OPEN CARVE','E'),I('CARVE 360','G')],
+    carve:t?[I('CARVE','CARVE'),I('OPEN CARVE','OPEN CARVE')]:[I('CARVE',bk),I('OPEN CARVE','E')],
     exit:t?[I('OUT OF THE BARREL · CARVE','CARVE'),I('OUT OF THE BARREL · SNAP','SNAP')]:[I('OUT OF THE BARREL · CARVE',bk),I('OUT OF THE BARREL · SNAP','\u2193'),I('OUT OF THE BARREL · CUTBACK','OPTION')],
     air:t?[I('SPIN','STICK'),I('GRAB','AIR')]:[I('SPIN',bk+' '+fw),I('FLIP','\u2191 \u2193'),I('GRAB','SPACE')],
     flo:t?[I('DROP','STICK \u2193')]:[I('DROP','\u2193')],
