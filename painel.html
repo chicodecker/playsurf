@@ -5,433 +5,1016 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Painel PlaySurf</title>
-<style>
-:root{color-scheme:light;--bg:#f2f5f7;--card:#fff;--ink:#0f1d25;--ink2:#4a5b65;--mute:#6f7f88;--line:#e1e8ec;--grid:#e8edf0;--axis:#c3ccd2;--track:#edf1f4;--s1:#2a78d6;--s1l:#86b6ef;--up:#006300;--down:#b42323;--tag:#e3eefb;--tagInk:#1c5cab;--warn:#fff4dc;--warnInk:#7a4b00}
-@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0b1419;--card:#13212a;--ink:#eef3f5;--ink2:#b9c7ce;--mute:#8a9ca6;--line:#23353f;--grid:#1e2f39;--axis:#36515f;--track:#1a2a33;--s1:#3987e5;--s1l:#184f95;--up:#3ccf3c;--down:#ff8a8a;--tag:#173450;--tagInk:#9ec5f4;--warn:#3a2c0e;--warnInk:#ffd88a}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:900px;margin:0 auto;padding:24px 16px 48px}
-a{color:var(--s1)}
-.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
-h1{font-size:24px;margin:0 0 2px}
-.sub{color:var(--ink2);margin:0}
-button{font:inherit;color:inherit}
-.ghost{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
-.ghost:hover{border-color:var(--axis)}
-.periods{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
-.periods button{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;cursor:pointer}
-.periods button:hover{border-color:var(--axis)}
-.periods button[aria-pressed="true"]{background:var(--s1);border-color:var(--s1);color:#fff;font-weight:600}
-.range{color:var(--ink2);font-size:14px;margin:0 0 16px}
-.alert{background:var(--warn);color:var(--warnInk);border-radius:10px;padding:10px 14px;font-size:14px;margin:0 0 16px}
-.alert button{background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;color:inherit}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.card .kpi{border-radius:12px;background:transparent}
-.kpi .l{color:var(--ink2);font-size:14px}
-.kpi .v{font-size:32px;font-weight:650;line-height:1.15;margin-top:4px}
-.kpi .d{font-size:13px;min-height:19px;margin-top:2px;color:var(--ink2)}
-.kpi .d.up{color:var(--up)}.kpi .d.down{color:var(--down)}
-.kpi .n{color:var(--mute);font-size:13px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
-.card h2{font-size:17px;margin:0 0 4px}
-.card .lead{color:var(--ink2);font-size:14px;margin:0 0 12px}
-.card .kpis{margin:4px 0 12px}
-.sub3{font-size:15px;margin:16px 0 2px}
-.note{color:var(--mute);font-size:13.5px;margin:10px 0 0}
-.empty{color:var(--ink2);font-size:14.5px;margin:8px 0}
-body.loading .kpis,body.loading .card{opacity:.55;transition:opacity .2s}
-/* barras horizontais */
-.row{display:grid;grid-template-columns:minmax(120px,200px) 1fr 112px;gap:4px 12px;align-items:center;margin:9px 0;font-size:15px}
-.row .lab{min-width:0;overflow-wrap:anywhere}
-.row .lab a{color:inherit;text-decoration:none}
-.row .lab a:hover,.row .lab a:focus-visible{color:var(--s1);text-decoration:underline}
-.row .p{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2);white-space:nowrap}
-.row .p b{color:var(--ink);font-weight:600}
-.bar{height:12px;background:var(--track);border-radius:0 4px 4px 0}
-.bar i{display:block;height:100%;background:var(--s1);border-radius:0 4px 4px 0;min-width:2px}
-.row.other .bar i{background:var(--s1l)}
-.tag{display:inline-block;font-size:11.5px;font-weight:600;line-height:1;padding:3px 6px;border-radius:999px;background:var(--tag);color:var(--tagInk);margin-left:6px;vertical-align:2px;white-space:nowrap}
-.extra{color:var(--ink2);font-size:14.5px;margin:12px 0 0}
-/* gráfico por dia */
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--ink2);margin:0 0 10px}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
-.sw.hi{background:var(--s1)}.sw.lo{background:var(--s1l)}
-.chart{position:relative}
-.plot{position:relative;height:200px;margin-left:30px}
-.gl{position:absolute;left:0;right:0;border-top:1px solid var(--grid)}
-.gl.base{border-top-color:var(--axis)}
-.gl span{position:absolute;right:100%;margin-right:6px;transform:translateY(-50%);font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
-.cols{position:absolute;inset:0;display:flex;align-items:flex-end}
-.col{flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:none;border:0;padding:0;cursor:default;position:relative;border-radius:4px}
-.col:hover,.col:focus-visible{background:color-mix(in srgb,var(--s1) 7%,transparent);outline:none}
-.col:focus-visible{box-shadow:inset 0 0 0 2px var(--s1)}
-.stk{width:min(24px,64%);display:flex;flex-direction:column;gap:2px}
-.stk i{display:block;width:100%}
-.stk .hi{background:var(--s1)}.stk .lo{background:var(--s1l)}
-.stk i:first-child{border-radius:4px 4px 0 0}
-.col .val{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px;font-variant-numeric:tabular-nums}
-.xl{display:flex;margin-left:30px;margin-top:6px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
-.xl span{flex:1 1 0;min-width:0;text-align:center;white-space:nowrap;overflow:visible;line-height:1.25}
-.xl span.sel{color:var(--ink);font-weight:700}
-.xl small{display:block;font-size:11px}
-.tip{position:absolute;top:0;z-index:2;pointer-events:none;background:var(--card);border:1px solid var(--line);box-shadow:0 6px 20px rgba(0,0,0,.14);border-radius:10px;padding:8px 10px;font-size:13px;min-width:180px}
-.tip .tt{display:block;font-weight:600;margin-bottom:4px}
-.tip .tr{display:flex;align-items:center;gap:6px;color:var(--ink2);margin:2px 0}
-.tip .tr strong{color:var(--ink);font-variant-numeric:tabular-nums;min-width:24px;text-align:right}
-.tip .k{width:12px;height:3px;border-radius:2px;display:inline-block}
-.tip .k.hi{background:var(--s1)}.tip .k.lo{background:var(--s1l)}.tip .k.no{background:transparent}
-details{margin-top:12px;font-size:14px}
-summary{cursor:pointer;color:var(--ink2)}
-table{border-collapse:collapse;width:100%;margin-top:8px;font-variant-numeric:tabular-nums}
-th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child{text-align:left}
-th{color:var(--ink2);font-weight:600}
-.foot{color:var(--mute);font-size:13.5px}
-@media (max-width:560px){
-  main{padding:18px 16px 40px}
-  h1{font-size:21px}
-  .kpis{grid-template-columns:1fr 1fr;gap:10px}
-  .kpi{padding:12px}
-  .kpi .v{font-size:26px}
-  .row{grid-template-columns:1fr auto;margin:12px 0}
-  .row .bar{grid-column:1/-1;grid-row:2}
-  .plot{height:170px}
-}
-</style>
-</head>
-<body>
-<main>
-<header class="top">
-  <div><h1>Painel PlaySurf</h1><p class="sub">Visitas, tempo de jogo e retorno em playsurfgame.com</p></div>
-  <button class="ghost" id="refresh" type="button">Atualizar</button>
-</header>
-<nav class="periods" id="periods" aria-label="Período">
-  <button type="button" data-p="hoje" aria-pressed="false">Hoje</button>
-  <button type="button" data-p="ontem" aria-pressed="false">Ontem</button>
-  <button type="button" data-p="7" aria-pressed="true">7 dias</button>
-  <button type="button" data-p="30" aria-pressed="false">30 dias</button>
-  <button type="button" data-p="tudo" aria-pressed="false">Tudo</button>
-</nav>
-<p class="range" id="range"></p>
-<div class="alert" id="alert" hidden></div>
-
-<section class="kpis" aria-label="Resumo do período">
-  <div class="kpi"><div class="l">Abriram o jogo</div><div class="v" id="kOpen">–</div><div class="d" id="dOpen"></div><div class="n">visitas à página do jogo</div></div>
-  <div class="kpi"><div class="l">Sessões jogadas</div><div class="v" id="kPlay">–</div><div class="d" id="dPlay"></div><div class="n" id="nPlay">surfaram pelo menos 1 onda</div></div>
-  <div class="kpi"><div class="l">Tempo médio</div><div class="v" id="kAvg">–</div><div class="d" id="dAvg"></div><div class="n">estimado, com a aba visível</div></div>
-  <div class="kpi"><div class="l">Ficaram 5 min ou mais</div><div class="v" id="kP5">–</div><div class="d" id="dP5"></div><div class="n">das visitas ao jogo</div></div>
-</section>
-
-<section class="card">
-  <h2 id="chartTitle">Visitas ao jogo por dia</h2>
-  <div class="legend"><span><i class="sw hi"></i>Ficaram 1 min ou mais</span><span><i class="sw lo"></i>Saíram antes de 1 min</span></div>
-  <div class="chart" id="chart"></div>
-  <details><summary>Ver em tabela</summary><div id="chartTable"></div></details>
-</section>
-
-<section class="card">
-  <h2>Quanto tempo as pessoas ficam</h2>
-  <p class="lead">Parte das visitas ao jogo que ficou pelo menos esse tempo com a aba aberta e visível.</p>
-  <div id="rows"></div>
-</section>
-
-<section class="card">
-  <h2>Quem voltou a jogar</h2>
-  <div class="kpis">
-    <div class="kpi"><div class="l">Jogadores novos</div><div class="v" id="sPpl">–</div><div class="n" id="sPplN">aparelhos na 1ª sessão</div></div>
-    <div class="kpi"><div class="l">Sessões de quem voltou</div><div class="v" id="sBack">–</div><div class="n" id="sBackN">2ª sessão em diante</div></div>
-    <div class="kpi"><div class="l">O mais fiel</div><div class="v" id="sMax">–</div><div class="n">sessões no mesmo aparelho</div></div>
-  </div>
-  <h3 class="sub3">Até que sessão os jogadores chegam</h3>
-  <p class="lead">Desde 16/11, de todos os aparelhos que jogaram, quantos chegaram a cada sessão. Não muda com o período escolhido.</p>
-  <div id="sRows"></div>
-  <p class="extra" id="sHeavy"></p>
-  <p class="note">Contado por aparelho, sem IP e sem cookie: o jogo guarda no próprio navegador quantas vezes já jogou ali. Celular e computador da mesma pessoa contam como dois, e quem limpa os dados do navegador recomeça do zero. A sessão começa na primeira onda; voltar em menos de 30 minutos é a mesma sessão. Contado desde 16/11/2026; quem já jogava antes entrou direto na 2ª sessão.</p>
-</section>
-
-<section class="card">
-  <h2>De onde são os jogadores</h2>
-  <div id="countries"><p class="empty">Carregando…</p></div>
-  <p class="note">País estimado pelo fuso horário do aparelho, sem IP. Conta uma vez por visita ao jogo.</p>
-</section>
-
-<section class="card">
-  <h2>Páginas mais vistas</h2>
-  <div id="pages"><p class="empty">Carregando…</p></div>
-  <p class="note">Visitas a cada página do site. As marcadas com “anúncio” são o destino dos anúncios do Google: cada idioma tem a sua, e o inglês leva direto à página do jogo.</p>
-</section>
-
-<section class="card">
-  <h2>De onde vêm as visitas</h2>
-  <div id="origin"><p class="empty">Carregando…</p></div>
-</section>
-
-<p class="foot" id="status"></p>
-<p class="foot">Mais detalhes (sites de origem, celular x computador, navegadores): <a href="https://playsurf.goatcounter.com" target="_blank" rel="noopener">painel completo do GoatCounter</a>.</p>
-</main>
+<link rel="icon" href="favicon.ico">
+<style>html,body{margin:0;background:#040915;min-height:100%}#dash-root{min-height:100vh}</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
 <script>
+/* stand-in for the Data runtime of the Claude artifact: the same page code, over the CSVs embedded below */
 (function(){
-'use strict';
-var GC='https://playsurf.goatcounter.com/counter/';
-var DATA_START='2026-11-13', SESS_START='2026-11-16';
-var M=[['30s',30,'30 s'],['1min',60,'1 min'],['3min',180,'3 min'],['5min',300,'5 min'],['10min',600,'10 min'],['20min',1200,'20 min'],['30min',1800,'30 min']];
-var SK=['antigo','1','2','3','4','5','6-9','10+'];
-var CC=['AE','AO','AR','AT','AU','BE','BG','BO','BR','CA','CH','CL','CN','CO','CR','CU','CV','CZ','DE','DK','DO','EC','EG','ES','FI','FJ','FR','GB','GR','GT','HK','HR','HU','ID','IE','IL','IN','IT','JP','KE','KR','MA','MX','MY','MZ','NG','NL','NO','NZ','PA','PE','PF','PH','PK','PL','PR','PT','PY','RO','RS','RU','SA','SE','SG','TH','TR','TW','UA','US','UY','VE','VN','XX','ZA'];
-// Eventos de origem: o painel já sabe ler; só aparecem quando o site passar a mandar origem-*.
-var ORIG=[['anuncio','Anúncio do Google'],['google','Busca do Google'],['busca','Outras buscas'],['social','Redes sociais'],['site','Outros sites'],['direto','Direto ou app']];
-// Destinos dos anúncios do Google (um por idioma; o inglês vai para a página do jogo).
-var ADS={'/':1,'/jogo-de-surf':1,'/juego-de-surf':1,'/jeu-de-surf':1,'/surf-spiel':1,'/gioco-di-surf':1,'/ja':1};
-var PAGES_FALLBACK=['/','/free-surf-game','/jogo-de-surf','/juego-de-surf','/jeu-de-surf','/surf-spiel','/gioco-di-surf','/ja','/game-selancar','/wave-pool-surf-game','/uluwatu-surf-game','/cloud-9-surf-game','/pipeline-surf-game','/trestles-surf-game','/campeche-surf-game','/pororoca-surf-game','/thorlakshofn-surf-game','/supertubos-surf-game','/skeleton-bay-surf-game','/greenbush-surf-game','/jeffreys-bay-surf-game','/chicama-surf-game','/matadeiro-surf-game','/rosa-norte-surf-game','/restaurants-fiji-surf-game','/ilha-dos-lobos-surf-game','/contact','/press','/about','/privacy','/terms'];
-var PH_DESK=200, PH_MOB=170;
-
-function $(id){return document.getElementById(id)}
-function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
-function nf(n){return Number(n||0).toLocaleString('pt-BR')}
-function pct(f){return Math.round(f*100)+'%'}
-function num(s){return parseInt(String(s||'0').replace(/\D/g,''),10)||0}
-function pad(n){return String(n).padStart(2,'0')}
-function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-function parse(s){var a=s.split('-').map(Number);return new Date(a[0],a[1]-1,a[2])}
-function add(s,n){var d=parse(s);d.setDate(d.getDate()+n);return ymd(d)}
-function dm(s){return s.slice(8)+'/'+s.slice(5,7)}
-var WD=['dom','seg','ter','qua','qui','sex','sáb'];
-function wd(s){return WD[parse(s).getDay()]}
-function today(){return ymd(new Date())}
-function fmtT(sec){if(sec==null)return '–';if(sec<1)return '0 s';var m=Math.floor(sec/60),s=Math.round(sec%60);if(s===60){m++;s=0}return m?(m+' min'+(s?' '+s+' s':'')):s+' s'}
-
-/* ---------- leitura do GoatCounter: fila curta, cache por consulta, 404 = zero ---------- */
-var cache={},queue=[],active=0,failed=0;
-function pump(){while(active<16&&queue.length){(function(job){active++;job.fn().then(job.ok,job.ko).then(function(){active--;pump()})})(queue.shift())}}
-function limited(fn){return new Promise(function(ok,ko){queue.push({fn:fn,ok:ok,ko:ko});pump()})}
-function cnt(path,start){
-  var k=path+'|'+(start||'');
-  if(!cache[k])cache[k]=limited(function(){
-    return fetch(GC+encodeURIComponent(path)+'.json'+(start?'?start='+start:''),{cache:'no-store'}).then(function(r){
-      if(r.status===404)return 0;
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      return r.json().then(function(j){return num(j.count)});
-    });
-  }).catch(function(){failed++;delete cache[k];return 0});
-  return cache[k];
-}
-// Contagem a partir do dia D até agora (dia no futuro = 0).
-function from(path,D){return D>today()?Promise.resolve(0):cnt(path,D)}
-// Contagem no intervalo [A, B) — B vazio = até agora.
-function rng(path,A,B){return Promise.all([from(path,A),B?from(path,B):0]).then(function(r){return Math.max(0,r[0]-r[1])})}
-var pagesP=null;
-function getPages(){
-  if(!pagesP)pagesP=fetch('sitemap.xml',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
-    var out=[],re=/<loc>\s*([^<\s]+)\s*<\/loc>/g,m;
-    while((m=re.exec(t))){try{var p=new URL(m[1]).pathname.replace(/\.html$/,'');if(p!=='/painel'&&out.indexOf(p)<0)out.push(p)}catch(e){}}
-    if(!out.length)throw 0;if(out.indexOf('/')<0)out.unshift('/');return out;
-  }).catch(function(){return PAGES_FALLBACK.slice()});
-  return pagesP;
-}
-
-/* ---------- períodos ---------- */
-function period(p){
-  var t=today(),P={p:p,A:null,B:null,pA:null,pB:null,cmp:''};
-  if(p==='hoje'){P.A=t;P.pA=add(t,-1);P.pB=t;P.cmp='ontem inteiro'}
-  else if(p==='ontem'){P.A=add(t,-1);P.B=t;P.pA=add(t,-2);P.pB=P.A;P.cmp='anteontem'}
-  else if(p==='tudo'){P.A=DATA_START}
-  else{var n=+p;P.A=add(t,-(n-1));P.pA=add(P.A,-n);P.pB=P.A;P.cmp=n+' dias antes'}
-  P.clipped=P.A<DATA_START;if(P.clipped)P.A=DATA_START;
-  if(P.pA&&P.pA<DATA_START){P.noPrev=true;P.pA=P.pB=null}
-  P.end=P.B?add(P.B,-1):t;
-  // dias do gráfico: o período (no mínimo 7 dias, para não virar uma barra só), a partir de 13/11, até 90 dias
-  var cEnd=P.end,cStart=P.A;if(cStart>add(cEnd,-6))cStart=add(cEnd,-6);if(cStart<DATA_START)cStart=DATA_START;if(cStart<add(cEnd,-89))cStart=add(cEnd,-89);
-  P.days=[];for(var d=cStart;d<=cEnd;d=add(d,1))P.days.push(d);
-  return P;
-}
-function rangeText(P){
-  var t=today(),s;
-  if(P.p==='hoje')s='Hoje, '+wd(t)+' '+dm(t)+', até agora';
-  else if(P.p==='ontem')s='Ontem, '+wd(P.A)+' '+dm(P.A);
-  else s=dm(P.A)+' a '+dm(P.end)+(P.end===t?' (hoje)':'');
-  if(P.pA)s+=' · comparado com '+(P.pA===add(P.pB,-1)?dm(P.pA):dm(P.pA)+' a '+dm(add(P.pB,-1)));
-  else if(P.clipped&&P.p!=='tudo')s+=' · o painel só tem dados desde '+dm(DATA_START)+', então ainda não dá para comparar';
-  else if(P.p!=='tudo')s+=' · sem comparação: os dados começam em '+dm(DATA_START);
-  return s;
-}
-
-/* ---------- métricas de um intervalo ---------- */
-function avgTime(base,ev){var a=0,pt=0,pf=1;M.forEach(function(m,i){var f=Math.min(1,ev[i]/base);a+=(m[1]-pt)*(pf+f)/2;pt=m[1];pf=f});return a+pf*600}
-function metrics(A,B){
-  return Promise.all([rng('/',A,B)].concat(M.map(function(m){return rng('tempo-'+m[0],A,B)}),SK.map(function(k){return rng('sessao-'+k,A,B)}))).then(function(r){
-    var o={open:r[0],ev:r.slice(1,1+M.length),s:{}};SK.forEach(function(k,i){o.s[k]=r[1+M.length+i]});
-    o.base=Math.max(o.open,o.ev[0]||0);o.avg=o.base?avgTime(o.base,o.ev):null;o.p5=o.base?Math.min(1,o.ev[3]/o.base):null;
-    o.play=SK.slice(1).reduce(function(a,k){return a+o.s[k]},0);return o;
-  });
-}
-
-/* ---------- desenho ---------- */
-function delta(id,cur,prev,P,fmt,isCount,since){
-  var e=$(id);e.className='d';e.textContent='';
-  if(P.p==='tudo')return;
-  if(!prev)return; // a linha do período já diz que não há comparação
-  if(since&&P.pA<since){e.textContent='sem comparação (contado desde '+dm(since)+')';return}
-  var pv=prev.v;
-  if(pv==null){e.textContent=P.cmp+': –';return}
-  if(P.p==='hoje'||!isCount||!pv){e.textContent=P.cmp+': '+fmt(pv);return}
-  var d=Math.round((cur-pv)/pv*100);
-  e.textContent=(d>0?'▲ '+d+'%':d<0?'▼ '+Math.abs(d)+'%':'= igual')+' · '+P.cmp+': '+fmt(pv);
-  if(d>0)e.classList.add('up');else if(d<0)e.classList.add('down');
-}
-function bars(box,list,base,emptyMsg){
-  box.textContent='';
-  if(!base){box.appendChild(el('p','empty',emptyMsg));return}
-  list.forEach(function(x){
-    var row=el('div','row'+(x.other?' other':'')),lab=el('span','lab');
-    if(x.href){var a=el('a',null,x.label);a.href=x.href;a.target='_blank';a.rel='noopener';lab.appendChild(a)}else lab.textContent=x.label;
-    if(x.tag){var t=el('span','tag',x.tag);if(x.tagTitle)t.title=x.tagTitle;lab.appendChild(t)}
-    var f=Math.max(0,Math.min(1,x.n/base)),bar=el('div','bar'),i=el('i');i.style.width=(f*100).toFixed(1)+'%';if(!x.n)i.style.minWidth='0';bar.appendChild(i);
-    var p=el('span','p');p.appendChild(el('b',null,pct(f)));p.appendChild(document.createTextNode(' ('+nf(x.n)+')'));
-    row.appendChild(lab);row.appendChild(bar);row.appendChild(p);box.appendChild(row);
-  });
-}
-var lastChart=null;
-function niceStep(max){var raw=max/3,p=Math.pow(10,Math.floor(Math.log10(raw))),s=[1,2,5,10].map(function(x){return x*p}).filter(function(x){return x>=raw})[0];return Math.max(1,s)}
-function drawChart(days,P){
-  lastChart={days:days,P:P};
-  var box=$('chart');box.textContent='';
-  var PH=window.matchMedia('(max-width:560px)').matches?PH_MOB:PH_DESK;
-  var max=Math.max(1,Math.max.apply(null,days.map(function(x){return x.t}))),step=niceStep(max),top=Math.ceil(max/step)*step;
-  var plot=el('div','plot'),cols=el('div','cols'),xl=el('div','xl'),tip=el('div','tip');tip.hidden=true;tip.setAttribute('role','tooltip');
-  for(var g=0;g<=top;g+=step){var gl=el('div','gl'+(g===0?' base':''));gl.style.bottom=(g/top*100)+'%';gl.appendChild(el('span',null,nf(g)));plot.appendChild(gl)}
-  var iMax=0;days.forEach(function(x,i){if(x.t>=days[iMax].t)iMax=i});
-  var width=box.clientWidth||600,every=Math.max(1,Math.ceil(days.length/Math.max(2,Math.floor((width-30)/46)))),showWd=every===1&&days.length<=14;
-  var sel=(P.p==='hoje'||P.p==='ontem')?P.A:null;
-  days.forEach(function(x,i){
-    var c=el('button','col');c.type='button';
-    var lo=Math.max(0,x.t-x.e),hpx=x.e/top*PH,lpx=lo/top*PH;
-    if(x.e&&hpx<2)hpx=2;if(lo&&lpx<2)lpx=2;
-    c.setAttribute('aria-label',wd(x.d)+' '+dm(x.d)+': '+x.t+' abriram o jogo, '+x.e+' ficaram 1 minuto ou mais, '+lo+' saíram antes');
-    if(x.t&&(i===iMax||i===days.length-1))c.appendChild(el('span','val',nf(x.t)));
-    var s=el('span','stk');
-    if(lo){var a=el('i','lo');a.style.height=lpx+'px';s.appendChild(a)}
-    if(x.e){var b=el('i','hi');b.style.height=hpx+'px';s.appendChild(b)}
-    c.appendChild(s);
-    function show(){tip.textContent='';tip.appendChild(el('span','tt',wd(x.d)+', '+dm(x.d)+(x.d===today()?' (até agora)':'')));
-      [[x.t,'abriram o jogo','no'],[x.e,'ficaram 1 min ou mais','hi'],[lo,'saíram antes de 1 min','lo']].forEach(function(r){var tr=el('div','tr');tr.appendChild(el('i','k '+r[2]));tr.appendChild(el('strong',null,nf(r[0])));tr.appendChild(document.createTextNode(r[1]));tip.appendChild(tr)});
-      // ao lado da coluna, para não cobrir a barra; centralizado só se não couber de nenhum lado
-      tip.hidden=false;var bw=box.clientWidth,cr=c.getBoundingClientRect(),br=box.getBoundingClientRect(),tw=tip.offsetWidth,cl=cr.left-br.left,left=cl+cr.width+4;
-      if(left+tw>bw)left=cl-tw-4;if(left<0)left=Math.max(0,Math.min(bw-tw,cl+cr.width/2-tw/2));tip.style.left=left+'px'}
-    function hide(){tip.hidden=true}
-    c.addEventListener('pointerenter',show);c.addEventListener('pointerleave',hide);c.addEventListener('focus',show);c.addEventListener('blur',hide);
-    cols.appendChild(c);
-    var lab=el('span',x.d===sel?'sel':null);
-    if(i%every===0||i===days.length-1){if(i===days.length-1||days.length-1-i>=every||i===0){lab.textContent=dm(x.d);if(showWd)lab.appendChild(el('small',null,wd(x.d)))}}
-    xl.appendChild(lab);
-  });
-  plot.appendChild(cols);box.appendChild(plot);box.appendChild(xl);box.appendChild(tip);
-  // tabela
-  var tb=$('chartTable'),table=el('table'),thead=el('thead'),hr=el('tr');
-  ['Dia','Abriram o jogo','Ficaram 1 min+','Saíram antes'].forEach(function(h){hr.appendChild(el('th',null,h))});thead.appendChild(hr);table.appendChild(thead);
-  var tbody=el('tbody');days.slice().reverse().forEach(function(x){var tr=el('tr');[wd(x.d)+' '+dm(x.d),nf(x.t),nf(x.e),nf(Math.max(0,x.t-x.e))].forEach(function(v){tr.appendChild(el('td',null,v))});tbody.appendChild(tr)});
-  table.appendChild(tbody);tb.textContent='';tb.appendChild(table);
-}
-var rT;window.addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(function(){if(lastChart)drawChart(lastChart.days,lastChart.P)},150)});
-
-var DN=null;try{DN=new Intl.DisplayNames(['pt-BR'],{type:'region'})}catch(e){}
-function flag(c){return c==='XX'?'🌐':String.fromCodePoint.apply(null,c.split('').map(function(ch){return 127397+ch.charCodeAt(0)}))}
-function cname(c){if(c==='XX')return 'Não identificado';try{return DN?DN.of(c):c}catch(e){return c}}
-
-/* ---------- carga ---------- */
-var gen=0,curP='7';
-function load(p,fresh){
-  curP=p;var my=++gen;failed=0;if(fresh){cache={};pagesP=null}
-  var P=period(p),ok=function(){return my===gen};
-  document.body.classList.add('loading');$('status').textContent='Carregando…';$('alert').hidden=true;
-  $('range').textContent=rangeText(P);
-  $('chartTitle').textContent='Visitas ao jogo por dia'+(P.p==='hoje'||P.p==='ontem'?' · últimos '+P.days.length+' dias':'');
-  var tasks=[];
-
-  // Resumo + tempo + sessões
-  var cur=metrics(P.A,P.B),prev=P.pA?metrics(P.pA,P.pB):Promise.resolve(null);
-  tasks.push(Promise.all([cur,prev]).then(function(r){if(!ok())return;var c=r[0],v=r[1];
-    $('kOpen').textContent=nf(c.open);
-    $('kPlay').textContent=nf(c.play);
-    $('kAvg').textContent=fmtT(c.avg);
-    $('kP5').textContent=c.p5==null?'–':pct(c.p5);
-    delta('dOpen',c.open,v&&{v:v.open},P,nf,true);
-    delta('dPlay',c.play,v&&{v:v.play},P,nf,true,SESS_START);
-    delta('dAvg',c.avg,v&&{v:v.avg},P,fmtT,false);
-    delta('dP5',c.p5,v&&{v:v.p5},P,function(x){return x==null?'–':pct(x)},false);
-    $('nPlay').textContent=c.open&&c.play&&P.A>=SESS_START?'surfaram pelo menos 1 onda · '+pct(Math.min(1,c.play/c.open))+' das visitas':P.A<SESS_START?'surfaram pelo menos 1 onda · contado desde '+dm(SESS_START):'surfaram pelo menos 1 onda';
-    // tempo
-    bars($('rows'),M.map(function(m,i){return{label:m[2]+' ou mais',n:c.ev[i]}}),c.base,'Ainda sem visitas ao jogo neste período.');
-    // sessões no período
-    var s=c.s,ppl=s['1']+s.antigo,ret=Math.max(0,c.play-s['1']);
-    $('sPpl').textContent=nf(ppl);
-    $('sPplN').textContent=s.antigo?'aparelhos na 1ª sessão (inclui '+nf(s.antigo)+' que já jogavam antes de 16/11)':'aparelhos na 1ª sessão';
-    $('sBack').textContent=nf(ret);
-    $('sBackN').textContent=c.play?'2ª sessão em diante · '+pct(ret/c.play)+' das sessões':'2ª sessão em diante';
-    $('sMax').textContent=s['10+']?'10+':s['6-9']?'6 a 9':s['5']?'5':s['4']?'4':s['3']?'3':s['2']?'2':s['1']?'1':'–';
-  }));
-
-  // Funil de retorno: sempre desde 16/11 (num período curto ele não fecha)
-  tasks.push(Promise.all(SK.map(function(k){return cnt('sessao-'+k,'')})).then(function(r){if(!ok())return;
-    var s={};SK.forEach(function(k,i){s[k]=r[i]});var ppl=s['1']+s.antigo;
-    bars($('sRows'),[['1ª sessão',ppl],['2ª sessão',s['2']],['3ª sessão',s['3']],['4ª sessão',s['4']],['5ª sessão',s['5']]].map(function(x){return{label:x[0],n:x[1]}}),ppl,'Ainda sem sessões contadas.');
-    var h=s['6-9']+s['10+'];
-    $('sHeavy').textContent=h?'Além da 5ª, os mais fiéis já jogaram mais '+nf(h)+(h===1?' sessão':' sessões')+': '+nf(s['6-9'])+' entre a 6ª e a 9ª e '+nf(s['10+'])+' da 10ª em diante.':'';
-  }));
-
-  // Gráfico por dia (aberturas e quem ficou 1 min+)
-  tasks.push(Promise.all(P.days.map(function(d){var n=add(d,1);return Promise.all([rng('/',d,n),rng('tempo-1min',d,n)]).then(function(r){return{d:d,t:r[0],e:Math.min(r[0],r[1])}})})).then(function(days){if(ok())drawChart(days,P)}));
-
-  // Países: primeiro descobre quais já apareceram alguma vez, depois conta só esses no período
-  tasks.push(Promise.all(CC.map(function(c){return cnt('pais-'+c,'').then(function(n){return n?c:null})})).then(function(seen){
-    seen=seen.filter(Boolean);
-    return Promise.all(seen.map(function(c){return rng('pais-'+c,P.A,P.B).then(function(n){return{c:c,n:n}})}));
-  }).then(function(list){if(!ok())return;
-    list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});
-    var tot=list.reduce(function(a,b){return a+b.n},0),top=list.slice(0,10).map(function(x){return{label:flag(x.c)+' '+cname(x.c),n:x.n}}),rest=list.slice(10);
-    if(rest.length)top.push({label:'Outros '+rest.length+' países',n:rest.reduce(function(a,b){return a+b.n},0),other:true});
-    bars($('countries'),top,tot,'Ainda sem visitas ao jogo neste período.');
-  }));
-
-  // Páginas
-  tasks.push(getPages().then(function(pages){
-    return Promise.all(pages.map(function(pg){return cnt(pg,'').then(function(n){return n?pg:null})}));
-  }).then(function(seen){
-    seen=seen.filter(Boolean);
-    return Promise.all(seen.map(function(pg){return rng(pg,P.A,P.B).then(function(n){return{pg:pg,n:n}})}));
-  }).then(function(list){if(!ok())return;
-    list=list.filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});
-    var tot=list.reduce(function(a,b){return a+b.n},0);
-    bars($('pages'),list.map(function(x){return{label:x.pg==='/'?'Jogo (página inicial)':x.pg.slice(1),href:x.pg,n:x.n,tag:ADS[x.pg]?'anúncio':'',tagTitle:'Destino de um anúncio do Google'}}),tot,'Nenhuma página vista neste período.');
-  }));
-
-  // Origem (só quando o site mandar eventos origem-*)
-  tasks.push(Promise.all(ORIG.map(function(o){return cnt('origem-'+o[0],'')})).then(function(all){
-    var any=all.some(Boolean),box=$('origin');
-    if(!any){if(!ok())return;box.textContent='';
-      var p1=el('p','empty');p1.appendChild(document.createTextNode('O contador público do GoatCounter, que este painel usa, não informa de onde veio cada visita. A origem (Google, Bing, outros sites, anúncios) está em “Referrers” no '));
-      var a=el('a',null,'painel completo do GoatCounter');a.href='https://playsurf.goatcounter.com';a.target='_blank';a.rel='noopener';p1.appendChild(a);p1.appendChild(document.createTextNode('.'));
-      box.appendChild(p1);
-      box.appendChild(el('p','note','Enquanto isso, um aumento nas páginas marcadas com “anúncio” desde 19/11 tende a vir da campanha. Quando o site passar a mandar a origem de cada visita, ela aparece aqui separada em anúncio, busca do Google, outras buscas, redes sociais, outros sites e acesso direto.'));
-      return;}
-    return Promise.all(ORIG.map(function(o){return rng('origem-'+o[0],P.A,P.B)})).then(function(r){if(!ok())return;
-      var tot=r.reduce(function(a,b){return a+b},0);
-      bars(box,ORIG.map(function(o,i){return{label:o[1],n:r[i]}}).filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n}),tot,'Ainda sem visitas com origem contada neste período.');
-      box.appendChild(el('p','note','Origem da primeira página vista em cada visita. “Anúncio do Google” é quem chegou por um clique em anúncio; “Direto ou app” é quem digitou o endereço, usou um favorito ou abriu por um app que não informa a origem.'));
-    });
-  }));
-
-  Promise.all(tasks).then(function(){if(!ok())return;
-    document.body.classList.remove('loading');
-    $('status').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. O GoatCounter guarda essas contagens em cache por alguns minutos, então as visitas mais recentes podem demorar a aparecer.';
-    if(failed){var al=$('alert');al.textContent=failed+(failed===1?' consulta':' consultas')+' ao GoatCounter '+(failed===1?'falhou':'falharam')+', então alguns números podem estar abaixo do real. ';var b=el('button',null,'Tentar de novo');b.type='button';b.onclick=function(){load(curP,false)};al.appendChild(b);al.hidden=false}
-  });
-}
-
-$('periods').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;[].forEach.call(this.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',String(x===b))});load(b.dataset.p)});
-$('refresh').addEventListener('click',function(){load(curP,true)});
-load('7');
+const RAW={"eventos": "dia,tipo,chave,nome,grupo,ordem,n\n2026-11-12,pagina,/,Jogo (página inicial),jogo,0,3\n2026-11-12,tempo,3min,3 min,,2,2\n2026-11-12,tempo,1min,1 min,,1,2\n2026-11-12,tempo,30s,30 s,,0,2\n2026-11-12,tempo,30min,30 min,,6,1\n2026-11-12,tempo,20min,20 min,,5,1\n2026-11-12,tempo,10min,10 min,,4,1\n2026-11-12,tempo,5min,5 min,,3,1\n2026-11-13,pagina,/,Jogo (página inicial),jogo,0,13\n2026-11-13,tempo,30s,30 s,,0,8\n2026-11-13,tempo,1min,1 min,,1,6\n2026-11-13,tempo,5min,5 min,,3,5\n2026-11-13,tempo,3min,3 min,,2,5\n2026-11-13,tempo,10min,10 min,,4,4\n2026-11-13,pais,BR,Brasil,,0,3\n2026-11-13,tempo,30min,30 min,,6,3\n2026-11-13,tempo,20min,20 min,,5,2\n2026-11-13,pais,PL,Polônia,,0,1\n2026-11-13,pagina,/free-surf-game,Free Surf Game (EN),idioma,0,1\n2026-11-13,pagina,/jogo-de-surf,Jogo de Surf (PT),idioma,0,1\n2026-11-14,pagina,/,Jogo (página inicial),jogo,0,13\n2026-11-14,pais,BR,Brasil,,0,8\n2026-11-14,tempo,1min,1 min,,1,8\n2026-11-14,tempo,30s,30 s,,0,8\n2026-11-14,tempo,3min,3 min,,2,7\n2026-11-14,tempo,5min,5 min,,3,5\n2026-11-14,pais,US,Estados Unidos,,0,2\n2026-11-14,tempo,10min,10 min,,4,2\n2026-11-14,pais,ES,Espanha,,0,1\n2026-11-14,pais,XX,Não identificado,,0,1\n2026-11-14,tempo,30min,30 min,,6,1\n2026-11-14,tempo,20min,20 min,,5,1\n2026-11-15,pagina,/,Jogo (página inicial),jogo,0,28\n2026-11-15,pais,BR,Brasil,,0,14\n2026-11-15,tempo,30s,30 s,,0,13\n2026-11-15,pais,US,Estados Unidos,,0,12\n2026-11-15,tempo,1min,1 min,,1,12\n2026-11-15,tempo,3min,3 min,,2,6\n2026-11-15,tempo,10min,10 min,,4,4\n2026-11-15,tempo,5min,5 min,,3,4\n2026-11-15,pais,FR,França,,0,1\n2026-11-15,pais,ES,Espanha,,0,1\n2026-11-16,pagina,/,Jogo (página inicial),jogo,0,16\n2026-11-16,pais,BR,Brasil,,0,10\n2026-11-16,tempo,1min,1 min,,1,10\n2026-11-16,tempo,30s,30 s,,0,10\n2026-11-16,tempo,5min,5 min,,3,6\n2026-11-16,tempo,3min,3 min,,2,6\n2026-11-16,sessao,2,2ª,,1,5\n2026-11-16,pais,US,Estados Unidos,,0,4\n2026-11-16,sessao,antigo,Já jogava antes da contagem,,7,3\n2026-11-16,tempo,10min,10 min,,4,3\n2026-11-16,sessao,3,3ª,,2,2\n2026-11-16,sessao,1,1ª vez,,0,2\n2026-11-16,tempo,20min,20 min,,5,2\n2026-11-16,sessao,5,5ª,,4,1\n2026-11-16,pagina,/pipeline-surf-game,Onda: Pipeline,onda,0,1\n2026-11-16,sessao,4,4ª,,3,1\n2026-11-16,pais,IN,Índia,,0,1\n2026-11-16,pais,RU,Rússia,,0,1\n2026-11-16,pagina,/jogo-de-surf,Jogo de Surf (PT),idioma,0,1\n2026-11-17,pagina,/,Jogo (página inicial),jogo,0,15\n2026-11-17,pais,BR,Brasil,,0,10\n2026-11-17,tempo,1min,1 min,,1,7\n2026-11-17,tempo,30s,30 s,,0,7\n2026-11-17,tempo,3min,3 min,,2,6\n2026-11-17,sessao,6-9,6ª a 9ª,,5,4\n2026-11-17,tempo,5min,5 min,,3,4\n2026-11-17,pagina,/press,Imprensa,outra,0,3\n2026-11-17,pais,US,Estados Unidos,,0,3\n2026-11-17,pagina,/supertubos-surf-game,Onda: Supertubos,onda,0,2\n2026-11-17,pagina,/skeleton-bay-surf-game,Onda: Skeleton Bay,onda,0,2\n2026-11-17,pagina,/pororoca-surf-game,Onda: Pororoca,onda,0,2\n2026-11-17,pagina,/jeffreys-bay-surf-game,Onda: Jeffreys Bay,onda,0,2\n2026-11-17,sessao,5,5ª,,4,2\n2026-11-17,pagina,/pipeline-surf-game,Onda: Pipeline,onda,0,2\n2026-11-17,sessao,4,4ª,,3,2\n2026-11-17,sessao,3,3ª,,2,2\n2026-11-17,sessao,1,1ª vez,,0,2\n2026-11-17,tempo,10min,10 min,,4,2\n2026-11-17,pais,JP,Japão,,0,1\n2026-11-17,pagina,/chicama-surf-game,Onda: Chicama,onda,0,1\n2026-11-17,pagina,/game-selancar,Game Selancar (ID),idioma,0,1\n2026-11-17,pais,IN,Índia,,0,1\n2026-11-17,tempo,30min,30 min,,6,1\n2026-11-17,tempo,20min,20 min,,5,1\n2026-11-18,pagina,/,Jogo (página inicial),jogo,0,19\n2026-11-18,pais,BR,Brasil,,0,13\n2026-11-18,tempo,30s,30 s,,0,12\n2026-11-18,tempo,1min,1 min,,1,11\n2026-11-18,tempo,3min,3 min,,2,7\n2026-11-18,sessao,1,1ª vez,,0,5\n2026-11-18,tempo,5min,5 min,,3,5\n2026-11-18,sessao,6-9,6ª a 9ª,,5,4\n2026-11-18,tempo,10min,10 min,,4,4\n2026-11-18,sessao,10+,10ª ou mais,,6,3\n2026-11-18,pais,AU,Austrália,,0,3\n2026-11-18,tempo,20min,20 min,,5,3\n2026-11-18,pagina,/ja,サーフィンゲーム (JA),idioma,0,2\n2026-11-18,pais,US,Estados Unidos,,0,2\n2026-11-18,pagina,/juego-de-surf,Juego de Surf (ES),idioma,0,1\n2026-11-18,sessao,3,3ª,,2,1\n2026-11-18,sessao,2,2ª,,1,1\n2026-11-18,pais,ES,Espanha,,0,1\n2026-11-18,pagina,/free-surf-game,Free Surf Game (EN),idioma,0,1\n2026-11-19,pagina,/,Jogo (página inicial),jogo,0,13\n2026-11-19,tempo,30s,30 s,,0,9\n2026-11-19,origem,direto,\"Direto (digitou, favorito, app)\",,0,8\n2026-11-19,pais,BR,Brasil,,0,8\n2026-11-19,tempo,1min,1 min,,1,8\n2026-11-19,tempo,5min,5 min,,3,6\n2026-11-19,tempo,3min,3 min,,2,6\n2026-11-19,tempo,10min,10 min,,4,5\n2026-11-19,sessao,1,1ª vez,,0,4\n2026-11-19,pais,US,Estados Unidos,,0,4\n2026-11-19,sessao,6-9,6ª a 9ª,,5,3\n2026-11-19,sessao,4,4ª,,3,3\n2026-11-19,origem,google,Busca Google,,0,2\n2026-11-19,sessao,10+,10ª ou mais,,6,2\n2026-11-19,sessao,5,5ª,,4,2\n2026-11-19,sessao,3,3ª,,2,2\n2026-11-19,sessao,2,2ª,,1,2\n2026-11-19,pagina,/jogo-de-surf,Jogo de Surf (PT),idioma,0,2\n2026-11-19,pais,AU,Austrália,,0,1\n2026-11-19,pais,IN,Índia,,0,1\n2026-11-20,origem,direto,\"Direto (digitou, favorito, app)\",,0,18\n2026-11-20,pagina,/,Jogo (página inicial),jogo,0,14\n2026-11-20,pais,BR,Brasil,,0,10\n2026-11-20,tempo,1min,1 min,,1,10\n2026-11-20,tempo,30s,30 s,,0,10\n2026-11-20,tempo,5min,5 min,,3,7\n2026-11-20,tempo,3min,3 min,,2,7\n2026-11-20,sessao,6-9,6ª a 9ª,,5,4\n2026-11-20,tempo,10min,10 min,,4,4\n2026-11-20,pagina,/gioco-di-surf,Gioco di Surf (IT),idioma,0,3\n2026-11-20,sessao,10+,10ª ou mais,,6,3\n2026-11-20,pagina,/juego-de-surf,Juego de Surf (ES),idioma,0,2\n2026-11-20,sessao,5,5ª,,4,2\n2026-11-20,pais,US,Estados Unidos,,0,2\n2026-11-20,pagina,/contact,Contato,outra,0,1\n2026-11-20,pais,TW,Taiwan,,0,1\n2026-11-20,pais,TH,Tailândia,,0,1\n2026-11-20,sessao,4,4ª,,3,1\n2026-11-20,sessao,1,1ª vez,,0,1\n2026-11-20,sessao,2,2ª,,1,1\n2026-11-20,tempo,30min,30 min,,6,1\n2026-11-20,tempo,20min,20 min,,5,1\n2026-11-21,pagina,/,Jogo (página inicial),jogo,0,10\n2026-11-21,origem,direto,\"Direto (digitou, favorito, app)\",,0,9\n2026-11-21,tempo,1min,1 min,,1,7\n2026-11-21,tempo,30s,30 s,,0,7\n2026-11-21,pais,BR,Brasil,,0,5\n2026-11-21,tempo,3min,3 min,,2,3\n2026-11-21,origem,google,Busca Google,,0,2\n2026-11-21,sessao,10+,10ª ou mais,,6,2\n2026-11-21,sessao,1,1ª vez,,0,2\n2026-11-21,pais,US,Estados Unidos,,0,2\n2026-11-21,tempo,10min,10 min,,4,2\n2026-11-21,tempo,5min,5 min,,3,2\n2026-11-21,pais,CA,Canadá,,0,1\n2026-11-21,pais,PH,Filipinas,,0,1\n2026-11-21,pais,TH,Tailândia,,0,1\n2026-11-21,sessao,4,4ª,,3,1\n2026-11-21,sessao,3,3ª,,2,1\n2026-11-21,sessao,2,2ª,,1,1\n2026-11-21,tempo,20min,20 min,,5,1\n", "dimensoes": "dia,dimensao,nome,n\n2026-11-12,referencia,Sem referência (direto ou bloqueado),13\n2026-11-13,referencia,Sem referência (direto ou bloqueado),52\n2026-11-13,navegador,Safari,36\n2026-11-13,navegador,Chrome,22\n2026-11-13,sistema,macOS,51\n2026-11-13,sistema,iOS,3\n2026-11-13,sistema,Linux,2\n2026-11-13,sistema,Windows,2\n2026-11-13,local,Brasil,50\n2026-11-13,local,Canadá,3\n2026-11-13,local,Estados Unidos,2\n2026-11-13,local,Belarus,1\n2026-11-13,local,Alemanha,1\n2026-11-13,local,Países Baixos,1\n2026-11-13,tela,Celular,4\n2026-11-13,tela,Tablet,2\n2026-11-13,tela,Computador,52\n2026-11-14,referencia,Sem referência (direto ou bloqueado),55\n2026-11-14,referencia,Google,2\n2026-11-14,navegador,Safari,37\n2026-11-14,navegador,Chrome,26\n2026-11-14,navegador,Firefox,1\n2026-11-14,sistema,macOS,31\n2026-11-14,sistema,iOS,19\n2026-11-14,sistema,Linux,9\n2026-11-14,sistema,Windows,5\n2026-11-14,local,Brasil,48\n2026-11-14,local,Reino Unido,6\n2026-11-14,local,Polônia,3\n2026-11-14,local,Estados Unidos,3\n2026-11-14,local,Espanha,2\n2026-11-14,local,Países Baixos,2\n2026-11-14,tela,Celular,21\n2026-11-14,tela,Computador,43\n2026-11-15,referencia,Sem referência (direto ou bloqueado),80\n2026-11-15,referencia,Facebook,8\n2026-11-15,navegador,Safari,55\n2026-11-15,navegador,Chrome,34\n2026-11-15,sistema,macOS,34\n2026-11-15,sistema,iOS,31\n2026-11-15,sistema,Windows,10\n2026-11-15,sistema,Linux,8\n2026-11-15,sistema,Android,6\n2026-11-15,local,Brasil,61\n2026-11-15,local,Estados Unidos,16\n2026-11-15,local,Áustria,2\n2026-11-15,local,Espanha,2\n2026-11-15,local,Reino Unido,2\n2026-11-15,local,Irlanda,2\n2026-11-15,tela,Celular,31\n2026-11-15,tela,Tablet,10\n2026-11-15,tela,Computador,48\n2026-11-16,referencia,Sem referência (direto ou bloqueado),73\n2026-11-16,navegador,Safari,47\n2026-11-16,navegador,Chrome,26\n2026-11-16,sistema,macOS,39\n2026-11-16,sistema,iOS,22\n2026-11-16,sistema,Windows,12\n2026-11-16,local,Brasil,63\n2026-11-16,local,Estados Unidos,8\n2026-11-16,local,Índia,2\n2026-11-16,tela,Celular,22\n2026-11-16,tela,Tablet,4\n2026-11-16,tela,Computador,47\n2026-11-17,referencia,Sem referência (direto ou bloqueado),72\n2026-11-17,referencia,Google,2\n2026-11-17,navegador,Chrome,62\n2026-11-17,navegador,Safari,39\n2026-11-17,sistema,macOS,56\n2026-11-17,sistema,Windows,23\n2026-11-17,sistema,iOS,20\n2026-11-17,sistema,Android,2\n2026-11-17,local,Brasil,85\n2026-11-17,local,Estados Unidos,11\n2026-11-17,local,Índia,2\n2026-11-17,local,Japão,2\n2026-11-17,local,Portugal,1\n2026-11-17,tela,Celular,22\n2026-11-17,tela,Tablet,2\n2026-11-17,tela,Computador,77\n2026-11-18,referencia,Sem referência (direto ou bloqueado),86\n2026-11-18,referencia,Google,6\n2026-11-18,navegador,Safari,50\n2026-11-18,navegador,Chrome,48\n2026-11-18,sistema,macOS,53\n2026-11-18,sistema,iOS,25\n2026-11-18,sistema,Android,16\n2026-11-18,sistema,Windows,4\n2026-11-18,local,Brasil,78\n2026-11-18,local,Austrália,8\n2026-11-18,local,Espanha,6\n2026-11-18,local,Estados Unidos,6\n2026-11-18,tela,Celular,32\n2026-11-18,tela,Tablet,3\n2026-11-18,tela,Computador,63\n2026-11-19,referencia,Sem referência (direto ou bloqueado),80\n2026-11-19,referencia,Google,11\n2026-11-19,navegador,Safari,50\n2026-11-19,navegador,Chrome,36\n2026-11-19,sistema,macOS,43\n2026-11-19,sistema,iOS,29\n2026-11-19,sistema,Windows,11\n2026-11-19,sistema,Chrome OS,3\n2026-11-19,local,Brasil,71\n2026-11-19,local,Austrália,7\n2026-11-19,local,Estados Unidos,4\n2026-11-19,local,Índia,3\n2026-11-19,local,Singapura,1\n2026-11-19,tela,Celular,29\n2026-11-19,tela,Tablet,4\n2026-11-19,tela,Computador,53\n2026-11-20,referencia,Sem referência (direto ou bloqueado),103\n2026-11-20,navegador,Safari,69\n2026-11-20,navegador,Chrome,34\n2026-11-20,sistema,iOS,45\n2026-11-20,sistema,macOS,43\n2026-11-20,sistema,Linux,6\n2026-11-20,sistema,Windows,5\n2026-11-20,sistema,Android,4\n2026-11-20,local,Brasil,82\n2026-11-20,local,Alemanha,6\n2026-11-20,local,Estados Unidos,5\n2026-11-20,local,Austrália,4\n2026-11-20,local,Tailândia,3\n2026-11-20,local,Taiwan,3\n2026-11-20,tela,Celular,49\n2026-11-20,tela,Computador,54\n2026-11-21,referencia,Sem referência (direto ou bloqueado),47\n2026-11-21,referencia,Google,13\n2026-11-21,navegador,Safari,40\n2026-11-21,navegador,Chrome,28\n2026-11-21,sistema,macOS,26\n2026-11-21,sistema,iOS,24\n2026-11-21,sistema,Chrome OS,7\n2026-11-21,sistema,Windows,6\n2026-11-21,sistema,Linux,5\n2026-11-21,local,Brasil,37\n2026-11-21,local,Estados Unidos,12\n2026-11-21,local,Canadá,7\n2026-11-21,local,Filipinas,7\n2026-11-21,local,Tailândia,5\n2026-11-21,tela,Celular,24\n2026-11-21,tela,Tablet,6\n2026-11-21,tela,Computador,38\n", "medicoes": "metrica,evento,desde,como_conta\nVisitas,páginas do site,2026-11-12,Cada página aberta conta uma vez por sessão do aparelho (GoatCounter). Não inclui eventos.\nVisitantes,página do jogo (/),2026-11-12,\"Aparelhos que abriram a página do jogo, uma vez por sessão. Somando vários dias, o mesmo aparelho conta uma vez por dia. Quem só viu uma página de onda ou de idioma não entra. O GoatCounter não tem contagem de pessoas únicas no site todo.\"\nJogaram,sessao-N,2026-11-16,Sessões em que alguém começou a surfar (a primeira onda começou). Voltar em menos de 30 min é a mesma sessão.\nTempo na página,tempo-30s … tempo-30min,2026-11-12,\"Quantas sessões ficaram com a página do jogo visível por pelo menos 30 s, 1, 3, 5, 10, 20 e 30 min.\"\nOrigem,origem-…,2026-11-19,\"Primeira página da visita, separada em anúncio, Google, outras buscas, redes sociais, outros sites e direto.\"\nPaís,pais-XX,2026-11-13,Estimado pelo fuso horário do aparelho (sem IP).\n\"Aparelhos, sistemas, navegadores, países por IP\",widgets do GoatCounter,2026-11-13,\"Parcela de todos os registros do dia (páginas e eventos), então quem joga mais pesa mais. Só as linhas que o GoatCounter mostra.\"\nTop 5 jogadores,jog-CÓDIGO e jog-CÓDIGO-mN,,\"Código aleatório criado no aparelho e apelido opcional digitado no fim da onda. Sessões = vezes que o código começou a jogar. Minutos estimados: cada marco de tempo surfando (1, 3, 5, 10, 15... min) soma a diferença para o marco anterior. Começa quando a mudança for publicada no jogo.\"\nGoogle Ads,relatório da campanha,2026-11-18,\"Impressões, cliques, custo e conversões (primeira onda da visita) da campanha de pesquisa, lidos no Google Ads.\"\n", "ads_diario": "dia,impressoes,cliques,custo,conversoes\n2026-11-18,0,0,0,0\n2026-11-19,0,0,0,0\n2026-11-20,0,0,0,0\n2026-11-21,0,0,0,0\n", "ads_campanha": "campanha,id,status,estrategia,orcamento_dia,cpc_max,rede,locais,grupos,palavras_chave,anuncios,lancada_em,lido_em\nPlaySurf - Pesquisa - CPC baixo,24490408483,Qualificada (aprendizado),Maximizar cliques,20,2.5,Pesquisa Google (sem parceiros),62,7,86,7,2026-11-18,2026-11-21 11:12\n"},UPD={"datasets/eventos": "2026-11-21T11:12:55-03:00", "datasets/ads_diario": "2026-11-21T11:12:55-03:00"};
+function csv(t){const rows=[];let row=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);f='';if(row.length>1||row[0]!=='')rows.push(row);row=[]}else f+=c}if(f!==''||row.length){row.push(f);rows.push(row)}const h=rows.shift()||[];return rows.map(r=>Object.fromEntries(h.map((k,j)=>[k,r[j]===undefined?'':r[j]])))}
+const DS={};for(const k in RAW)DS[k]=csv(RAW[k]);
+const CALC={},DRAW={},ON=[],OUT={};let P={},started=false;
+function solve(id,seen){if(id in OUT)return OUT[id];const c=CALC[id];if(!c)return [];if(seen.has(id))return [];seen.add(id);const args=(c.inputs||[]).map(i=>solve(i,seen));let r=[];try{r=c.fn(...args)||[]}catch(e){console.warn('calc',id,e)}OUT[id]=r;return r}
+function compute(){for(const k in OUT)delete OUT[k];for(const k in DS)OUT[k]=DS[k];for(const id in CALC)solve(id,new Set())}
+function render(name){const h=DRAW[name];if(!h)return;document.querySelectorAll('[data-draw="'+name+'"]').forEach(el=>{try{if(h.mount&&!el.__psM){el.__psM=1;el.__psMade=h.mount(el)}if(h.update)h.update(el,el.__psMade)}catch(e){console.warn('draw',name,e)}})}
+function all(){compute();for(const n in DRAW)render(n);ON.forEach(f=>{try{f()}catch(e){console.warn(e)}})}
+window.dash={
+  calc(id,o){CALC[id]=o},
+  draw(name,h){if(h===undefined){if(started)render(name);return}DRAW[name]=typeof h==='function'?{update:h}:h;if(started)render(name)},
+  data(id){return id in OUT?{status:'ok',data:OUT[id]}:{status:'missing',data:[]}},
+  onData(f){ON.push(f)},
+  params(){return P},
+  setParams(o){P=Object.assign({},P,o);if(started)all()}
+};
+window.claude={use(name){if(name==='db')return Promise.resolve({doc(path){return{onSnapshot(cb){setTimeout(()=>cb({exists:!!UPD[path],data:()=>({updated:{at:UPD[path]}})}),0);return()=>{}}}}});return Promise.resolve(null)}};
+document.addEventListener('DOMContentLoaded',()=>{started=true;all()});
 })();
 </script>
+</head>
+<body>
+<div id="dash-root">
+<meta name="dash-one-writer">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,75..125,400..900;1,75..125,400..900&display=swap');
+/* Layout: o "hub" do World Champ do jogo — título itálico enorme, faixa de números, cartões azul-marinho com cabeçalho em degradê, botões-pílula. */
+#dash-root{--dash-gutter:0}
+.ps{
+  --navy:#0e1838; --deep:#040915; --ink:#f4f7ff; --mute:rgba(228,234,246,.68); --mute2:rgba(228,234,246,.44);
+  --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.07);
+  --pink:#ff4f9e; --orange:#ffa53d; --mint:#9ff5dc; --gold:#ffd23a; --sky:#8ccaff; --bad:#ff7a90;
+  --grad:linear-gradient(100deg,#e3368f 0%,#f75a78 48%,#ffab3d 100%);
+  --card:linear-gradient(180deg,rgba(24,38,78,.92),rgba(8,14,34,.95));
+  --f:Saira,"Avenir Next","Segoe UI",Arial,sans-serif;
+  position:relative;color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.45;
+  background:radial-gradient(120% 70% at 50% 0%,#18295a 0%,#0b1533 38%,var(--deep) 78%);
+  padding:clamp(18px,3vw,40px) clamp(16px,3vw,40px) 48px;min-height:100%;
+  display:flex;flex-direction:column;gap:clamp(16px,2vw,24px);
+}
+.ps *{box-sizing:border-box}
+.ps-eyebrow{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);font:800 11px/1 var(--f);font-style:italic;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+.ps-eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}
+.ps-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;padding-bottom:16px;border-bottom:1px solid;border-image:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,.03)) 1}
+.ps-title{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 22px;margin:14px 0 10px}
+.ps-mark{position:relative;display:inline-flex;line-height:0;max-width:calc(100% - 56px)}
+.ps-logo{display:block;width:min(560px,100%);height:auto;filter:drop-shadow(0 10px 30px rgba(4,12,34,.62))}
+.ps-chip{position:absolute;left:100%;top:7%;margin-left:4px;display:inline-flex;align-items:center;gap:5px;font:800 10px/1 var(--f);font-style:italic;font-stretch:112%;letter-spacing:.26em;color:rgba(255,255,255,.8);padding:3px 4px 3px 6px;border:1px solid rgba(255,255,255,.3);border-radius:3px;background:rgba(8,16,40,.25);white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.ps-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#ff6f9a;box-shadow:0 0 6px rgba(255,111,154,.75)}
+.ps-title-t{font:900 clamp(30px,4.4vw,50px)/.82 var(--f);font-style:italic;text-transform:uppercase;letter-spacing:.01em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .12em .08em 0}
+.ps-lead{margin:6px 0 0;max-width:64ch;color:var(--mute);font-size:15px}
+.ps-lead b{color:var(--ink);font-weight:800}
+.ps-filter{display:flex;flex-direction:column;gap:10px;align-items:flex-end;min-width:0}
+.ps-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.ps-pill{appearance:none;cursor:pointer;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);color:var(--ink);font:800 12px/1 var(--f);font-style:italic;letter-spacing:.16em;text-transform:uppercase;transition:transform .15s,background .15s}
+.ps-pill:hover{background:rgba(255,255,255,.12)}
+.ps-pill:focus-visible,.ps-date:focus-visible,.ps-seg button:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.ps-pill.on{background:var(--grad);border-color:transparent;color:var(--navy);box-shadow:0 10px 26px rgba(247,90,120,.35)}
+.ps-dates{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;color:var(--mute2);font:700 11px/1 var(--f);font-style:italic;letter-spacing:.18em;text-transform:uppercase}
+.ps-date{background:rgba(2,6,16,.55);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:7px 9px;font:600 14px/1 var(--f);color-scheme:dark}
+.ps-range{font:700 12px/1 var(--f);font-style:italic;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+
+.ps-stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-radius:16px;background:rgba(2,6,16,.45);border:1px solid var(--line2);overflow:hidden;box-shadow:0 24px 54px rgba(0,0,0,.35)}
+.ps-k{padding:16px 18px 15px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);display:flex;flex-direction:column;gap:6px;min-width:0}
+.ps-k-l{font:800 11px/1.1 var(--f);font-style:italic;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.ps-k-n{font:900 clamp(34px,4.2vw,50px)/.9 var(--f);font-style:italic;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ps-k:first-child .ps-k-n{color:var(--gold)}
+.ps-k-d{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;font:700 12px/1.2 var(--f);color:var(--mute2)}
+.ps-delta{font-weight:800;font-style:italic}
+.ps-delta.up{color:var(--mint)} .ps-delta.down{color:var(--bad)} .ps-delta.flat{color:var(--mute2);font-weight:600}
+.ps-k-s{font-size:12px;color:var(--mute2)}
+
+.ps-card{position:relative;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:0 24px 54px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.07);padding:18px clamp(14px,2vw,22px) 20px;min-width:0}
+.ps-ch{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+.ps-ch h2{margin:0;font:900 clamp(20px,2.2vw,26px)/1 var(--f);font-style:italic;text-transform:uppercase;letter-spacing:.01em}
+.ps-tag{padding:6px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);font:800 10px/1 var(--f);font-style:italic;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.ps-tag.hot{background:var(--grad);border-color:transparent;color:var(--navy)}
+.ps-sub{margin:-4px 0 12px;color:var(--mute2);font-size:13px}
+.ps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(14px,1.8vw,22px)}
+
+.ps-chart{position:relative;min-height:260px}
+.ps-chart svg{display:block;width:100%;overflow:visible}
+.ps-grid-l{stroke:rgba(255,255,255,.08)}
+.ps-tick{fill:var(--mute2);font:600 11px var(--f)}
+.ps-barlab{fill:var(--ink);font:800 12px var(--f);font-style:italic}
+.ps-line{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.ps-l1{stroke:var(--mint)} .ps-l2{stroke:var(--gold)}
+.ps-dot1{fill:var(--mint)} .ps-dot2{fill:var(--gold)}
+.ps-band{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.14);stroke-dasharray:3 4}
+.ps-legend{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 8px;padding:0;list-style:none;font:700 12px/1 var(--f);color:var(--mute)}
+.ps-legend li{display:flex;align-items:center;gap:7px}
+.ps-sw{display:inline-block;width:14px;height:10px;border-radius:3px}
+.ps-sw.bar{background:var(--grad)} .ps-sw.l1{height:3px;background:var(--mint)} .ps-sw.l2{height:3px;background:var(--gold)}
+.ps-tip{position:absolute;z-index:3;pointer-events:none;min-width:150px;padding:10px 12px;border-radius:12px;background:rgba(6,11,28,.96);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 30px rgba(0,0,0,.5);font:600 13px/1.5 var(--f)}
+.ps-tip strong{display:block;font:900 14px/1.2 var(--f);font-style:italic;letter-spacing:.06em;margin-bottom:4px}
+.ps-tip span{display:flex;justify-content:space-between;gap:14px;color:var(--mute)}
+.ps-tip span b{color:var(--ink)}
+.ps-hint{margin:8px 0 0;font-size:12px;color:var(--mute2)}
+
+.ps-bars{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.ps-bar{display:grid;grid-template-columns:minmax(0,9.5em) minmax(40px,1fr) auto 3.4em;align-items:center;gap:10px;font-size:14px}
+.ps-bar-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.ps-bar-track{height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.ps-bar-fill{display:block;height:100%;border-radius:999px;background:var(--grad)}
+.ps-bars.mint .ps-bar-fill{background:linear-gradient(90deg,#4fd6b4,var(--mint))}
+.ps-bars.gold .ps-bar-fill{background:linear-gradient(90deg,#ffab3d,var(--gold))}
+.ps-bars.sky .ps-bar-fill{background:linear-gradient(90deg,#4f8fe3,var(--sky))}
+.ps-bar-val{font:900 15px/1 var(--f);font-style:italic;font-variant-numeric:tabular-nums;text-align:right}
+.ps-bar-pct{font:600 12px/1 var(--f);color:var(--mute2);text-align:right;font-variant-numeric:tabular-nums}
+.ps-empty{margin:4px 0;color:var(--mute2);font-size:14px}
+.ps-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(2,6,16,.45)}
+.ps-seg button{appearance:none;cursor:pointer;border:0;border-radius:999px;padding:6px 11px;background:transparent;color:var(--mute);font:800 10px/1 var(--f);font-style:italic;letter-spacing:.16em;text-transform:uppercase}
+.ps-seg button.on{background:rgba(255,255,255,.14);color:var(--ink)}
+.ps-mini{margin:16px 0 8px;font:800 11px/1 var(--f);font-style:italic;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+
+.ps-podium{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:4px 0 14px}
+.ps-slot{border-radius:11px;background:rgba(2,6,16,.45);border:1px dashed rgba(255,255,255,.18);padding:10px 6px 9px;text-align:center;min-width:0}
+.ps-slot b{display:block;font:900 26px/1 var(--f);font-style:italic;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.5)}
+.ps-slot:first-child b{-webkit-text-stroke:0;color:var(--gold)}
+.ps-slot span{display:block;margin-top:6px;font:700 11px/1.2 var(--f);color:var(--mute2);letter-spacing:.14em}
+.ps-slot.on{border-style:solid;border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.05)}
+.ps-slot em{display:block;margin-top:6px;font:900 13px/1.15 var(--f);font-style:italic;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.02em;text-transform:uppercase}
+.ps-slot.on span{color:var(--mint);letter-spacing:.06em}
+.ps-text{margin:0 0 10px;color:var(--mute);font-size:14px;max-width:62ch}
+.ps-text b{color:var(--ink)}
+
+.ps-table-wrap{overflow-x:auto}
+.ps-table{width:100%;border-collapse:collapse;font-size:14px}
+.ps-table th{text-align:left;font:800 10.5px/1 var(--f);font-style:italic;letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);padding:0 8px 9px;border-bottom:1px solid var(--line)}
+.ps-table td{padding:9px 8px;border-bottom:1px solid var(--line2);vertical-align:middle}
+.ps-table td.num,.ps-table th.num{text-align:right;font-variant-numeric:tabular-nums}
+.ps-table td.num{font:900 15px/1 var(--f);font-style:italic}
+.ps-chip{display:inline-block;padding:4px 9px;border-radius:999px;font:800 10px/1 var(--f);font-style:italic;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(255,255,255,.2);color:var(--mute)}
+.ps-chip.jogo{background:var(--grad);border-color:transparent;color:var(--navy)}
+.ps-chip.onda{border-color:rgba(159,245,220,.55);color:var(--mint)}
+.ps-chip.idioma{border-color:rgba(140,202,255,.55);color:var(--sky)}
+
+.ps-split{display:flex;height:16px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);margin:2px 0 10px}
+.ps-split span{display:block;height:100%}
+.ps-ads{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(min(100%,260px),1fr);gap:clamp(14px,1.8vw,22px)}
+@media (max-width:760px){.ps-ads{grid-template-columns:1fr}}
+.ps-ads .ps-stat{box-shadow:none}
+.ps-ads .ps-k-n{font-size:clamp(28px,3.4vw,40px);color:var(--ink)}
+.ps-ads .ps-k:first-child .ps-k-n{color:var(--ink)}
+.ps-status{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,210,58,.12);border:1px solid rgba(255,210,58,.4);color:var(--gold);font:800 11px/1 var(--f);font-style:italic;letter-spacing:.14em;text-transform:uppercase}
+.ps-status i{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.ps-dl{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:0;font-size:14px}
+.ps-dl dt{color:var(--mute2);font:700 11px/1.6 var(--f);font-style:italic;letter-spacing:.16em;text-transform:uppercase}
+.ps-dl dd{margin:0;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.ps-note{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line2);color:var(--mute);font-size:14px}
+.ps-note b{color:var(--ink)}
+.ps-todo{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.ps-todo li{border-radius:14px;background:rgba(2,6,16,.45);border:1px solid var(--line2);padding:14px 15px;font-size:14px;color:var(--mute)}
+.ps-todo li strong{display:block;margin-bottom:6px;font:900 15px/1.15 var(--f);font-style:italic;text-transform:uppercase;letter-spacing:.03em;color:var(--ink)}
+.ps-todo code{font-size:12.5px;color:var(--mint);word-break:break-all}
+.ps-details{border-radius:14px;border:1px solid var(--line);background:rgba(2,6,16,.35);padding:12px 16px}
+.ps-details summary{cursor:pointer;font:800 12px/1.4 var(--f);font-style:italic;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.ps-details[open] summary{margin-bottom:10px}
+@media (prefers-reduced-motion:no-preference){.ps-pill:active{transform:scale(.97)}}
+@media print{.ps{background:#0b1533}}
+/* Botão de atualização: pede ao Claude uma leitura nova do GoatCounter e do Google Ads. */
+.ps-sync{display:flex;flex-direction:column;align-items:flex-end;gap:6px;max-width:100%}
+.ps-sync-btn{display:inline-flex;align-items:center;gap:8px;max-width:100%;white-space:normal;line-height:1.25;text-align:left;border-color:rgba(159,245,220,.55);color:var(--mint)}
+.ps-sync-t b{white-space:nowrap}
+.ps-sync-btn svg{width:14px;height:14px;flex:none}
+.ps-sync-btn[disabled]{opacity:.6;cursor:default}
+.ps-sync-btn.girando svg{animation:ps-gira 1s linear infinite}
+@keyframes ps-gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.ps-sync-btn.girando svg{animation:none}}
+.ps-sync-t,.ps-sync-msg{margin:0;max-width:46ch;text-align:right;color:var(--mute);font-size:13px;line-height:1.4}
+.ps-sync-t b,.ps-sync-msg b{color:var(--ink);font-weight:800}
+.ps-sync-msg.erro{color:var(--bad)}
+</style>
+
+<div class="ps" id="painel">
+  <header class="ps-head" id="topo">
+    <div>
+      <span class="ps-eyebrow"><i></i>playsurfgame.com · monitor</span>
+      <h1 class="ps-title" id="titulo"><span class="ps-mark"><img class="ps-logo" src="data:image/webp;base64,UklGRmRvAABXRUJQVlA4WAoAAAAQAAAAAQQAogAAQUxQSI0mAAAB70cmbdPWv/Xtjoh1wD9a2moUBm0bSYr5w7597w5ARExAT8NoTmMKTbXo2Uu1qBiF7hv8tntueBy3sE2ZvBoj43fAwMUjDlejhgsutIMqpze+iz3m/9+pbX7e247xnqWOJ3hv43ibeibB2xYEOXtvK0bO8LZcnNKiYOWc5WIlZCILsslCOqm0SBkE1CKBlAESEjpl3x8Z326Ou/fn/fl+L/t7Ef2XRdtq3ThHQ2lxktqyJNsyesTzhw37/8VRq5HduLvbxj3BVtCFuiteoz3UhSoPVnd3od4+p+6K1t29WN198e1u5k3+//nPZDIJcF79fhH9lwXZbt02uH5StmqrAkRcXkJJ+xf8BCD8yj5tqNYY9GAzjp88MzVxZvaGvEtWLZs06Icc5l/3x6pwa9T4CANAsIkHqA+NZbeMThZRuqJj95x2wnHz/v++tz7ahJzkaD3wQwMKFbSD0d6RxQoc+J+T8Ow5F9/9KYSanu40tV8SMiShdGMPQXq5FZV6CKAt0jl1zs1LX/2TxHXZIDv43k8OKAnXxl7VvIhhC6158WEQAUrakk3rt6c2rVu+3ns/fgz2AEw55pyLFgLAA2/7h8+mUqmC2RZgxtOt3htVIdXl+7+8bTAhMiAGO06S5oxQ1ziEjNkGEsKx2BWlK1wrbx2HIM+oC3OC71Gh35aSZ86fSaW++KS9rebt5naxo7FM9gZgLJ1hmENYgtvpIrgy5g6hDfcmmgy0Uass69jc0Uoqlgzirjt3VfKJbDpf6cZROAn2RtypC3Ek4jjonQgAozuxGxFHQRcihjGRLlaGISJAEbMxiLrtVksfb3d69TGDzRXOlxBHjurea8bcK25a+upTCJ/CO4gAuAY6z/G1BheyKOVI3qccX89+ItwJkG2MBECyQWgpAt7vFT97tfFXRXUniUnXvMPJHx+f4JDAsiLG+2gk4Tqxvuy8AD1l7cj6Whz1UK42IIxDKFti+ENsNhkEo+iK2OIYDDLsYbwd9G8DbWGsZgjseR7Kvjt1uiwOtQE5vxfKi8jsiySM+gweMXDIKGA/8XKD1/whHB/1ygjUBq4ZML/R33k8OeeNECVAFrKlgLPpD5mhLjOUQsik44oY7FGR8dXrsNMEAJ5Si7MVViiTq+DJk1jdYEA8P4SykNFGf4Ogyurae18dB8WqOK9XmpxcMRiiATd1Ro472IDdSTy+2XYXWlt/EEUxaNd69q9KjuuVJ42i0Cp2dbeMmybR1BnBUQQBdpM9TVuWqO3IYfXLldBPs9ylV3YZVaGwUy41GJrYz7xEuYxJnUQX3kYPl7HqLBD36CsCijtjgCbI3Q+t4mdhoU80EvSKfb7AQyXaLUBjSgHVoNlNyxzkmhSR5kzxMhu90zrRPjMm+TiiJJ8xt+O9Sg7AnoDd2Q4RL4PYEKuEV5oxMo0eBiuWJnVYR0dlyAr4VPcIet33a0wopcr1VKOUVj30VSzTjTpsI0YobOukuQoF22CnASpPGEs7uq2zpZAmeGWAUcoaF77DG900gVhuoVi/RGjlqxLgfXwddanGdFIPYQ2QnvBEulErRg29VItu0g2GSMBLuhHjQGfNauQXGFToFmNFbzeK2N2B63X+F0NU5o9wTGrU0F2z3KgRm9imSd6pkqrC2RAnfSV2GNaJ4P5rTkLEU+HYQw6b4jfs2Or9Dp+X2n8+ArZ5UOthvmveWA5fmjip8bicpVmyjG5g2ZWXe8Wr5WOmUFl1DuZ+2HkTGYr6wCPI62JMOVXPp606T5EnxuJpLYwM3Grzt8ZqDaldP2yY0NDcZUbMVU0ZnjIbGcFsN9LfgO+m99SeGyvhqGqJKtfa5YwRpUqs/FgnJuHAS+gdQeJMAe71Jp3LnawjpFJOM4L4IwCseRXgqQdvvubsHUsmpfdWLZ+olLvhqWmhxlbIMufZ+6W6nXoA1juQjNNyIUUBEMY6ASzlO+VlDdGoolFWb0L8cQ18Cq88cQvMP+Po42fipJ26Cn70gL5tSCvCBUa3fl35J75D5rHqvad2w/KXdbKyE3maP/gs4LpHrNgaud5BTxHdqqUzMde+yO+1ha3V8FEm0vesEeqSBXejlCLhbehABpsN33qVxFllPe3VsfcWlzdUEoXv1vmshCl7sDH4c6nhRujs62Lc9RGAp4HvqSfzQx6Bd85hyf+8kmFvplK0Vw+F4YyJcajWbatlKEHj4S54ys4TK+OYvFuB617JdgSOcvYBOQ5AZvKhqfrUkciwS3SL8l7sitEbfzrolIh8akE6NIewMfockJeULRdc/SqcU5rTRbSYNiCGsVa70HIEu8ZyXqoZBsXFkFMA3PVLqc7l9ej1zGYhGoMJ7tNncLyNoQTeP5dR3SWh4cVHgOTAP4PzlPgk0CcP5LQMpFqtbsUwSmAHX+VoLX8LrlB1qW6YGQzimcC/YkB8EMRBA46vEZUwCfyRqqx698ndg2IUqDq1R5cYmQAGord2CU47UEZRbcVu9HrO0BvhmJUTreXG7ab+0uXmO5kBSVhpIGwklkm6lhcI7OBW90lLAGEAPDXBSnXFgqFffGzhH7IG36fIFD1pNMAxlrSm6jhf9N3jPL1eua3cegJiQrwOTuxSIOMztU6aagzXIrXa5RF0Cy7g4MLJ1Yuy4e0QNIsXHDZhBg+5ZHUnL0+W3Fdsp+C34GkyJD0izUdv7X6cdp/cgmEPrD7dBjaQlzGMB8UOcbL+F7OMaHhaise0v2e5ruVvdKQbMIHYmvuV2iwpHriGNfEyjuRlrLdP6kOzWHdWE5AXUVSho3oRzbBoEsePbkmVbRm6bdgVWgW6iiJdvos3JcrnHplfNhpHEutcXT4IvxPImVXOk1MgjyZWrVYYGMvQapPeg8LnQ/cWMv9pdlmdCGA7emvDrlv+CZkeBd+Gc3aULrJREyF4GT/e++hcqqJiFI7u+Kgv0LV8X0dWGRxJle1G9Ho+oFx8uvBu4RVPN3b0DgSD2fKfQMt16c2Wq8ZMHuQi0Okkq027+HXCVIlydZAIYwxhuJkjWQ3HscVwttsO0fggHBMYo7jV0rSTFaxb4duwz5Lir9d7laCyQ/nb5HsQaeU76FXz6Tno9a90nL5Nqe0gej0L6eiDj+dCaSKk4gcb2hBZKpusuuK4Fh/7f6a5A4o6kRAo4NshZOw4VVYebu6sxLKlbRWXDd4njX7xpdIMlAJQH8A9Lnl8XKlU1/HpqJblBp0z0DlhQ/6th4pD9T6xjVUuZLoYuA3g6bZdwEZfaDTTdMbVJGUlRdSxnm2s7SJ8/D/B4mH5NXqEsmWGPxSopkSp7RX0epZqfgfPqBzdJGgOvPqfyKpOKWAboNCgCLHpB/AZrZWfJt3TrDc4LnTIJ3aT2VSC+BFgeeAt8OMrRWKf2glJnl57IxJnXhkK9HCH2Crg25CBYjEZGaBWJYTMIHuZokG0izpJpWRkCNwXVTZ8jqrh+1TLaaTNHXoA6GyQCakE/AU2Kody5wqJ5cS6XRchuvLO/u/px5WU4P45Kt8hRv8EJ+tPPn/lV3iZjq8wDGCMgvGQeh3i5wOH2HLh2zDJgLifAganYorJJvAfjPqz5hH9y7XKi5qmS6xaWpXaznVcT5UdPUwQjGSKln3bVQxZP5AR2uUNMNLUa8PPAdU9Emp/0ecaS+a1oA2V5A+J7hk181a6+QsyHK2viXGCzE+VHW0VnClpt0bbJoOgIRDl7xyQRPHEFwkxGMJ89SVTY9wL1Kor+W12fpFwT7m7NH/iM5hRmLhLDX0RfTVJdwUdHfLcqgd2ZKmhp1Qz1UC6ApgsUYq1K5SDoOpgapQei66I0rgkGxDEMkEXWxz5XxiawQkfbsBGNLym7FVtbtc3BtRMU5wSJ0XiBjriUFeyWOunU4tcbY/m53IL2zI2HjvzRruRO6DtU2wrMwjKA24Mhr8FtKFC7uAIXk6s/8QCPvZKXaYbjdIAT3lpRJRjmkkl1qCIgAILpMQJ1TJLBJZT1VZV6dTTghjMM/Qs0Ky1yzZ9JfNZ+S6thhFgMJwJ+EMxtS4k1vdqwt1c3ulemaHXxuATOlGefKukxFpaAhi71S7Ht0QZy89vFFOnlPPwT8zi4SOGGVHkyoOq7dNz5CGVvcS6ogPq/ALDDtMTlUozvrc3Zdms896LUuuvuLukoqadJik9QRTTS7NTuavWX1P0dl3zB1G5asBzMNqw06vmO+5FOtfqfAKWJJ82/GbbOZalN341Zhwokh3GqecT6zYlPNd8O+xqd8tTMDdUO8dyuuwov54lGgMqOD/lQYG51uiYS6Oo0lsO01doFbU6pIz1sjl9KIQ2ki8XX8f5HmLdrICSuO1T6bAvL+VYMTRBukGxsbyep9QP+VklaScS6qI2yea7VgTqdXew8LU6yuKdJbZ15A3Latr68BePXKg7f4Y190quVNRqoy/UsesVyvQH0LH62viSQhH8a95gKyu502xrfe3TqdChgmvzLl05P31gD+/tM2fxZEwIOhYdZh+bal1Iq7djVzPMlWZvS4YmLf+BxFQ7xli8kCXXRSSk0JPVu5uLowbGWbm9ZrxXdp/WW1eadeZFtdpYg4nW11REDfMkl8EzrWYa/CHdtoww+njJteLlIuARkpisgHA9jInohwuCcoDEcQWaMH43d+dJtU1Jj61ZaIzt6zn4wB7ss40+RKoB4P2xmXI9trGcv19kMlMujkG2pUYb9YH3erXx9gDVYwtLVKYBWmfjI3CY0RlGw5G4xDlN03+/baWP0cWBwMnimTsk2Qy6C1pS/MyLdS2GILTZtelK4OnUXmA7+yTGViTZEvKMED0HDBy3bHNex3m+2wSDYbaFClO7Oq5GZOaJ8jjJpyQtcuL/tptaR2bf+Xl9++CrxiLU8sR1mzJybavpVF/gVxK2LLlKvq5YfiKVH4KSuf62kjroSpcbm4B6T5KnfSBU3Jcmn7rt7hjNiOX1kKy7S8Itgkn2ZmMTyjF8YjEp1MmFAkKnsoHuUkmBtFQUzbfItU9vogdiEW2pPX/k8iXTJaKtB6se4Wadha+vghdZrtUfkLgVVIT25Y4S2u7XNXBQKLe0PVx48LZ9+bNoCs4LJK642mykdeOSR/yQpTfweybYlZEGzdeN1WcP5mTatfqzAbqBWcTxtoBU12iV21RyveT/BhU1kn4E9W7V+vtMUpRfYI9Qipj1Aiu7yz461jVXu0Z+b0QKIamkOeUsuZ6TAsvI4oCZTTFJ5ynpC3VRrNyfi6m8Qg6mSbY46iY9yIUa2uQyO6AmH7+uudbRtwWq+aRNAdKziHwK+E3fvm/YNiPPljcH3DwZiyw7+yCsD1RzpVrZzn+Qj7qOFB+QU7QlQnIluxTw9f/3vIsSchrwTkiKEJmBXLE2RpoMOo2KaiDQsBUvcOSro9BTT2vbkJUcswJ22tEOcQ2WIaz7sufbEHgdVpNeq/6f4Vpk20Wyxe3O13aXUahpmdPzAVzbBeWXPZM7M8mOqNdlMxtJg3R+wvcD/AYTSZWc0OC7ApTMgJ+vwT0AnLAKa3Wf9axb/c8f79+zSyYdDXqctYYPZeEnbSIccZIuQTLP1vpu4B2/bBWxR6lhdFNQuHYY3brv3Eo+Fe8Ie+0ycX8Qn7hveVeoE76tpQW4eUWBCrDfGm2gPXae8oQziFUKOMDBGTt2FzOJiITeT/fPcpxOqmxXaLlqRs2hVBWotojAcKesbRviy4iqCVX495+f3l980W6ycRTUwyBwnY6qF28TuTugp/3tmuqHJnX87l7XbFs1Ma1PV6aJGP8gz4H/qcAjSK2xT8AkevSzWrrYRZIG/UTnydmAiS9qq8uKctePCvSFQ+78XTZWd41Q8VfQxv9X+Bf6ZeQovE0wkylbNj8P4+5ypAIXBQUAtPEB0BK2A7YrVRqt3mi2OT2hWDyZLXad9N/3NhMbwMGqRBfqdU0m4kzHz+95lEX5hyNt0zHPs8tB723DdlQCqABADQBKSsfbKlrsTm8oHkvlSnvMWfwDxTEOVEGixwgcfPD5txwM9nOPRIN2o1YplL+lBWnZqc1FrzQgxvyFPlQWh+lZ0FncO8f2dVuqomDhKCedcPDfqwK1Ros6PRgIQEdL+BTQ1C1qqsXlrb0/XSjvf+u7m6loMgiSvQw5gH9WHz+i+8jFHPRzJ4Z8Fp2qrcFbEvsMTlYko7ZtSiRs/Nf/+09PLMzKTHPdb0uEWqYE8l6d3mA0mS1WOzgI7EhJ+JTQroBmbrHYnN5wLJ4pdE+9Z2U/vV4p/1CAn++duUOpnM8Viqf1Dwz+mPc7jJr2BtsrdLVY3nsfdZTYVreX3b1qgHN/WSq8ZdRra++12h0utzcQinTEAKLhEPidNjN/Qo+y+KC2hlZHOAdfOI7pwtCD7/+ZBBxqvZJef75yfDmXjEUj0VQOFtTujgx6TbWnTbHvh/53peIgna//Wax+QlbYvH7bQqf/rmSAv8xAXut0e4PRWEc8kUxnsnkAyGVqHut3OywmvVal1PRDRUO1RmegKEfSMuyIx6niEBTjIPH1tV0q2VQ04HEj+CMZvJWrPh4mTxtk+IcWgl2eFGmOzsIby4/mZ8b7nIgd/bkqNVlmsTlc3lA0jolUJl8s90w67PxFtz63/PWVXyyelcvGI36n1aTT/Neoqs6xtjmsDnewI5HOdx5945rGtAAgPDSikA57nTazCS0Obzg58nfu+4THqlfJK44Oy9k2tbj66/ieRNNmnCS3tmjtwdhtBpMKi0anN5qtDpcvHIN4Klso9Uw98+43Vv7KMXFJJZeMBtBpMfTu0a2rMksgFk/lygfc+g0HUOW1SP742uH5uN9pMeq0Gi2Y7N6O+MNcf6/HoVfXFrCGeSUxnSxdpMstKtGKnAS/HFwycM1B1mt3eoLReCKdK4475Jz73/mVMW5HMAgwAPDAzRfOSET8Hmv///6wL+RzjiaL3e2PJpK50n7nvt3PG0aEhlyfGF6Ieu0mnVqlBECd2RnpWMjB7h6HgZiGMOptp+tzpKxKtGv+1x++olvy83uSakNei9XuItxeKluceOwV7//J81YSb8QU+LsgF/DWLrU3yDwg0pxjbXtE4olsaaeLPh6gko7GCRDX9hQ7PFaDhhpHRaXGaA+GjuY2jHTb9M1iSJ3c2VpC+XE9l5Jk5vW8FofbH4knMoXypHNf+ovqb4iV9VVpFe/K/fwei16tVMg+66DlholMsWf2sj56ZiEHDTPuhFLKZzNo6HipaFfrrf7AsdzqiJsIEVqMLbMmp/TL4zEfW0Nh9kDX/JbEtF3bdySStfXO+u+n1fp0PVVEDtYNAMDfu3hdJuKwstYbUpwjGXIYe8biHxrdAoDw/ohc0GGsXYcAzyxe/6zqy16XWadsEja12UVa/bjL3ZO535Ia7d2s3D5b3HXe439z9fo3+UBb1s7a57y3Ofgh46E67XIWHNld/mg8lS/PvP83EvR4LY28P6mc8JAYo+CZSmf2eC/krna7jNomsWXArz/oIGl08oEd2hCxHREbOY9HwbU9z7uT2dKelzy/jl5vnYfv6itz9irnsxm8m4OrvG75eayCLTjyhgnpsPdVX/DVhg2//jkuG6apRoaZHIFV/SMc1JJtsuU1SJuDb+khPY1HTQGUDVPuabi29xLOobjjnGUbJXHvQfhg5rBCOhGLJyHxArcmRD+V4ViIkSc4yhTHnfHyZoEhh8Y+f3142m8laQbLrPbducecYGqWJbNw5DioQ7IchzrzsqX8RMtPYACdRq2E2stbSguV29PefdbL6yQS9SI80l3KJcIBHwYiHWM2/DvaadXVViy7oVCKdIgl0vkKnXVQSYccbABuH5rymrVKBSP9UmnNlrsHhtss+honsU12D+2R0LXLqHk8JrPFZnc4Xeh2gcNCnRujJTzgde71Rpp0SOUrRz/8m2TUHsJ1I4upoMdhQzIhMLyCO8RFKXjkxDnwBUeJVK68z9VfMDlHedycVUl5TGxT6vRjuPMsVr1W1d5a7m+zJS3Jhk0B1DKmlD8QicYAECOhgN9lNxt1atGr0efVb+RlHdnS/jdI6d0ISzpLcb/DYtQbTFZnEC7lZjntxGSjgibbgx4LyZUmX/MKM+uQzc01NTMLmEYbnW0xkus22X1+ciEKEJLyB6NxxGQ6my8UsQe6sjEIeewmag9XNP+QIyvrOPsVSWV9Vdi8bznpIzo+ErysPu+l1X3t1BNZ9NZ0VJ0hdzBGWnY8+40BftYhL3tweMZHmhV8ow4UgFSvsKVYuntsZe608KT8HTwp/+S5N923/IPVf/fBV8ekYyGv22KgLq1AccDLOiSW9SE8NjwXdJhqmw6Var3J5X6QS9vMjTQF1Vvjx2s7pTdK5Uq7XvbiX0JTjWX05L3OXIiSISiA+tLU3mJQo/xmWCsAtor3XyO1Iy30sZMv5Z9+JpHys7Bl0Sk7hn0uK7k0c0UPExlypDr3+9/YgNy++u/0UpyM4rfXvoZKa7TDO6sclK6vsTytlp4C5faF44lUvrwXPRQ6iFV5FiXduHcp4bXqSU0FBPKtUYOI9AgRooIHlBTtdaENUSAE5bc2dH2BxYX5rjldKnPiLKaUH5E+OwYH0P/h6V6HlVLCNm3HyMZT9Y/nZx1Sj+L/0JMPO4yEbqCU/KY4N9ti06mVbQ2peMhcRqZAdRAVdGX/G9/YKPh+2T29c0Qh4rZS8xERQA8GAB1QD4ShkgJYB0g4Q0R+MUfp791j28belMceFXrhOKbzDCk/DDL8hymieyrspHrrTdri9ISI4mDiBY/SWUdj+u4Bu17VRpnahNesclokJO/5R3XeQV+jAwO1zB2I1NabLXafcOPn/QIt8rzbNG1oLuJ1WM0AFrShE9BiNpFBYmHoxQDFwCgGJgaMyCzmKK2td09DJDc25QmRlsphV3wsUspPPsXqGw67/BfuFqdd0u46VdW+0xOMJ9OFEbOf+6thnfsBWNGZD9gN6vY2ssU1eveSkUahYRWFEIQ76UpetVPyWpPFZnd5/NF4IknWe86ynzlWi5wv3Fd7Di0mQn6vB7wYjAQw5HU77WCzsmEjADFwCMNJwSUMNwUXgsNGijnyG7Y2jnrCLmKJCr1hx97xhWgpf5XDhw8rZ5Pxnb/aWLKZtE3xVMEYEtXTLTGi6p9y19pGynoRXu0qhJ21Vyrbqc6D3oBIH1tRKA8X04mnOuRa1NHVTq02h8vtD3fEk7Vl5d1m19bLLDQi+8vXM0eWspkUQDqZSk94dkoSOiIhCDIRAiSICqEDAGJCiCNSaxJCAnjoiIYj5LzIvIquOensCufoTK1NeZquXMbe16+tQ8pf5f46blg+lYwlQzO44+02KZ/Khdr3hqiCPrtd/PaA7I39KvdLbynmtRl1JIhQMQRJ91qDrLSbgpaA3YmnuukmJP19utpp7bUUT1tZf+DsX77q+LlKAsKmhw/vHD60Athz+IN/cadUivlsJg0pHtIAgMLIImIOAPKCKEBRBEqIWAYAxGKBFHOMh6gGnYaTyna550WfuOuqg1kuo3f+G3WJZqqw8dBhRaLg9Qej/bfYKGuG6uI0uefyUXlReberPt1EVfQQzrRzhufDHrvFhGi2gBURwEyl2cjOvAEALNTH4nfiHeAElxu9/mA4GotDIpXJFcs7zrzw0Q8/Nzo+V0QmuOqhO+6EFT+RbfnQ4XjwQTOmwzQeAGZMP3jOXCHMQ8TLFiHeKoTbbn1uOa4QxiurVq6isBI/uXfmsHw6Hgt5HNZdJDmFR7ZFM9/DSJvDrjr4hN5O5774B9+nRduCEcWo3+10OD3w3T1WlJ0xk/12xqkFjIwqY5nCsH2v/1AeI3sIn4wekaVq+6LX7wEAkmMDLw/n591eAB/6AxgECIUjGMUOoDroiTgmU5lsvlgeutORlz/5+TohnlbVzwDrEzTDd177+KHUT0gQqP8IfbNds99CqM1NFirrCMQS6ULXac/VXy0H4c2eSsznsJiJSumneWaLVhqTgNNDRKGMXwVq6rwiPCm0n6b2Rxx66xrqTB6yOL4j3DdqWDGbSiDG4phNJngJOCDyknGkYgxiEqiOPN1zz+WhUMRSpbN30swLbn3ys682cIKFj/T9haq1SLdUxWFQFAakwyDz81Pfbc2t+5RzF0j2/x/hHlu1g7rw5ZfLIDNmDr7rGykO6QgXdeZDTrNBj2ZLuK9sMrLkiHWFlTo4PRGD4BpELZ/cQ4vV7nB7gpE4UuTenGfXyiu7R3hmUtfwSgnLnce+e3KpWGDn4VTeXYFh46EXca9piDOmz6Y67jfcivhUrVP+EwnSTf9agObs6fS/dy4n3sLLrPzLOLePrVkIfd77qZNkJrLF3S5/T6JqOVU8dGg6YDfpdXoLXv2o2UoI6fZ6KXsQ4vS04jg9RtLPYwOo6Y8eXzASi2Oqtmz87Pvf2CC/7L7KbXzjpoXzrlzyAwevLTxrAcy/+lZEvH3pcuQn3t/1EfSL90NklzvdajZgM//fh+gfGzDXEb0MsAl9lzdMSIeu055fJxWhV+X6dh+WDjjNRoMRbNckLWYj4e2ZcaX+sIJoBrAwOD3GkLgTgDfo7fH6aHKPYvfypcpuxz/+4V+cYD0fuTxkuVP925vRjWd2yjk+tg0eMBgHh9meGWrtcw1GOiCkmqWHHDKFoQff/S3VpZdqr9syvTMf8TpsVqSiBlrNJqyDsmeHlbo4PWDk/AgICURC7uUKpUrvXrNvWLxmM32cl6mmHwcGkcrd6bAiNvEG4LZ18Pf0NsXW7tqosF2lLDk9UDEJfXeA1szPvGeNxLUyB+DeUSPTkYDP4w/4gn6vx40urCes8Dj7ujg9akycnfRXoKt34tQj51122+K1ff0cY9n2DE6lZ6Vsza61VrCIiivtEnJ6bFLPYuNp5pPZ4oijH/qUk3w4vwp9k7qHF7PpRAxSSUCMs8IKiKHs2WEFaU6vk3B6E/ajOL1TCae38JZFtyLeTY2Bv7MKcfVPfevYKT5s3yyDZUOTHe5WfulvN2cqVrBpR8QGcnpsUs/l9oWiPEJ/3uPfNobRq3JrZ43uHFYp734FlIqIBZ6CTSRlj/PwhkUMTu8NitP7qY9gUIq0ABEAuO0dDAJ8tH8q5rYInBrJJTMWbuxvg9KGJX+XltNzCCX9Hh/6g6TCSALT2dqy4658b13jtCtVDl+/4pxr3t7MXbDgWpaE7cUvV60Uouwl4fREDIkPbk3yfYfeltx4biLsID8nQUu2avO1DTpUoPOKOqINCTRE/Q4WsErC6UUwKszpAZ0SpDO5fLHctf/sm97b3GBCn/9xq3VT9vLh9LaHGm+O+qx6VUu+22cSCC03q6lNoOhBZrTRCkUbq81O1wX2+gIYFKDsRXF6aciI4/SgMrSnd6fpx827eembPw3yKb1GE/fkgwt1G+QXVravGhf4XIbW/DQB6zMaTzFAD7yZbqxoQ4/Hd9DzRBMksojj9IBwetA7YdI0pGefzMOzqdkm9/M4vZWrcPVvfRs4ABah/z8j0Brl/i0bh9pNLdnif9BtU1mH+WKHGw2iuGgDVB8jGCHRBhAwgak0GZAvlsqjx+86DSnKfsEti5Cm7IU4PSn2kkFKOfc/n0BD77+IOMjeh4+1WVqxbTZx8UUOZ7sfpCMOg1FgzGtHuwNcVF2ZMAk3gADUz9aDuXyhWBoxrnfKrLlXLbp7+Tur/uzbLMV+kVidHmwPxwXpIOl0JCZAFOG0oe/Xla8/d+OlBxUshhbcPExJ14P8qhoa/rm+aFLB4XR7vP5AKBwJY4TqahD5HWbzhfLYvaedPufSW55Y/vKqH5nj8QBQX1gBgO1X78dBMQBx4JoA/X345yrEV1Y8dSvesmDuMdN2HN9VzKY6gm6b3H/mCy0TBft6DPN49To9mMxEAEyp7YngPkCGC6iIk650jT3giNPmXH/TA0s/Xvmt4Ah9FRnq9+0k729qbOgTgz9XrxLGylXvrBCB5Xh3bThZCIvwhnkEc2kcNm36Xr3jx1SI+qSQh1w2k04lE7GOaCTodZh0Lfh5sY7fzzBV/FZnMCGlEiC0ottDv7Y8ds99TjjxnOueWPzKF7/8s0Ew2LCizTaP96Mo32/yv6vNorz/nzWivP9Dcd5/vyjvv2Uh5f1COHb6jOkA04Sw04ReAYwHgDEVACgLoERQFEYBIC+EHABkETHDQzoFtPQ0hohIIk446PeRiqjU71bUeu+zlLQ2VABV+YcSAfsiqbH7zJx14Q2P4zsff/HHRqGxXPyXAh1umtD9tzbe398nCl+J8v4G4dw/W5z37ybK+8c10vuB7/3CSBOkBJAESAiCqqEkAF4pUpEfBgTRAQBRGhFEDAcD6EMvr1wx2MGGVosZTGRSKnXiylY+D6Gtf+CJ8Yw75NRLnln+1jfrJfJGsRVlGuH9+s9bUJz3f7daMu9/WJT34zmivP/UGaK8fy9R3g9ivN9ryf0Yx5gE3s+azlGP9yM7CoQgKIgA+tEnBC8AuEXBJQwnBYcg7CzYCKwWADNQZyxAA3VOFNAi/9RICmjhKuTCwHtqwj077rrX8SfCcUefeMWlcAkiPvDEk/DU08/gsx98jl8QfPn7PwR9iLiBkxdwuf/LF0V5/1PivP8CUd4/5+DpM0R4/37ivH9Yo71fpPs31vs9Y+5H2Xk/2EXARocBYVgIzMIwiYRRFAxioGdBR0GLyK/hrAJQErQj8k5i1mLtYBxf3o37H3SNPRu1hFpbbQE96BhPYDKVzgzv6sYeGAWjccIkmAxTAKZOwyP+jwKZ1TN3wc2LCG6l3nepGOdHnCmqK7xjFcPnAVqD9yPGthreD3LwfpTM+8VAJxZaUdCIglo8VPVAyQDj1IXIPyNia5+L/ME8DSMAkALgenKlDT3AmDxAT97HSJSpMU4gYpI5q5ehLgYeLdT4hFT4KCwH70eJvB+9ALCV9n6U1vtRJQGUEqJdSrRJAgWAqFDT0q+NmgYB0TD0R7ypRWhDxswiF7o9AODlzyvCIPDqeiAyTyzD9H6RB+GguIR0a+L92GK8H2Tq/dJC0UAM2coj1nz+a5X1B8hXILOmFgvXDaBAeSzzJHMo5uRydqkTUum8v4EH4e0x798msJqvzdvdlfUIjMzqQeIqiyBq+RB/ptmGJKSWyf3Qirz/e3y46Fx4pA26FhOGUiRUsA3r/d/r5Qa79C9aB9qkRyO9/3/v6OZ/AhB+9R8AAABWUDggsEgAAJATAZ0BKgIEowA+KRKHQqGhCixHBgwBQljbvwtf8oUP+eZ2tID9AP4BPgqF8p/n/9j+QHeyy77x/gfkt+UPzhXF/P/2v9i/u39b/8PvL+O/53nZdFfor/H+8z/gf9f8jPll+uvYP/Wv/d/5f9qPlF/6fXB/iv/T6of6f/g/9P/gPe59I3+I9Qn+n/3j/0fvr75/scegZ/MP9P///Xq/5X+++Gj+7f9D9qfgY/nH9E/5P5vfIB/2vUA///sM/wDsi/6l+J/6m/176vfFv3f/P/4n9kP2B8zP2X+P/ML/Cf6H/KfKjYc68Hzr8M/wf8J6a/9rxD+ZuoR+O/0f9dPWOjW8lPof2P9ib2S+r/8v0z5wHg72AP53/Sv+x/afcb/AeEX+A/0/sBfyj+2f+X/Pf5n4Wv67/p/5D8zvcN+Xf4f/uf434Bf4x/Pv99/av877zfsH/a/2Dv1R/4H5+ICxqOKuBMlbdbAk0sRyd/UckQ6v4LA5tTalcYRKbi/TWw6cxz5vyzHGll3bOCldAPiJ4AmfM8POIdEVDuHPWU8gHU7lpTkRtHf0UYo45sNbLLPQvFxIw0BwsVwG6yRC930LAi1+/Urn6wJbwJnd/89M15iGOwgreCuGPihF8r1Z8tM/rJwgCQup+8UVMux5YqxvxlNTrW86CaWbEvgfVXiRWWPCLEc4ls2cN6X09p+C+HjBWi1k0NCbQev86vEzAcW/gu16+uuPtMvI117ziQOBKSz++xiZZWsa3YFFnhlaX3JoZGgjuR+dB0uS0ND5OqoUv0UPq1xUVR/nwR7KD5HO0mfBYwS1HnaqJD1qlqe+Xf9iysHKAwo1yayPFItVAw1s7yfmGrB67Yez+7tA16F4nTZVTaBk5mJ/QVZUqlnSc20ZaiPUktgcNiQKAmlXnMfqL7RtxLgPIMMqJVH+pyKO6lPgUbhmzQeEHOAruvR6GS/0i5HZLGxUy045dbmdME8jn/8NZp45riKXsM1MPg/gqfZt9wGcZNh0wXI/fOIEO5ctPx1gVxVhv0G3UDb+Ny57ltzJyz6ldcnDeFoShOIXOvjuI28pjb/bxKbs8ba0ctUsyKwSTBEokbAu7u9B+61rTqZAe/WUTkcRzBjwjSkyDZzRMoWHdK0mM6RjskeETDfttHnzsDWMcWq5/Htg7whOR8/AteDwpgKOKbIXN3shpmrIv8RizetguD81Jaklb8UmG8qc2IP8QfuE1PN/0QZ8BddvramQjxLdDo2KwqEO7EgDh7syzWM2+Doj2mDOxbEQ4/FxJp3zt/JrSKtDSTWzPvsEFu6rtgfKTwVQt9+QehplzqyPakJcADbkocqp2O8a6n7Zx2PJPmXHpl5ERLERH6LZMUADAlS9XSht6y4v25WgwnscYoxypRCeofNy1MiuOayCCVP7u+ZKqpYBA/BwCOpAhS2zcWksxnFBe4UeQ2fnhnmlefsokgZqYWIsM5ZGsFuIjR2h9D4lVVht4ToYzEz3ZyjZLs7ZubJd34sfHc2eYSOGFt5KCbzV576SEBecJlZALlRUWBSQHTt/3wM1iRra3QbhpSoWY1CRDvtoo5tHGm/49zK0t+lm5zN8unbWnjZCO93BZJqs7tmc77CpTTg71s6ulOn5m30cx/9J1L3jPV86CIsyIJXNgSVODD+1uU7P9OX6kMdx1EjSabHXM85aIluAkZXesOZyeIQ9ngBao9ZrbTjOTos1a01rOT9AmfWj9ndoIp5PtiKs5j5RY8ibZU6fRb7ZsPZwJhVjmuYwjcOqpMz8LSKnIQ9gGvu3Vyq85NrWNeBA2huJO4a/+QWB4tVwOIGEU5FCe/CpgBdCelQHg948Y6wf/HyGxBDvNtVUQaAxDGQf/Epuonp/4m3ZhLO34zuEzyhq5doX4CSxRf0aTyVB9/+IiPiorNGVK69y0uSpkNN1jKecz9u1FSqs0YhysXPM/Q494GkERVWL1Jddd3d6yLJQtiGp9cMG/fyAuWTRZWxaQQfxhQNB/U5cekVpwf7DOh9EKvQsy4zm8jFjILAXZHJFlxb2w+5EiohICNs0DknrHJ6gCYt9k291+3A0q+pozYrXlJq8el5mMPL++Fav3lVHrhsLi3cojk5U5lMtdc2U/vxnrHluUVZq7Hl2x+9gyG/F9Z5TSvBcIKmEStOEIHe3e/3kaZY2H0JIPyE9Rn9N1DrY4O8eKP7Z9C1DbiCLpqd/2icY9qm/IARSgCJ7eq34iddIYV1VGvg4yRgLBK+bHCcn5oaODVn32tUOws9yxdJVb8h9l6CZT1feDlywnBJhTL61WKs9Xu/8q0xOt1EFP8/BKiksh9QzJeg6P4EqZ6/sORzthzqf3zu+TFf2Yjo/Hsb0y7e+QTcaoQ7dyynnDnFRXW9DilVsQ9+kGvan4RHiZXUrbp+ukuIZVvn+dR9W5HaRgfYSTUNyU1X8yGWJQJ94rcxnOymfxUwiLb1e5pB9ctKb3Z5CMxeNYlqSnjp6MwUgEp4xYUrF7Rp6t0A3vXQIF3JairgKj8ZIlBc7EMH2G4Kf/gAR+5bGPI9HICV6gA+Ims3gwlhL1DODIdqYqHw0T6kzEJ58GZvLC6jt7BZLyfEOkeITf2rqj/Qu3UChsbo36ELKF7JIO1Ey56Tr+DqnJakp46yGzVjZT0JEIolx6/g2su0WCETp3yYG0thjQBu+TU7niIkpiosqQ5lsQECcb250+XtM+GY5mXnCfxS2DPylQAKPovLKxDWNjnt0mkCCf8CGrWdyMHIZBeo//4bpMm+3eb5UwjpXpb+kcch+i2JBt3WfgqNkAjJPQWd+/0j8Z5dKoIMH38t35fQrCKwPM02emvUiclU4k9uiMIlR0Va50oIh8Jt3oXzlogFd2nsSDvnMlJakp466NyphMt8JhL7G2J9UjoWxtifVExIoGUFpfVEoVS+qJQWl9UjdFa6pdSWpKeOyWNQAAP7aRoBHfnBJ13m/xj3Syxsk5zvurLDjeCxJ51TPaQjysbeqt625kGx8kn6LZR8mnAOxYT9Ab8uYVYBIq+HRKq6Pv9YcUTRze/sgpaS3VKeAleD/RCcDxSfBgVzgNYzSZz1bhIA7xWoyhn8AIPoP1UpNgMWgIrWDfuIaR6OQMXqzPISWM/PbGJlfJ3mCRzE+iKVzwvv7fF3WfnIX/rCBlSaJEOktgPSUSti9CaYBl1ttFlYbonB3puLK+XmZ2q5YfK7+sdMnbAHnX//d0CbQc8nQCesKON44JC2cOKC0I5i3nXOtqFC10qo/LS2nPd/gzTodrQsztHAEhIbawTNdgqo27pP6864b3DCB+Nih7rk/yLZX2rmkeKL6M1nFXdJPu9bFAL9TKfbQAFD/CvnuCyiEW/v7/gauESN0YsDHqMMjVcWRcvUHtoL0nP7aDBvWzy/VMcbeOs8xxTY6HFlqFfzoZZlwZaJW0ms0UPgVVHCckbI6auDfIaPHIQnDNYMm8boVLBB2v2jb5P40+v9/hr8mzRsBA/FEh6xvk397aOs4hs4Wpix17rNdnkEor//dG/Z2iRqEJOttbjUyOFVSHU9gidRuiTRKh128Acuc3E67balt3nfb+TmaSRvWnW8MGvGUjW4xxYJvX7BctCOkVWu2du3Hthw5eP82pzqwvwEqeXhM+9/8K86Dn8IwlvvLOvdFrbgCq8jY9Ld3tCfIq685GZ/UjNlTplfWGiYjJDfcK1dBPTu23KnhvykGPOJ3c6/ar49+uNRKqASqwwpgAKBRs5O6TwDhGWjS2HP4Kbd4EGd4ncOisuQH46+r8lovlaSCHUiFYDV/CuekXfjrpksHcq0cRwIZRf57DBmo6uUhpY4uF/V8s5MBXA8pLgc44mXYYOu1EXpriq71K107GpUFtkG+6oX4QprVcMKyJT/CZFrIF7qi1p2ey3RdauyampAxIRJDJ43Xa+tHP+vfWWF+NK9eWKd0viqJrDJVPYJcqk5acz7YV7e6344bph1sbAqYfmOTggKnODgM2dQFpF6VRWNMQUP2FeZfnPQDOnyOshO+4u06I0wW1uN8rSlBqHMEvdyV9FoYckUkAy50yNFxNOhdEUHG9U7ftXos7Xk+Fwu5oqccQQcK6Yc1uE/yB/BqW48YLReLxx66Mzr4KWfOvTtEdTn25jdXaNeU7E5BrgyP/+Q+ttDste/8XIOaXRrf53tJocAsf+OVnNEINrZov/DlX+tvAs59YO24ta/AsjmmMOGZD1WjjBStVWhpn8SzqH/G38xMNrcie3BaScY+iQ+7IW28Fx2hDLB29mF+dz7rc/wGW8PYOS892rxD+EUFD+kBaEmMoDPuxC0l0IaYMjnb1P3qz//vgNvxG6a7mgttUo6yOJ9pgj5CkcKIm0/lMS+umKGh7YAugqoMFzXpvIIM1bb75UcfbKu32sATfqld1tQntVBfZ81QMyRTMGk04DeDBsWaTvE3qJQTXy7GsMd867oWctms0n9tiLIBQW29qxQ6KTUYBsV6h1YOyRUpctdagwSixEMc09BRnINhSRtHUCla5ZAMh4p8OEFBmXpHg88XdN81YB0PrUhdgYoNlMZBCLb1jsOE2k33mPGkKs22bx2xHhseVXe+4LMpgeBiDHLJ7qjZnirfvITgNPGSqZZhdZl8SclLlhZo9zdREaA/wrpyflhrvOEwS9578X1mJyaQ1komQtFBl1Ho0h5NT1okH4BkaOMZ98Rb7Adq7BOj2MRUiv+aeCGpM8PusdY3WoCeUMS0LIsqQ4lyNTDx8P5+bOBIzOrHWoxDz7prWzJYWj/iL2OrIXI4O0qVatZhzQQVL/lb3AVN3c785U63URSCXgG3xDbv/0Pj4DH+zb+vgLwaB00Ulj55OcxPOwk4bD+a57afNE4pgm1jXVy2Bat9+d7mn+go+4tlwYIawZ9PunfnQK48M7zom6weMB/f6BF9TM9G30auCIpeMczntAILUB7lnj3I2e8Q7PvgyGs+vK2+aHirZyLy8/WQIR08MmLjgidJK8L3jrlCYsvSbx9d/uQb6xU2QH6msTY/kKBVuAAmYOJ3shypaJjnv37IrvB8APn93LqB8UWL8t+TP3957lShcyrM9W84A2zHSyVddkdSNleSndUtttWI4717kPuRO6UvaC+PNORfRHT7BeVEyQ5m1KsNyP4pqK1FBimKgkmBmVsbTQhfUS7X1EuC5VWCNw/YDEQQmTJDozALWbFzahQrZiQgk5471BVovP++QeUYJoZMCJV9aLgG81AyL3KaBBHpxyoiNyV+bJdJST3JiZG4XXWnYY5CfAiSjkX9t2z3GQn0osH+GFrGoOoADOww4soNXhFCk8ty90Mkk0AWf1ig06TwiAtQc+yPaN9H34rGhJXelTfxY/jmd3TCRNlkUA2nMF/ucn/QzNgzjq7f/abRxdO5eZDub6MIpzP+0H0Nj6PDclmELsWXZHfhofEbjkPbHwimkAraGE/BagiEpifHAEbW/Zwmf04PkQoPQCA4T1lyMJg/D9D1zU7UNINodnvPeiUoPrIkZRixCivnJKa6QRWPB5/JUB2Tc31N4Gmw2+aLN9MGG9ptQRWDDxWtP9LgvEit45U65whBeFF4IVngBJPLSmE9P9u8oOgI3DGiDlGF5bMbCxFOPTjfVBnTJCq5gHc3cxKUnMtLH7LY9UtNiHXwztfoZTN6vlmvUVsKMw/2URbRke06tsw9oRBhwWOg8RSyun5OPuPqLaioHq3lPhot6hLLf/bwV5nmNEmWsrL17Oj20RHhLpNJojk5vRGkRGrne18WYvQc019jgauF7Zgh/4Oxig/vLXqbk+1qxQNf6+I97yXrr/SEtx1sQcDoB+g6gPptp2Pz6WvISYi0ReFp8s+YEHa0IZzD43Kyt3lykUfFDUsH58wzQM08hM04MKdaIBURmrTUEi2mjs1Yy9SdulZBRukiZUiUoW7L/PqqfMnKCyCaG33y37N+gurDBt4G9IZmuI0jtX0T44aF0Ok9kT698hC+KWmdYoI5NmDEdlzhRUCq+yC4jSHOxxPJLFZG4Vnc+2H4XxGKe7o/B6t35db5LNPFuzJ+17YE+UikN0yUtEkrUvDMz7g2UaJnz/0v/oi0gi6wYBTYUuM4AEgkR3s8PxJtkKuefWFNoHmMiTnDC1Jk2jwDxUwPLIB4luExWwiCsllHSnyFfqZ3wsyxvAtBuOavX1QR0oOU6Qul3+TStQ1yvCfVXNyo5F+adgvBi0pdXr3EheKHpkh5FY3fWMKM1lBvO7Hwlf7WXU0zbNyoIt2chMbUjdPWKdfkqneijLi8L2Jxl1NyTIjpwHOLds3EGgOvJlqOXBzjslBP9vzALHzMFipnX+AWa1fo6VjBzbdlOseDNphbvxccPptI2NsXnXHSPntQhRFd/YiQ6vFhqFNuxM98D5xJvMKuj2oRm2IxjB2O4orVbGiu8CFicAbYfs7Y7dDd9aZSOhJkEWw8IkH2bkXB1lGikKg6jDooyE0Nx0/OBO23T0/vwtHJra/vZDsV7kthduIL7SZnDPUSPNXBuwqIUL/jGrUSRJc/65seDzZKz7Rh/7VHWwyJeUwXSyMSBeY2/+4kC0Xgns4tMByxp+gvmm46X/1VyyhahPe2SSshJfj+RVj9P37eoOkcAe2DMozp/wSVKf2fZaDuei4qq+GZHsr2Xf6+O9E5aHz4z0UQdJeHUzpSiYqeF/GBqL/JmOGGCjvKy1HNT9DJL2Jm/ywU7l5mUni8g2d5/Bvu+Ea4nTwK4PpQJmrBGEc/yR6cvU9QEXkMK34emDkqXkY+ZzIZN4hBdL+NivI1piYWfbY6XMfSYF2kGyz1QfdSSiWETVBcAUQKGrNX/kDrBjK3vh+QU3KZE1ZfoUmSHqbVm8MQ3sh89I61ZS530jtDbdbHm0SlqMfIC84li3MDOwZTdZbEKgtuTJVDfhWz/YbLC/1Ybnu8mfc5io53Vdq3T0+93YJlNxDdkrQPDq6vu2h37BOrD5mUYnhYpIhb/VHrZU3OZE/5eu30ZbuuHY47+ZwyWWg0juCCLQlU5rAaE8Hw/ihjG/0N1wgkS2KDJ2xk1HokWHZh4tTdAqQ0CAKWnetoqZRSvzn9IrEQV50W2hUrhzmwpvGOT3zQenkcoea/pJZUp4/SlS3ppwp3YVWYJ4UTCZ3i/Jc78dT6GvTcRyY4eKEb3cyUYdIVnf+8SS6rKd5wNo4fEjKZ7/8/fBGI9M8j3zAc4nmxdMfuJBUH8V6dR19/BHhAAFN+DkxV7xr0su+lUyNonNK0kHbww9d6mW3Csy58Qbjz/9g3eiyX1V/nC+h34QgRvaaObd1R8xvgTYmHtCMDIUNHe/3rxmRsDejY/knSgkXNdGakw8CMW8Olb/5SjMcOmkdr4qfkLJCBPEF/WsR3YkCJY07WFXCXy0ie9KGSUbcmksi/LcnFpPPQk3zr5lukLI46QMWdYMkQ433rj/zXC3gaQgLB/H3WHAoJgJI3241gn2Fy2mn9LueaFWlXLhXgry61v5jCdw/gNklzDxIZ/vCygzoe9iifIxN4ZhaPtiqa1nK3H7majegaaCm9tpxhlCO118ztNZdNz5+hWZmiUcSoNbysZpEBXt09wXytj8MA2r8jGuPzWST8/XRS4lPxvBiDatJ0bXr+fTQLQ+Ta/1Qj8Zprse+ngAvkSjHNTXKraG1Rwwbey3myS/G+G7gp94nuhIVxOqIk0mpISQCo9PqXlFDbMeFvILqQWLFp8mMeyIU82ZwtwptpcQbg/xMkd9e6ariFAbAaMxEkH3H0aLopYGC39bJSl6PMAtP5EW/D/j7l/ZCKVdNEUsMa60/kOujA7jkyyIgoYHPZ3WGUr6Fks/dPAGIShtpzcNQYUV5JFcxtlSsqzSMe13OEax3Amn+2Ma+l68QygLiCqwoI0GSDKdC8YNWFxPZYQnJQ0kfW9sM5NZt9tpSfy2ePHBBUpfMz18NRZzcOdui4/dyAxBMyLz1jqGP1iz+J6ADRu4oZclwoS66p+DL34Xh/ubtcRfC/uLLo8RqGi/uxhEuHcrU+7E6M2WnVJd/2hupiVibuSCujn44yiKQFepDkmPGjajFT8cRYPgyAfjYPraPVioOo7IHkuGwVDewqvdztV9LztpMVl7YDw1jcaAi/V7JJjv51zeX3oFh/9eo1N7yJbrxRFNnvTv6Nwc4gHe+fExXLG5d2yvUiTrm117YKRhmO5xYgDOJ7eXk0EzGsg4oCiij2PpyJkhgeoB2+HngZDXuMW4+X+oJL4OQSTJti0GAa60LeAzl7LGJfsmuD6zEWpAgGQbfbdmdWnEK1U4CgalpF/EVGp+Gf7XTyoGkk7KMigx/bQBAFNvKoW8tws7DRSVwscbwNRrB9lywvwS5rdGdY7MC71PI8E8isbqLzXPe1/1Oh2McpMbb6rvDBVo1U+ATF72RihlMUkEPpHbLT6tm6CGG2CfveWu6dhJuvuE384w3v+BJ2bfET83xFBxTTUtDE0oC7wnk1uySunJFvcTBIMch5/uMGPcjX8fbuOaMrWVqATT+kbHNMDCm68pgZHh/YbH8NV5D/wwTfhD6z4vo6/eX4TiJvyzut7mQd+XDqD/EqviDLLt5sugv6nQkLzCPBn+ONeu09Go0p0Q1DcEf+IBRSoh2a28e4B/QWAhLb6qqFbXIv537LgBnZuou1c83mU2v2HIicsqSqrPazQVDuGiwnFAcGHwTpw+We2FVmCWt+Lont67R2bev+diqOZdr2mSOkL3MSjbKqT2+GA7oGiFR1SQ5GT0nz9jL82/K7gcmMixTpI12gdmkg5Rtz7DgUvoqiVFIYhwwqSfqWI77/BvoC7dXzcjF7F4NrbT+avPBjFUqxGZjqVDL9DHgFa69dDxOXjQY+jzMOEc+CkvU9v0f2ljNnJpBhbIEa65C6/rDVvjJ6dyye0KHSfOjQKcIkhEt1SWQY2QvGrxXoId1JqsrM/P6sUu6glL0nKas2730un+PwtWE2PquCWlzeHJvEtsQLQ9Azj02xFptHEU0okeI83DS4ooPcEoR2Wwxf6A9/3rwBmwXA8RKfRA9snu6V4EXPKFRudtUajcNa9siw79FzxP+55w+uiEciFVHyDPgr8C52J90agO3HKP6/QtAzJzxNQwOMXMBfHbmIVR1C6VMFstbkOsynl/uqwVF9pfVG7XuwAS1FX3/3tP6Hgq1zxaz8u3yYv5o4Gx6TpsIsmlQG6swSrI4aQkeZJTp+roekUaxi1aNF7gkeiRN+CvJRNBNtyvWDsPgJ3Jjc3sRAwygFDKFXzFaZbOIDzpNaKTqHk5aq8vd67QsryJJTKl9XroiyomaXTFVFXt+KlUkrnA1DY5aqhzmubKTTnMFPyCItMQFpoua0V+6iC1nhRGJHxftMN/eh0LCf3DmBQNbyQiqMA4O8bwUZuaWJtkKoV3+2vz0PhhcwQ+ZItOF/fw3piYLWbD8TW7GrGIjw5dz4EMkevKGnOr73JMFF4u2SXAZ5xQSWKx6Xhm5YXoI9WtB32MCQDtKamqvRPTxjmhP9axvmN3dPAy75qwKNyFATyunR6j/Nv8fS1HzCSaHHP5nm9VrKUI/5hDB2U8r2D7xgi+MwR5XOZyj59VT8kA1EU/u9VcI1BZPihIisnm/l73JcuJyb56q1m2/oeZzj87NzeIc4Qj9Ga2vwbpxxIgB33XdEfHFhfvJ1CLroVxktoZHckSmWQNnIyR4TmeoFtLjAlAH+6M0Gu3MNRlQAAAAGn+frgQjq++BGjzBdaY6HkIkCOUNTyW7whfz9ZQ1tXZ1dO1QA2Mg5/1qQI6ujPO9I8F3fE6sEnAn1bWGTVC2ouA22jaZbUyFPoGXJi21sAou/VJYDWJ4trPmbiaN4pch0rLFExitu8IMdn2A4AY0pRtJ5WYFG2caI5C+GrD3saY13uedIvz/oe6MKPiaRk/5Z5twsjLXTnHo/jiinWt5X8RoAMGkQAUhI1NBslqkvezm0hvXbUK2KZ49tHg9qbYKKdWx+TChK+B+D9TzYvStIsuMdr5U5EuBFFwef4Pk0jltuW5oYoJ53cV8gQz3xUDgkLQx1VjYvnYzYzgE19Y0I8nvWsb/gwOTE1ew/YbexWldSvua0N5KMW39pEpwS0NtBJ8JDMiw9+3wQUhvVxSDd/V2xZ0HYiyiNB8np8MwyPlkXgb0rU84I72aIy5e65FNhGbGFH5u//TcPhgEQAzylTfBTL5Xzm9cQwLgPguSFh+U6DJS5jotln7lQVy+yYtJmLtkDsa5P3mTi6Y2C0IA3Tw7vK2laJ2xi4CXrtjwG+PsfOrju5wIj55uYRCi6aW6F6m2OBY/dS++uGXWlNUc9W/zy2D3wnRxcEyaXQAQX7D4dM5/Wa7U3Td/v+XrdzaeGv6TW4jXvn6v8bmve/MRul4av4BSTL2ym2aXFFA1sPvNlzKSGkxkq07glNSufzHCGc1udGzYFAxhYvYVhXlX5IB4jmg+aIXZGWJbC2U0gjaXCxf3NHHNH76eYlUL9SKgFWGmJQLh68o72RbuxrBTNCDbk8vikzOzGmLvSFEKWFTF8WEaJr3qJ8L2PSsFM/1fyHxfojg5VZTACrEj9FZeYvBpRFL3X0RWGXtjLYOH5dOBMQPte7/mvGd+Pdw0we6C8dwVjagWvqbRQ8wplNHZLzDvYxG4dfzOSsmLUbC5ROARUztgAUeHEu1TBGw+iLLUdmCnsuPxESL6LkiVVUQ9mt0LZfwDIf8s+c8/Op4c5deHQ00nZXuHrsNKT8plAwMcoo/Pz6fIXzB0aAhgWz9gQ0TIkTd+ODfqgs+iTcrSourypvrH/UCS/Q6lkCrbV61W31g/N8IZEX/mWtjjJzgnN0VKo3u+kZRUOvJed812+yrDmxKbSDFJRNqqyN1by3yv0lX67HBbgfymInEtmCmFLnt77FbN7Zs0GPi+1ORU56Rl6rYd2IZUWcAhwZa0/0L/jdTPdYmB44WfBlGyBur/19/jqdDpF5B37WfFvgovyhDWfDt4xzjbylOsOirC3tpq4u/xdVnBYtg4uy3He7ozFtrIimlIQrWCK+CpibwiDvox73Rj8AwzEcc+JngL+6kVIcC6+BMnv3INqwSCMSyYz+ZcV6FmTin9ok7lf2KGojsAy1g5+yxEPbc1CUyhhabvW/E66jyUuFwxWOHuSsDLr75Mynafke3CObGqWreIdCuRFtEbPtCGavSMSWwTvuf5UOEf0tgGiRI12u/hDhP7RjKIGB88GVbRnSS1io6sUYSvcVFv1oWn94N8kIhOohN7IdVtrQqDnLwYRwCfep6vB5IvUBgl57RUriU+NN7lXgaJlEvZUJ8ZAScGfSIW5vHTnQj5+RE5VDOhhMyZeYkx2VxqJDqrdh549jZX0JtrAiLEXF3snTsSZpWhZN6z7p2Dnyv4p6BtuZyoMx3Lq8ZPlOQqu0bXAlwEnJXU9QaKNP8K05xSrtyi37/SWcZIMAewOyJuB9yqPvUp16OhrFLIIf461YJUe1YJLEGoEnNoqVS86nNbgP5CnLo+6eBm/ZPNTFa8IOdvuaxBgIfBnwkQh5jIfwbSDr9YcmMLTfPepJuN8ZkeXLpVYj6wlqSdt45rhIjB9H7rFjk9VRCaEZagJw4sTAw3QkinPSOq87RhnlDP+vPlLMntKr+ftKEyKyI8Fo0XYAqhwrNbI8PX/10v4rFrT3htGqZcDriAPKdluV9DQrfdJYgRJe5zBh1zDwGd+dFXru1XtGdRkwDOVHPJMSkUTuoduVukyLgEdYYq3GCHvtriYtWfyDjlh7ZoTNwhidyvMBmfyp7YLPPvIpt3OdaPDunQlQVNo1CqaMGL7PFx3gnA4jaAW5StYcbEDEmXaEykdSYyZFve2SMUlqJlq8Vg2040327z7hFe7lgqushR68uJDF+PP6ra6rBQNf9LXPPWtNv4r/pXDqtJFdGebDSHTt7o69hooU6Ml+9oiakJnswnDp8LdAuesmFOy6X43eR1E2ES9ASvgn6Y+YtazSb+H8ZYSbj36YeaiWnM5JboH3s8uy65VB/VZbwBeV3bZXwx1mbYCFq9vxr7P2W7vPGlexgXCh66wuVP4IDn9mwGyDjZSYZignr4gpwVyvuktCEb1CuE/H/NqkCzR9NxYbWf5LycaUpX/06sSstP2nWW4liJ5o/l5TfD9IK7WJgb/5cLO6hvelzS6RiuV/9+1/o1KehMb9CPOtkD+HRahUVGU84vN7e2mu4cxRt5SD1lzeP82NBwPMes/tpC8gBWnwzQRe+s2yX8tF/GyFrCTsSwAkYdGw5AtoBSXE5cTChNeg96VYiuiJdZopQKceyP3CueuI/QOYBYVuVADF3ohTG2UUClUUbZqXIR6LVD6WWGrDJGdVTOXZFA+ZE9cB+It44dKrMXeB3D6AKecSBxY1wn+9i95WHnKh16M/oY44OsQMVBKP3V/VoQJOpuuQ2XRY3ytVZXJRbAeNCEaIR37eOeOJvl+JXqTpZXmkZ5UkK3BkWKDh/UDERiYUMmRf7dxumgIr+SvGxh8g5pfusMa8puMTkara9yCamjJqOKtID6jnYDMTmkkzNmPbGFoW2Qdya9JVY3kkYKOy+KeRYRQYAY62XO/w/3IjaxBOlirQAp5elpqWonuIk3TukqhfueRG76EReQkRLnSAVtJRlE0wtIHjjEm+meZmXidOt4IGquqhi2K2CGK6NuPKCnJXYm431X7cogvYPe1mEei9q70g0RKNAZO0Wvt8+bG8oblWjLp/SFsdv1SHgyOhBQewnZgLzDMl3h/MwY5NDKo6cXcCd1vfvbfL8Nkxsz8XYByRweKFDBmFl4Y3cDRf/3o+d/k0fLiJBH91nr+UcfUSH2vcOkEX7rSatL+CkcNm2GAv3Zo0Efyzs449u4rFSGieRGtstVfVH8KfzRDmZz/+3gVo8MBwxtbduOKrvtQ20b1aeHV8QdddyBqoVm/Rfe06eC7++xJyW2LXmN6+/1bSPlH6tOqwEFBfgBm/vWuADv3YS9q/svYz/76elcQEIg133fp2SU6Kgt6TU/OVNQPZsBNzLte9oaGkPibejjMLADGTWXBUxFNhdCIou4/HdnvMZGP7J7wAFdg3zQK/AiH2c7lEfcPhbS+95oK9kNMyT2R921us+17W6PfS8weTk/BJSIZPyuOrMvfPluQKj9T7n+G2GulJw/p11ixr+LanH144YeMl8n7a4j7ISMgVhnOwvR1RftJIPMhmUrVTMcl0aOf1kvGdfxYL3oZe0uigKphbpHrNS/I0swLk1tUeak8TFMyzqYSyCYs6G1/dTzTNGvbH+P5FfpVPjBP00Njjp2piMficwFhAPLxPbAbG8G5gnqv0UyhdZ4VLfXgTYi4I3lb+1JOR5LUEMbPmedC56jWn+n8cJwa5mRjwcvrT1WjK/EdJTvvLWMuaoDZ/KDc41PZr06hrpGsc96q/tqk1Sjvz8k6rFqkaOha8SY96q+HPu7p010sDyZ7TJVm8MuD7FYpMpth7DEnrd3oz6tvEk3CbbwEr1cgEyRgxWR7BgSTd8aJn8mi58mTtBft8Eq7Vcduuwol4FAdrDtbuj8hD8a/NPsMp8246KAA1hLBrU8lqI+MRFvZoZFwS+SxoOGbO2yrawIqMdQTbmvPSePrQMjwdKdpI13mSkBtYuxSb7RaQznRm0YoyKwNhjXta+gXD5SYARv6iGRSLVoZ4NnTsdF1iqX+VliGe/QrZH5VpaH8SmiWEw13RhHlAAN/A6FTWcj/wUVRbWDdOKp21Lz35ChnQpRTwN0Vh2A6G1s6lTEEhv8+oL+pGmw0cKA6Bl+QKVTRsYYvnYaGS0etEQwaRLYjX8AWT6vC5y9crOheiemaj/yfPivFSB1rK5j6NYD1LBezQXkpCX0EN8r3sglcZhCokwPZT4+P8H8MIpPQbtZn7gQYJugl3U0T24o3FTfwBapQKUfkFoKFWNE3/uOYqaihFt7YTkfh3iHsWox7emEsLPQJdWiGK4jE7crOsANou7+mlXBKTWky/PUy8NxmM3+vr6L8iIueDSMdUgphet4ysPY0v0P74NpCbijUatC0BwnQ/2cnbhV+zKzWh1i+6XzTvCj+DkUL3ZHW7JjZ7hvRZySMVDPsjdhti+XslnnvyVFJ3rF+EJa9r/5AxO8ds6leV/DL5/PEAXw/fR+VcHZm0XETpF3/WPRWy0Iu/yMvONCfeGzDmbajSuAyJsKK8zLXT84mfgbreI7D7WaKR3s5neT3KAO27hwL7/xIdhjPM3srvOrRWNzcUPaYLDHTjn85lejn0OcMBoZ97xDAQX8oDH4mA37+BTKle1BNL+y7Uo8WKK6c0HxZk5LiAQN37AshunsjeX/I/Qi3Jh1WqGAqBLPcIpHs2N5Mw36LUlwUKF7is+uRgqpCmMFUHsgTyT2YqFO20Se5huMZxsUnRnUETokZ8VnQdOgQAMaQBRJTeosgpzeTETFhcieFmY7yj6z0TG8FWNziu9JmzFBSKyhJsDjXG3tGqZ7gFwvMqUa9loO/YGDm8CI6KwjQHKmC5WugEoMCgcvTD2fFuC45Hw2dmdQkXsXYNGR0b9cv/JDtoF/jkh/FMDD+OAPh7Xskh4gLtWM7TXPFcE3P/E5Vu+PzQvAaTuKf8lx7hb0MyeZSy6tBb995HZocNT/yRgYieVIHeMFppLqM4y+i4SMTNW2VTuVjH4WyWu4x+9LnJzttjybSl0sPnJkdGkNrEBtJLQIqkel9X2782zbFF7hEjceuBC2XGxDdp+yWHw5D05eIfJ6yjAmnj93HjYm4Opvtoym0WP9HGpp5g0edx39hcgfw1vwIpn4kXy0OaUievcEjuJo/ogHPm0uyXnoasYwSpYJZSbXbFcgl9iu6XwG9EWVGEOu1+8tsLDF2Iiuy6i1OFVEnz/ev2MmOV2W6cgj21jOd5RhJRpORws77I3O/vugR4DLIgMZg/XUadSn80tPl3G5wHq3Nv2aCIh1kWFyglghL/GE/37IWJWXtqtBinoG87np+L3CWoNcBtuB9K85M2x5WC6AjAgsZTb939jPes2GIOFUn+NRVWU7h1CuclFLZMJErSvWfqylQa6avN70ZDAMzqnzbO+/JpDbqVcP4fIPAIRK3DeQm0uVi03LfKD0NpuJ/euw1StDuLxH4og4+88jHqsiOvcT7A3RKAAF3+Wtws8T4/koZErCwkwETvfLQiGkYQ5I/9K2YV3tyhvZXi4drqCwZo/L+RSnudHYinyFMEg5aRG3xEji6D7Dgb5c8k1vpwzMzmu1aEwzN9pAC1kJwfsrwgkpZ59uEE5VUZTKUU65qQOi2XHF8LIjJCz/5hHKJKVCAZkZaOP+0Xf/LdymAu1ENea/GXnZ4ad18OvLd6up0hoNFdB+lzkGJ23szAkfVNek85FAFiM2o4TH9gtOdlDe5kvujcB1ROHXti/VGYHBpcU+CtOHzVobDdCsdN9zj3hz7EALEzb35GXkTBOBQBx2y0wjwTxaLGPkQILmGX0Z8cjUckxijeU6dinO3iQuJ4auEL2T6zfGdzDq+beEXfAbliP6TQrh64Fzhh1xPv3lDP42uz52Tavf10eIc8ootZ0SdgWdt5t3xCcvkIA6jc6EntnvXGfg4v6d9fcrIRbMrKeNo3pnRU0iV7fWzy6lvu8DfjBfWX8J9qg/o6KR+LmO3u7CwSQ7fPrztLzMFmfWXtgDTgcosFGxwM3BiksdHxW7bNBD26CV+la4DhEMzOoFgJkOsxOV9zGwfQHdSQafSbC/ZdGNnJZhAspSZKEwkBSvbACfHVO8cQibkH1ETTS+mVmB/me6OkIZm41lfHT4XZoCubp7QJxZ8do91M0Ed485Zlzxmt4eCYDglNE4lHn/xmY7x/uPD56h8Ri4V439fzN0N0uCOhe+1L3rrFjcPi9+0JmJPzfxUzMcuKRP9dWvU5zAlxNVPmqJBdYWB+NxRt7CDqCeR9Tdjr6Pb8yjtu5g55BDqbHon/HQcKeI3HcjHRWHsxCoAZoYnjez8FcbwV77XwSO1vP9KNO0ffTb6e9cD7djUg5rIiBDf7LKNXeZP90fopvGXC3T9Ws1TvkOoT37wA39vaWJWWn37deSQLg49DxBmXxgWYH50P+o/gqtn0jZnINhRB40GsdD1aFkCLy5kCfxojZ6YkfsJzztfVQYE3bhX2fwm+B/11ir7lTDwp/tMTuWCgQ3PPVaIxRPU7t2ShOD/Twf6LoyxQYX3AHF/XhiM8ox7YPGkX5DzpdGZlivbB9y/fKRf68J9GjfLGzIQKoVSz8JCFRTi4zuceJJDSJSV/8PhR/wfVin2/a5OoBX3MpifixEwtpCECQrXdiLZnLSCN4yg7UKRMH+8FHwZYY3oPHVZO4IrgI/zwtLWgq8gzDmVWQsidR1ksnUYV5TpOMJaZA7Qm5F8BF0+gHC2KV8ngpUyX5f/HeUTaCalq/APgS6oHBVtBI4YAbPwOTPwnd1G1B855SZ/QXteAwFubhT6iApK1OP58pgi8u1rEsbW4AIK6BgnCGkEijktV9ToV8G4NUDaiW8kl2sHafRVNNR7WRE5hZFs54hsAwhovRypanmCx62W1oJx+RsaUICfE5i8UXeLZvAXYQbYQw03V7ITJ1rJzWIn9bORe8T88Bu62UZw67BiT7Uwdvyl8oK9hPYquBbA3CBORwgDVsRHqjZS2ducuhSEI2pr/Bn7L7j1rWpEm1IOJzgXO8DTOgm+yvIasv1XiBf7v/rsRfkJZFnYcho90Z6KQNos6ayRkt3cMCzIOt2/SfNvX9DfUfsEJq1+7+k3xasxplZtTI+3cQfVBD9ZSYkPwz0ezUhitPMLLmydP9xXUiqSKOi0wr0Riti6bV0pvcuLQNadWPpcqFz3BMeeZWdKL0jrMNP33sF6xZbqAJ3FFD2C8cfabw7FoeOaeevyLAjLMB5nb46m7YDXA8BQdIz0cpSat/i54nkjTuNwzOgIyXxFyU/H0yejOkNgW505JnK5w/ThWa0+Sq0ahpKEZJNpuQiCHNPDf+avE8MifUykEJ6yUV23F1Wkz9yqi3hSFoOMottvqM1uPA1CcPrIxrYRvXZFC8kX87wT/XiBrbrDD/Lasp3aY/M7x+vp3yY1f1iJYfRFr5R069NV8y92jUvefdbIvWsku/CHtkxKIpKj4eQbDfYiQiak/Bb2RHiz2dvvlqKjtL3WPXdAbm0MsPttbPzcdkQSXb5GN320ydBISZy8lSTG3+mXg1uSt7YVjiuVAL/uoAVgfnuuv0TAzb132svgd+K18Aic74/57aKPY2NGo3pDaR3u/7EMq0V7tHzlZsFHkxI3Rkg+F4KwB8Zbt5WpUYP7duqsDU3DKJvSkO6oicfSagg4u9F2UTBQD37kmdADPM494RcwMS1f5XTg0u9v2RyoE2RKQbV8DrbYRK2oWgw6FQF+gC22Ea7N6pTGD5UlWGNBUQTJJAzuu9rIBssLIxc0K+PddKiVTjkJ5a9uXCka7Oret8vUlhvXGi5nlJTZ1+ikCqFvK2Fr9i1HspaO9kpiH79AJ60X1X/kwkp9Ep9qqGAUckhisI8J5N0igwMAX9P/0s4VtWHQS0oiTEV7Kv/PjEGMlnVFQPmnGBNuuomq0h3TieSLQOnPBTmAI/rDcx++OCb9N+MlpD7TGKTGgaVTk2ZhFdqDre+doGCkyw/QawZ+OW0VWpN3X5UVuq82799s4lA8jkQ5CBhCkwl/C0vQDIPfzOktMnwBjleqMbO/tBHX9vwo0cH9CPESj3fTr7eZN5XwxWM3NMGk6DEcl/g29KC5Si/J+3wAiDnJVfxyZA6FRnxJlbDrg+A2LxWzkBuzbmFs4MZyxGsojD8CfDtns00YphNl9Eap6U+Ir73mybn087IFB2lJZt7gt0AQTBa9kAGemavBSkAZIZ4ZK4Ci77k+/C/VQdI8O0uWxFht6qHyZUVajnN08i/Ozy1BuHAPSJJfJ2IesNPe3nPjSKjvkSik5z3heHfKdfNSF2XUY7zhplB2udLBhS2Wf0rF8cmwBB/Jto8HgbjAIWRnWJ5rCzDoIXjaY6+8GP7wrSrzeh9CYptTNVGHkubIN4RwMcFwqhEGi6tRoSIBP0qYq15hOw0m1nuKnWX8SXaU41/vnIWL4HsVdi28to1o+kPE7jg9EXTaoXOOZEq9PufpL1LMb/hjAj0jczu2M/dwR9c/+eHBys/jthA9l6MtAhhBdBm8/73VO+YDaYGVIvfEsecZEW+3qFhri+Oy3ra4MvG2jJW3gy0atmF2UYEKwHB9zVw3n5+NI9rafaREgWkRgqTgJ2CVlkOkGublZ1Y82RXehrqIMfGaoXewfIxoAAACoeRHzmDWZLYCTAxeu5ysTHmbp+5JzATUaulv7ORnKg9W+orTAsC1mYHUeTyI+W1beiQVyHYxSQ394dlOVPQ3S0ZtuN4ZeQpn7fvnSg1J4HZST4zJHmEq0ugHGTcGL53R/WtitATYESlUnP4DJJmffzhZ7b3bO7xvG13G81BuZFkcsVU2YHqJkv6z6cg06Zxnuyj4TFE+o84sZ1KpPlGRmQUn8LTn8cGuolW1+3CwrJzeF/oXOScHZ+Tvn+yaKIFNpkUxb9FYeXMQmkqj5YFlqvhMEDiYYMnB7QFm9Eub2vH7KnztJpBi83Z3n1Iqzioa6n43jW/Me4AAZQk/kSMnYauKfVBzQnRLj+JoAjf+NLM/9+839/ywTWJ+GTPdjKa0ittiy0rwhInJvkGG+WdQi4VCDUUr8ZoCunvYEHR+oZH3/0t1uvVLQqavX9X/wAb4Zho83JteqUtJoM/xk4KXTvhwjXjKu/SH65d8in3kJ4sAaNb9DODS4aIZpTnK82HvFuYwK2r6ABa/trdOqEmSVYPnC6tzmGrJAtDuLO5qPSW6HHuBqohSQWQ8z+z8o6rbvfELNREHFSW/lWz3rT300Sta5VpuMmgrY9doal5eDonJ7z0mglRXewxBeWjS3OGNpGW3eXMrplTVHniftfhyuDq//3+3BgNgBD606g8TASQFcBnvT2yTb+WksNgnTqKmm+RUfoMUYllK2HKbUD9VEg0cjIBT2n8Om7fyIcURXqIc3nq1qxLhWMSHLKanxy9P0PBvhcn3gNhs7Mf4pSMywGo6gESXr4g+sxZDS1WKVnBVq+rG0lJWAFdNAt3Jn3Utze31WhgK1MJV+9Q/XfxGEszEty2LzEzkUaxwOA9KSXB86j7zAB44xQHRONW2OU6jyvKDNjGVMpX7f0/FH9hy4SWWs09dXTCuNwp3qE8N3vXPPdEfra7wQUo5klBwxQgDoTp9gtyGGY+z9EA0IXklqL1HTcciEt6DRGF4ZVuW4h80n0olJX1oI7ykDrPLpeE8b+yWZqbg1FoKiBIUj5uPdEYAB5bJLb/MPGKEw5nWxTt4g05v08Qw+4lIU/Nnwh2D7ewtlzCWkwsE8fJ3ZeQPFXZasYvtNgBt4EMv9jF13ynJrDdIoD1qlgqVUv6Ub6pNXzeMwAsWfTRIsjrjyTn5H+xItQrB8JuBC2GXuspSeNcTPMiCebe6SjTFW8w599IGod9qtwCUy0+DAz12D5dnfFodTfsw440B9D50oZQ7wEq9YTnEFyEL3FhhJGfEXZSgSAfPwF20sW22UOFi3uqT11sslG5fwC4D6Vqb1gBu6Lf7QAIf84qSoLZQeRiVMfUj8T6eBEkn9ZMaOWrEcB7d8lxJEJsiklN0onx1CUjp9NupbJ9xgNUTmHdBIPKKTFaJOnmHHn18h7cjKFkHvOWc1AXQgze+Bp5ePxnmUtUEBdjO+Z9/1ERSUWlIm+cDRSGQlNFcn8her4m+3TRgjn1637Y06p31lLBHK1CukMcce0K+wPCzNwxfYkkUOJ8ea4UJ29u7dtGNUZNVPHxTiSfvxvoggw1rzFt2RKRJ03z32MamURals6UW+4o7baC6l1f3q2Il3OU+4w0S/b8BUpoP9T/8S6flI2fxH88/LlTbFJFk9FVU6ou/yqn9C6oz4Mypo5U0lL02/kmZWqKh0f897luC8rurwVhW81/yCgNiWG6WkTjmjXNVcARy0IqtAuidX08HEY+KujJKA28kGDZ2Hu7qwj3wol+TNn9PR7lTT9x0ILU163j6tl9fzzcY9EYoL3xzQlS3wnVDYVz4qhCdk/dciuCP+KgbbHmMJIlcpoMvsAT8P1Vq/A2U0DribXBUop7Ct3fADkQxxlGJKFOwT5W8vXG/71n8k4ceR6Q90PiNdQy1xOZUFyj8qeytHnwnfcN6auCT7kbn5nWPXs+O3Qf99Uy7Fwm0I0gToHJDKVyhPE3kYEsIR13bAj5EoxJwmS9naoyfV4x/ixyxwAHMT1DysoNO7AO9EYCre6IkDR7Fqt9NgbLRv1bAN5lkddv//wnE+Rm9iphdVaE59e8PSkX9O64Wi32jEaZ/1HxmVonRwdWyCgX+YXkEya+oC1FGW8kEaX+YG7x0cdIwgf3GCltOoNAaeqdIeQHQjwlQADGwej3qHvTKfe+Z3hbgR+zGpByfSTChgCmdWQLX8lyYTlz76/IrCG9/+JHZ/pYSOm2pWDRXBRaYIov4GLWDPoT5jsm9jbsE4oSbcJjTpLamrmMOJIp6XEbepRfr8yL+cXnJKlEsAUmJa9lRF+vjgDGNTi+cdVQJFZvWPDs8NfNda3fZ1oA2HiKnjiW2RAuYCTklkRfZLdEF3uJQQ/YwKB5jMnwLov4so2ktslI7Tbhz1B6p5DykD34+umVQG7QVtLSeytqVTI2xIjftCZo5P1klermzgQlnFf4CKiDRk61ZPDMntOm5bEwrAMgjc3zVX7ZCskCzt2d5hsEzKTVIe1lDOwd1J6wgd3rlTn6YyZlw143leE6hHFxKIrawn2/xzGWEpjbS2lfE/DP3EtBVEuBsfZcvyqot6aeDw8Acm9w5mI6ZrSKDNnVotTfPI1RxpcQXMYzswSzvuCmKCgtK8Op23ChKRpOfWDwTpcpiSPeQHtNweyiXDIYAIg10WBErUggj8QdEB+yzVd3Snv/UJ+ZOeIKbntgGqqM3Xs8Y6DbjGJ22hprZZeal6mXFDdu2p84IL+b4xAW7vzLYSu/xz/nSEreVF8Y9rWVPliYpyGis93DEH9LZiOP1Qb7LPCB834JMzgrI/P6nlH30C9tsK+5U+wLjjVJBWVa6UswQmP+yycT7958J2V13PceOLEy0Xq5ojIF5n2+FH12/3v75+NdiA31pajx88OnJXjaZHqvV09n0vBl8A0/nFbuobyFSrDxmGwwnicCTl0BXgHCmX2guqQ6U9GbkrbZ/Ug0lxoUMNu5jXbMC4pb8YywOQ3DM/IjxOVqnU3mEyLocBhq/g0AM1fW3wzHyIixBIExjEdHhOdK1qCcluHTs/QHWzwd4hziqn5Xkgnqvuq/7p8Yomg76LE94yRe35kJDcw30hPw6OfRUAP9hkizgawmTuc1DSGtVL6Xw+95doDjvZE2kGeQRwyH+2ZPmfNDmJgy4FwY+zvRWPlyJ78ZkQDxFIOQYh8f82GWhLydTYB26RTrYtEmKerYlAavd9G7KLzm3vIQZsvHzBURljhEohP6cv6CvloDwgSKYf+EdPcRaNN29Y4U7tnEC2lo58ZeOsPHil4Gsw7j2N7jBoSyEiAvUtVtV7DxQe35vCGf7oDnWWrKk60pHQOjJkTjZh87H4jqdvNvfo/+WJgueuGo71FIbV/rNa1yreW5cvz7+oYbIbvlroAa+DvBZ47ZVj4mUS7zsLJKO7O6r94aFG7yx+muBf3AIEvKMn/8S296k0xgvGAg31C8K5r2gAAD5+L6XFuktQo1V0+uMeAPStSy6Y6C/qfpE5desHWd8Q8UYS9jHn5WB3vJVyhDIaFhpcFS4qrP6s/zupSPO5MtvRaRTE5sN6gG8b8W8iXu4/rdNiLsvqaPfY41pZFZTbPi92rgDH+yM0M1DS4Tc07TPUwKBxhQ8KcxphP50/9VNj4LcWYf37TUVKmIIiibdtOV3Wxu8qYPsgP7ycKH4J7zkL1kLJS3O1hspexaKHWnjeOj/WMrmD1WQ3Mq50tXuwXi+1vs62KmclMkAM9bBG6SqAoIaTuubv8cRklWuW7fW6wUWNECNXO+3qGiWuUdnKR9s3ueD60vOm/MRwyXsZHbhHa0IiUy25pfZURBJA6HEWd3Q9YTf8MddrIWk7jHwYwW0lRGp3+rU51/kBLKyM1h4SgTu699105lz//BgwjZ/4yYj7qjF6d6YwtD6DKDrjFEU4sgoL/RHiKsemnez/fUQgHdUx0o9GmffzjgNYTDpG2BbXc9qvz36huDJKmzV2305njqtPwRGQiDEFWKzTnDhM79arKMGHCf5aXwsAolP9nNWu+Rsr00HP+wsY7l4oBSQNMKWonf4I9DZt1ekcPNCFXfLowal7/ny6X1LRVx9C4D+iSDw37xe21lRc8jlM9YKaBbG3mbSwXMRMq8+e2BiBZ+m08VLfvJl4nhTFTcKaUOtEAvOLZeQOIUytLecsbCz8karFnE7oB41mRdPrpLuvU0wfnXIcUbBVtOXNZnaRJACxadtz3+Q9oCnnvhneco113HCTt/2xT2QB/wSdc6uoCvwx1oKDcQpDdvhnAyFt6iCqiCLncwX+swkNxBA1/4jHM8DGTWYi+jGacnIQMVE8w4fBNSiJPPXo2SdQTcxjojjUUE9v4zwm8dXAsX3+7AoKXjqGuGxFp7Atpcl2/y6FR6RySrPJVRRT5l3MWJnHsq9FFRoglbO5y+PkWad6iAOkDqtt/SMdHTJ4wQ0NTRuD8YgDeZo4fH5bIAku0NeH3sTK82iEV0YMoTsx9HootmSsR1aW4AFuHSC+SXDSRO9Goeaap6MwsHTACZbCf1qbxuRv8aJLWwD5UJwjvBX2X6ZyzutndfAArbbRntuT5dSKDUOmFa6T3n14gqOtXR1yb6//7ZzAAWbLFluj9zQCByXA303voa3tGrwBHf/ULmojh+2blhk6Tbd6qjcQEoQoBtmw/4kTlHLIs3KpHCCJ53oSWI2s4TC/29gUwPiP+o6yeOvIjRoPhijMfBhyUTxQKvKwjqF0EqbB7NOvB4Z61uSCOieMyOsLT6y9ToKbuR/bDvDWDiRdvP/IoWqAXW4/LvSokzFcrtwmrbiLbsizux3DPec44CbRUKTP5KBV+EgvpRjxUuAfHgIaxJIPpzZOs4nGdx8opjAeENy5zUvMADeFJ4i2vQ+crb4i1cwy2oWG3+J1/E6AtfcD2wbgdSoqOf+qvR891WmRwe6X20jl1dhdQZ+xrYPBuPzYFX1CUGCEJpN1enDWHJ5n2+VUEEI7rs34Gq8/ARsVnpbdGAXNk40qXEULqHKAhfwZ5AZSw1GxTze/ELtwRlocSNQUA2hUm1pID9rb8p0A7eh4uJr5EImir3nwkY1yFSoYntlErTyReWsYVVE5iqMnea1Cy3KSYWuFDH09ScigePEnmQyS/9QO6BvucOttFdrwVwS4TH0pSdVYWxxHm34PNvITfQPMvXAoNHf03lZb9WgseJyAoZMfrVIgArHw/Dgzt9mT/r020mZtJKPITR483eUG05SDYtWQJxVtnefM6yhPeV8CH3/U+LMrNLZQsY5B1g60Xn3Wc+FEnePUPNlArBJHOIqWsNET4ALBwSMaoDW3TwCf/IttnIAvX0nkszIzBzMehOvIE59EamFDzhgBHiK/obs7A73UgeeVx5gYMewtFMrea7Itjt9VkBuebBIB2WShzUjWuGeu+MDsAs4eETUgqTt3t8H6BAZzXLhjYivU5noH2KBugUtJNhwVHaaTpzLpsz+/ZDTYnPE2iTTTushcnGtEfahOcKc493Tjw5MSv7zmJ+vvoZskX0Y3m8ntfwc64VbQrRH+gFgmEXpceHqBXV8TIsGE9PrSm8VGKP9FEqJ2rLMOo7behJnQD8ZdneVKu3n1lL4Sw40IoJcNMiz8AyFUbU+CjWCzGxqcqfBHBlCZlJc2a3kviMQZLTcPJBhc0V0VtiGaQKlI/f3Rh0Kz2tqJQWEz+lRdI87jnpn+uvJdUuJaqUmV+3yYUIih8+kpUs0s8IDGXKvHNf31Nr0Ugo1wgClrokrko3QLZKZIdYw5VjuqJV0LPmD2rIYwgaB2tzsGsZMtYk3zj0v9GQzKmEThsxp8SP67o3gSZN2HKf4Pf+XAkynYeVf/jzF09evKDxrpgLH0QjD7G+eFFtNTRLq9OPrbIiJ2m9z6Z3NaKkIUMw9x8qowbsO9IaQxiAqOHChjdMdduIVUK90GSNqI4hJDPrYM1TNHsA06rRhu05K+78cXJSfbvx5KT5HUAAKNP/8rtTxvqdEs4TlqwVl5/BAZXc/y0u+DVcuH3N/qLav+H4Q15TrxlOLuleWvqQXEHxBur7sh8RZKpvleOmTVSDnSarDlf1zogh3r77NtxtI6kg0U6deXFEvbPj1lmVBBC2H5rkS6+KRv8U2c2kwDGtIhWRZIliRyTFcv7MGc1RoGunK/eXcyhABTikXWS5ZFmKhaXjGVKy8xSMFWMtDv5GkPsQpBN/a7G3CLzuamd6ZD0SpOSVzFNVG2sCoAXWQwQM93gzmmkRU1qgBC5BTdjGNkZQcTC2/zze2gqsMLbFjkUj6U0roLQ292lklciYPiVLjtODUzIUsi6/aNt9+phFtR/VF/ugUfYblWopkBPzK23Bv+sOhQEiyhtQZd6iRQgYwd2gDYfNmDEgsGl/PVVtNyMx7JdZ/9VNWr+omC8T0lrBJa3MA+vLfrbxqdne3Co8gAAgxTc2d0jmoUJnAAGXwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG9gAAAAA" alt="PlaySurf" width="1026" height="163"><b class="ps-chip">BETA</b></span><span class="ps-title-t">Painel</span></h1>
+      <p class="ps-lead" id="resumo"><span data-draw="t-quando">—</span>: <b data-draw="t-vis" data-source="kpis" data-field="visitas" data-row="0">—</b> páginas abertas, <b data-draw="t-vtes" data-source="kpis" data-field="visitantes" data-row="0">—</b> aparelhos abriram o jogo e <b data-draw="t-jog" data-source="kpis" data-field="jogaram" data-row="0">—</b> sessões começaram a surfar. País que mais jogou: <b data-draw="t-pais" data-source="paises" data-field="nome" data-row="0">—</b>.</p>
+    </div>
+    <div class="ps-filter" id="filtro">
+      <div class="ps-pills" role="group" aria-label="Período">
+        <button type="button" class="ps-pill" data-preset="hoje">Hoje</button>
+        <button type="button" class="ps-pill" data-preset="ontem">Ontem</button>
+        <button type="button" class="ps-pill" data-preset="7">7 dias</button>
+        <button type="button" class="ps-pill" data-preset="tudo">Tudo</button>
+      </div>
+      <div class="ps-dates">
+        <label for="f-de">De</label><input type="date" class="ps-date" id="f-de" data-draw="f-de">
+        <label for="f-ate">Até</label><input type="date" class="ps-date" id="f-ate" data-draw="f-ate">
+      </div>
+      <div class="ps-range" id="periodo-txt"><span data-draw="r-txt">—</span> · último dia com dados: <span data-draw="r-ult" data-source="periodo" data-field="ultimo" data-row="0">—</span></div>
+      <div class="ps-sync" id="atualizar">
+        <button type="button" class="ps-pill ps-sync-btn" id="sync-btn" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pedir atualização ao Claude</button>
+        <p class="ps-sync-t" id="sync-lido-txt">Última leitura do GoatCounter e do Google Ads: <b data-draw="sync-lido">—</b></p>
+        <p class="ps-sync-t" id="sync-onde">O pedido vai para a conversa do Claude aberta ao lado do painel. Use no app do Claude, ao lado da conversa do PlaySurf no Code: é ela que lê o GoatCounter e o Google Ads no seu Chrome.</p>
+        <p class="ps-sync-msg" id="sync-enviando" role="status" hidden>Enviando o pedido…</p>
+        <p class="ps-sync-msg" id="sync-ok" role="status" hidden>Pedido enviado ao Claude às <b data-draw="sync-hora">—</b>. Acompanhe no chat; quando ele terminar, a hora da última leitura muda aqui.</p>
+        <p class="ps-sync-msg" id="sync-chat" role="status" hidden>O pedido ficou no chat do Claude: é só enviar a mensagem.</p>
+        <p class="ps-sync-msg erro" id="sync-falhou" role="status" hidden>O pedido não chegou ao Claude. Tente de novo daqui a pouco, ou peça no chat: “atualize o painel PlaySurf”.</p>
+        <p class="ps-sync-msg" id="sync-sem" hidden>Números da última leitura do GoatCounter e do Google Ads. Para atualizar, peça ao Claude: “atualize o painel PlaySurf”.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="ps-stat" id="numeros" aria-label="Números do período">
+    <div class="ps-k" id="k-visitas">
+      <span class="ps-k-l">Visitas</span>
+      <b class="ps-k-n" data-draw="k-visitas" data-source="kpis" data-field="visitas" data-row="0">—</b>
+      <span class="ps-k-d"><span class="ps-delta" data-draw="d-visitas" data-source="kpis" data-field="var_visitas" data-row="0">—</span><span data-draw="k-comp">—</span></span>
+      <span class="ps-k-s">páginas abertas no site</span>
+    </div>
+    <div class="ps-k" id="k-visitantes">
+      <span class="ps-k-l">Visitantes</span>
+      <b class="ps-k-n" data-draw="k-visitantes" data-source="kpis" data-field="visitantes" data-row="0">—</b>
+      <span class="ps-k-d"><span class="ps-delta" data-draw="d-visitantes" data-source="kpis" data-field="var_visitantes" data-row="0">—</span><span data-draw="k-comp">—</span></span>
+      <span class="ps-k-s">aparelhos que abriram o jogo</span>
+    </div>
+    <div class="ps-k" id="k-jogaram">
+      <span class="ps-k-l">Jogaram</span>
+      <b class="ps-k-n" data-draw="k-jogaram" data-source="kpis" data-field="jogaram" data-row="0">—</b>
+      <span class="ps-k-d"><span class="ps-delta" data-draw="d-jogaram" data-source="kpis" data-field="var_jogaram" data-row="0">—</span><span data-draw="k-comp">—</span></span>
+      <span class="ps-k-s">sessões que pegaram onda · <span data-draw="k-taxa" data-source="kpis" data-field="taxa_jogou" data-row="0">—</span>% de quem abriu</span>
+    </div>
+    <div class="ps-k" id="k-novos">
+      <span class="ps-k-l">Primeira vez</span>
+      <b class="ps-k-n" data-draw="k-novos" data-source="kpis" data-field="novos" data-row="0">—</b>
+      <span class="ps-k-d"><span class="ps-delta" data-draw="d-novos" data-source="kpis" data-field="var_novos" data-row="0">—</span><span data-draw="k-comp">—</span></span>
+      <span class="ps-k-s">aparelhos jogando pela 1ª vez</span>
+    </div>
+    <div class="ps-k" id="k-ficaram">
+      <span class="ps-k-l">Ficaram 3+ min</span>
+      <b class="ps-k-n" data-draw="k-ficaram3" data-source="kpis" data-field="ficaram3" data-row="0">—</b>
+      <span class="ps-k-d"><span class="ps-delta" data-draw="d-ficaram3" data-source="kpis" data-field="var_ficaram3" data-row="0">—</span><span data-draw="k-comp">—</span></span>
+      <span class="ps-k-s">sessões com o jogo aberto 3 min ou mais</span>
+    </div>
+    <div class="ps-k" id="k-gasto">
+      <span class="ps-k-l">Gasto Google Ads</span>
+      <b class="ps-k-n" data-draw="k-custo" data-source="ads_tot" data-field="custo" data-row="0">—</b>
+      <span class="ps-k-d"><span data-draw="k-cliques" data-source="ads_tot" data-field="cliques" data-row="0">—</span> cliques</span>
+      <span class="ps-k-s">teto de <span data-draw="k-orc" data-source="ads_campanha" data-field="orcamento_dia" data-row="0">—</span> por dia</span>
+    </div>
+  </section>
+
+  <section class="ps-card" id="dia-a-dia">
+    <div class="ps-ch"><h2>Dia a dia</h2><span class="ps-tag">Toque num dia para filtrar</span></div>
+    <ul class="ps-legend" aria-hidden="true">
+      <li><span class="ps-sw bar"></span>Visitas</li>
+      <li><span class="ps-sw l1"></span>Visitantes</li>
+      <li><span class="ps-sw l2"></span>Jogaram</li>
+    </ul>
+    <div class="ps-chart" data-draw="grafico" data-source="serie"></div>
+    <p class="ps-hint">A linha "Jogaram" começa em 16/11, quando a contagem de sessões entrou no jogo. A faixa tracejada marca o período escolhido.</p>
+  </section>
+
+  <div class="ps-grid">
+    <section class="ps-card" id="top5">
+      <div class="ps-ch"><h2>Top 5 jogadores</h2><span class="ps-tag hot" id="top5-tag-espera">Aguardando o jogo novo</span><span class="ps-tag" id="top5-tag-ok" hidden>Por minutos surfando</span></div>
+      <div class="ps-podium" data-draw="top5" data-source="top5"></div>
+      <p class="ps-text" id="top5-espera">Decidido em 21/11: cada aparelho ganha um <b>código anônimo</b> e quem quiser digita um <b>apelido</b> no cartão do fim da onda. O ranking começa a encher depois que essa mudança for publicada no jogo e na página /privacy.</p>
+      <p class="ps-text" id="top5-vazio" hidden>Ninguém com código jogou neste período. Escolha um período maior.</p>
+      <p class="ps-hint" id="top5-nota" hidden>Minutos estimados pelos marcos de tempo surfando (1, 3, 5, 10, 15... min). Quem não digitou apelido aparece pelo código.</p>
+      <p class="ps-mini">Quantas vezes os aparelhos voltaram</p>
+      <ul class="ps-bars gold" data-draw="fidelidade" data-source="fidelidade"></ul>
+    </section>
+
+    <section class="ps-card" id="paises">
+      <div class="ps-ch"><h2>Países que mais jogaram</h2>
+        <div class="ps-seg" role="group" aria-label="Como contar o país">
+          <button type="button" class="on" data-seg="jogo" aria-pressed="true">Abriram o jogo</button>
+          <button type="button" data-seg="ip" aria-pressed="false">Por IP</button>
+        </div>
+      </div>
+      <p class="ps-sub" data-seg-txt="jogo">Aparelhos que abriram o jogo, com o país estimado pelo fuso horário do aparelho.</p>
+      <p class="ps-sub" data-seg-txt="ip" hidden>País pelo IP, como o GoatCounter mostra: parcela de todos os registros, então quem joga mais pesa mais.</p>
+      <ul class="ps-bars" id="lista-paises" data-draw="paises" data-source="paises"></ul>
+      <ul class="ps-bars sky" id="lista-ip" data-draw="paises-ip" data-source="paises_ip" hidden></ul>
+    </section>
+  </div>
+
+  <div class="ps-grid">
+    <section class="ps-card" id="tempo">
+      <div class="ps-ch"><h2>Quanto tempo ficam</h2><span class="ps-tag">Página do jogo aberta</span></div>
+      <p class="ps-sub">Parte dos visitantes que ficou com o jogo na tela por pelo menos este tempo.</p>
+      <ul class="ps-bars mint" data-draw="tempo" data-source="tempo"></ul>
+    </section>
+
+    <section class="ps-card" id="origem">
+      <div class="ps-ch"><h2>De onde vêm</h2><span class="ps-tag">Desde 19/11</span></div>
+      <p class="ps-sub">Como a visita chegou ao site, contado na primeira página da visita.</p>
+      <ul class="ps-bars" data-draw="origem" data-source="origem"></ul>
+      <p class="ps-mini">Referências que o GoatCounter viu</p>
+      <ul class="ps-bars sky" data-draw="referencias" data-source="referencias"></ul>
+    </section>
+  </div>
+
+  <div class="ps-grid">
+    <section class="ps-card" id="paginas">
+      <div class="ps-ch"><h2>Páginas e ondas mais vistas</h2></div>
+      <p class="ps-sub">Visitas por página do site no período. As ondas jogadas dentro do jogo ainda não são contadas uma a uma.</p>
+      <div class="ps-table-wrap">
+        <table class="ps-table" data-source="paginas" data-row-key="caminho">
+          <thead><tr><th data-field="nome">Página</th><th data-field="grupo">Tipo</th><th class="num" data-field="n">Visitas</th></tr></thead>
+          <tbody data-draw="paginas"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ps-card" id="aparelhos">
+      <div class="ps-ch"><h2>Aparelhos</h2><span class="ps-tag">GoatCounter</span></div>
+      <p class="ps-sub">Parcela de todos os registros do período (páginas e eventos), então quem joga mais pesa mais.</p>
+      <div class="ps-split" data-draw="tela-split" data-source="tela" role="img" aria-label="Celular, tablet e computador"></div>
+      <ul class="ps-bars" data-draw="tela" data-source="tela"></ul>
+      <p class="ps-mini">Sistemas</p>
+      <ul class="ps-bars mint" data-draw="sistemas" data-source="sistemas"></ul>
+      <p class="ps-mini">Navegadores</p>
+      <ul class="ps-bars gold" data-draw="navegadores" data-source="navegadores"></ul>
+    </section>
+  </div>
+
+  <section class="ps-card" id="google-ads">
+    <div class="ps-ch"><h2>Google Ads</h2><span class="ps-status"><i></i><span data-draw="ads-status" data-source="ads_campanha" data-field="status" data-row="0">—</span></span></div>
+    <p class="ps-sub"><span data-draw="ads-nome" data-source="ads_campanha" data-field="campanha" data-row="0">—</span> · números do período escolhido</p>
+    <div class="ps-ads">
+      <div>
+        <div class="ps-stat" id="ads-numeros">
+          <div class="ps-k"><span class="ps-k-l">Impressões</span><b class="ps-k-n" data-draw="a-imp" data-source="ads_tot" data-field="impressoes" data-row="0">—</b></div>
+          <div class="ps-k"><span class="ps-k-l">Cliques</span><b class="ps-k-n" data-draw="a-cli" data-source="ads_tot" data-field="cliques" data-row="0">—</b></div>
+          <div class="ps-k"><span class="ps-k-l">CTR</span><b class="ps-k-n" data-draw="a-ctr" data-source="ads_tot" data-field="ctr" data-row="0">—</b></div>
+          <div class="ps-k"><span class="ps-k-l">Custo</span><b class="ps-k-n" data-draw="a-custo" data-source="ads_tot" data-field="custo" data-row="0">—</b></div>
+          <div class="ps-k"><span class="ps-k-l">CPC médio</span><b class="ps-k-n" data-draw="a-cpc" data-source="ads_tot" data-field="cpc_medio" data-row="0">—</b></div>
+          <div class="ps-k"><span class="ps-k-l">Conversões</span><b class="ps-k-n" data-draw="a-conv" data-source="ads_tot" data-field="conversoes" data-row="0">—</b><span class="ps-k-s">1ª onda da visita</span></div>
+          <div class="ps-k"><span class="ps-k-l">Chegaram pelo anúncio</span><b class="ps-k-n" data-draw="a-vis" data-source="ads_tot" data-field="visitas_anuncio" data-row="0">—</b><span class="ps-k-s">visitas no GoatCounter</span></div>
+        </div>
+        <p class="ps-note" id="ads-zero">O anúncio <b>ainda não apareceu</b> neste período. Em 20/11 o diagnóstico do Google apontava classificação do anúncio baixa (lance × qualidade, numa conta nova). O teto de CPC subiu para <b data-draw="ads-cpc2" data-source="ads_campanha" data-field="cpc_max" data-row="0">—</b> em 20/11; vale conferir de novo em 24 a 48 horas.</p>
+        <p class="ps-note" id="ads-rodando" hidden>O anúncio <b>já está aparecendo</b> neste período. Compare os cliques do Google com as visitas que chegaram pelo anúncio no GoatCounter: a diferença costuma ser quem fechou a página antes de carregar.</p>
+        <p class="ps-note" id="ads-antes" hidden>A campanha só começou em 18/11. Escolha um período a partir dessa data para ver os números do Ads.</p>
+      </div>
+      <dl class="ps-dl" id="ads-config">
+        <dt>Orçamento</dt><dd><span data-draw="c-orc" data-source="ads_campanha" data-field="orcamento_dia" data-row="0">—</span>/dia</dd>
+        <dt>CPC máximo</dt><dd data-draw="c-cpc" data-source="ads_campanha" data-field="cpc_max" data-row="0">—</dd>
+        <dt>Estratégia</dt><dd data-draw="c-est" data-source="ads_campanha" data-field="estrategia" data-row="0">—</dd>
+        <dt>Rede</dt><dd data-draw="c-rede" data-source="ads_campanha" data-field="rede" data-row="0">—</dd>
+        <dt>Locais</dt><dd data-draw="c-loc" data-source="ads_campanha" data-field="locais" data-row="0">—</dd>
+        <dt>Grupos de anúncios</dt><dd data-draw="c-gru" data-source="ads_campanha" data-field="grupos" data-row="0">—</dd>
+        <dt>Palavras-chave</dt><dd data-draw="c-pal" data-source="ads_campanha" data-field="palavras_chave" data-row="0">—</dd>
+        <dt>No ar desde</dt><dd data-draw="c-lan" data-source="ads_campanha" data-field="lancada_em" data-row="0">—</dd>
+        <dt>Lido em</dt><dd data-draw="c-lido" data-source="ads_campanha" data-field="lido_em" data-row="0">—</dd>
+      </dl>
+    </div>
+  </section>
+  <section class="ps-card" id="crazygames">
+    <div class="ps-ch"><h2>CrazyGames</h2><span class="ps-status"><i></i><span>Rascunho (ainda não enviado para revisão)</span></span></div>
+    <p class="ps-sub">PlaySurf · Basic Launch · lido no portal de desenvolvedor em 2026-11-22 08:40</p>
+    <div class="ps-stat">
+      <div class="ps-k"><span class="ps-k-l">Jogadas</span><b class="ps-k-n">-</b></div>
+      <div class="ps-k"><span class="ps-k-l">Tempo médio</span><b class="ps-k-n">-</b></div>
+      <div class="ps-k"><span class="ps-k-l">Retenção D1</span><b class="ps-k-n">-</b></div>
+      <div class="ps-k"><span class="ps-k-l">Conversão</span><b class="ps-k-n">-</b></div>
+      <div class="ps-k"><span class="ps-k-l">CTR</span><b class="ps-k-n">-</b></div>
+      <div class="ps-k"><span class="ps-k-l">Receita</span><b class="ps-k-n">€ 0.00</b></div>
+    </div>
+    <p class="ps-note">Os números do CrazyGames só aparecem depois que o jogo é aprovado e entra no ar lá. Todo o período, desde o envio.</p>
+  </section>
+
+  <section class="ps-card" id="falta-decidir">
+    <div class="ps-ch"><h2>O que falta decidir</h2></div>
+    <ul class="ps-todo">
+      <li><strong>Top 5 jogadores</strong>Decidido em 21/11: código anônimo por aparelho e apelido opcional no fim da onda. Falta publicar a mudança no jogo e na página /privacy, com o seu OK na sessão PlaySurf. Depois disso o ranking enche sozinho a cada atualização do painel.</li>
+      <li><strong>Atualização automática</strong>Uma rotina diária pode ler o GoatCounter e o Google Ads de novo e atualizar o painel sozinha. Sem ela, use o botão “Pedir atualização ao Claude”, no topo.</li>
+      <li><strong>Não contar as suas visitas</strong>Os seus testes entram nas contas. Abrir <code>playsurfgame.com/#toggle-goatcounter</code> uma vez em cada aparelho seu faz o GoatCounter ignorar esse aparelho.</li>
+      <li><strong>Ondas jogadas</strong>Hoje só as páginas de onda do site são contadas. Um evento por onda escolhida no jogo mostraria quais ondas o pessoal mais surfa.</li>
+    </ul>
+  </section>
+
+  <details class="ps-details" id="definicoes">
+    <summary>Como cada número é contado</summary>
+    <div class="ps-table-wrap">
+      <table class="ps-table" data-source="medicoes" data-row-key="metrica">
+        <thead><tr><th data-field="metrica">Número</th><th data-field="desde">Desde</th><th data-field="como_conta">Como conta</th></tr></thead>
+        <tbody data-draw="medicoes"></tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<script>
+/* Períodos e somas: cada número do painel sai destes cálculos sobre os arquivos lidos do GoatCounter e do Google Ads. */
+dash.calc('periodo', {
+  inputs: ['eventos'],
+  title: 'Período escolhido',
+  description: 'Datas do filtro. Sem filtro, o último dia com dados. ant_ = período anterior do mesmo tamanho.',
+  fn: (eventos) => {
+    const dias = [...new Set(eventos.map((r) => r.dia))].sort();
+    if (!dias.length) return [];
+    const primeiro = dias[0], ultimo = dias[dias.length - 1];
+    const p = dash.params();
+    let de = p.de || ultimo, ate = p.ate || ultimo;
+    if (de > ate) [de, ate] = [ate, de];
+    const dia = (s, k) => { const t = new Date(s + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + k); return t.toISOString().slice(0, 10); };
+    const n = Math.round((Date.parse(ate) - Date.parse(de)) / 864e5) + 1;
+    return [{de, ate, dias: n, ant_de: dia(de, -n), ant_ate: dia(de, -1), primeiro, ultimo}];
+  }
+});
+
+dash.calc('kpis', {
+  inputs: ['eventos', 'periodo', 'medicoes'],
+  title: 'Números do período',
+  description: 'Somas do período e do período anterior de mesmo tamanho; var_ é a variação em %. Vazio quando a contagem ainda não existia.',
+  fn: (eventos, periodo, medicoes) => {
+    if (!periodo.length) return [];
+    const p = periodo[0];
+    const desde = Object.fromEntries(medicoes.map((m) => [m.metrica, m.desde]));
+    const soma = (de, ate, f) => eventos.filter((r) => r.dia >= de && r.dia <= ate && f(r)).reduce((a, r) => a + Number(r.n), 0);
+    const metricas = {
+      visitas: [(r) => r.tipo === 'pagina', desde['Visitas']],
+      visitantes: [(r) => r.tipo === 'pagina' && r.chave === '/', desde['Visitantes']],
+      jogaram: [(r) => r.tipo === 'sessao' && r.chave !== 'antigo', desde['Jogaram']],
+      novos: [(r) => r.tipo === 'sessao' && r.chave === '1', desde['Jogaram']],
+      ficaram3: [(r) => r.tipo === 'tempo' && r.chave === '3min', desde['Tempo na página']],
+    };
+    const row = {};
+    for (const [k, [f, d]] of Object.entries(metricas)) {
+      const atual = p.ate < d ? null : soma(p.de, p.ate, f);
+      const antes = p.ant_de < d ? null : soma(p.ant_de, p.ant_ate, f);
+      row[k] = atual;
+      row[k + '_ant'] = antes;
+      row['var_' + k] = atual == null || !antes ? null : Math.round((atual - antes) / antes * 100);
+      row[k + '_desde'] = d;
+    }
+    const deJogo = p.de < desde['Jogaram'] ? desde['Jogaram'] : p.de;
+    const abriram = soma(deJogo, p.ate, metricas.visitantes[0]);
+    row.taxa_jogou = row.jogaram != null && abriram ? Math.round(row.jogaram / abriram * 100) : null;
+    return [row];
+  }
+});
+
+dash.calc('serie', {
+  inputs: ['eventos', 'periodo', 'medicoes'],
+  title: 'Dia a dia',
+  description: 'Visitas, visitantes e sessões de jogo de cada dia; sel = 1 nos dias do filtro.',
+  fn: (eventos, periodo, medicoes) => {
+    const desde = Object.fromEntries(medicoes.map((m) => [m.metrica, m.desde]));
+    const p = periodo[0] || {};
+    const dias = [...new Set(eventos.map((r) => r.dia))].sort();
+    return dias.map((dia) => {
+      const doDia = eventos.filter((r) => r.dia === dia);
+      const s = (f) => doDia.filter(f).reduce((a, r) => a + Number(r.n), 0);
+      return {
+        dia,
+        visitas: s((r) => r.tipo === 'pagina'),
+        visitantes: s((r) => r.tipo === 'pagina' && r.chave === '/'),
+        jogaram: dia < desde['Jogaram'] ? null : s((r) => r.tipo === 'sessao' && r.chave !== 'antigo'),
+        sel: dia >= p.de && dia <= p.ate ? 1 : 0,
+      };
+    });
+  }
+});
+
+dash.calc('paises', {
+  inputs: ['eventos', 'periodo'],
+  title: 'Países que mais jogaram',
+  description: 'Aparelhos que abriram o jogo, por país (fuso horário do aparelho), no período.',
+  fn: (eventos, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    for (const r of eventos) if (r.tipo === 'pais' && r.dia >= p.de && r.dia <= p.ate) {
+      acc[r.chave] = acc[r.chave] || {pais: r.chave, nome: r.nome, n: 0};
+      acc[r.chave].n += Number(r.n);
+    }
+    const rows = Object.values(acc).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
+    const total = rows.reduce((a, r) => a + r.n, 0);
+    return rows.map((r) => ({...r, pct: Math.round(r.n / total * 100)}));
+  }
+});
+
+dash.calc('paises_ip', {
+  inputs: ['dimensoes', 'periodo'],
+  title: 'Países por IP',
+  description: 'País pelo IP no GoatCounter: registros do período (páginas e eventos), só as linhas que o GoatCounter mostra.',
+  fn: (dimensoes, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    for (const r of dimensoes) if (r.dimensao === 'local' && r.dia >= p.de && r.dia <= p.ate) acc[r.nome] = (acc[r.nome] || 0) + Number(r.n);
+    const rows = Object.entries(acc).map(([nome, n]) => ({nome, n})).sort((a, b) => b.n - a.n);
+    const total = rows.reduce((a, r) => a + r.n, 0);
+    return rows.map((r) => ({...r, pct: Math.round(r.n / total * 100)}));
+  }
+});
+
+dash.calc('tempo', {
+  inputs: ['eventos', 'periodo'],
+  title: 'Quanto tempo ficam',
+  description: 'Sessões que ficaram com o jogo na tela por pelo menos cada tempo; pct = parte dos visitantes do período.',
+  fn: (eventos, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    let visitantes = 0;
+    for (const r of eventos) {
+      if (r.dia < p.de || r.dia > p.ate) continue;
+      if (r.tipo === 'pagina' && r.chave === '/') visitantes += Number(r.n);
+      if (r.tipo === 'tempo') {
+        acc[r.chave] = acc[r.chave] || {chave: r.chave, nome: r.nome, ordem: Number(r.ordem), n: 0};
+        acc[r.chave].n += Number(r.n);
+      }
+    }
+    return Object.values(acc).sort((a, b) => a.ordem - b.ordem).map((r) => ({...r, pct: visitantes ? Math.round(r.n / visitantes * 100) : null}));
+  }
+});
+
+dash.calc('fidelidade', {
+  inputs: ['eventos', 'periodo'],
+  title: 'Quantas vezes voltaram',
+  description: 'Sessões de jogo do período pelo número da sessão daquele aparelho (1ª vez, 2ª, ... 10ª ou mais). Não inclui a marca de quem já jogava antes da contagem.',
+  fn: (eventos, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    for (const r of eventos) if (r.tipo === 'sessao' && r.chave !== 'antigo' && r.dia >= p.de && r.dia <= p.ate) {
+      acc[r.chave] = acc[r.chave] || {chave: r.chave, nome: r.nome, ordem: Number(r.ordem), n: 0};
+      acc[r.chave].n += Number(r.n);
+    }
+    const rows = Object.values(acc).sort((a, b) => a.ordem - b.ordem);
+    const total = rows.reduce((a, r) => a + r.n, 0);
+    return rows.map((r) => ({...r, pct: Math.round(r.n / total * 100)}));
+  }
+});
+
+dash.calc('origem', {
+  inputs: ['eventos', 'periodo'],
+  title: 'De onde vêm as visitas',
+  description: 'Primeira página de cada visita por tipo de origem, no período (contagem desde 19/11).',
+  fn: (eventos, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    for (const r of eventos) if (r.tipo === 'origem' && r.dia >= p.de && r.dia <= p.ate) {
+      acc[r.chave] = acc[r.chave] || {chave: r.chave, nome: r.nome, n: 0};
+      acc[r.chave].n += Number(r.n);
+    }
+    const rows = Object.values(acc).sort((a, b) => b.n - a.n);
+    const total = rows.reduce((a, r) => a + r.n, 0);
+    return rows.map((r) => ({...r, pct: Math.round(r.n / total * 100)}));
+  }
+});
+
+dash.calc('paginas', {
+  inputs: ['eventos', 'periodo'],
+  title: 'Páginas mais vistas',
+  description: 'Visitas por página do site no período.',
+  fn: (eventos, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    for (const r of eventos) if (r.tipo === 'pagina' && r.dia >= p.de && r.dia <= p.ate) {
+      acc[r.chave] = acc[r.chave] || {caminho: r.chave, nome: r.nome, grupo: r.grupo, n: 0};
+      acc[r.chave].n += Number(r.n);
+    }
+    return Object.values(acc).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
+  }
+});
+
+for (const [id, dim, titulo] of [['tela', 'tela', 'Tipo de aparelho'], ['sistemas', 'sistema', 'Sistemas'], ['navegadores', 'navegador', 'Navegadores'], ['referencias', 'referencia', 'Referências']]) {
+  dash.calc(id, {
+    inputs: ['dimensoes', 'periodo'],
+    title: titulo,
+    description: 'Do GoatCounter: registros do período (páginas e eventos), só as linhas que ele mostra; pct = parte do total.',
+    fn: (dimensoes, periodo) => {
+      if (!periodo.length) return [];
+      const p = periodo[0], acc = {};
+      for (const r of dimensoes) if (r.dimensao === dim && r.dia >= p.de && r.dia <= p.ate) acc[r.nome] = (acc[r.nome] || 0) + Number(r.n);
+      const rows = Object.entries(acc).map(([nome, n]) => ({nome, n})).sort((a, b) => b.n - a.n);
+      const total = rows.reduce((a, r) => a + r.n, 0);
+      return rows.map((r) => ({...r, pct: Math.round(r.n / total * 100)}));
+    }
+  });
+}
+
+dash.calc('top5', {
+  inputs: ['eventos', 'periodo'],
+  title: 'Top 5 jogadores',
+  description: 'Códigos com mais minutos surfando no período. Cada marco de tempo (1, 3, 5, 10, 15... min) vale a diferença para o marco anterior; sessões = vezes que o código começou a jogar.',
+  fn: (eventos, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0], acc = {};
+    const anterior = (b) => b <= 1 ? 0 : b <= 3 ? 1 : b <= 5 ? 3 : b - 5;
+    for (const r of eventos) {
+      if (r.dia < p.de || r.dia > p.ate || (r.tipo !== 'jogador' && r.tipo !== 'jogmin')) continue;
+      const a = acc[r.chave] = acc[r.chave] || {codigo: r.chave, nome: r.nome, minutos: 0, sessoes: 0, ultimo: ''};
+      if (r.dia >= a.ultimo) { a.ultimo = r.dia; a.nome = r.nome; }
+      if (r.tipo === 'jogador') a.sessoes += Number(r.n);
+      else { const b = Number(r.ordem); a.minutos += Number(r.n) * (b - anterior(b)); }
+    }
+    return Object.values(acc).sort((x, y) => y.minutos - x.minutos || y.sessoes - x.sessoes).slice(0, 5).map((r, i) => ({pos: i + 1, ...r}));
+  }
+});
+
+dash.calc('ads_tot', {
+  inputs: ['ads_diario', 'periodo', 'eventos'],
+  title: 'Google Ads no período',
+  description: 'Somas da campanha nos dias do filtro; CTR = cliques ÷ impressões; CPC médio = custo ÷ cliques. visitas_anuncio vem do GoatCounter.',
+  fn: (ads, periodo, eventos) => {
+    if (!periodo.length) return [];
+    const p = periodo[0];
+    const dias = ads.filter((r) => r.dia >= p.de && r.dia <= p.ate);
+    const s = (k) => dias.reduce((a, r) => a + Number(r[k]), 0);
+    const tem = dias.length > 0;
+    const imp = s('impressoes'), cli = s('cliques'), custo = s('custo');
+    const visitas_anuncio = eventos.filter((r) => r.tipo === 'origem' && r.chave === 'anuncio' && r.dia >= p.de && r.dia <= p.ate).reduce((a, r) => a + Number(r.n), 0);
+    return [{
+      dias: dias.length,
+      impressoes: tem ? imp : null,
+      cliques: tem ? cli : null,
+      custo: tem ? custo : null,
+      conversoes: tem ? s('conversoes') : null,
+      ctr: imp ? Math.round(cli / imp * 1000) / 10 : null,
+      cpc_medio: cli ? Math.round(custo / cli * 100) / 100 : null,
+      visitas_anuncio,
+    }];
+  }
+});
+</script>
+
+<script>
+/* Desenho: números, listas, tabela e gráfico. */
+window.PS = {
+  nf: new Intl.NumberFormat('pt-BR'),
+  row(id) { const d = dash.data(id); return d.status === 'ok' && Array.isArray(d.data) && d.data[0] ? d.data[0] : null; },
+  n(v) { return v == null ? '—' : PS.nf.format(v); },
+  brl(v) { return v == null || v === '' ? '—' : Number(v).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); },
+  dm(s) { return s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '—'; },
+  dia(s, k) { const t = new Date(s + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + k); return t.toISOString().slice(0, 10); },
+  el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; },
+};
+
+const texto = (name, id, f) => dash.draw(name, (el) => { const r = PS.row(id); el.textContent = r ? f(r) : '—'; });
+
+texto('t-quando', 'periodo', (r) => r.dias === 1 ? 'Em ' + PS.dm(r.de) : 'De ' + PS.dm(r.de) + ' a ' + PS.dm(r.ate));
+texto('t-vis', 'kpis', (r) => PS.n(r.visitas));
+texto('t-vtes', 'kpis', (r) => PS.n(r.visitantes));
+texto('t-jog', 'kpis', (r) => PS.n(r.jogaram));
+texto('t-pais', 'paises', (r) => r.nome);
+texto('r-txt', 'periodo', (r) => (r.dias === 1 ? PS.dm(r.de) : PS.dm(r.de) + ' a ' + PS.dm(r.ate)) + ' · ' + r.dias + (r.dias === 1 ? ' dia' : ' dias'));
+texto('r-ult', 'periodo', (r) => PS.dm(r.ultimo));
+
+for (const k of ['visitas', 'visitantes', 'jogaram', 'novos', 'ficaram3']) {
+  texto('k-' + k, 'kpis', (r) => PS.n(r[k]));
+  dash.draw('d-' + k, (el) => {
+    const r = PS.row('kpis');
+    el.classList.remove('up', 'down', 'flat');
+    if (!r) { el.textContent = '—'; return; }
+    const v = r['var_' + k];
+    const per = PS.row('periodo');
+    if (r[k] == null || (per && per.de < r[k + '_desde'])) { el.textContent = 'conta desde ' + PS.dm(r[k + '_desde']); el.classList.add('flat'); return; }
+    if (v == null) { el.textContent = r[k + '_ant'] === 0 ? 'antes: 0' : 'sem comparação'; el.classList.add('flat'); return; }
+    el.textContent = (v > 0 ? '▲ +' : v < 0 ? '▼ ' : '= ') + PS.nf.format(v) + '%';
+    el.classList.add(v > 0 ? 'up' : v < 0 ? 'down' : 'flat');
+  });
+}
+texto('k-comp', 'periodo', (r) => 'vs ' + (r.dias === 1 ? PS.dm(r.ant_de) : PS.dm(r.ant_de) + ' a ' + PS.dm(r.ant_ate)));
+texto('k-taxa', 'kpis', (r) => PS.n(r.taxa_jogou));
+texto('k-custo', 'ads_tot', (r) => PS.brl(r.custo));
+texto('k-cliques', 'ads_tot', (r) => PS.n(r.cliques));
+texto('k-orc', 'ads_campanha', (r) => PS.brl(r.orcamento_dia));
+
+texto('a-imp', 'ads_tot', (r) => PS.n(r.impressoes));
+texto('a-cli', 'ads_tot', (r) => PS.n(r.cliques));
+texto('a-ctr', 'ads_tot', (r) => r.ctr == null ? '—' : PS.nf.format(r.ctr) + '%');
+texto('a-custo', 'ads_tot', (r) => PS.brl(r.custo));
+texto('a-cpc', 'ads_tot', (r) => PS.brl(r.cpc_medio));
+texto('a-conv', 'ads_tot', (r) => PS.n(r.conversoes));
+texto('a-vis', 'ads_tot', (r) => PS.n(r.visitas_anuncio));
+texto('ads-status', 'ads_campanha', (r) => r.status);
+texto('ads-nome', 'ads_campanha', (r) => r.campanha);
+texto('ads-cpc2', 'ads_campanha', (r) => PS.brl(r.cpc_max));
+texto('c-orc', 'ads_campanha', (r) => PS.brl(r.orcamento_dia));
+texto('c-cpc', 'ads_campanha', (r) => PS.brl(r.cpc_max));
+texto('c-est', 'ads_campanha', (r) => r.estrategia);
+texto('c-rede', 'ads_campanha', (r) => r.rede);
+texto('c-loc', 'ads_campanha', (r) => PS.n(Number(r.locais)));
+texto('c-gru', 'ads_campanha', (r) => PS.n(Number(r.grupos)));
+texto('c-pal', 'ads_campanha', (r) => PS.n(Number(r.palavras_chave)));
+texto('c-lan', 'ads_campanha', (r) => PS.dm(r.lancada_em));
+texto('c-lido', 'ads_campanha', (r) => PS.dm(r.lido_em.slice(0, 10)) + ' ' + r.lido_em.slice(11, 16));
+
+/* Listas com barra: nome, barra, número e %. */
+function barras(name, id, key, opts) {
+  dash.draw(name, (el) => {
+    const d = dash.data(id);
+    el.replaceChildren();
+    if (d.status === 'error') { el.append(PS.el('li', 'ps-empty', 'Não carregou.')); return; }
+    if (d.status !== 'ok') { el.append(PS.el('li', 'ps-empty', '—')); return; }
+    const rows = d.data.slice(0, opts.max || 8);
+    if (!rows.length) { el.append(PS.el('li', 'ps-empty', opts.vazio)); return; }
+    const max = Math.max(...rows.map((r) => r.n)) || 1;
+    for (const r of rows) {
+      const li = PS.el('li', 'ps-bar');
+      const nome = PS.el('span', 'ps-bar-name', r.nome); nome.title = r.nome;
+      const track = PS.el('span', 'ps-bar-track');
+      const fill = PS.el('span', 'ps-bar-fill');
+      fill.style.width = (opts.escala === 'pct' ? Math.min(100, r.pct || 0) : r.n / max * 100) + '%';
+      track.append(fill);
+      const where = key + '=' + encodeURIComponent(r[key]);
+      const val = PS.el('b', 'ps-bar-val', PS.n(r.n));
+      val.dataset.source = id; val.dataset.field = 'n'; val.dataset.where = where;
+      const pct = PS.el('span', 'ps-bar-pct', r.pct == null ? '' : PS.nf.format(r.pct) + '%');
+      if (r.pct != null) { pct.dataset.source = id; pct.dataset.field = 'pct'; pct.dataset.where = where; }
+      li.append(nome, track, val, pct);
+      el.append(li);
+    }
+  });
+}
+barras('paises', 'paises', 'pais', {max: 8, vazio: 'Sem eventos de país neste período (a contagem por país começou em 13/11).'});
+barras('paises-ip', 'paises_ip', 'nome', {max: 8, vazio: 'O GoatCounter não mostrou países neste período.'});
+barras('tempo', 'tempo', 'chave', {max: 7, escala: 'pct', vazio: 'Ninguém ficou 30 segundos com o jogo aberto neste período.'});
+barras('fidelidade', 'fidelidade', 'chave', {max: 8, vazio: 'Sem sessões de jogo contadas neste período (a contagem começou em 16/11).'});
+barras('origem', 'origem', 'chave', {max: 6, vazio: 'Sem eventos de origem neste período (a contagem começou em 19/11).'});
+barras('referencias', 'referencias', 'nome', {max: 5, vazio: 'Nada registrado neste período.'});
+barras('tela', 'tela', 'nome', {max: 4, vazio: 'O GoatCounter não mostrou aparelhos neste período.'});
+barras('sistemas', 'sistemas', 'nome', {max: 6, vazio: 'Nada registrado neste período.'});
+barras('navegadores', 'navegadores', 'nome', {max: 5, vazio: 'Nada registrado neste período.'});
+
+dash.draw('top5', (el) => {
+  const d = dash.data('top5');
+  el.replaceChildren();
+  const rows = d.status === 'ok' ? d.data : [];
+  for (let i = 0; i < 5; i++) {
+    const r = rows[i], slot = PS.el('div', 'ps-slot' + (r ? ' on' : ''));
+    slot.append(PS.el('b', null, String(i + 1)));
+    if (r) {
+      const nome = PS.el('em', null, r.nome); nome.title = '#' + r.codigo;
+      nome.dataset.source = 'top5'; nome.dataset.field = 'nome'; nome.dataset.where = 'codigo=' + encodeURIComponent(r.codigo);
+      const min = PS.el('span', null, PS.n(r.minutos) + ' min');
+      min.dataset.source = 'top5'; min.dataset.field = 'minutos'; min.dataset.where = 'codigo=' + encodeURIComponent(r.codigo);
+      const ses = PS.el('span', null, PS.n(r.sessoes) + (r.sessoes === 1 ? ' sessão' : ' sessões'));
+      ses.dataset.source = 'top5'; ses.dataset.field = 'sessoes'; ses.dataset.where = 'codigo=' + encodeURIComponent(r.codigo);
+      slot.append(nome, min, ses);
+    } else {
+      slot.append(PS.el('span', null, '???'));
+    }
+    el.append(slot);
+  }
+});
+
+dash.draw('tela-split', (el) => {
+  const d = dash.data('tela');
+  el.replaceChildren();
+  if (d.status !== 'ok' || !d.data.length) return;
+  const cores = {'Celular': 'var(--pink)', 'Computador': 'var(--sky)', 'Tablet': 'var(--mint)'};
+  for (const r of d.data) { const s = PS.el('span'); s.style.width = r.pct + '%'; s.style.background = cores[r.nome] || 'var(--mute2)'; el.append(s); }
+  el.setAttribute('aria-label', d.data.map((r) => r.nome + ' ' + r.pct + '%').join(', '));
+});
+
+dash.draw('paginas', (tb) => {
+  const d = dash.data('paginas');
+  tb.replaceChildren();
+  const vazio = (t) => { const tr = PS.el('tr'); const td = PS.el('td', 'ps-empty', t); td.colSpan = 3; tr.append(td); tb.append(tr); };
+  if (d.status === 'error') return vazio('A tabela não carregou.');
+  if (d.status !== 'ok') return vazio('—');
+  if (!d.data.length) return vazio('Nenhuma página aberta neste período.');
+  const tipos = {jogo: 'Jogo', idioma: 'Idioma', onda: 'Onda', outra: 'Outra'};
+  for (const r of d.data.slice(0, 12)) {
+    const tr = PS.el('tr'); tr.dataset.key = encodeURIComponent(r.caminho);
+    const tdN = PS.el('td', null, r.nome); tdN.title = r.caminho;
+    const tdT = PS.el('td'); tdT.append(PS.el('span', 'ps-chip ' + r.grupo, tipos[r.grupo] || r.grupo));
+    const tdV = PS.el('td', 'num', PS.n(r.n));
+    tr.append(tdN, tdT, tdV); tb.append(tr);
+  }
+});
+
+dash.draw('medicoes', (tb) => {
+  const d = dash.data('medicoes');
+  tb.replaceChildren();
+  if (d.status !== 'ok') return;
+  for (const r of d.data) {
+    const tr = PS.el('tr'); tr.dataset.key = encodeURIComponent(r.metrica);
+    tr.append(PS.el('td', null, r.metrica), PS.el('td', null, PS.dm(r.desde)), PS.el('td', null, r.como_conta));
+    tb.append(tr);
+  }
+});
+
+/* Gráfico dia a dia: barras de visitas, linhas de visitantes e de sessões de jogo. */
+dash.draw('grafico', (el) => {
+  const d = dash.data('serie');
+  el.replaceChildren();
+  if (d.status === 'error') { el.textContent = 'O gráfico não carregou.'; return; }
+  if (d.status !== 'ok' || !d.data.length) { el.textContent = '—'; return; }
+  const rows = d.data;
+  const W = Math.max(280, el.clientWidth || 600), H = 270, m = {t: 28, r: 8, b: 30, l: 30};
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H)
+    .attr('role', 'img').attr('aria-label', 'Visitas, visitantes e sessões de jogo por dia, de ' + PS.dm(rows[0].dia) + ' a ' + PS.dm(rows[rows.length - 1].dia));
+  const x = d3.scaleBand().domain(rows.map((r) => r.dia)).range([m.l, W - m.r]).paddingInner(0.3).paddingOuter(0.15);
+  const top = d3.max(rows, (r) => Math.max(r.visitas, r.visitantes, r.jogaram || 0)) || 1;
+  const y = d3.scaleLinear().domain([0, top * 1.12]).nice(4).range([H - m.b, m.t]);
+  const gr = svg.append('defs').append('linearGradient').attr('id', 'psBarGrad').attr('x1', 0).attr('y1', 1).attr('x2', 0).attr('y2', 0);
+  gr.append('stop').attr('offset', '0%').attr('stop-color', '#e3368f');
+  gr.append('stop').attr('offset', '100%').attr('stop-color', '#ffab3d');
+  const ticks = y.ticks(4);
+  svg.append('g').selectAll('line').data(ticks).join('line').attr('class', 'ps-grid-l')
+    .attr('x1', m.l).attr('x2', W - m.r).attr('y1', (v) => y(v)).attr('y2', (v) => y(v));
+  svg.append('g').selectAll('text').data(ticks).join('text').attr('class', 'ps-tick')
+    .attr('x', m.l - 7).attr('y', (v) => y(v) + 4).attr('text-anchor', 'end').text((v) => PS.n(v));
+  const gap = x.step() * x.paddingInner() / 2;
+  const sel = rows.filter((r) => r.sel === 1);
+  if (sel.length && sel.length < rows.length) {
+    const x0 = x(sel[0].dia) - gap, x1 = x(sel[sel.length - 1].dia) + x.bandwidth() + gap;
+    svg.append('rect').attr('class', 'ps-band').attr('x', x0).attr('y', m.t - 18).attr('width', x1 - x0).attr('height', H - m.b - m.t + 18).attr('rx', 8);
+  }
+  svg.append('g').selectAll('rect').data(rows).join('rect')
+    .attr('x', (r) => x(r.dia)).attr('width', x.bandwidth())
+    .attr('y', (r) => y(r.visitas)).attr('height', (r) => y(0) - y(r.visitas)).attr('rx', Math.min(5, x.bandwidth() / 3))
+    .attr('fill', 'url(#psBarGrad)').attr('opacity', (r) => r.sel ? 1 : 0.4);
+  if (x.bandwidth() >= 14) {
+    svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'ps-barlab')
+      .attr('x', (r) => x(r.dia) + x.bandwidth() / 2).attr('y', (r) => y(r.visitas) - 6).attr('text-anchor', 'middle')
+      .attr('opacity', (r) => r.sel ? 1 : 0.55).text((r) => r.visitas);
+  }
+  const cx = (r) => x(r.dia) + x.bandwidth() / 2;
+  for (const [k, cls, dot] of [['visitantes', 'ps-l1', 'ps-dot1'], ['jogaram', 'ps-l2', 'ps-dot2']]) {
+    svg.append('path').datum(rows).attr('class', 'ps-line ' + cls)
+      .attr('d', d3.line().defined((r) => r[k] != null).x(cx).y((r) => y(r[k])));
+    svg.append('g').selectAll('circle').data(rows.filter((r) => r[k] != null)).join('circle').attr('class', dot)
+      .attr('cx', cx).attr('cy', (r) => y(r[k])).attr('r', 3.5);
+  }
+  const cabe = Math.max(1, Math.floor((W - m.l - m.r) / 46));
+  const passo = Math.ceil(rows.length / cabe);
+  svg.append('g').selectAll('text').data(rows.filter((r, i) => (rows.length - 1 - i) % passo === 0)).join('text').attr('class', 'ps-tick')
+    .attr('x', cx).attr('y', H - 9).attr('text-anchor', 'middle').text((r) => PS.dm(r.dia));
+  const tip = PS.el('div', 'ps-tip'); tip.hidden = true; el.append(tip);
+  const mostra = (ev, r) => {
+    tip.replaceChildren(PS.el('strong', null, PS.dm(r.dia)));
+    for (const [rot, v] of [['Visitas', r.visitas], ['Visitantes', r.visitantes], ['Jogaram', r.jogaram]]) {
+      const s = PS.el('span', null, rot); s.append(PS.el('b', null, v == null ? 'sem contagem' : PS.n(v))); tip.append(s);
+    }
+    tip.hidden = false;
+    const box = el.getBoundingClientRect();
+    const left = Math.min(Math.max(0, cx(r) / W * box.width - tip.offsetWidth / 2), box.width - tip.offsetWidth);
+    tip.style.left = left + 'px'; tip.style.top = '4px';
+  };
+  svg.append('g').selectAll('rect').data(rows).join('rect')
+    .attr('x', (r) => x(r.dia) - gap).attr('width', x.step()).attr('y', m.t - 18).attr('height', H - m.b - m.t + 18)
+    .attr('fill', 'transparent').style('cursor', 'pointer')
+    .on('mouseenter', mostra).on('mousemove', mostra)
+    .on('mouseleave', () => { tip.hidden = true; })
+    .on('click', (ev, r) => dash.setParams({de: r.dia, ate: r.dia}));
+});
+
+/* Campos de data: só aplicam uma data completa e dentro do intervalo com dados. */
+for (const [name, lado] of [['f-de', 'de'], ['f-ate', 'ate']]) {
+  dash.draw(name, {
+    mount(el) {
+      el.addEventListener('change', () => {
+        if (!(el.value && el.validity.valid)) return;
+        const r = PS.row('periodo');
+        if (!r) return;
+        dash.setParams(lado === 'de' ? {de: el.value, ate: r.ate} : {de: r.de, ate: el.value});
+      });
+      el.addEventListener('blur', () => dash.draw(name));
+      return {};
+    },
+    update(el) {
+      const r = PS.row('periodo');
+      if (!r) return;
+      el.min = r.primeiro; el.max = r.ultimo;
+      if (document.activeElement !== el) el.value = r[lado];
+    },
+  });
+}
+</script>
+
+<script>
+/* Controles: períodos prontos, troca de lista de países e frases do Ads. */
+document.querySelectorAll('.ps-pill[data-preset]').forEach((b) => b.addEventListener('click', () => {
+  const r = PS.row('periodo');
+  if (!r) return;
+  const k = b.dataset.preset;
+  if (k === 'hoje') dash.setParams({de: '', ate: ''});
+  else if (k === 'ontem') { const o = PS.dia(r.ultimo, -1); dash.setParams({de: o < r.primeiro ? r.primeiro : o, ate: o < r.primeiro ? r.primeiro : o}); }
+  else if (k === '7') { const o = PS.dia(r.ultimo, -6); dash.setParams({de: o < r.primeiro ? r.primeiro : o, ate: r.ultimo}); }
+  else dash.setParams({de: r.primeiro, ate: r.ultimo});
+}));
+
+document.querySelectorAll('.ps-seg button[data-seg]').forEach((b) => b.addEventListener('click', () => {
+  const seg = b.dataset.seg;
+  document.querySelectorAll('.ps-seg button[data-seg]').forEach((o) => { o.classList.toggle('on', o === b); o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+  document.querySelectorAll('[data-seg-txt]').forEach((p) => { p.hidden = p.dataset.segTxt !== seg; });
+  document.querySelectorAll('#lista-paises').forEach((l) => { l.hidden = seg !== 'jogo'; });
+  document.querySelectorAll('#lista-ip').forEach((l) => { l.hidden = seg !== 'ip'; });
+}));
+
+dash.onData(() => {
+  const r = PS.row('periodo');
+  if (r) {
+    const o = PS.dia(r.ultimo, -1), s = PS.dia(r.ultimo, -6);
+    const ativo = r.de === r.ultimo && r.ate === r.ultimo ? 'hoje'
+      : r.de === o && r.ate === o ? 'ontem'
+      : r.ate === r.ultimo && r.de === (s < r.primeiro ? r.primeiro : s) && r.de !== r.primeiro ? '7'
+      : r.de === r.primeiro && r.ate === r.ultimo ? 'tudo' : '';
+    document.querySelectorAll('.ps-pill[data-preset]').forEach((b) => b.classList.toggle('on', b.dataset.preset === ativo));
+  }
+  const ev = dash.data('eventos'), t5 = dash.data('top5');
+  const temCodigo = ev.status === 'ok' && ev.data.some((x) => x.tipo === 'jogador');
+  const temNoPeriodo = t5.status === 'ok' && t5.data.length > 0;
+  document.querySelectorAll('#top5-espera,#top5-tag-espera').forEach((x) => { x.hidden = temCodigo; });
+  document.querySelectorAll('#top5-tag-ok,#top5-nota').forEach((x) => { x.hidden = !temCodigo; });
+  document.querySelectorAll('#top5-vazio').forEach((x) => { x.hidden = !temCodigo || temNoPeriodo; });
+  const a = PS.row('ads_tot');
+  const estado = !a ? 'zero' : a.dias === 0 ? 'antes' : a.impressoes > 0 ? 'rodando' : 'zero';
+  document.querySelectorAll('#ads-zero').forEach((p) => { p.hidden = estado !== 'zero'; });
+  document.querySelectorAll('#ads-rodando').forEach((p) => { p.hidden = estado !== 'rodando'; });
+  document.querySelectorAll('#ads-antes').forEach((p) => { p.hidden = estado !== 'antes'; });
+});
+</script>
+
+<script>
+/* Atualização: o botão manda ao Claude do usuário o pedido de uma leitura nova do GoatCounter e do Google Ads
+   (room.sendToClaudeSession, direto do clique). A hora da última leitura vem do campo `updated` dos datasets. */
+let syncRoom = null, syncEstado = 'off', syncPedidoEm = null, syncLido = {gc: null, ads: null};
+const SYNC_MSGS = ['sync-enviando', 'sync-ok', 'sync-chat', 'sync-falhou'];
+const syncMostra = (id) => SYNC_MSGS.forEach((m) => document.querySelectorAll('#' + m).forEach((p) => { p.hidden = m !== id; }));
+const syncBotoes = (fn) => document.querySelectorAll('#sync-btn').forEach(fn);
+const syncOferece = (s) => {
+  syncEstado = s;
+  const ok = s === 'available' || s === 'available_if_summoned' || s === 'available_if_opened';
+  syncBotoes((b) => { b.hidden = !ok; });
+  document.querySelectorAll('#sync-sem').forEach((p) => { p.hidden = ok; });
+};
+const syncMarca = () => { syncPedidoEm = new Date(); dash.draw('sync-hora'); };
+
+claude.use('room').then((r) => {
+  syncRoom = r;
+  if (!r || typeof r.canSendToClaudeSession !== 'function') { syncOferece('off'); return; }
+  r.canSendToClaudeSession().then(syncOferece, () => syncOferece('off'));
+}, () => syncOferece('off'));
+
+/* a resposta muda quando a conversa do Claude abre ou fecha ao lado do painel: confere de novo ao voltar para a página */
+const syncConfere = () => { if (syncRoom && typeof syncRoom.canSendToClaudeSession === 'function') syncRoom.canSendToClaudeSession().then(syncOferece, () => syncOferece('off')); };
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncConfere(); });
+window.addEventListener('focus', syncConfere);
+
+syncBotoes((b) => b.addEventListener('click', () => {
+  if (!syncRoom) return;
+  const dados = {
+    label: 'Atualizar o painel PlaySurf',
+    pedido: 'Atualizar o painel PlaySurf agora: ler de novo o GoatCounter (playsurf.goatcounter.com) e o Google Ads da campanha de pesquisa, refazer os arquivos dos datasets e gravar a nova hora de leitura, do mesmo jeito da última atualização.'
+  };
+  if (syncLido.gc) dados.ultima_leitura_goatcounter = syncLido.gc;
+  if (syncLido.ads) dados.ultima_leitura_google_ads = syncLido.ads;
+  let envio;
+  try {
+    envio = syncRoom.sendToClaudeSession(dados, {
+      deliver: syncEstado === 'available_if_opened' ? 'stage' : 'send',
+      attachPresence: false,
+      onStatus: (s) => {
+        if (s && s.state === 'sent') { syncMarca(); syncMostra('sync-ok'); }
+        else if (s && s.state === 'failed') syncMostra('sync-falhou');
+      }
+    });
+  } catch (e) { envio = Promise.reject(e); }
+  syncBotoes((x) => { x.disabled = true; x.classList.add('girando'); });
+  syncMostra('sync-enviando');
+  envio.then((para) => {
+    const to = para && para.to;
+    if (syncEstado === 'available_if_opened') syncMostra('sync-chat');
+    else if ((to === 'session' || to === 'new') && para.id) { /* onStatus diz como foi */ }
+    else { syncMarca(); syncMostra('sync-ok'); }
+  }, () => {
+    syncMostra('sync-falhou');
+    syncRoom.canSendToClaudeSession().then(syncOferece, () => {});
+  }).finally(() => setTimeout(() => syncBotoes((x) => { x.disabled = false; x.classList.remove('girando'); }), 4000));
+}));
+
+dash.draw('sync-hora', (el) => {
+  el.textContent = syncPedidoEm ? syncPedidoEm.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}) : '—';
+});
+
+dash.draw('sync-lido', {
+  mount(el) {
+    const made = {stop: [], vivo: true};
+    made.pinta = () => {
+      const datas = [syncLido.gc, syncLido.ads].map((s) => (s ? new Date(s) : null)).filter((d) => d && !isNaN(d));
+      if (!datas.length) { el.textContent = '—'; return; }
+      const d = new Date(Math.min(...datas)), p2 = (n) => String(n).padStart(2, '0');
+      const min = Math.max(0, Math.round((Date.now() - d) / 60000));
+      const ha = min < 60 ? `há ${min} min` : min < 2880 ? `há ${Math.round(min / 60)} h` : `há ${Math.round(min / 1440)} dias`;
+      el.textContent = `${p2(d.getDate())}/${p2(d.getMonth() + 1)} às ${p2(d.getHours())}h${p2(d.getMinutes())} (${ha})`;
+    };
+    claude.use('db').then((db) => {
+      if (!db || !made.vivo) return;
+      [['gc', 'datasets/eventos'], ['ads', 'datasets/ads_diario']].forEach(([k, path]) => {
+        made.stop.push(db.doc(path).onSnapshot((s) => {
+          const u = s.exists ? (s.data() || {}).updated : null;
+          syncLido[k] = u && typeof u.at === 'string' ? u.at : null;
+          made.pinta();
+        }, () => {}));
+      });
+    }, () => {});
+    made.timer = setInterval(() => made.pinta(), 60000);
+    made.pinta();
+    return made;
+  },
+  update(el, made) { made.pinta(); },
+  unmount(el, made) { made.vivo = false; clearInterval(made.timer); made.stop.forEach((f) => { try { f(); } catch (e) {} }); }
+});
+</script>
+
+</div>
 </body>
 </html>
