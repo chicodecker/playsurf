@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Painel PlaySurf</title>
 <link rel="icon" href="favicon.ico">
-<style>html,body{margin:0;background:#040915;min-height:100%}#dash-root{min-height:100vh}</style>
+<style>[hidden]{display:none!important}html,body{margin:0;background:#040915;min-height:100%}#dash-root{min-height:100vh}</style>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
 <script>
 /* stand-in for the Data runtime of the Claude artifact: the same page code, over the CSVs embedded below */
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded',()=>{started=true;all()});
       <div class="ps-sync" id="atualizar">
         <button type="button" class="ps-pill ps-sync-btn" id="sync-btn" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pedir atualização ao Claude</button>
         <p class="ps-sync-t" id="sync-lido-txt">Última leitura do GoatCounter e do Google Ads: <b data-draw="sync-lido">—</b></p>
-        <p class="ps-sync-t" id="sync-onde">O pedido vai para a conversa do Claude aberta ao lado do painel. Use no app do Claude, ao lado da conversa do PlaySurf no Code: é ela que lê o GoatCounter e o Google Ads no seu Chrome.</p>
+        <p class="ps-sync-t" id="sync-onde" hidden>O pedido vai para a conversa do Claude aberta ao lado do painel. Use no app do Claude, ao lado da conversa do PlaySurf no Code: é ela que lê o GoatCounter e o Google Ads no seu Chrome.</p>
         <p class="ps-sync-msg" id="sync-enviando" role="status" hidden>Enviando o pedido…</p>
         <p class="ps-sync-msg" id="sync-ok" role="status" hidden>Pedido enviado ao Claude às <b data-draw="sync-hora">—</b>. Acompanhe no chat; quando ele terminar, a hora da última leitura muda aqui.</p>
         <p class="ps-sync-msg" id="sync-chat" role="status" hidden>O pedido ficou no chat do Claude: é só enviar a mensagem.</p>
