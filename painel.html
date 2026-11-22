@@ -377,6 +377,72 @@ document.addEventListener('DOMContentLoaded',()=>{started=true;all()});
     </div>
     <p class="ps-note">Os números do CrazyGames só aparecem depois que o jogo é aprovado e entra no ar lá. Todo o período, desde o envio.</p>
   </section>
+  <section class="ps-card" id="ads-dia">
+    <div class="ps-ch"><h2>Google Ads dia a dia</h2><span class="ps-status"><i></i><span>Todas as campanhas</span></span></div>
+    <p class="ps-sub">Custo de cada dia nas barras, cliques na linha. Toque num dia para ver os números.</p>
+    <div class="ps-chart" data-draw="ads-grafico" data-source="ads_diario" style="position:relative"></div>
+    <div class="ps-table-wrap">
+      <table class="ps-table">
+        <thead><tr><th>Dia</th><th>Impressões</th><th>Cliques</th><th>CTR</th><th>Custo</th><th>CPC médio</th><th>Conversões</th></tr></thead>
+        <tbody data-draw="ads-tabela"></tbody>
+      </table>
+    </div>
+  </section>
+<script>
+/* 2026-11-22 (the user: "coloque tb no painel uma progressao dos google ads, dia a dia") the Ads day by day: cost in bars, clicks in a line, and the table */
+(function () {
+  const linhas = () => { const d = dash.data('ads_diario'); return d.status === 'ok' ? d.data.map((r) => ({dia: r.dia, imp: Number(r.impressoes) || 0, cli: Number(r.cliques) || 0, custo: Number(r.custo) || 0, conv: Number(r.conversoes) || 0})).sort((a, b) => a.dia < b.dia ? -1 : 1) : []; };
+  dash.draw('ads-grafico', (el) => {
+    const rows = linhas();
+    el.replaceChildren();
+    if (!rows.length) { el.textContent = '—'; return; }
+    const W = Math.max(280, el.clientWidth || 600), H = 240, m = {t: 26, r: 40, b: 30, l: 46};
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).attr('role', 'img')
+      .attr('aria-label', 'Custo e cliques do Google Ads por dia');
+    const x = d3.scaleBand().domain(rows.map((r) => r.dia)).range([m.l, W - m.r]).paddingInner(0.3).paddingOuter(0.15);
+    const yc = d3.scaleLinear().domain([0, (d3.max(rows, (r) => r.custo) || 1) * 1.18]).nice(4).range([H - m.b, m.t]);
+    const yk = d3.scaleLinear().domain([0, (d3.max(rows, (r) => r.cli) || 1) * 1.18]).nice(4).range([H - m.b, m.t]);
+    const gr = svg.append('defs').append('linearGradient').attr('id', 'psAdsGrad').attr('x1', 0).attr('y1', 1).attr('x2', 0).attr('y2', 0);
+    gr.append('stop').attr('offset', '0%').attr('stop-color', '#e3368f');
+    gr.append('stop').attr('offset', '100%').attr('stop-color', '#ffab3d');
+    const tc = yc.ticks(4);
+    svg.append('g').selectAll('line').data(tc).join('line').attr('class', 'ps-grid-l').attr('x1', m.l).attr('x2', W - m.r).attr('y1', (v) => yc(v)).attr('y2', (v) => yc(v));
+    svg.append('g').selectAll('text').data(tc).join('text').attr('class', 'ps-tick').attr('x', m.l - 7).attr('y', (v) => yc(v) + 4).attr('text-anchor', 'end').text((v) => 'R$' + v);
+    svg.append('g').selectAll('text').data(yk.ticks(4)).join('text').attr('class', 'ps-tick').attr('x', W - m.r + 7).attr('y', (v) => yk(v) + 4).attr('text-anchor', 'start').text((v) => PS.n(v));
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.dia)).attr('width', x.bandwidth())
+      .attr('y', (r) => yc(r.custo)).attr('height', (r) => yc(0) - yc(r.custo)).attr('rx', Math.min(5, x.bandwidth() / 3)).attr('fill', 'url(#psAdsGrad)');
+    if (x.bandwidth() >= 22) svg.append('g').selectAll('text').data(rows.filter((r) => r.custo > 0)).join('text').attr('class', 'ps-barlab')
+      .attr('x', (r) => x(r.dia) + x.bandwidth() / 2).attr('y', (r) => yc(r.custo) - 6).attr('text-anchor', 'middle').text((r) => PS.brl(r.custo));
+    const cx = (r) => x(r.dia) + x.bandwidth() / 2;
+    svg.append('path').datum(rows).attr('class', 'ps-line ps-l1').attr('d', d3.line().x(cx).y((r) => yk(r.cli)));
+    svg.append('g').selectAll('circle').data(rows).join('circle').attr('class', 'ps-dot1').attr('cx', cx).attr('cy', (r) => yk(r.cli)).attr('r', 3.5);
+    svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'ps-tick').attr('x', cx).attr('y', H - 9).attr('text-anchor', 'middle').text((r) => PS.dm(r.dia));
+    const tip = PS.el('div', 'ps-tip'); tip.hidden = true; el.append(tip);
+    const gap = x.step() * x.paddingInner() / 2;
+    const mostra = (ev, r) => {
+      tip.replaceChildren(PS.el('strong', null, PS.dm(r.dia)));
+      for (const [rot, v] of [['Impressões', PS.n(r.imp)], ['Cliques', PS.n(r.cli)], ['Custo', PS.brl(r.custo)], ['CPC médio', r.cli ? PS.brl(r.custo / r.cli) : '—']]) {
+        const s = PS.el('span', null, rot); s.append(PS.el('b', null, v)); tip.append(s);
+      }
+      tip.hidden = false;
+      const box = el.getBoundingClientRect();
+      tip.style.left = Math.min(Math.max(0, cx(r) / W * box.width - tip.offsetWidth / 2), box.width - tip.offsetWidth) + 'px'; tip.style.top = '4px';
+    };
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.dia) - gap).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t)
+      .attr('fill', 'transparent').style('cursor', 'pointer').on('mouseenter', mostra).on('mousemove', mostra).on('click', mostra).on('mouseleave', () => { tip.hidden = true; });
+  });
+  dash.draw('ads-tabela', (tb) => {
+    const rows = linhas().slice().reverse();
+    tb.replaceChildren();
+    for (const r of rows) {
+      const tr = document.createElement('tr');
+      for (const v of [PS.dm(r.dia), PS.n(r.imp), PS.n(r.cli), r.imp ? (Math.round(r.cli / r.imp * 1000) / 10).toLocaleString('pt-BR') + '%' : '—', PS.brl(r.custo), r.cli ? PS.brl(r.custo / r.cli) : '—', PS.n(r.conv)]) tr.append(PS.el('td', null, v));
+      tb.append(tr);
+    }
+  });
+})();
+</script>
+
 
   <section class="ps-card" id="falta-decidir">
     <div class="ps-ch"><h2>O que falta decidir</h2></div>
