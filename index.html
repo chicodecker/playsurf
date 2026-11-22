@@ -1456,7 +1456,81 @@ body.wcOn #gm .gmSurf button:not([data-s="pro"]):not([data-s="girl"]):not([data-
   .wct{padding:4px 22px 4px 10px;gap:3px;min-height:calc(var(--rh,30px) + 2px);border-radius:7px;box-shadow:none}.wct b{font-size:11px}.wct small{font-size:6.5px}.wct em{display:none}.wct i{font-size:8px;right:7px}
   .wmCt{padding:3px 7px 4px;gap:2px;border-radius:6px}.wmCt b{font-size:7.5px}.wmCt span{font-size:5.5px}
   .wmPlB{right:6px;bottom:5px;padding:3px 8px 3px 4px;gap:5px}.wmPlB i{width:11px;height:11px}.wmPlB b{font-size:7.5px}.wmPlB span{display:none}}
+/* 2026-11-22 (1122, the user: "ta tudo muito pesado ... zoom na regiao ... volte pro mapa mundo") the wave map, lighter, with a camera */
+.wmz .wmSide{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;width:var(--mw,480px);align-items:stretch}
+.wmz .wmBox{grid-column:1/-1;width:100%;padding:0;border-radius:18px;background:radial-gradient(ellipse 75% 90% at 50% 45%,rgba(16,46,84,.40),rgba(4,14,32,.52));border:1px solid rgba(255,255,255,.09);box-shadow:0 18px 40px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.06);touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.wmz .wmBox.drag{cursor:grabbing}.wmz .wmBox.pt{cursor:pointer}
+.wmz .wmInfo{width:auto;min-width:0;border-radius:14px;background:linear-gradient(180deg,rgba(10,24,46,.50),rgba(4,12,28,.50));border:1px solid rgba(255,255,255,.09);box-shadow:0 10px 26px rgba(0,0,0,.18)}
+.wmz .wmInfo:last-child{grid-column:1/-1}
+.wmz .wmInfo::before{width:3px;border-radius:3px;top:12px;bottom:12px;left:8px}
+.wmz .wmInfo{padding-left:22px}
+.wmz .wmSide .tod{display:flex;flex-direction:column;gap:5px;justify-content:center}
+.wmz .wmSide .tod button{padding:5px 12px;border-radius:999px;font-size:10.5px;background:rgba(6,16,34,.42);border:1px solid rgba(255,255,255,.14);opacity:.9;text-align:left;transition:background .15s,border-color .15s}
+.wmz .wmSide .tod button.on{background:var(--ps-grad);border-color:transparent;opacity:1}
+@media (hover:hover){body:not(.touch) .wmz .wmSide .tod button:not(.on):hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4)}}
+.wmCam{position:relative;transform-origin:0 0;--ik:1}
+.wmz .wmPins{pointer-events:none}   /* (the pins' layer let no pointer through to the continents under it) */
+.wmz .wmLab{display:none!important}
+.wmz .wmEqT{transition:opacity .3s}.wmz.zin .wmEqT{opacity:0}
+.wmz .wmLand{transition:opacity .35s}
+.wmz .wmHi{transition:opacity .3s ease}.wmz .wmHi.pv:not(.on){opacity:.75}
+.wmz .wmHi use{fill:rgba(255,120,180,.11)}
+/* (the coast's lines keep their width while the map scales) */
+.wmz .wmLand{stroke-width:calc(1px*var(--ik,1))}.wmz .wmGlow{stroke-width:calc(4px*var(--ik,1))}.wmz .wmHi use{stroke-width:calc(1.6px*var(--ik,1))}.wmz .wmEq{stroke-width:calc(.14px*var(--ik,1))}
+.wmz .wmBack~span{display:none}
+/* the pins and the names keep their size while the map scales (scale = 1 / the camera's) */
+.wmz .wdot{scale:var(--ik,1);transition:opacity .3s,width .18s,height .18s,margin .18s,transform .3s}
+.wmz .wdot.on,.wmz .wdot.pk{transform:none;width:11px;height:11px;margin:-5.5px 0 0 -5.5px}
+.wmz .wdot>b{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);padding:3px 7px;border-radius:999px;font:900 10px/1 var(--ps-f);font-style:italic;letter-spacing:.07em;color:#fff;white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.85);opacity:0;visibility:hidden;transition:opacity .25s,background .15s,color .15s;pointer-events:none}
+.wmz .wdot.l>b{left:auto;right:calc(100% + 6px)}
+.wmz .wdot.lb>b{opacity:1;visibility:visible}
+.wmz .wdot.lock>b{color:rgba(255,255,255,.62)}
+.wmz .wdot.on>b,.wmz .wdot.pk>b{opacity:1;visibility:visible;background:#fff;color:#0b1520;text-shadow:none;box-shadow:0 6px 16px rgba(0,0,0,.35);z-index:2}
+.wmz.mv .wdot:not(.on):not(.pk)>b{opacity:0}
+/* the continents' names: text on the map, a white pill when pointed at */
+.wmz .wmCt{scale:var(--ik,1);transform-origin:0 0;background:rgba(4,12,26,.22);border-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;text-shadow:0 1px 8px rgba(0,0,0,.8);transition:background .18s,color .18s,border-color .18s,opacity .3s}
+.wmz .wmCt span{text-shadow:none}
+.wmz .wmCt.hv{background:#fff;color:#0b1520;border-color:#fff;text-shadow:none}.wmz .wmCt.hv span{color:#e3368f}
+.wm3.wmz:not([data-ct=""]) .wmCt{opacity:0;pointer-events:none}
+.wmz .wmPlB{background:rgba(30,10,26,.5);box-shadow:none}.wmz .wmPlB.on{background:#fff}
+.wmz.wmPlH .wmzH{opacity:0}
+/* the camera's controls */
+.wmzUi{position:absolute;inset:0;pointer-events:none;z-index:5}
+.wmzUi button{pointer-events:auto;cursor:pointer;font-family:var(--ps-f);color:#fff;-webkit-tap-highlight-color:transparent;outline:none}
+.wmzW{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:8px;padding:7px 14px 7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(4,12,26,.55);font:900 11px/1 var(--ps-f);font-style:italic;letter-spacing:.12em;opacity:0;visibility:hidden;transform:translateX(-10px);transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.2,1),visibility 0s .4s,background .15s,color .15s}
+.wmzW span{font:800 8.5px/1 var(--ps-f);letter-spacing:.2em;color:var(--ps-acc);font-style:normal}
+.wmzW span:empty{display:none}
+.wmz.zin .wmzW{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.2,1),background .15s,color .15s}
+.wmzW:hover,.wmzW:focus-visible,.wmzW.gpF{background:#fff;color:#0b1520}.wmzW:hover span,.wmzW:focus-visible span{color:#e3368f}
+.wmzZ{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.22);background:rgba(4,12,26,.45)}
+.wmzZ button{width:32px;height:30px;margin:0;padding:0;border:0;background:transparent;font:700 18px/1 system-ui,sans-serif;display:grid;place-items:center;transition:background .15s,color .15s,opacity .2s}
+.wmzZ button+button{border-top:1px solid rgba(255,255,255,.16)}
+.wmzZ button:hover,.wmzZ button:focus-visible,.wmzZ button.gpF{background:#fff;color:#0b1520}
+.wmzZ button:disabled{opacity:.3;cursor:default;background:transparent;color:#fff}
+.wmzH{position:absolute;left:14px;bottom:11px;font:800 8.5px/1 var(--ps-f);letter-spacing:.2em;color:rgba(255,255,255,.55);text-shadow:0 1px 6px rgba(0,0,0,.8);white-space:nowrap;transition:opacity .3s}
+/* the list: no boxes, thin glass lines */
+.wmz .wmHead b{font-size:13px;letter-spacing:.1em}
+.wmz .wct,.wmz .wrow{background:linear-gradient(90deg,rgba(6,16,34,.50),rgba(6,16,34,.26));border:1px solid rgba(255,255,255,.10);box-shadow:none;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+.wmz .wct:hover,.wmz .wct:focus-visible,.wmz .wrow.hv,.wmz .wrow.pk,.wmz .wrow:focus-visible{text-shadow:none}
+.wmz .wrow.hv,.wmz .wrow.pk,.wmz .wrow:focus-visible,.wmz .wct:focus-visible{background:#fff;border-color:#fff}
+.wmz .wrow.lock.hv{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.6);text-shadow:0 1px 6px rgba(0,0,0,.55)}
+.wmz .wmHead b,.wmz .wmHead span{text-shadow:0 1px 8px rgba(0,0,0,.85)}
+.wmz .wct.lock,.wmz .wrow.lock{border-style:dashed;border-color:rgba(255,255,255,.16)}
+.wmz .wct.pl{background:linear-gradient(90deg,rgba(120,40,30,.28),rgba(255,255,255,.04));border-color:rgba(255,150,70,.32)}
+.wmz .wct::before,.wmz .wrow::before{content:'';position:absolute;left:5px;top:22%;bottom:22%;width:3px;border-radius:3px;background:var(--ps-grad);opacity:0;transform:scaleY(.4);transition:opacity .18s,transform .25s}
+.wmz .wct:hover::before,.wmz .wrow.hv::before,.wmz .wrow.pk::before,.wmz .wct:focus-visible::before{opacity:1;transform:none}
+.wmz .wmBack{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3)}
+.wm3.wmz .wmList.in .wmRows>*{animation:wmzRowIn .46s cubic-bezier(.2,.9,.2,1) both}
+@keyframes wmzRowIn{from{opacity:0;transform:translateX(26px) skewX(-8deg)}to{opacity:1;transform:skewX(-8deg)}}
+.wm3.wmz .wmList.in .wmHead{animation:wmzHdIn .4s cubic-bezier(.2,.9,.2,1) both}
+@keyframes wmzHdIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (max-height:540px){.wmz .wmBox{border-radius:12px}.wmz .wmInfo{border-radius:10px;padding-left:18px}.wmz .wmInfo::before{left:6px;top:8px;bottom:8px}.wmz .wmSide{gap:5px}
+  .wmz .wmSide .tod{gap:3px}.wmz .wmSide .tod button{padding:3px 9px;font-size:9px}
+  .wmzW{left:7px;top:7px;padding:5px 10px 5px 8px;font-size:9px;gap:6px}.wmzW span{display:none}.wmzZ{right:7px;top:7px;border-radius:10px}.wmzZ button{width:26px;height:24px;font-size:15px}
+  .wmzH{display:none}.wmz .wmHead b{font-size:10.5px;letter-spacing:.06em}.wmz .wmHead span{font-size:7px;letter-spacing:.12em}.wmz .wdot>b{font-size:8.5px;padding:2px 6px}}
+
 </style>
+<style>body.touch #wzNx{top:auto!important;height:auto!important}   /* 2026-11-22 (no stretched NEXT on a phone) */</style>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -8457,6 +8531,101 @@ function progUI(){
   const nT=TROPHIES.filter(t=>PROG.tro[t.id]).length;$('trBtn').textContent='TROPHIES '+nT+'/'+TROPHIES.length;
   $('trSub').textContent=nT+' OF '+TROPHIES.length+' · LEVEL '+lv+' · '+PROG.xp.toLocaleString('en-US')+' XP · '+PROG.waves+' WAVES';
   $('trGrid').innerHTML=TROPHIES.map(t=>`<div class="tr${PROG.tro[t.id]?' on':''}"><b>${t.n}</b><span>${t.d}</span></div>`).join('')+BOARDS.map(b=>`<div class="tr${boardOpen(b)?' on':''}"><b>BOARD · ${b.name}</b><span>${boardOpen(b)?b.sub:'&#128274; '+reqText(b.req)}</span></div>`).join('')}
+/* 2026-11-22 (1122, the user: "faca de forma que de zoom na regiao, abra o menu de ondas, volte pro mapa mundo, zoom in, zoom out") a camera on the
+   wave map. root._cam = {s: scale, x, y: the map point in the middle of the box, 0..1}. The map (.wmIn) sits in a .wmCam that the camera moves;
+   the pins and the continents' names are scaled back by 1/s (--ik) so they keep their size. A continent fits its waves; WORLD flies back out */
+const WMZ={dur:640,max:14,min:1};
+const wmzEase=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const wmzClamp=c=>{const s=Math.max(WMZ.min,Math.min(WMZ.max,c.s)),h=.5/s;return {s,x:Math.max(h,Math.min(1-h,c.x)),y:Math.max(h,Math.min(1-h,c.y))}};
+function wmzSet(root,c){const cam=root.querySelector('.wmCam');if(!cam)return;c=wmzClamp(c);root._cam=c;
+  cam.style.transform='translate('+((.5-c.x*c.s)*100).toFixed(3)+'%,'+((.5-c.y*c.s)*100).toFixed(3)+'%) scale('+c.s.toFixed(4)+')';cam.style.setProperty('--ik',(1/c.s).toFixed(4));
+  root.classList.toggle('zin',c.s>1.03||!!root._ct);const P=root.querySelector('.wmzP'),M=root.querySelector('.wmzM');if(P)P.disabled=c.s>=WMZ.max-.01;if(M)M.disabled=c.s<=1.01&&!root._ct}
+function wmzGo(root,t,dur){if(!root||!root._cam)return;cancelAnimationFrame(root._camA);clearTimeout(root._camTm);t=wmzClamp(t);root._goal=t;
+  if(!dur){root.classList.remove('mv');wmzSet(root,t);wmzLabels(root);return}
+  const a=root._cam,t0=performance.now(),la=Math.log(a.s),lb=Math.log(t.s);root.classList.add('mv');
+  const step=()=>{const k=Math.min(1,(performance.now()-t0)/dur),e=wmzEase(k),s=Math.exp(la+(lb-la)*e);
+    /* the point under the middle moves so that the zoom feels like a straight flight */
+    const w=(1/a.s-1/s)/((1/a.s-1/t.s)||1e-9),f=Math.abs(lb-la)>.01?Math.max(0,Math.min(1,w)):e;
+    wmzSet(root,{s,x:a.x+(t.x-a.x)*f,y:a.y+(t.y-a.y)*f});if(k<1)root._camA=requestAnimationFrame(step);else{root.classList.remove('mv');wmzLabels(root)}};
+  root._camA=requestAnimationFrame(step);root._camTm=setTimeout(()=>{if(root.classList.contains('mv')){cancelAnimationFrame(root._camA);root.classList.remove('mv');wmzSet(root,t);wmzLabels(root)}},dur+400)}   /* (a hidden tab has no frames: it lands anyway) */
+/* the view that fits a continent's waves (the whole world for none, or for KEPLER-452b) */
+function wmzFit(root,k){if(!k||k==='pl')return {s:1,x:.5,y:.5};const P=[...root.querySelectorAll('.wdot[data-ct="'+k+'"]')].map(d=>[+d.dataset.x/100,+d.dataset.y/100]);if(!P.length)return {s:1,x:.5,y:.5};
+  const box=root.querySelector('.wmBox'),A=box&&box.clientHeight?box.clientWidth/box.clientHeight:2.46;let x0=1,x1=0,y0=1,y1=0;P.forEach(([x,y])=>{x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)});
+  const w=Math.max(x1-x0,.05),h=Math.max(y1-y0,.05*A/2.46),s=Math.max(1.3,Math.min(.6/w,.56/h,5.5));
+  return {s,x:(x0+x1)/2+.07/s,y:(y0+y1)/2}}   /* (a touch right of the middle: the names go on the right) */
+/* the waves' names on the map: the open continent's (or every wave in sight once zoomed in on the world); a name that would hit another waits */
+function wmzLabels(root){const c=root._cam,box=root.querySelector('.wmBox');if(!c||!box)return;const W=box.clientWidth,H=box.clientHeight;if(!W)return;
+  const k=root._ct&&root._ct!=='pl'?root._ct:null,all=!k&&c.s>=2.2,D=[...root.querySelectorAll('.wdot')];
+  D.forEach(d=>{d._sx=W*(.5+(+d.dataset.x/100-c.x)*c.s);d._sy=H*(.5+(+d.dataset.y/100-c.y)*c.s);d.classList.remove('lb','l')});
+  const C=D.filter(d=>(k?d.dataset.ct===k:all)&&d._sx>-10&&d._sx<W+10&&d._sy>-10&&d._sy<H+10);
+  C.sort((a,b)=>(b.classList.contains('pk')-a.classList.contains('pk'))||(a._sy-b._sy));
+  const small=innerHeight<=540,placed=[[0,0,small?90:200,small?34:44],[W-(small?40:52),0,W,small?60:76],[W-(small?110:170),H-(small?30:40),W,H]];
+  const hit=(r,me)=>placed.some(q=>r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1])||D.some(d=>d!==me&&!d.classList.contains('dim')&&d._sx>r[0]-3&&d._sx<r[2]+3&&d._sy>r[1]-3&&d._sy<r[3]+3);
+  C.forEach(d=>{const b=d.firstElementChild;if(!b)return;if(!d._lw)d._lw=b.offsetWidth||((b.textContent.length*6.4)+14);const w=d._lw,h=small?14:17,R=[d._sx+7,d._sy-h/2,d._sx+7+w,d._sy+h/2],L=[d._sx-7-w,d._sy-h/2,d._sx-7,d._sy+h/2];
+    const okR=R[2]<W-4&&!hit(R,d),okL=L[0]>4&&!hit(L,d),useL=d._sx>W*.66?okL:!okR&&okL;
+    if(useL){d.classList.add('lb','l');placed.push(L)}else if(okR){d.classList.add('lb');placed.push(R)}})}
+function wmzUi(root){const w=root.querySelector('.wmzW span'),h=root.querySelector('.wmzH'),tch=document.body.classList.contains('touch'),c=root._ct&&wmCtOf(root._ct);
+  if(w)w.textContent=c?c.t:'';if(h)h.textContent=root._ct&&root._ct!=='pl'?(tch?'TAP A WAVE · PINCH TO ZOOM':'CLICK A WAVE · SCROLL TO ZOOM · ESC FOR THE WORLD'):(tch?'TAP A CONTINENT · PINCH TO ZOOM':'CLICK A CONTINENT · SCROLL TO ZOOM · DRAG TO MOVE')}
+function wmzWorld(root){if(!root)return;if(root._ct)ctOpen(root,null);else wmzGo(root,{s:1,x:.5,y:.5},WMZ.dur);mapInfo(root,root._pk?wmSpot(root._pk):null)}
+function wmzZoom(root,f,u,v,dur){const c=root._goal&&root.classList.contains('mv')?root._goal:root._cam;if(!c)return;u=u==null?.5:u;v=v==null?.5:v;
+  if(f<1&&c.s<=1.01){if(root._ct)wmzWorld(root);return}   /* zoomed all the way out: back to the world */
+  const s=Math.max(1,Math.min(WMZ.max,c.s*f)),mx=c.x+(u-.5)/c.s,my=c.y+(v-.5)/c.s;wmzGo(root,{s,x:mx-(u-.5)/s,y:my-(v-.5)/s},dur==null?220:dur)}
+function wmzHov(root,k){root.querySelectorAll('.wmHi').forEach(g=>g.classList.toggle('pv',!!k&&g.dataset.ct===k));root.querySelectorAll('.wmCt').forEach(b=>b.classList.toggle('hv',!!k&&b.dataset.ct===k))}
+function wmzInit(root){if(!root||!root.dataset.built||root._cam)return;const box=root.querySelector('.wmBox'),inn=root.querySelector('.wmIn');if(!box||!inn)return;
+  const cam=document.createElement('div');cam.className='wmCam';inn.parentNode.insertBefore(cam,inn);cam.appendChild(inn);root.classList.add('wmz');
+  const ui=document.createElement('div');ui.className='wmzUi';ui.innerHTML='<button type="button" class="wmzW" aria-label="Back to the world map">&#9664;&#xFE0E; <b>WORLD</b><span></span></button><div class="wmzZ"><button type="button" class="wmzP" aria-label="Zoom in">+</button><button type="button" class="wmzM" aria-label="Zoom out">&minus;</button></div><div class="wmzH"></div>';box.appendChild(ui);
+  root._cam={s:1,x:.5,y:.5};root._camK=null;wmzSet(root,root._cam);
+  const rel=e=>{const r=box.getBoundingClientRect();return [(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
+  const ctUnder=e=>{const z=e.target.closest&&e.target.closest('.wmZones polygon,.wmCt,.wmPlB');return z?z.dataset.ct:null};
+  /* pointing: on the map a continent only lights up (the old map opened it on hover); in the world the pins wait for a continent */
+  root.addEventListener('pointerover',e=>{if(e.pointerType==='touch'||!box.contains(e.target))return;const k=ctUnder(e);if(!k)return;e.stopPropagation();wmzHov(root,k===root._ct?null:k)},true);
+  root.addEventListener('pointermove',e=>{if(e.pointerType==='touch'||root._ct||!box.contains(e.target))return;e.stopPropagation();const k=ctUnder(e);wmzHov(root,k);box.classList.toggle('pt',!!k)},true);
+  box.addEventListener('pointerleave',()=>{wmzHov(root,null);box.classList.remove('pt')});
+  /* a click: the camera's buttons; in the world, the continent clicked (or the one of the wave nearest) flies in; a drag is not a click */
+  const nearCt=e=>{const P=root.querySelector('.wmPins').getBoundingClientRect();let best=null,bd=40*40;root.querySelectorAll('.wdot').forEach(d=>{const x=P.left+(+d.dataset.x)/100*P.width,y=P.top+(+d.dataset.y)/100*P.height,q=(x-e.clientX)**2+(y-e.clientY)**2;if(q<bd){bd=q;best=d}});return best?best.dataset.ct:null};
+  root.addEventListener('click',e=>{if(performance.now()-(root._dragT||0)<300&&box.contains(e.target)){e.stopPropagation();e.preventDefault();return}
+    const b=e.target.closest('.wmzW,.wmzP,.wmzM');if(b){e.stopPropagation();if(!document.body.classList.contains('touch')&&!b.classList.contains('gpF'))b.blur();if(root._zoom)return;
+      if(b.classList.contains('wmzW'))wmzWorld(root);else wmzZoom(root,b.classList.contains('wmzP')?1.7:1/1.7,null,null,380);return}
+    if(root._ct||!box.contains(e.target)||e.target.closest('.wmPlB,.wmCt'))return;e.stopPropagation();if(root._zoom)return;const k=ctUnder(e)||nearCt(e);if(k){wmzHov(root,null);ctOpen(root,k);mapInfo(root,null)}},true);
+  box.addEventListener('dblclick',e=>{if(root._zoom||e.target.closest('button'))return;e.preventDefault();const [u,v]=rel(e);wmzZoom(root,2,u,v,380)});
+  box.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();if(root._zoom)return;const d=e.deltaMode===1?e.deltaY*16:e.deltaMode===2?e.deltaY*400:e.deltaY,[u,v]=rel(e);
+    const c=root._goal&&root.classList.contains('mv')?root._goal:root._cam;if(d>0&&c.s<=1.01&&root._ct){if(!root._wq||performance.now()-root._wq>450){root._wq=performance.now();wmzWorld(root)}return}
+    wmzZoom(root,Math.exp(-Math.max(-300,Math.min(300,d))*.0024),u,v,160)},{passive:false});
+  /* drag to move, two fingers to zoom */
+  const pts=new Map();let g=null;
+  const mv=e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);const r=box.getBoundingClientRect();
+    if(pts.size>=2){const [a,b]=[...pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),m=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+      if(!g||!g.pinch){g={pinch:1,d0:d,c0:root._cam,m0:m};root._dragT=performance.now()+1e4;return}
+      const s=Math.max(1,Math.min(WMZ.max,g.c0.s*d/(g.d0||1))),u0=(g.m0[0]-r.left)/r.width,v0=(g.m0[1]-r.top)/r.height,u=(m[0]-r.left)/r.width,v=(m[1]-r.top)/r.height,mx=g.c0.x+(u0-.5)/g.c0.s,my=g.c0.y+(v0-.5)/g.c0.s;
+      cancelAnimationFrame(root._camA);wmzSet(root,{s,x:mx-(u-.5)/s,y:my-(v-.5)/s});wmzLabels(root);return}
+    if(!g||g.pinch)return;const dx=e.clientX-g.x0,dy=e.clientY-g.y0;if(!g.on&&dx*dx+dy*dy<36)return;
+    if(!g.on){g.on=1;box.classList.add('drag');cancelAnimationFrame(root._camA);root.classList.remove('mv');g.c0=root._cam}
+    root._dragT=performance.now()+1e4;wmzSet(root,{s:g.c0.s,x:g.c0.x-dx/(r.width*g.c0.s),y:g.c0.y-dy/(r.height*g.c0.s)});wmzLabels(root)};
+  const up=e=>{if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);if(g&&(g.on||g.pinch))root._dragT=performance.now();
+    if(!pts.size){g=null;box.classList.remove('drag');removeEventListener('pointermove',mv,true);removeEventListener('pointerup',up,true);removeEventListener('pointercancel',up,true)}
+    else if(g&&g.pinch){const [p]=[...pts.values()];g={x0:p[0],y0:p[1],on:1,c0:root._cam}}};
+  box.addEventListener('pointerdown',e=>{if(e.button>0||root._zoom||e.target.closest('button'))return;pts.set(e.pointerId,[e.clientX,e.clientY]);
+    if(pts.size===1){g={x0:e.clientX,y0:e.clientY,on:0};addEventListener('pointermove',mv,true);addEventListener('pointerup',up,true);addEventListener('pointercancel',up,true)}});
+  wmzUi(root)}
+{const _mr=mapRender;mapRender=function(root,sel){const r=_mr.apply(this,arguments);if(root&&root.dataset.built){const first=!root._cam;wmzInit(root);
+    root.querySelectorAll('.wdot').forEach(d=>{const o=wmSpot(d.dataset.dot);if(o&&!d.firstElementChild){const b=document.createElement('b');b.textContent=o.short||o.name;d.appendChild(b)}});
+    if(first){root._camK=root._ct||null;wmzGo(root,wmzFit(root,root._camK),0)}else wmzLabels(root);wmzUi(root)}return r};
+ const _co=ctOpen;ctOpen=function(root,k,quiet){const r=_co.apply(this,arguments);if(!root||!root._cam)return r;const bk=root.querySelector('.wmBack');if(bk)bk.innerHTML='&#9664;&#xFE0E; WORLD';
+    const K=root._ct||null;wmzUi(root);if(K!==root._camK){root._camK=K;wmzGo(root,wmzFit(root,K),quiet?0:WMZ.dur)}else if(!quiet&&K)wmzGo(root,wmzFit(root,K),WMZ.dur);else wmzSet(root,root._cam);return r};
+ /* the sizes: the card and the time of day share one row under the map, the list is narrower, so the map takes the room */
+ mapSize=function(root,W,H,hs,tw){const small=innerHeight<=540,maxR=Math.max(WM_CT.length,...WM_CT.map(c=>wmIn(c.k).length)),hh=small?24:30,rg=small?4:5;
+   let rh=Math.floor((H-hh-10)/maxR)-rg;rh=Math.max(small?24:30,Math.min(small?36:48,rh));const two=rh>=34;
+   const cw=small?(W<640?164:186):(W>1400?290:252),lw=cw,cg=small?14:Math.round(Math.min(40,Math.max(20,W*0.022)));
+   root.classList.toggle('r1',!two);root.classList.remove('c1');[['--rh',rh],['--hh',hh],['--rg',rg],['--cw',cw]].forEach(([k,v])=>root.style.setProperty(k,v+'px'));
+   const inf=root.querySelector('.wmInfo'),ih=inf?inf.offsetHeight:0;
+   const mw=Math.round(Math.max(tw||0,180,Math.min(W-lw-cg,(hs-ih-(small?8:12))/0.4067,1400)));root.style.setProperty('--mw',mw+'px');requestAnimationFrame(()=>wmzLabels(root));return {mw,lw,cg}};
+ /* BACK, Esc or B on CHOOSE YOUR WAVE: from a continent (or a zoom) out to the world first, like a group's names on CHOOSE YOUR SURFER */
+ const _bk=wzBackGo;wzBackGo=function(){if(WZ.s===3){const m=document.getElementById('spotMap');if(m&&m._cam&&!m._zoom&&(m._ct||m._cam.s>1.03)){wmzWorld(m);return}}return _bk.apply(this,arguments)};
+ const act=()=>{const wp=document.getElementById('wavePick');if(wp&&!wp.classList.contains('off'))return document.getElementById('wpMap');return game.attract&&WZ.s===3?document.getElementById('spotMap'):null};
+ addEventListener('keydown',e=>{const m=act();if(!m||!m._cam||m._zoom||(e.target&&e.target.tagName==='INPUT'))return;
+   if(e.code==='Escape'&&m.id==='wpMap'&&(m._ct||m._cam.s>1.03)){e.preventDefault();e.stopImmediatePropagation();wmzWorld(m);return}   /* (CHANGE WAVE: Esc goes out to the world, then closes) */
+   if(e.code==='Equal'||e.code==='NumpadAdd'){e.preventDefault();e.stopImmediatePropagation();wmzZoom(m,1.7,null,null,380)}else if(e.code==='Minus'||e.code==='NumpadSubtract'){e.preventDefault();e.stopImmediatePropagation();wmzZoom(m,1/1.7,null,null,380)}},true);
+ addEventListener('resize',()=>['spotMap','wpMap'].forEach(id=>{const m=document.getElementById(id);if(m&&m._cam){m.querySelectorAll('.wdot').forEach(d=>d._lw=0);wmzLabels(m)}}))}
 $('spotMap')._pick=o=>{
   if(!spotOpen(o)){toast(o.soon?o.full+' · COMING SOON':'LOCKED · '+reqText(o.req));return}if($('spotMap')._zoom)return;game.pickSpot=o.id;if(o.planet&&!plCrewOk())try{plCrewSet()}catch(e){}if(o.id!==SPOT.id){if(game.attract)washCut(()=>{setSpot(o.id);startAttract()},true);else setSpot(o.id)}else progUI();if(game.attract&&WZ.s===3)mapZoom($('spotMap'),o,()=>{if(WZ.s===3)wzGo(4)})};   /* picking the wave is the answer: straight on to the board, no NEXT */
 {const cyc=d=>{const i=BOARDS.indexOf(BOARD);for(let k=1;k<=BOARDS.length;k++){const b=BOARDS[(i+d*k+BOARDS.length*9)%BOARDS.length];if(boardOpen(b)){setBoard(b.id);if(b.id==='soft'&&PROG.softRider==='pro'){PROG.softRider='theo';progSave();boardLook()}if(typeof theoPage==='function')theoPage();return}}};   /* 2026-11-18 picking Theo's board puts Theo on it (CHANGE SURFER can still swap in the grown-up) */
@@ -8711,6 +8880,20 @@ const TRACKS=[{f:'music/01-drop-in-paddle-out.mp3',t:'Drop In, Paddle Out',b:'Ri
   {f:'music/33-zero-gravity.mp3',t:'Zero Gravity',b:'Moonwax',th:'astronaut'},{f:'music/34-house-special.mp3',t:'House Special',b:'Salt & Pepper Swell',th:'chef'},
   {f:'music/35-out-of-office.mp3',t:'Out of Office',b:'The Auto-Replies',th:'boss'},
   {f:'music/37-take-me-to-your-lineup.mp3',t:'Take Me to Your Lineup',b:'Crop Circle Crew',th:'alien'},
+  /* 1122 THEME SONGS part 2 (Suno v6): the 25 characters that had none; styles only California punk rock, pop punk, dub, reggae */
+  {f:'music/38-classic-line.mp3',t:'Classic Line',b:'The Rail Savers',th:'pro'},{f:'music/39-hang-ten-forever.mp3',t:'Hang Ten Forever',b:'Longboard Elders',th:'legend'},
+  {f:'music/40-mountains-of-water.mp3',t:'Mountains of Water',b:'Big Gun Theory',th:'charger'},{f:'music/41-crowned-by-the-sea.mp3',t:'Crowned by the Sea',b:'The Last Heat Kids',th:'wchamp'},
+  {f:'music/42-style-for-miles.mp3',t:'Style for Miles',b:'Sunkissed Static',th:'girl'},{f:'music/43-dragon-drop-in.mp3',t:'Dragon Drop-In',b:'Scale & Flame',th:'dragon'},
+  {f:'music/44-set-in-stone.mp3',t:'Set in Stone',b:'Granite Dub Station',th:'gargoyle'},{f:'music/45-mischief-tide.mp3',t:'Mischief Tide',b:'The Sneaky Fins',th:'goblin'},
+  {f:'music/46-heaven-sent-swell.mp3',t:'Heaven Sent Swell',b:'Halo Roots',th:'angel'},{f:'music/47-lightning-on-the-lip.mp3',t:'Lightning on the Lip',b:'Storm Front Riot',th:'thunder'},
+  {f:'music/48-way-of-the-wave.mp3',t:'Way of the Wave',b:'Steel & Salt Sound',th:'samurai'},{f:'music/49-inner-peace-pipeline.mp3',t:'Inner Peace Pipeline',b:'Lotus Lineup',th:'kungfu'},
+  {f:'music/50-empire-of-foam.mp3',t:'Empire of Foam',b:'Gladiator Groms',th:'empress'},{f:'music/51-queen-of-the-tide.mp3',t:'Queen of the Tide',b:'Desert Rose Riddim',th:'nilequeen'},
+  {f:'music/52-let-them-surf.mp3',t:'Let Them Surf',b:'The Powdered Wigs',th:'marquise'},{f:'music/53-spellbound-swell.mp3',t:'Spellbound Swell',b:'Crystal Ball Dub',th:'wizard'},
+  {f:'music/54-player-one-paddle.mp3',t:'Player One Paddle',b:'The Extra Lives Club',th:'gamer'},{f:'music/55-hot-delivery.mp3',t:'Hot Delivery',b:'Pepperoni Pipeline',th:'pizza'},
+  {f:'music/56-mirrorball-dub.mp3',t:'Mirrorball Dub',b:'Glitterball Sound System',th:'disco'},{f:'music/57-monster-swell.mp3',t:'Monster Swell',b:'Bolt & Bunsen',th:'maddoctor'},
+  {f:'music/58-spotless.mp3',t:'Spotless',b:'The Scrub Brushes',th:'cleanfreak'},{f:'music/59-buy-it-all.mp3',t:'Buy It All',b:'Shopping Bag Riot',th:'shopaholic'},
+  {f:'music/60-catwalk-on-the-swell.mp3',t:'Catwalk on the Swell',b:'Catwalk Roots',th:'topmodel'},{f:'music/61-no-brakes.mp3',t:'No Brakes',b:'Full Throttle Kids',th:'adrenaline'},
+  {f:'music/62-vanishing-act.mp3',t:'Vanishing Act',b:'Top Hat Dub',th:'magician'},
   /* 1118o PUNK ROCK KIDS (the player's own band): Theo's soundtrack, only on his waves. k:2 = the three a Theo wave always opens with, k:1 = the rest of the album, shuffled in after */
   {f:'music/prk-se-essa-rua-fosse-minha.mp3',t:'Se Essa Rua Fosse Minha',b:'Punk Rock Kids',k:2,c:'music/cover-prk.jpg'},{f:'music/prk-cai-cai-balao.mp3',t:'Cai Cai Balão',b:'Punk Rock Kids',k:2,c:'music/cover-prk.jpg'},
   {f:'music/prk-o-sapo-nao-lava-o-pe.mp3',t:'O Sapo Não Lava o Pé',b:'Punk Rock Kids',k:2,c:'music/cover-prk.jpg'},{f:'music/prk-alecrim-dourado.mp3',t:'Alecrim Dourado',b:'Punk Rock Kids',k:1,c:'music/cover-prk.jpg'},
