@@ -4280,7 +4280,7 @@ const _tintV=new THREE.Vector3();const _qRelB=new THREE.Quaternion();const _qFF=
 /* ───────────────────────── progression ───────────────────────── */
 // XP from every wave, the best score at each spot, trophies, boards; all kept in this browser
 const PROG=(()=>{let d={};try{d=JSON.parse(localStorage.getItem('playsurf_prog')||'{}')||{}}catch(e){}
-  return Object.assign({xp:0,waves:0,best:{},tro:{},board:'classic',celeb:[],spot:1},d)})();
+  const P=Object.assign({xp:0,waves:0,best:{},tro:{},board:'classic',celeb:[],spot:1},d);if(!P.ogSet)P.open=1;return P})();   /* 2026-11-22 (the user) OPEN GAME is ON unless the player turned it off */
 function progSave(){try{const o=SVT&&SVT.orig;localStorage.setItem('playsurf_prog',JSON.stringify(o?Object.assign({},PROG,o.f,{board:o.board}):PROG))}catch(e){}}   /* (2026-11-21) the surfer only pointed at on CHOOSE YOUR SURFER is never saved: while he rides the wave behind, the save keeps your own (SVT is a var, so this works before it is set) */
 PROG.pro2=0;   /* 2026-11-19 PRO 2 is gone (the user): whoever had picked him rides THE PRO */PROG.local=0;PROG.haole=0;PROG.talent=0;   /* 2026-11-19 THE LOCAL, THE HAOLE and THE TALENT are gone too (the user): they ride THE PRO. THE KID is Theo's own sculpted surfer; THEO 2 is back as his own surfer with a new 3D body (theo-4) */
 /* 2026-11-19 six more surfers in their own 3D bodies (Magnific design -> Tripo H3.1, cut to 26k triangles), each with a board of his own (picked with him, and open for him even before it is won) and a riding style of his own. sc: size on the board (THE PRO's proportions for the men, THE GIRL's for the women) */
@@ -4444,7 +4444,7 @@ function ulKeyOf(b){if(!b)return '';if(b.dataset&&b.dataset.s&&b.closest('#gm'))
 addEventListener('click',e=>{const b=e.target&&e.target.closest?e.target.closest('button'):null;const k=ulKeyOf(b);if(k&&!surfOpen(k)){e.stopPropagation();e.preventDefault();try{toast('LOCKED · '+ulName(k)+' · RIDE '+ulNeed(ulAt('surf',k)))}catch(_){}}},true);
 /* a surfer picked before the ladder came in that is still shut: back on THE PRO (OPEN GAME keeps him) */
 function ulFix(){if(PROG.open)return;try{if(!surfOpen(gmSurfNow())){PROG.softRider='pro';PROG.girl=0;PROG.nx='';PROG.theo2=0;progSave();try{setBoard('pro',true)}catch(e){}}}catch(e){}}
-function ogToggle(){PROG.open=PROG.open?0:1;progSave();if(!PROG.open)ulFix();ulDeco();try{progUI()}catch(e){}try{toast(PROG.open?'OPEN GAME · EVERYTHING UNLOCKED UNTIL 31/12/2026':'OPEN GAME OFF · BACK TO YOUR PROGRESS')}catch(e){}}
+function ogToggle(){PROG.open=PROG.open?0:1;PROG.ogSet=1;progSave();if(!PROG.open)ulFix();ulDeco();try{progUI()}catch(e){}try{toast(PROG.open?'OPEN GAME · EVERYTHING UNLOCKED UNTIL 31/12/2026':'OPEN GAME OFF · BACK TO YOUR PROGRESS')}catch(e){}}
 setTimeout(()=>{try{const u=document.getElementById('ulHome'),h=document.querySelector('.wzS.hm .hmIn');if(u&&h){const tk=h.querySelector('.hmTick');h.insertBefore(u,tk&&tk.parentNode===h?tk:null);u.classList.add('hmProg')}}catch(_){}},0);   /* 2026-11-21 (1120c) OPEN GAME and the next unlock join the home column, under the cards */
 setTimeout(()=>{ulFix();ulDeco();const og=document.getElementById('ogBtn');if(og)og.addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();ogToggle()})},0);
 
