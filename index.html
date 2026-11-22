@@ -6858,19 +6858,154 @@ const PERS={pro:{cl:[2,0,4],ce:[17,7,6],dr:'push'},kid:{cl:[3,0],ce:[11,13,15],d
   legend:{cl:[1,3],ce:[6,18],dr:'shaka',g:'shaka'},charger:{cl:[2,5],ce:[12,17],dr:'push',g:'fist'},shredder:{cl:[4,5],ce:[16,15],dr:'yell',g:'horns'},flyer:{cl:[3,0],ce:[19,13],dr:'shoo',g:'bow'},
   wahine:{cl:[3,1],ce:[20,6],dr:'pray'},cruiser:{cl:[1,3],ce:[6,13],dr:'yell'},champ:{cl:[4,2],ce:[21,7],dr:'point',g:'num1'},zen:{cl:[3],ce:[18,19],dr:'pray',g:'pray'},
   robot:{cl:[3],ce:[23],dr:'point'},cowboy:{cl:[0,2],ce:[26,24],dr:'shoot'},pirate:{cl:[4,0],ce:[25,14],dr:'yell'},ballerina:{cl:[3,0],ce:[19,13],dr:'shoo'},astronaut:{cl:[3,1],ce:[21,13],dr:'shaka'},viking:{cl:[4,2],ce:[12,22],dr:'yell',g:'fist'},chef:{cl:[1,3],ce:[7,13],dr:'complain'},boss:{cl:[2,0],ce:[17,10],dr:'point'},dj:{cl:[3,0],ce:[16,15,9],dr:'shoo'},wchamp:{cl:[4,1],ce:[12,21],dr:'yell',g:'fist'},alien:{cl:[3,1],ce:[13,21],dr:'shaka'}};
+/* 2026-11-22 (pers1122, the user: behaviours, reactions and characteristics for every character) the twenty 2026-11-21 surfers' personalities, and gaps filled in the older ones */
+Object.assign(PERS,{samurai:{cl:[3,4],ce:[27,19,17],dr:'block',g:'bow'},gargoyle:{cl:[5,3],ce:[31,12,22],dr:'roar',g:'perch'},dragon:{cl:[3,5],ce:[31,30,12],dr:'roar',g:'roar'},goblin:{cl:[2,5],ce:[35,11,15],dr:'yell',g:'claws'},
+  angel:{cl:[3,0],ce:[30,18,19],dr:'pray',g:'wings'},thunder:{cl:[4,2],ce:[29,22,12],dr:'hex',g:'sky'},wizard:{cl:[4,3],ce:[28,24,19],dr:'hex',g:'spell'},gamer:{cl:[2,5],ce:[36,15,11],dr:'complain',g:'thumbs'},
+  adrenaline:{cl:[2,0,5],ce:[12,15,22],dr:'push',g:'pump2'},maddoctor:{cl:[0,4],ce:[35,11,10],dr:'complain',g:'rub'},kungfu:{cl:[3,2],ce:[27,22,13],dr:'block',g:'fistpalm'},disco:{cl:[4,0],ce:[32,9,16],dr:'point',g:'disco'},
+  pizza:{cl:[1,0],ce:[38,7,13],dr:'yell',g:'toss'},magician:{cl:[3,0],ce:[28,19,24],dr:'hex',g:'tada'},empress:{cl:[3],ce:[34,19],dr:'shoo',g:'regal'},nilequeen:{cl:[3,4],ce:[34,20,21],dr:'point',g:'regal'},
+  marquise:{cl:[3,1],ce:[37,34,13],dr:'shoo',g:'curtsy'},topmodel:{cl:[3,1],ce:[33,17,15],dr:'shoo',g:'hips'},cleanfreak:{cl:[3],ce:[39,7],dr:'complain',g:'wipe'},shopaholic:{cl:[0,3],ce:[40,33,13],dr:'complain',g:'bags'}});
+PERS.pro.g='shaka';PERS.cruiser.g='wave';PERS.alien.g='wave';PERS.robot.g='salute';PERS.astronaut.g='salute';PERS.robot.ce=[23,21,7];
+/* their backs (as BODIES[k].post: + a straight back, - hunched over) */
+const PSTY={samurai:0.9,gargoyle:-0.7,dragon:0.3,goblin:-1.2,angel:1.0,thunder:0.9,wizard:-0.35,gamer:-0.9,adrenaline:0.4,maddoctor:-0.4,kungfu:1.0,disco:0.6,pizza:0.2,magician:0.8,empress:1.2,nilequeen:1.1,marquise:1.0,topmodel:1.2,cleanfreak:1.3,shopaholic:0.5};
+function wcK(){return typeof BODIES!=='undefined'&&BODIES.act==='wchamp'&&RIG.on?1:0}   /* THE WORLD CHAMP's stronger moves (see the snap, the spray and the lip) */
+/* their riding styles: c the crouch, w the style's weight, tr a clean trim, mv a move; returns the feet along the board [front, back] */
+function nxStyle2(k,time,c,w,tr,mv){const s=Math.sin,ad=(n,v)=>{AT[n]=(AT[n]||0)+v*w};let fF=0,fB=0;
+  if(k==='samurai'){AT.crouch=lerp(c,clamp(Math.max(c,0.50)*0.92+0.04,0,1),w);AT.hroll=(AT.hroll||0)*(1-0.85*w);AT.look=(AT.look||0)*(1-0.6*w);ad('gz',-0.03);fF=0.06;fB=-0.06}   /* calm and upright over a low, wide stance; the head never moves */
+  else if(k==='gargoyle'){AT.crouch=lerp(c,clamp(Math.max(c,0.62)+0.05+0.02*s(time*0.7),0,1),w);ad('gz',0.18);ad('shiftX',-0.04);AT.hroll=(AT.hroll||0)*(1-0.7*w);fF=0.07;fB=-0.07}   /* heavy as stone: wide, low, hunched, the weight sitting back */
+  else if(k==='dragon'){AT.crouch=lerp(c,clamp(Math.max(c,0.50)+0.03,0,1),w);ad('gz',-0.12);ad('hroll',0.10*s(time*0.9)*(mv?0.3:1));ad('shiftX',0.03*s(time*0.9+1.2));fF=0.07;fB=-0.07}   /* big and wide, chin up, swaying slowly like a tail swinging behind him */
+  else if(k==='goblin'){AT.crouch=lerp(c,clamp(Math.max(c,0.72)+0.03*Math.abs(s(time*3.6)),0,1),w);ad('gz',0.22);if(!mv)ad('look',0.30*Math.tanh(4*s(time*1.4)));fF=0.02;fB=-0.02}   /* tiny and crouched right down, hunched, the eyes darting side to side */
+  else if(k==='angel'){AT.crouch=lerp(c,clamp(c*0.58+0.02+0.05*s(time*1.1),0,1),w);ad('gz',-0.08);AT.hroll=(AT.hroll||0)*(1-0.6*w);fF=-0.02;fB=0.02}   /* light and tall, floating up and down, feet close together */
+  else if(k==='thunder'){AT.crouch=lerp(c,clamp(Math.max(c*0.85,0.40),0,1),w);ad('gz',-0.14);ad('shiftX',0.03);fF=0.06;fB=-0.06}   /* broad and powerful, chest out, chin up at the sky */
+  else if(k==='wizard'){AT.crouch=lerp(c,clamp(c*0.80+0.10,0,1),w);ad('gz',0.10);if(!mv)ad('look',0.20*s(time*0.6))}   /* an old man's stoop, peering slowly over the water */
+  else if(k==='gamer'){AT.crouch=lerp(c,clamp(c*0.75+0.14,0,1),w);ad('gz',0.30);AT.hroll=(AT.hroll||0)*(1-0.7*w);AT.look=(AT.look||0)*(1-0.7*w);fF=-0.01;fB=0.01}   /* hunched over, eyes down on the controller, stiff */
+  else if(k==='adrenaline'){AT.crouch=lerp(c,clamp(Math.max(c,0.52)+0.06*Math.abs(s(time*5.5)),0,1),w);ad('gz',-0.04);ad('shiftX',0.05);if(!mv)ad('look',0.18*s(time*3.1));fF=0.03;fB=-0.03}   /* low and leaning in, bouncing, looking for the next thrill */
+  else if(k==='maddoctor'){const j1=Math.pow(Math.max(0,s(time*2.3)),12),j2=Math.pow(Math.max(0,s(time*1.7+1)),10);AT.crouch=lerp(c,clamp(c*0.82+0.08,0,1),w);ad('gz',0.12);ad('hroll',0.22*j1);ad('look',0.25*j2)}   /* a little hunched, with sudden twitches of the head */
+  else if(k==='kungfu'){AT.crouch=lerp(c,clamp(Math.max(c,0.58),0,1),w);AT.hroll=(AT.hroll||0)*(1-0.9*w);AT.look=(AT.look||0)*(1-0.6*w);AT.shiftX=(AT.shiftX||0)*(1-0.7*w);ad('gz',-0.04);fF=0.08;fB=-0.08}   /* the horse stance: wide, deep, centred, the back straight */
+  else if(k==='disco'){const b=s(time*4.4),m=mv?0.3:1;AT.crouch=lerp(c,clamp(c*0.80+0.06+0.05*Math.abs(b),0,1),w);ad('shiftX',0.05*b*m);ad('hipBack',-0.40*b*m);ad('hroll',0.10*s(time*2.2)*m)}   /* the hips dancing to the beat */
+  else if(k==='pizza'){AT.crouch=lerp(c,clamp(c*0.86+0.06+0.03*s(time*3),0,1),w);ad('gz',0.02);if(!mv)ad('look',0.20*s(time*0.8))}   /* easy and bouncy, looking around for the address */
+  else if(k==='magician'){AT.crouch=lerp(c,clamp(c*0.76+0.06,0,1),w);ad('gz',-0.08);ad('hroll',0.05*s(time*1.7)*tr)}   /* the showman: upright, chin up, playing to the crowd */
+  else if(k==='empress'){AT.crouch=lerp(c,clamp(c*0.60+0.04,0,1),w);ad('gz',-0.10);AT.hroll=(AT.hroll||0)*(1-0.8*w);AT.look=(AT.look||0)*(1-0.5*w);fF=-0.03;fB=0.03}   /* tall, still and regal, chin up */
+  else if(k==='nilequeen'){AT.crouch=lerp(c,clamp(c*0.64+0.04,0,1),w);ad('gz',-0.08);ad('shiftX',0.025*s(time*1.0)*tr);ad('hroll',0.04*s(time*1.0+0.8)*tr);fF=-0.02;fB=0.02}   /* tall, swaying gently, chin up */
+  else if(k==='marquise'){AT.crouch=lerp(c,clamp(c*0.66+0.05+0.02*s(time*2.6),0,1),w);ad('gz',-0.06);fF=-0.04;fB=0.04}   /* prim: upright, little dainty bobs, feet together */
+  else if(k==='topmodel'){AT.crouch=lerp(c,clamp(c*0.58+0.03,0,1),w);ad('gz',-0.10);ad('shiftX',0.04*s(time*1.1)*tr);ad('hroll',0.08*s(time*1.1+0.5)*tr);ad('hipBack',-0.25*tr);fF=-0.03;fB=0.03}   /* the runway: tall, chin up, hips forward and popping side to side */
+  else if(k==='cleanfreak'){AT.crouch=lerp(c,0.36,0.85*w);AT.hroll=(AT.hroll||0)*(1-0.9*w);AT.look=(AT.look||0)*(1-0.7*w);ad('gz',0.04);fF=-0.04;fB=0.04}   /* stiff and tidy: always the same height, nothing out of place */
+  else if(k==='shopaholic'){AT.crouch=lerp(c,clamp(c*0.80+0.06+0.04*Math.abs(s(time*3.4)),0,1),w);ad('gz',0.03);if(!mv)ad('look',0.34*s(time*0.9))}   /* bouncy and excited, window-shopping the whole beach */
+  return [fF,fB]}
+/* their arms (S the spine, X across the shoulders back to front) */
+const _nx2=new THREE.Vector3();
+function nxArms2(k,time,rT,F,S,X){const o=_nx2,s=Math.sin,B=(b,f,x,u)=>o.copy(b).addScaledVector(F,f).addScaledVector(X,x).addScaledVector(S,u),fH=()=>J.hFt.lerp(o,rT),bH=()=>J.hBt.lerp(o,rT);
+  if(k==='samurai'){B(J.shF,0.10,-0.12,-0.40);fH();B(J.shB,0.10,-0.04,-0.42);bH()}   /* the hand resting on the sword at his hip */
+  else if(k==='gargoyle'){const q=0.03*s(time*0.8);B(J.shF,0.22,0.16,-0.36+q);fH();B(J.shB,0.20,-0.16,-0.38-q);bH()}   /* heavy arms hanging forward, elbows out, claws down */
+  else if(k==='dragon'){B(J.shF,0.10,0.40,-0.12+0.06*s(time*0.9));fH();B(J.shB,0.06,-0.40,-0.12+0.06*s(time*0.9+1.5));bH()}   /* arms held wide and half raised, like wings ready */
+  else if(k==='goblin'){B(J.shF,0.26,-0.08,-0.20+0.02*s(time*9));fH();B(J.shB,0.26,0.08,-0.22+0.02*s(time*9+1));bH()}   /* hands up at the chest, fingers scheming */
+  else if(k==='angel'){B(J.shF,-0.04,0.46,-0.16+0.05*s(time*1.1));fH();B(J.shB,-0.06,-0.46,-0.16+0.05*s(time*1.1));bH()}   /* arms open, a little back, palms forward */
+  else if(k==='thunder'){B(J.shF,0.34,0.14,-0.14);fH();B(J.shB,0.12,-0.22,-0.36);bH()}   /* the front fist forward as if gripping a hammer, the back fist low */
+  else if(k==='wizard'){B(J.shF,0.30,0.16,-0.12);fH();B(J.shB,0.18,-0.18,-0.30+0.05*s(time*1.3));bH()}   /* the front hand out on an invisible staff, the other weaving slowly */
+  else if(k==='gamer'){B(J.shF,0.30,-0.12+0.01*s(time*23),-0.34);fH();B(J.shB,0.30,0.12,-0.34+0.01*s(time*19));bH()}   /* both hands together on a controller, thumbs busy */
+  else if(k==='adrenaline'){const p=0.06*Math.abs(s(time*5.5));B(J.shF,0.20,0.34,-0.12+p);fH();B(J.shB,0.16,-0.34,-0.14+p);bH()}   /* arms out and pumping */
+  else if(k==='maddoctor'){const j=0.015*s(time*17);B(J.shF,0.30,-0.02,-0.18+j);fH();B(J.shB,0.28,0.02,-0.20-j);bH()}   /* hands up in front, twitching, as if holding test tubes */
+  else if(k==='kungfu'){B(J.shF,0.42,0.02,-0.10);fH();B(J.shB,-0.04,-0.10,-0.34);bH()}   /* the open guard hand forward, the other fist chambered at the hip */
+  else if(k==='disco'){const b=s(time*4.4);B(J.shF,0.20,0.20+0.10*b,-0.18+0.08*b);fH();B(J.shB,0.18,-0.20+0.10*b,-0.20-0.08*b);bH()}   /* elbows bent, swinging to the beat */
+  else if(k==='pizza'){B(J.shF,0.20,0.22,0.02);fH();B(J.shB,0.06,-0.16,-0.44);bH()}   /* a pizza box on the flat of his hand at shoulder height */
+  else if(k==='magician'){const a=time*6;B(J.shF,0.38+0.03*Math.cos(a),0.10+0.03*s(a),-0.12);fH();B(J.shB,0.24,0.14,-0.16);bH()}   /* twirling a wand in little circles */
+  else if(k==='empress'){B(J.shF,0.26,-0.14,-0.38);fH();B(J.shB,0.26,0.14,-0.38);bH()}   /* hands clasped in front of the waist */
+  else if(k==='nilequeen'){B(J.shF,0.26,0.10,-0.04);fH();B(J.shB,-0.20,-0.10,-0.34);bH()}   /* the profile pose of the old wall paintings: one forearm up in front, the other arm back */
+  else if(k==='marquise'){B(J.shF,0.24,-0.14,0.10+0.02*s(time*14));fH();B(J.shB,0.06,-0.20,-0.44);bH()}   /* a fan fluttering at her chin, the other hand holding her skirt */
+  else if(k==='topmodel'){B(J.shF,0.06+0.06*s(time*1.1),0.14,-0.46);fH();B(J.shB,0.02,-0.14,-0.40);bH()}   /* one hand on the hip, the other swinging loose */
+  else if(k==='cleanfreak'){B(J.shF,0.30,0.08,-0.22);fH();B(J.shB,0.30,-0.08,-0.22);bH()}   /* elbows in, hands up and away from everything */
+  else if(k==='shopaholic'){const q=0.08*s(time*3.4);B(J.shF,0.06+q,0.20,-0.48);fH();B(J.shB,0.06-q,-0.20,-0.48);bH()}}   /* arms low, swinging the shopping bags */
+/* the new trim gestures, the body part (persIn) */
+function persBody2(g,t,w){const a=v=>{AT.gz=(AT.gz||0)+v*w};
+  if(g==='fistpalm')a(0.30);
+  else if(g==='perch'){AT.crouch=lerp(AT.crouch||0,0.80,w);a(0.22);AT.look=(AT.look||0)*(1-w)}   /* the gargoyle freezes into a statue */
+  else if(g==='roar'||g==='sky'||g==='toss')a(-0.32);
+  else if(g==='wings'||g==='tada'||g==='pump2')a(-0.16);
+  else if(g==='claws'){a(0.06);AT.hroll=(AT.hroll||0)+0.12*Math.sin(t*7)*w}
+  else if(g==='thumbs')a(0.24);
+  else if(g==='rub'){a(0.14);AT.hroll=(AT.hroll||0)+0.10*w}
+  else if(g==='disco'){AT.hroll=(AT.hroll||0)+0.14*Math.sin(t*2*PI)*w;AT.shiftX=(AT.shiftX||0)+0.04*Math.sin(t*2*PI)*w}
+  else if(g==='regal')a(-0.08);
+  else if(g==='curtsy'){AT.crouch=lerp(AT.crouch||0,Math.min(1,(AT.crouch||0)+0.24),w);a(0.18)}
+  else if(g==='hips'){a(-0.10);AT.hroll=(AT.hroll||0)+0.10*w;AT.hipBack=(AT.hipBack||0)-0.30*w}
+  else if(g==='wipe')a(0.26);
+  else if(g==='bags')AT.hroll=(AT.hroll||0)+0.08*Math.sin(t*5)*w;
+  else if(g==='salute')a(-0.06)}
+/* the new answers to a drop-in, the body part */
+function persDrop2(r,t,w){if(r==='roar'){AT.gz=(AT.gz||0)-0.30*w;AT.crouch=Math.min(1,(AT.crouch||0)+0.06*w)}else if(r==='block'){AT.crouch=Math.min(1,(AT.crouch||0)+0.10*w);AT.gz=(AT.gz||0)+0.05*w}else if(r==='hex')AT.gz=(AT.gz||0)-0.12*w}
+/* ... and the arms */
+function persDropArms2(r,t,dw,Pp,o){
+  if(r==='roar'){const k=0.04*Math.sin(t*16);Pp(J.shF,0.30,0.38,0.18+k);J.hFt.lerp(o,dw);Pp(J.shB,0.30,-0.38,0.18-k);J.hBt.lerp(o,dw)}   /* claws up, arms wide: a roar at him */
+  else if(r==='block'){Pp(J.shF,0.42,0.02,0.10);J.hFt.lerp(o,dw);Pp(J.chest,0.24,-0.04,0.02);J.hBt.lerp(o,dw)}   /* the martial guard: the open hand up between them, the other at the chest */
+  else if(r==='hex'){o.subVectors(DROP.hand,J.shF);if(o.lengthSq()<1e-6)o.copy(J.front);o.normalize().multiplyScalar(0.60).add(J.shF).addScaledVector(WU,0.10+0.03*Math.sin(t*18));J.hFt.lerp(o,dw);Pp(J.shB,0.10,-0.30,0.30+0.04*Math.sin(t*11));J.hBt.lerp(o,dw)}}   /* a spell (or a bolt) thrown at him, the other hand raised */
+/* the new trim gestures, the arms */
+function persGest2(g,t,w,Pp){const fH=v=>J.hFt.lerp(v,w),bH=v=>J.hBt.lerp(v,w),s=Math.sin,c=Math.cos;
+  if(g==='fistpalm'){fH(Pp(J.chest,0.28,0.02,0.10));bH(Pp(J.chest,0.29,-0.01,0.11))}   /* the martial salute: fist into the open palm, and a bow */
+  else if(g==='perch'){fH(Pp(J.pel,0.30,0.14,-0.20));bH(Pp(J.pel,0.30,-0.14,-0.20))}   /* crouched still, hands on the knees, like a statue on a cathedral */
+  else if(g==='roar'){const k=0.03*s(t*15);fH(Pp(J.shF,0.22,0.42,0.22+k));bH(Pp(J.shB,0.22,-0.42,0.22-k))}   /* arms wide, claws out, roaring at the sky */
+  else if(g==='claws'){fH(Pp(J.head,0.22,0.12,-0.05+0.03*s(t*14)));bH(Pp(J.head,0.22,-0.12,-0.05+0.03*s(t*14+1.5)))}   /* fingers wriggling by his face, up to mischief */
+  else if(g==='wings'){const f=0.16*s(t*3.2);fH(Pp(J.shF,-0.08,0.50,0.12+f));bH(Pp(J.shB,-0.08,-0.50,0.12+f))}   /* the arms spread like wings, beating slowly */
+  else if(g==='sky'){fH(Pp(J.shF,0.04+0.02*s(t*21),0.08,0.60));bH(Pp(J.pel,0.10,-0.18,0.08))}   /* a fist raised to the sky, shaking: calling the thunder */
+  else if(g==='spell'){const a=t*7;fH(Pp(J.shF,0.50,0.06+0.04*c(a),0.22+0.04*s(a)));bH(Pp(J.chest,0.26,-0.08,-0.02))}   /* the arm thrust out, casting a spell */
+  else if(g==='thumbs'){fH(Pp(J.chest,0.30,0.06+0.015*s(t*23),-0.18));bH(Pp(J.chest,0.30,-0.06,-0.18+0.015*s(t*19)))}   /* mashing the buttons */
+  else if(g==='pump2'){const p=0.22*Math.max(0,s(t*10));fH(Pp(J.shF,0.28,0.18,0.08+p));bH(Pp(J.shB,0.28,-0.18,0.08+p))}   /* the double fist pump */
+  else if(g==='rub'){const a=t*9;fH(Pp(J.chest,0.26,0.03+0.03*s(a),0.02*c(a)));bH(Pp(J.chest,0.26,-0.03-0.03*s(a),-0.02*c(a)))}   /* rubbing his hands together: an evil plan */
+  else if(g==='disco'){if(Math.floor(t*2)%2)fH(Pp(J.shF,0.15,0.30,0.48));else fH(Pp(J.pel,0.24,-0.16,-0.12));bH(Pp(J.pel,0.05,-0.18,0.06))}   /* pointing up high, then down across the hip, the other hand on the hip */
+  else if(g==='toss'){const a=t*9;fH(Pp(J.head,0.12+0.05*c(a),0.06+0.05*s(a),0.30));bH(Pp(J.head,0.12,-0.08,0.26+0.04*s(t*9)))}   /* spinning the pizza dough over his head */
+  else if(g==='tada'){fH(Pp(J.shF,0.15,0.40,0.42));bH(Pp(J.shB,0.15,-0.40,0.42))}   /* ta-da! */
+  else if(g==='regal'){fH(Pp(J.shF,0.30,0.18+0.04*s(t*5),0.30));bH(Pp(J.pel,0.22,-0.04,0.10))}   /* the royal wave, the other hand at the waist */
+  else if(g==='curtsy'){fH(Pp(J.pel,0.08,0.26,-0.06));bH(Pp(J.pel,0.08,-0.26,-0.06))}   /* holding out her skirt for a curtsy */
+  else if(g==='hips'){fH(Pp(J.pel,0.02,0.20,0.08));bH(Pp(J.pel,0.02,-0.20,0.08))}   /* both hands on the hips, the runway pose */
+  else if(g==='wipe'){const a=t*12;fH(Pp(J.chest,0.32,0.10,-0.06));bH(Pp(J.chest,0.34+0.03*c(a),0.06+0.04*s(a),-0.02))}   /* scrubbing a spot off his sleeve */
+  else if(g==='bags'){const q=0.12*s(t*5);fH(Pp(J.shF,0.10+q,0.18,-0.52));bH(Pp(J.shB,0.10-q,-0.18,-0.52))}   /* swinging the shopping bags */
+  else if(g==='salute'){fH(Pp(J.head,0.10,0.08,0.06));bH(Pp(J.pel,0.02,-0.20,0.0))}}   /* a salute, the hand to the brow */
+/* the new end-of-wave celebrations (CELEB v27..v40), the arms (into _b, _a) */
+function celebArms2(v,e,P){const T=2*PI,s=Math.sin,c=Math.cos;
+  if(v===27){P(_b,J.chest,0.28,0.02,0.10);P(_a,J.chest,0.29,-0.01,0.11)}   /* saudação marcial: fist in the palm */
+  else if(v===28){const td=sstep(0.9,1.2,e),a=e*T*1.6;P(_b,J.chest,0.30+0.06*c(a),0.06+0.06*s(a),0);P(_a,J.chest,0.30-0.06*c(a),-0.06-0.06*s(a),0);if(td>0){P(_c,J.shF,0.18,0.40,0.42);_b.lerp(_c,td);P(_c,J.shB,0.18,-0.40,0.42);_a.lerp(_c,td)}}   /* abracadabra: the hands weave, then ta-da */
+  else if(v===29){const sm=sstep(2.0,2.25,e);P(_b,J.shF,0.04+0.02*s(e*T*3.5),0.08,0.60);P(_a,J.pel,0.10,-0.18,0.08);if(sm>0){P(_c,J.shF,0.34,0.10,-0.30);_b.lerp(_c,sm);P(_c,J.shB,0.34,-0.10,-0.30);_a.lerp(_c,sm)}}   /* trovão: the fist up to the sky, then both fists smashed down */
+  else if(v===30){const f=0.20*s(e*T*0.9);P(_b,J.shF,-0.05,0.50,0.10+f);P(_a,J.shB,-0.05,-0.50,0.10+f)}   /* asas: the wings beating */
+  else if(v===31){const r=sstep(0.7,0.95,e),k=0.03*s(e*T*7)*r;P(_b,J.shF,0.20,0.10,-0.30);P(_a,J.shB,0.20,-0.10,-0.30);if(r>0){P(_c,J.shF,0.36,0.36,0.18+k);_b.lerp(_c,r);P(_c,J.shB,0.36,-0.36,0.18-k);_a.lerp(_c,r)}}   /* rugido: gathered low, then claws out and the roar */
+  else if(v===32){if(Math.floor(e/0.5)%2)P(_b,J.shF,0.15,0.30,0.48);else P(_b,J.pel,0.24,-0.16,-0.12);P(_a,J.pel,0.05,-0.18,0.06)}   /* febre da disco: up high, down low */
+  else if(v===33){P(_b,J.head,-0.08,0.10,0.05);P(_a,J.pel,0.02,-0.20,0.08)}   /* passarela: a hand behind the head, the other on the hip */
+  else if(v===34){P(_b,J.shF,0.30,0.16+0.05*s(e*T*1.2),0.30);P(_a,J.chest,0.20,0.0,0.0)}   /* aceno real: the royal wave */
+  else if(v===35){const up=sstep(1.5,1.8,e),a=e*T*1.5;P(_b,J.chest,0.26,0.03+0.03*s(a),0.02*c(a));P(_a,J.chest,0.26,-0.03-0.03*s(a),-0.02*c(a));if(up>0){const k=0.03*s(e*T*6);P(_c,J.shF,0.10,0.30,0.45+k);_b.lerp(_c,up);P(_c,J.shB,0.10,-0.30,0.45-k);_a.lerp(_c,up)}}   /* mwahahaha: rubbing the hands, then arms up laughing */
+  else if(v===36){_c.copy(_cd);if(_c.lengthSq()<1e-6)_c.copy(J.front);_c.normalize();const k=0.03*s(e*T*2);_b.copy(J.shF).addScaledVector(_c,0.50).addScaledVector(WU,0.06+k);_a.copy(J.shB).addScaledVector(_c,0.50).addScaledVector(WU,0.06+k)}   /* GG: both thumbs up at the camera */
+  else if(v===37){P(_b,J.pel,0.08,0.26,-0.06);P(_a,J.pel,0.08,-0.26,-0.06)}   /* mesura: the curtsy */
+  else if(v===38){const a=e*T*1.6,up=Math.max(0,s(e*T*0.6));P(_b,J.head,0.12+0.05*c(a),0.06+0.05*s(a),0.30+0.10*up);P(_a,J.head,0.14,-0.08,0.24+0.08*up)}   /* pizza no ar: the dough spinning and tossed up */
+  else if(v===39){const a=e*T*1.8;P(_b,J.shF,0.46,0.10+0.12*c(a),0.10+0.12*s(a));P(_a,J.pel,0.02,-0.20,0.08)}   /* faxina: polishing the camera lens in big circles */
+  else if(v===40){const k=0.05*s(e*T*2.4);P(_b,J.shF,0.10,0.30,0.46+k);P(_a,J.shB,0.10,-0.30,0.46-k)}   /* comprei tudo!: the bags held up high */
+  else{P(_b,J.shF,0.30,0.12,-0.30);P(_a,J.shB,0.30,-0.12,-0.30)}}
+/* ... and the body */
+function celebBody2(v,e){const T=2*PI,s=Math.sin;
+  if(v===27){const b=sstep(0.6,1.0,e)*(1-sstep(2.8,3.2,e));AT.gz=0.50*b;AT.hipBack=0.6*b;AT.crouch=0.36+0.06*b}
+  else if(v===28){const td=sstep(0.9,1.2,e);AT.crouch=0.40-0.10*td;AT.gz=0.10*(1-td)-0.16*td}
+  else if(v===29){const sm=sstep(2.0,2.25,e);AT.crouch=0.34+0.28*sm;AT.gz=-0.36*(1-sm)+0.18*sm;AT.lean=0.06*sm}
+  else if(v===30){AT.crouch=0.28+0.05*s(e*T*0.9);AT.gz=-0.16}
+  else if(v===31){const r=sstep(0.7,0.95,e);AT.crouch=0.56-0.10*r;AT.gz=0.15*(1-r)-0.30*r;AT.lean=0.10*r}
+  else if(v===32){AT.crouch=0.36+0.05*Math.abs(s(e*T*2));AT.hroll=Math.floor(e/0.5)%2?0.14:-0.10;AT.shiftX=0.05*s(e*T);AT.hipBack=-0.3*s(e*T*2)}
+  else if(v===33){AT.crouch=0.30;AT.gz=-0.10;AT.hroll=0.14;AT.shiftX=0.04;AT.hipBack=-0.35}
+  else if(v===34){AT.crouch=0.30;AT.gz=-0.10;AT.hroll=0}
+  else if(v===35){const up=sstep(1.5,1.8,e);AT.crouch=0.40-0.06*up;AT.gz=0.18*(1-up)-(0.34+0.05*s(e*T*6))*up}
+  else if(v===36){AT.crouch=0.38;AT.gz=0.10*s(e*T*2)}
+  else if(v===37){const b=sstep(0.4,0.9,e)*(1-sstep(2.6,3.1,e));AT.crouch=0.30+0.32*b;AT.gz=0.20*b;AT.hipBack=0}
+  else if(v===38){AT.crouch=0.36+0.05*Math.abs(s(e*T*1.6));AT.gz=-0.30}
+  else if(v===39){AT.crouch=0.36;AT.gz=0.06;AT.hroll=0}
+  else if(v===40){AT.crouch=0.34+0.08*Math.abs(s(e*T*2.4));AT.hroll=0.10*s(e*T*1.2);AT.gz=-0.10}}
 function persKey(){try{if(reelPro()&&!kidOn()&&!PROG.girl)return 'pro';return typeof gmSurfNow==='function'?gmSurfNow():'pro'}catch(e){return 'pro'}}
 function persIn(time,dt){const k=persKey(),P=PERS[k];if(!P){A.dropW=A.gW=0;return null}
   const ride=game.state==='ride'&&sf.mode==='ride'&&!AT.claim&&(A.prone||0)<0.5,mv=!!(sf.cv||sf.c360||sf.rh||sf.tt||sf.pivot>0||(sf.hit||0)>0.05);
   const tr=A.pTr=damp(A.pTr||0,ride&&!mv&&!game.inTube&&Math.abs(AT.rail||0)<0.3?1:0,1.1,dt);
   let sd=0;for(let i=0;i<k.length;i++)sd+=k.charCodeAt(i)*0.37;const ph=((time+sd)*0.12)%1;   /* about every 8 s, for a second and a half, when the line is clean */
   const dw=A.dropW=damp(A.dropW||0,DROP.on&&DROP.react&&(DROP.ph==='push'||DROP.ph==='wob')?1:0,6,dt),gw=A.gW=damp(A.gW||0,P.g&&ph<0.18&&tr>0.85&&dw<0.05?1:0,5,dt);
-  if(dw<0.01&&gw<0.01)return null;const s={g:AT.gz,r:AT.hroll,l:AT.look};
+  if(dw<0.01&&gw<0.01)return null;const s={g:AT.gz,r:AT.hroll,l:AT.look,c:AT.crouch,hb:AT.hipBack,x:AT.shiftX};
   if(dw>0.01){const r=DROP.react;if(r==='complain'){AT.hroll=(AT.hroll||0)+0.28*Math.sin(time*7.5)*dw;AT.gz=(AT.gz||0)-0.10*dw}else if(r==='yell'){AT.gz=(AT.gz||0)-0.25*dw;AT.hroll=(AT.hroll||0)+0.10*Math.sin(time*13)*dw}else if(r==='pray'||r==='shoot'){AT.gz=(AT.gz||0)-(r==='pray'?0.34:0.25)*dw}}   /* the head shaking no, the chin thrust out, the eyes up to the sky */
-  if(gw>0.01){if(P.g==='horns')AT.gz=(AT.gz||0)+0.26*Math.sin(time*9)*gw;else if(P.g==='bow')AT.gz=(AT.gz||0)+0.34*gw;else if(P.g==='pray')AT.gz=(AT.gz||0)+0.16*gw;else if(P.g==='num1')AT.gz=(AT.gz||0)-0.14*gw}
+  if(gw>0.01){if(P.g==='horns')AT.gz=(AT.gz||0)+0.26*Math.sin(time*9)*gw;else if(P.g==='bow')AT.gz=(AT.gz||0)+0.34*gw;else if(P.g==='pray')AT.gz=(AT.gz||0)+0.16*gw;else if(P.g==='num1')AT.gz=(AT.gz||0)-0.14*gw;else persBody2(P.g,time,gw)}
+  if(dw>0.01)persDrop2(DROP.react,time,dw);   /* 2026-11-22 the new answers and gestures (pers1122) */
   return s}
-function persOut(s){AT.gz=s.g;AT.hroll=s.r;AT.look=s.l}
+function persOut(s){AT.gz=s.g;AT.hroll=s.r;AT.look=s.l;AT.crouch=s.c;AT.hipBack=s.hb;AT.shiftX=s.x}
 const _pgO=new THREE.Vector3();
 const PERS_F=new Set(['girl','charger','flyer','cruiser','champ','pirate','ballerina','wahine']);   /* 2026-11-20 the women and girls of the line-up */
+for(const q of ['empress','nilequeen','marquise','topmodel','cleanfreak','shopaholic'])PERS_F.add(q);   /* 2026-11-22 the new women of the line-up */
 function persArms(k,time){const P=PERS[k];if(!P)return;const F=J.front,S=J.axis,U=WU,o=_pgO,Pp=(b,f,s,u)=>o.copy(b).addScaledVector(F,f).addScaledVector(S,s).addScaledVector(U,u);
   const dw=A.dropW||0;
   {const pv=sf.mode==='ride'&&(sf.pivot>0||!!(sf.cv&&sf.cv.ph===1));if(!A.pvW&&pv&&!game.inTube)A.suT=Math.random()<0.2?time:-9;A.pvW=pv;const e=time-(A.suT===undefined?-9:A.suT);   /* 2026-11-21 (the user) the arms go up in the lip, as the move is thrown, not after it */   /* 2026-11-20 (the user) the women throw both arms up after every snap */
@@ -6883,6 +7018,7 @@ function persArms(k,time){const P=PERS[k];if(!P)return;const F=J.front,S=J.axis,
     else if(r==='pray'){Pp(J.chest,0.24,0.025,0.08);J.hFt.lerp(o,dw);Pp(J.chest,0.24,-0.025,0.08);J.hBt.lerp(o,dw)}   /* hands together at the chest: amen */
     else if(r==='shoot'){Pp(J.shF,0.06,0.10,0.60);J.hFt.lerp(o,dw);Pp(J.pel,0.08,-0.18,0.06);J.hBt.lerp(o,dw*0.8)}   /* THE COWBOY: the revolver up at the sky, a shot in the air to run him off */
     else if(r==='point'){Pp(J.shF,0.10,0.55,0.25);J.hFt.lerp(o,dw);Pp(J.shB,0.30,-0.05,-0.20);J.hBt.lerp(o,dw*0.7)}   /* the arm out to the judges on the beach: interference! */
+    else persDropArms2(r,t,dw,Pp,o);   /* 2026-11-22 roar, block, hex */
     return}
   const gw=A.gW||0;if(gw<0.01||!P.g)return;const g=P.g,t=time;   /* the gesture on a clean trim */
   if(g==='wave'){Pp(J.shF,0.25,0.12+0.10*Math.sin(t*10),0.42);J.hFt.lerp(o,gw)}   /* waving hello to the beach */
@@ -6892,8 +7028,9 @@ function persArms(k,time){const P=PERS[k];if(!P)return;const F=J.front,S=J.axis,
   else if(g==='horns'){Pp(J.shF,0.15,0.10,0.55);J.hFt.lerp(o,gw)}   /* the fist up high, head banging */
   else if(g==='bow'){Pp(J.chest,0.26,0.03,0.04);J.hFt.lerp(o,gw);Pp(J.chest,0.26,-0.03,0.04);J.hBt.lerp(o,gw)}   /* hands together, a little bow */
   else if(g==='num1'){Pp(J.shF,0.08,0.05,0.58);J.hFt.lerp(o,gw)}   /* number one, the arm straight up */
-  else if(g==='pray'){Pp(J.chest,0.24,0.025,0.08);J.hFt.lerp(o,gw);Pp(J.chest,0.24,-0.025,0.08);J.hBt.lerp(o,gw)}}   /* hands together at the chest, eyes down */
-function nxPost(){const B=typeof BODIES!=='undefined'&&BODIES.act&&BODIES[BODIES.act];return (B&&B.post)||0}   /* 2026-11-21 THE WORLD CHAMP: a strong, athletic posture, no hunch */
+  else if(g==='pray'){Pp(J.chest,0.24,0.025,0.08);J.hFt.lerp(o,gw);Pp(J.chest,0.24,-0.025,0.08);J.hBt.lerp(o,gw)}   /* hands together at the chest, eyes down */
+  else persGest2(g,t,gw,Pp)}   /* 2026-11-22 the new trim gestures (pers1122) */
+function nxPost(){const B=typeof BODIES!=='undefined'&&BODIES.act&&BODIES[BODIES.act];return (B&&B.post)||(BODIES.act&&PSTY[BODIES.act])||0}   /* 2026-11-21 THE WORLD CHAMP: a strong, athletic posture, no hunch */
 const NXS_K={girl:1,theo2:1};function nxStyled(k){return !!(k&&(NX[k]||NXS_K[k]))}   /* 2026-11-20 THE GIRL and THEO 2 get a style of their own too */
 function nxStyleIn(time,dt){const k=typeof BODIES!=='undefined'&&BODIES.act;if(!nxStyled(k)){A.nxFF=A.nxFB=0;return null}
   const on=game.state==='ride'&&sf.mode==='ride'&&!AT.claim&&(A.prone||0)<0.5?1:0,w=A.nxW=damp(A.nxW||0,on,on?3:6,dt);if(w<0.01){A.nxFF=A.nxFB=0;return null}
@@ -6921,8 +7058,9 @@ function nxStyleIn(time,dt){const k=typeof BODIES!=='undefined'&&BODIES.act;if(!
   else if(k==='chef'){AT.crouch=lerp(c,clamp(c*0.84+0.05,0,1),w);AT.gz=(AT.gz||0)+0.05*w}   /* the kitchen: upright and busy, eyes down on the pan */
   else if(k==='boss'){const wt=Math.pow(Math.max(0,Math.sin(time*0.55)),6)*tr;AT.crouch=lerp(c,clamp(c*0.70+0.08,0,1),w);AT.hroll=(AT.hroll||0)*(1-0.7*w);AT.gz=(AT.gz||0)+0.20*wt*w}   /* out of office: stiff and formal, and now and then a glance down at his watch */
   else if(k==='dj'){AT.crouch=lerp(c,clamp(c*0.86+0.05+0.05*Math.abs(Math.sin(time*4.2)),0,1),w);AT.gz=(AT.gz||0)+0.10*Math.sin(time*8.4)*tr*w}   /* drop the beat: bouncing on the knees and nodding his head to a beat only he can hear */   /* 2026-11-20 the five new men's postures */
-  else if(k==='wchamp'){AT.crouch=lerp(c,clamp(c*0.92+0.05,0,1),w);AT.gz=(AT.gz||0)+0.10*w}   /* the champion: a low, powerful competition stance, chest up, chin up, eyes down the line (2026-11-21) */
+  else if(k==='wchamp'){const sn=sf.pivot>0||!!sf.cv||!!sf.c360;AT.crouch=lerp(c,clamp(Math.max(c,0.62)+0.04+(sn?0.10:0),0,1),w);AT.gz=(AT.gz||0)+0.06*w;AT.shiftX=(AT.shiftX||0)+0.05*w*(sn?0.4:1);if(sn&&!game.inTube)AT.look=(AT.look||0)+0.22*w;fF=0.04;fB=-0.04}   /* 2026-11-22 (the user) very low and compact, chest forward over the front foot; in the snap and the carve a deeper compression, the head leading the turn */   /* the champion: a low, powerful competition stance, chest up, chin up, eyes down the line (2026-11-21) */
   else if(k==='alien'){AT.crouch=lerp(c,clamp(c*0.86+0.05+0.04*Math.sin(time*1.3),0,1),w);AT.gz=(AT.gz||0)+0.07*Math.sin(time*0.8)*w}   /* the visitor: knees bobbing, head tilting this way and that, curious about everything on this planet */   /* 2026-11-21 */
+  else if(PSTY[k]!==undefined){const r=nxStyle2(k,time,c,w,tr,mv);fF=r[0];fB=r[1]}   /* 2026-11-22 the twenty new surfers' riding styles (pers1122) */
   A.nxFF=damp(A.nxFF||0,fF*w,4,dt);A.nxFB=damp(A.nxFB||0,fB*w,4,dt);
   return s}
 function nxStyleOut(s){AT.crouch=s.c;AT.look=s.l;AT.shiftX=s.x;AT.gz=s.g;AT.drag=s.d;AT.hipBack=s.hb;AT.hroll=s.hr}
@@ -6979,8 +7117,9 @@ function nxArms(k,time){const rk=(1-(A.claim||0))*(1-0.85*(A.grab||0))*(1-(A.pro
   else if(k==='chef'){const t=A.nxTr||0,fl=Math.pow(Math.max(0,Math.sin(time*2.2)),6)*t;_nxB.copy(J.shF).addScaledVector(X,0.16).addScaledVector(F,0.30+0.06*fl).addScaledVector(S,-0.20+0.18*fl);J.hFt.lerp(_nxB,rT);_nxB.copy(J.shB).addScaledVector(X,0.04).addScaledVector(F,0.26).addScaledVector(S,-0.10+0.03*Math.sin(time*9)*t);J.hBt.lerp(_nxB,rT)}   /* the front hand on the handle of an invisible pan, flipping it now and then, the back hand sprinkling salt over it */
   else if(k==='boss'){const t=A.nxTr||0,wt=Math.pow(Math.max(0,Math.sin(time*0.55)),6)*t,ph=Math.pow(Math.max(0,Math.sin(time*0.55+2.6)),6)*t;_nxB.copy(J.shF).addScaledVector(X,0.12-0.02*wt).addScaledVector(F,0.06+0.22*wt).addScaledVector(S,-0.40+0.38*wt);J.hFt.lerp(_nxB,rT);_nxB.copy(J.shB).addScaledVector(X,-0.12+0.18*ph).addScaledVector(F,0.04+0.04*ph).addScaledVector(S,-0.42+0.64*ph);J.hBt.lerp(_nxB,rT)}   /* arms stiff at his sides; now and then the wrist comes up to check the watch, or the back hand goes to his ear for a call */
   else if(k==='dj'){const t=A.nxTr||0,pm=Math.abs(Math.sin(time*4.2));_nxB.copy(J.shF).addScaledVector(X,0.30-0.12*t).addScaledVector(F,0.10-0.02*t).addScaledVector(S,-0.20+(0.50+0.08*pm)*t);J.hFt.lerp(_nxB,rT);_nxB.copy(J.shB).addScaledVector(X,-0.20+0.28*t).addScaledVector(F,0.06).addScaledVector(S,-0.28+0.42*t);J.hBt.lerp(_nxB,rT)}   /* on a clean trim one hand pumping in the air and the other on his headphones */   /* 2026-11-20 the five new men's arms */
-  else if(k==='wchamp'){const t=A.nxTr||0,f=Math.pow(Math.max(0,Math.sin(time*0.6)),8)*t;_nxB.copy(J.shF).addScaledVector(X,0.36-0.14*f).addScaledVector(F,0.05).addScaledVector(S,-0.22+0.56*f);J.hFt.lerp(_nxB,rT);_nxB.copy(J.shB).addScaledVector(X,-0.34).addScaledVector(F,-0.03).addScaledVector(S,-0.27);J.hBt.lerp(_nxB,rT)}   /* arms ready like a pro; on a clean trim the front fist goes up now and then, the champion's salute */
+  else if(k==='wchamp'){const t=A.nxTr||0,f=Math.pow(Math.max(0,Math.sin(time*0.6)),8)*t;_nxB.copy(J.shF).addScaledVector(X,0.36-0.14*f).addScaledVector(F,0.05).addScaledVector(S,-0.22+0.56*f);J.hFt.lerp(_nxB,rT);_nxB.copy(J.shB).addScaledVector(X,-0.34).addScaledVector(F,-0.03).addScaledVector(S,-0.27);J.hBt.lerp(_nxB,rT);{const sn=sf.mode==='ride'&&(sf.pivot>0||!!sf.cv||!!sf.c360)&&!game.inTube,tb=game.inTube?1:0,k2=rk*(sn?0.9:tb?0.8:0.85*(1-f));if(sn){_nxB.copy(J.shF).addScaledVector(F,0.05).addScaledVector(X,0.42).addScaledVector(S,0.30);J.hFt.lerp(_nxB,k2);_nxB.copy(J.shB).addScaledVector(F,0.30).addScaledVector(X,0.30).addScaledVector(S,-0.10);J.hBt.lerp(_nxB,k2)}else if(tb){_nxB.copy(J.shF).addScaledVector(F,0.30).addScaledVector(X,0.12).addScaledVector(S,-0.20);J.hFt.lerp(_nxB,k2);_nxB.copy(J.shB).addScaledVector(F,0.10).addScaledVector(X,-0.06).addScaledVector(S,-0.46);J.hBt.lerp(_nxB,k2)}else{_nxB.copy(J.shF).addScaledVector(F,0.40).addScaledVector(X,0.22).addScaledVector(S,-0.22);J.hFt.lerp(_nxB,k2*t);_nxB.copy(J.shB).addScaledVector(F,-0.08).addScaledVector(X,-0.10).addScaledVector(S,-0.40);J.hBt.lerp(_nxB,k2*t)}}}   /* 2026-11-22 (the user) on the trim the front arm reaches forward and down the line, the back arm low and close behind; in the snap and the carve the front arm is flung high and wide and the back arm wraps across; in the barrel compact, the back hand low */   /* arms ready like a pro; on a clean trim the front fist goes up now and then, the champion's salute */
   else if(k==='alien'){const t=A.nxTr||0,a=Math.sin(time*1.1);_nxB.copy(J.shF).addScaledVector(X,0.34).addScaledVector(F,0.12).addScaledVector(S,-0.06+0.10*a);J.hFt.lerp(_nxB,rT);_nxB.copy(J.shB).addScaledVector(X,-0.34).addScaledVector(F,0.12).addScaledVector(S,-0.06-0.10*a);J.hBt.lerp(_nxB,rT)}   /* both arms out, rocking slowly like someone still learning the gravity here */   /* 2026-11-21 */
+  else if(PSTY[k]!==undefined)nxArms2(k,time,rT,F,S,X)   /* 2026-11-22 the twenty new surfers' arms (pers1122) */
 }
 function poseRider0(time,dt){
   // Posture rules below were tuned frame by frame against footage of a goofy-footer surfing a wave-pool left frontside:
@@ -7117,6 +7256,7 @@ function poseRider0(time,dt){
     else if(v===23){const st=Math.floor(e/0.5)%4;if(st===0){P(_b,J.shF,0.45,0.05,0);P(_a,J.shB,0.45,-0.05,0)}else if(st===1){P(_b,J.shF,0.10,0.05,0.45);P(_a,J.shB,0.10,-0.05,-0.40)}else if(st===2){P(_b,J.shF,0.10,0.05,-0.40);P(_a,J.shB,0.10,-0.05,0.45)}else{P(_b,J.shF,0.05,0.45,0);P(_a,J.shB,0.05,-0.45,0)}}   /* robô: the arms snapping from pose to pose on the beat */
     else if(v===24){const p=sstep(1.2,1.8,e);P(_b,J.head,0.08,0.02,0.10);if(p>0){P(_c,J.shF,0.40,0.30,-0.15);_b.lerp(_c,p)}P(_a,J.pel,0.08,-0.18,0.06)}   /* tira o chapéu: the hand to the hat brim, then swept out wide */
     else if(v===25){P(_b,J.shF,0.62,0.05,0.18);P(_a,J.head,0.10,-0.02,0.08)}   /* terra à vista: pointing at the horizon, the other hand shading his eyes */
+    else if(v>=27)celebArms2(v,e,P);   /* 2026-11-22 v27..v40 (pers1122) */
     else{const a=e*T*2.4;P(_b,J.head,0.07+0.05*Math.cos(a),0.25,-0.01+0.05*Math.sin(a));P(_a,J.shB,0.10+0.12*Math.sin(e*T*0.9),-0.06,-0.49)}   // tô doidão: a finger circling at the temple, the other arm hanging loose
     J.hFt.lerp(_b,w);J.hBt.lerp(_a,w)}
   else if(cl>0.01){const v=(AT.claimV|0)%CLAIMS.length,L=CLAIMS[v][0],T=CLAIMS[v][1],w=Math.min(1,cl);   // the claim, one of several
@@ -9548,6 +9688,7 @@ function gagPlace(dt,time){const G=sf.gag,D=G&&GAG[G.id];if(!D){sf.mode='ride';r
   GEV.last=t}
 // end-of-wave celebrations, a different one each wave, in turn (the turn carries over to the next visit)
 const CELEB=[{v:17,n:'Marrento'},{v:7,n:'Nota 10'},{v:8,n:'67'},{v:12,n:'Bate no Peito'},{v:9,n:'Macarena'},{v:13,n:'Palmas'},{v:10,n:'Ihhh, não sei'},{v:14,n:'Arqueiro'},{v:11,n:'Tô doidão'},{v:15,n:'Dab'},{v:6,n:'Hang Loose'},{v:16,n:'Guitarra'},{v:18,n:'Amém'},{v:19,n:'Reverência'},{v:20,n:'Aloha'},{v:21,n:'Número 1'},{v:22,n:'Muque'},{v:23,n:'Robô'},{v:24,n:'Tira o Chapéu'},{v:25,n:'Terra à Vista'},{v:26,n:'Tiro pro Alto'}];
+CELEB.push({v:27,n:'Saudação Marcial'},{v:28,n:'Abracadabra'},{v:29,n:'Trovão'},{v:30,n:'Asas'},{v:31,n:'Rugido'},{v:32,n:'Febre da Disco'},{v:33,n:'Passarela'},{v:34,n:'Aceno Real'},{v:35,n:'Mwahahaha'},{v:36,n:'GG'},{v:37,n:'Mesura'},{v:38,n:'Pizza no Ar'},{v:39,n:'Faxina'},{v:40,n:'Comprei Tudo!'});   /* 2026-11-22 (pers1122) */
 function nextCeleb(){if(game.attract)return CELEB[Math.floor(Math.random()*CELEB.length)];
   {const k=persKey(),P=PERS[k];if(P&&P.ce&&P.ce.length){game.celebK=game.celebK||{};const i=(game.celebK[k]||0)%P.ce.length;game.celebK[k]=i+1;const v=P.ce[i];return CELEB.find(c=>c.v===v)||{v,n:''}}}   /* 2026-11-20 each surfer celebrates in their own ways, in turn */
   if(game.celebI===undefined){game.celebI=0;try{game.celebI=(parseInt(localStorage.getItem('playsurf_celeb')||'0',10)||0)%CELEB.length}catch(e){}}
@@ -9573,6 +9714,7 @@ function celebBody(v,e){_cd.copy(camera.position).sub(riderG.position).applyQuat
   else if(v===23){const st=Math.floor(e/0.5)%4;AT.crouch=0.38;AT.hroll=st%2?0.15:-0.15}   // robô: the head clicking side to side
   else if(v===24){const p=sstep(1.2,1.8,e);AT.gz=0.15*p;AT.crouch=0.36}   // tira o chapéu: a nod as the hat comes off
   else if(v===25){AT.crouch=0.42;AT.gz=-0.15;AT.lean=0.08}   // terra à vista: leaning toward it, chin up
+  else if(v>=27)celebBody2(v,e);   /* 2026-11-22 v27..v40 (pers1122) */
   else if(v===11){AT.shiftX=0.06*Math.sin(e*T*0.7);AT.crouch=0.44+0.12*Math.sin(e*T*1.1);AT.hroll=0.35*Math.sin(e*T*0.7+1);AT.look+=0.30*Math.sin(e*T*0.55);AT.lean=0.16*Math.sin(e*T*0.7+0.5)}}   // tô doidão: wobbling knees, rolling head, the whole body swaying
 const _qi=new THREE.Quaternion(),_ce=new THREE.Vector3();
 /* ── the shallow-reef walk out: board under the arm, quick tiptoe steps, a yelp now and then as a foot finds coral ── */
@@ -10249,7 +10391,7 @@ function stepRide(dt){
   else if(sf.openT>0){sf.openT-=dt;   // the first bottom turn, built from the same moves as the rest of the wave: the glide off the foam, the round turn at the base, the climb to the lip
     if(sf.openT>1.65){thT=-0.95;rate=2.6}else if(sf.openT>1.0&&sf.p<0.3*top){thT=clamp((0.36*top-sf.p)*0.95,-0.8,0.6);rate=4.4}else{sf.openT=Math.min(sf.openT,0.99);thT=1.38;rate=5.2*(0.55+0.45*clamp(sf.V/7,0,1.3));sf.openC=(sf.openC||0)+dt;sf.openT=sf.openC>2.2?0:Math.max(sf.openT,0.05)}
     if(sf.openT<1.0&&sf.p>0.8*top)sf.openT=0}
-  else if(sf.pivot>0){const cb=!!(sf.rh&&sf.rh.ph>=1);thT=sf.pivotTh;rate=cb?8.5:4.8*mk*0.85;sf.pivot-=dt*(cb?1:mkT*0.85);piv=true}   /* 2026-11-19 the cutback's backside hit is a quick shove, not a long turn */   /* the snap turns 15% slower, in time with the bottom turn that fed it */
+  else if(sf.pivot>0){const cb=!!(sf.rh&&sf.rh.ph>=1);thT=sf.pivotTh;rate=cb?8.5:4.8*mk*0.85*(1+0.15*wcK());sf.pivot-=dt*(cb?1:mkT*0.85);piv=true}   /* 2026-11-19 the cutback's backside hit is a quick shove, not a long turn */   /* the snap turns 15% slower, in time with the bottom turn that fed it */
   else if(sf.straight){thT=clamp((0.24*top-sf.p)*0.75,-1.05,0.3);rate=2.6}   /* the end: angled in, low on the face right at the foot of the white water, carried along by it instead of running out onto the flat */
   else if(sf.c360){const C=sf.c360;if(C.up){thT=1.2;rate=5.0*mk;if(rel>0.86||C.t>1.1){C.up=false;C.pth=sf.th}}   /* straight up to the lip first: the whole turn is done up there, in the white of it */else{thT=sf.th-1.45;rate=9.0*mk;sf.V=clamp(sf.V-0.8*dt,CP+0.8,Math.max(CP+0.8,sf.V))}}   // carve 360: round by the bottom, up the face and on round to the line again   // the end: straight in to the beach, no more running along the wave
   else if(sf.ar){const R=sf.ar,vk=Math.max(mk,0.8);if(R.ph===0){thT=-0.85;rate=4.8*vk;if(sf.p<0.42*top||R.t>1.1)R.ph=1}else{thT=1.22;rate=5.6*vk;game.airReq=now}}   /* the air's run-up: down a little if he is up high, then a steep turn straight up the face to the lip */
@@ -10387,7 +10529,7 @@ function stepRide(dt){
       sf.p=top-0.19-0.05*top;if(sf.pivot<=0){const bk=ct<-0.4;sf.pivot=bk?0.50:0.35;sf.pivotTh=bk?-0.78:-0.7;sf.V*=0.98;if(bk){sf.bsHit=1;sf.burst=1.6;A.impact=0.5;game.shake=0.4;splash(30,S.pos,1.1)}}
     }else if(S.aMax>0.85&&game.state==='ride'&&!sf.endCl&&!game.inTube&&!((sf.cov||0)>0.25)){   /* (2026-11-18 no hit off the lip from inside the barrel: it threw the board up onto the roof) */
       if((vp>4.4&&inp.crouch||vp>(sf.ar?1.8:3.4)&&game.airReq>0&&now>=game.airReq&&now-game.airReq<1.8)&&!sf.rh){launchAir(vp,inp);return}
-      if(sf.pivot<=0){const vert=Math.abs(st),bk=ct<-0.4;sf.p=top-0.22-0.05*top;   /* he hits a touch below the very top of the lip (2026-11-21 a little lower: the snap was going over it) */sf.pivot=0.50;sf.pivotTh=bk?-0.78:-1.0;if(bk){sf.bsHit=1;sf.burst=Math.max(sf.burst,1.6)}{const fz=S.foam>0.45;lipBreak(fz?0.30:0.40+0.30*vert);   /* (2026-11-18 the extra lipBurst here tore the lip the instant he arrived, before the move: the one queued by lipBreak, a moment into the turn, is the only one now) */   /* every hit on the wave, lip or white water, frontside or backside, tears a little of it */if(!fz&&S.aEnd>2.1&&!bk&&!sf.cv&&!game.attract&&game.state==='ride'&&Math.random()<0.4)sf.ffArm=1;if(fz){if(now-sf.foamAt>1.4)sf.foamAt=now}else sf.V*=0.97;sf.burst=fz?0.7:1.3;A.impact=fz?0.2:0.45;game.shake=fz?0:0.35}
+      if(sf.pivot<=0){const vert=Math.abs(st),bk=ct<-0.4;sf.p=top-0.22-0.05*top;   /* he hits a touch below the very top of the lip (2026-11-21 a little lower: the snap was going over it) */sf.pivot=0.50;sf.pivotTh=bk?-0.78:-1.0;if(bk){sf.bsHit=1;sf.burst=Math.max(sf.burst,1.6)}{const fz=S.foam>0.45;lipBreak(fz?0.30:(0.40+0.30*vert)*(1+0.15*wcK()));   /* (2026-11-18 the extra lipBurst here tore the lip the instant he arrived, before the move: the one queued by lipBreak, a moment into the turn, is the only one now) */   /* every hit on the wave, lip or white water, frontside or backside, tears a little of it */if(!fz&&S.aEnd>2.1&&!bk&&!sf.cv&&!game.attract&&game.state==='ride'&&Math.random()<0.4)sf.ffArm=1;if(fz){if(now-sf.foamAt>1.4)sf.foamAt=now}else sf.V*=0.97;sf.burst=fz?0.7:1.3;A.impact=fz?0.2:0.45;game.shake=fz?0:0.35}
         if(now-sf.lastTop>0.5&&vp>2.2){const fm_=S.foam>0.45,nm=bk?'Backside Hit':fm_?'Foam Hit':vert>0.86?'Vertical Hit':'Off the Lip',pt=550+vert*500+sf.V*45+(fm_?250:0);award(nm,pt);reqShot(nm,pt,0.16);if(!fm_&&vert>0.8&&!game.attract&&game.waveAge>8&&Math.random()<0.045)sf.fallAt=now+0.28;sfxNoise(0.5,2600,fm_?0.2:0.35);if(fm_)splash(16,S.pos,0.8)}
         sf.lastTop=now;sf.upT=0}
     }else{
@@ -10710,7 +10852,7 @@ const _fl=new V3();function placeSurfer(dt,time){
       if(sf.exV===11){_kd.set(0,1,0).applyQuaternion(boardG.quaternion);qS.setFromAxisAngle(_kd,2*PI*sstep(0.06,0.92,u));riderG.position.sub(boardG.position).applyQuaternion(qS).add(boardG.position);riderG.quaternion.premultiply(qS);boardG.quaternion.premultiply(qS)}   /* 2026-11-18 the ollie 360: board and rider go round together */
       if(sf.exV===1)boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,0.30*Math.sin(PI*u)*(1-u)));else if(sf.exV===2)boardG.quaternion.multiply(qS.setFromAxisAngle(UPV,2*PI*sstep(0.1,0.88,u)));
       AT.crouch=u<0.12?0.85:u<0.8?0.7:0.55;AT.claim=0}
-    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);if(!game.attract){const v=sf.claimV;if(PROG.celeb.indexOf(v)<0){PROG.celeb.push(v);progSave()}if(PROG.celeb.length>=CELEB.length)giveTro('show')}sf.celebN=''}}}
+    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);if(!game.attract){const v=sf.claimV;if(PROG.celeb.indexOf(v)<0){PROG.celeb.push(v);progSave()}if(PROG.celeb.length>=Math.min(CELEB.length,21))giveTro('show')}sf.celebN=''}}}
   A.prone=proneT>A.prone?Math.min(proneT,A.prone+dt/0.3):Math.max(proneT,A.prone-dt/0.48);
   if(sf.mode==='ride'&&(sf.grabSnap||0)>0){sf.grabSnap-=dt;grabT=1;sf.burst=Math.max(sf.burst||0,1.6)}   /* hand on the rail through the snap: the tail throws a wide open fan */
   A.flail=damp(A.flail,0,8,dt);A.grab=damp(A.grab,grabT,12,dt);A.air=damp(A.air,Math.max(airT,sf.ffU>0?0.75*Math.sin(PI*Math.min(sf.ffU,1)):0),9,dt);A.claim=damp(A.claim,AT.claim,7,dt);
@@ -10729,7 +10871,7 @@ function boardSpray(dt){if(mapUp())return;   /* (no spray off an unseen board be
     while(accArc>=1){accArc--;const r=Math.random(),tx=sf.pos.x-sf.f.x*0.75,ty=sf.pos.y-sf.f.y*0.75+0.1,tz=sf.pos.z-sf.f.z*0.75,sp=7+r*7,upv=4.5+5.5*Math.random();
       emit(tx,ty,tz,sf.right.x*sg*sp+sf.up.x*upv-sf.f.x*(1.5+2*r)-CP*0.3,sf.right.y*sg*sp+sf.up.y*upv+2.2-sf.f.y*(1.5+2*r),sf.right.z*sg*sp+sf.up.z*upv-sf.f.z*(1.5+2*r),rnd(1.0,1.7),0.05,rnd(0.12,0.3),rnd(0.42,0.62),9.2,0.25);
       if(Math.random()<0.35)emit(tx,ty,tz,sf.right.x*sg*sp+sf.up.x*upv-sf.f.x*(1.5+2*r)-CP*0.3,sf.right.y*sg*sp+sf.up.y*upv+2.2-sf.f.y*(1.5+2*r),sf.right.z*sg*sp+sf.up.z*upv-sf.f.z*(1.5+2*r),rnd(0.5,0.9),rnd(0.2,0.32),rnd(0.8,1.4),rnd(0.30,0.45),9.2,0.3,2)}}
-  const inten=(clamp(Math.abs(sf.om)*sf.V/19-0.16,0,1)*(sf.cv&&sf.cv.ph===0?0.3:1)+sf.burst+(sf.pivot>0?0.9:0))*(BOARD.spr||1);sf.burst=Math.max(0,sf.burst-dt*3.5);   /* every snap throws a big fan off the tail; boards with more foam up front throw more */
+  const inten=(clamp(Math.abs(sf.om)*sf.V/19-0.16,0,1)*(sf.cv&&sf.cv.ph===0?0.3:1)+sf.burst+(sf.pivot>0?0.9:0))*(BOARD.spr||1)*(1+0.30*wcK());sf.burst=Math.max(0,sf.burst-dt*3.5);   /* every snap throws a big fan off the tail; boards with more foam up front throw more */
   const sg=Math.sign(sf.om)||1,rel=clamp(sf.p/Math.max(S.top,0.1),0,1),btK=sf.mode==='ride'&&!game.inTube&&!sf.tt?sstep(0.45,0.12,rel)*clamp(Math.abs(sf.om)*sf.V/12-0.35,0,1):0,k=Math.min(Math.max(inten,1.25*btK),2.1),lowK=Math.max(lerp(0.30,1,sstep(0.25,0.6,rel)),0.95*btK);   /* the bottom turn: the rail buried at the base throws a tall fan of water up the face, from the middle of the board and forward, the way he is going (2026-11-18: more of it) */
   accSpr+=(inten*2700*lerp(0.55,1,lowK)+btK*3000+(sf.V>4?80:0))*dt;
   while(accSpr>=1){accSpr--;const r=Math.random(),r2=Math.random();
