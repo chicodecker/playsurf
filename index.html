@@ -1536,6 +1536,7 @@ body.wcOn #gm .gmSurf button:not([data-s="pro"]):not([data-s="girl"]):not([data-
 .wmz .wmBox.drag{cursor:grabbing}.wmz .wmBox.pt{cursor:pointer}
 .wmz .wmInfo{width:auto;min-width:0;border-radius:14px;background:linear-gradient(180deg,rgba(10,24,46,.50),rgba(4,12,28,.50));border:1px solid rgba(255,255,255,.09);box-shadow:0 10px 26px rgba(0,0,0,.18)}
 .wmz .wmInfo:last-child{grid-column:1/-1}
+.wmz .wmInfo:has(+ .tod[style*="none"]){grid-column:1/-1}
 .wmz .wmInfo::before{width:3px;border-radius:3px;top:12px;bottom:12px;left:8px}
 .wmz .wmInfo{padding-left:22px}
 .wmz .wmSide .tod{display:flex;flex-direction:column;gap:5px;justify-content:center}
@@ -1672,7 +1673,7 @@ body.wcOn #gm .gmSurf button:not([data-s="pro"]):not([data-s="girl"]):not([data-
         <div class="pbtns"><button id="goRight" class="pbtn wv big">REGULAR<i>LEFT FOOT FORWARD</i></button><button id="goLeft" class="pbtn wv big">GOOFY<i>RIGHT FOOT FORWARD</i></button></div></div></section>
       <section class="wzS" data-s="3"><h2 class="wzH">CHOOSE YOUR WAVE</h2>
         <div class="wmap" id="spotMap"></div>
-        <div class="tod"><button id="todD" class="on">☀ DAY</button><button id="todS"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.5h18M7 17.5a5 5 0 0 1 10 0M12 7.2v2.2M5.3 10.4l1.5 1.5M18.7 10.4l-1.5 1.5M5 21h14"/></svg> SUNSET</button><button id="todN">☾ NIGHT</button></div>
+        <div class="tod"><button id="todD" class="on">☀ DAY</button><button id="todN">☾ NIGHT</button></div>
         <div class="pbtns wzGo" style="display:none"><button id="wzNext3" class="pbtn big">NEXT &#9654;&#xFE0E;</button></div></section>
       <section class="wzS" data-s="4"><h2 class="wzH">CHOOSE YOUR SURFER</h2>
         <div class="pbtns svGroups"><div id="svHv" aria-hidden="true"><canvas></canvas><i class="svHvLd"></i><b id="svHvN"></b></div><button class="pbtn wv big svGB" data-g="surfers">SURFERS<i>9 SURFERS</i></button><button class="pbtn wv big svGB" data-g="fun">FUN<i>13 SURFERS</i></button><button class="pbtn wv big svGB" data-g="world">WORLD<i>9 SURFERS</i></button><button class="pbtn wv big svGB" data-g="creatures">CREATURES<i>8 SURFERS</i></button></div><div class="svRow"><div class="svStage" id="svStage"><canvas id="svView" aria-label="The surfer, turning"></canvas><div id="svName" aria-hidden="true"></div><div id="svLd" aria-hidden="true"></div></div>
@@ -3146,8 +3147,8 @@ const partMat=new THREE.ShaderMaterial({
 #endif
       float a=mix(aS,aD,vF),thin=smoothstep(0.45,0.95,edge)*vF;
       vec3 lit=mix(vec3(0.58,0.72,0.85),vec3(1.06,1.03,0.99),0.30+0.70*vB)*(0.80+0.34*n)*(0.64+0.52*(1.-gl_PointCoord.y))*mix(1.,0.80+0.26*hb,vF);   // lit tops, shaded undersides, bubbly
-      if(vF>0.5){float cv=texture2D(uNoise,gl_PointCoord*1.25+vS*3.7).b,cv2=texture2D(uNoise,gl_PointCoord*2.6+vS*1.3).a;float cr=smoothstep(0.30,0.72,cv*0.6+cv2*0.4);   /* gfx2: white water with relief, sunlit domes of foam and shaded creases between them, not a flat white blob */
-        lit*=mix(vec3(0.60,0.71,0.80),vec3(1.07,1.05,1.01),0.25+0.75*cr)*mix(1.,0.86+0.22*hb,0.6);}
+      if(vF>0.5){float cv=texture2D(uNoise,gl_PointCoord*1.25+vS*3.7).b,cv2=texture2D(uNoise,gl_PointCoord*2.6+vS*1.3).a;float cr=smoothstep(0.18,0.88,cv*0.6+cv2*0.4);   /* gfx2: white water with relief, sunlit domes of foam and shaded creases between them, not a flat white blob */
+        lit*=mix(vec3(0.84,0.90,0.95),vec3(1.02,1.02,1.0),0.3+0.7*cr)*mix(1.,0.92+0.12*hb,0.4);}   /* 2026-11-25 softer relief */
       vec3 col=mix(lit,lit*vec3(0.55,0.86,0.95),thin*0.6)*uTint;                           // the thin rim lets the blue of the water through
 #ifdef SKIN
       col*=1.+0.45*vB*(1.-vF);   /* WAVE SKIN: spray and the mist off the lip light up with the sun behind them */
@@ -3177,13 +3178,13 @@ const plumeMat=new THREE.ShaderMaterial({
       float n1=texture2D(uNoise,vec2(u*0.07,t*0.22-uT*0.12)).b,n2=texture2D(uNoise,vec2(u*0.33+n1*0.25,t*0.42-uT*0.36)).a,n3=texture2D(uNoise,vec2(u*0.75+n2*0.3,t*0.6-uT*0.85)).b;   /* wind-combed: fine along the crest, drawn out with the wind */
       float lv=texture2D(uNoise,vec2(u*0.021+0.37,uT*0.02)).a;float tt=t/mix(0.5,1.,smoothstep(0.25,0.75,lv));if(tt>=1.)discard;float body=smoothstep(0.,0.08,t)*pow(1.-tt,1.7);   /* ragged: some stretches of the plume reach twice as far as others */
       float tex=n1*0.45+n2*0.35+n3*0.20;
-      float d=smoothstep(0.40+0.20*t,0.82,tex+0.26*(1.-t))*body;
-      d=max(d,0.40*body*smoothstep(0.2,0.75,n1*0.7+n2*0.3+0.2*(1.-t)));   /* a soft veil under the streaks */
-      float a=d*vPl.y*uK*vNear*1.45;
+      float d=smoothstep(0.28+0.22*t,1.0,tex+0.18*(1.-t))*body;
+      d=max(d,0.26*body*smoothstep(0.1,0.9,n1*0.7+n2*0.3+0.2*(1.-t)));   /* a soft veil under the streaks */
+      float a=d*vPl.y*uK*vNear*0.75;
       if(a<0.004)discard;
-      vec3 lit=mix(vec3(0.70,0.82,0.92),vec3(1.06,1.04,1.00),0.45+0.55*smoothstep(0.35,0.9,tex));   /* thick bits sunlit, the thin veil carries the sky's blue */
-      lit*=1.+0.85*vB*(1.-0.5*d);   /* the sun behind it shines through */
-      gl_FragColor=vec4(lit*uTint,clamp(a,0.,0.68));}`,
+      vec3 lit=mix(vec3(0.74,0.84,0.92),vec3(0.98,0.98,0.97),0.5+0.5*smoothstep(0.3,0.95,tex));   /* thick bits sunlit, the thin veil carries the sky's blue */
+      lit*=1.+0.45*vB*(1.-0.5*d);   /* the sun behind it shines through */
+      gl_FragColor=vec4(lit*uTint,clamp(a,0.,0.36));}`,
   transparent:true,depthWrite:false,side:THREE.DoubleSide});
 const plume=new THREE.Mesh(plumeGeo,plumeMat);plume.frustumCulled=false;plume.renderOrder=4;scene.add(plume);
 
@@ -3249,31 +3250,31 @@ function plumeTick(dt){const on=qLevel<6&&!(qLevel>=5&&qLite)&&!SPOT.planet;   /
     const y0=Math.max(colH[i],PY[k]),z0=PY[k]>=colH[i]-0.05?PZ[k]:colCZ[i];
     const hk=sstep(0.9,3.2,H),ek=1-0.9*colEnd[i],bk=s<0?Math.exp(s/2.2):1,lk=0.55+0.45*Math.min(1,colW[i]*1.3+(colAEnd[i]>2.2?0.5:0));
     const gust=0.55+0.45*Math.sin(s*0.19+gst*1.3)*Math.sin(s*0.047-gst*0.5);
-    const edge=sstep(0,4,c)*sstep(0,4,PLC-1-c),st=hk*ek*bk*lk*gust*edge*(1-0.6*colFoam[i]*(1-colEnd[i]))*0.85;
-    const Hk=Math.min(0.7+0.5*H,6)*(0.75+0.35*gust),Bk=Math.min(1.2+0.8*H,9)*(0.85+0.3*gust);
+    const edge=sstep(0,4,c)*sstep(0,4,PLC-1-c),st=hk*ek*bk*lk*gust*edge*(1-0.6*colFoam[i]*(1-colEnd[i]))*0.55;
+    const Hk=Math.min(0.35+0.24*H,2.6)*(0.85+0.2*gust),Bk=Math.min(0.7+0.42*H,4.2)*(0.9+0.2*gust);   /* 2026-11-25 softer: a low veil off the lip, not a wall of smoke */
     for(let r=0;r<PLR;r++){const u=r/(PLR-1),o=(c*PLR+r);
       plP[o*3]=s-u*u*0.9;plP[o*3+1]=y0-0.18+Hk*(1-(1-u)*(1-u));plP[o*3+2]=z0+0.15-Bk*u;
       plA[o*2]=u;plA[o*2+1]=st}}
   plumeGeo.attributes.position.needsUpdate=true;plumeGeo.attributes.aPl.needsUpdate=true}
 function emitWave(dt){
   const pw=game.Hbase*(qLevel>=7?0.55:qLevel>=5?0.78:1)*(qLite?0.7:1);   /* 2026-11-17 on the lower picture levels the wave's own mist and white water are thinned out as well (the spray off the board is not): they are big soft sprites drawn over each other, the heaviest thing left for a slow graphics chip */
-  accLip+=2100*dt*pw;   /* the offshore wind combing the crest: a veil of fine water torn off low and blown back flat, in gusts along the line */
+  accLip+=1500*dt*pw;   /* the offshore wind combing the crest: a veil of fine water torn off low and blown back flat, in gusts along the line */
   {const nk=1-0.35*TOD.value;while(accLip>=1){accLip--;const s=rnd(0.3,56),i=Math.round(colIndex(s)),w=colW[i];if(Math.random()>w*1.1)continue;
     const g=0.6+0.4*Math.sin(s*0.21+game.t*1.7)*Math.sin(s*0.057-game.t*0.6);
-    emit(s,colH[i]+rnd(-0.08,0.14),colCZ[i]+rnd(-0.40,0.40),rnd(-1.6,0.4),rnd(0.3,1.5)*g,-rnd(2.0,5.5)*(0.6+0.6*g),rnd(0.6,1.4),0.05,rnd(0.24,0.58),rnd(0.04,0.085)*w*(0.6+0.6*g)*nk,1.2,0.9)}
+    emit(s,colH[i]+rnd(-0.08,0.14),colCZ[i]+rnd(-0.40,0.40),rnd(-1.6,0.4),rnd(0.25,1.1)*g,-rnd(1.5,3.8)*(0.6+0.5*g),rnd(0.6,1.4),0.05,rnd(0.16,0.38),rnd(0.025,0.055)*w*(0.6+0.5*g)*nk,1.2,0.9)}
    /* 1118o the crest all along the line, the unbroken shoulder too, is never a hard thin line against the sky: it has body and frays in the wind,
       a band of water crumbling off its top a hand or two deep and blown back over the wave */
-   accCrest+=1500*dt*pw;while(accCrest>=1){accCrest--;const s=rnd(-0.5,78),i=Math.round(colIndex(s));if(!(i>=0&&i<NS))continue;const h=colH[i];if(h<0.6)continue;
+   accCrest+=1000*dt*pw;while(accCrest>=1){accCrest--;const s=rnd(-0.5,78),i=Math.round(colIndex(s));if(!(i>=0&&i<NS))continue;const h=colH[i];if(h<0.6)continue;
     const g=0.55+0.45*Math.sin(s*0.33+game.t*2.1)*Math.sin(s*0.071-game.t*0.8),k=i*NV+NF+NQ;
-    emit(s+rnd(-0.2,0.2),PY[k]+rnd(-0.10,0.18),PZ[k]+rnd(-0.25,0.35),rnd(-0.8,0.3),rnd(0.15,0.9)*g,-rnd(1.4,3.8)*(0.6+0.5*g),rnd(0.55,1.2),0.05,rnd(0.22,0.50)*(0.8+0.25*Math.min(h,3)),rnd(0.05,0.10)*(0.55+0.6*g)*nk,1.1,0.85)}}   /* (a light offshore: the crest frays into mist instead of ending in a line) */
+    emit(s+rnd(-0.2,0.2),PY[k]+rnd(-0.10,0.18),PZ[k]+rnd(-0.25,0.35),rnd(-0.8,0.3),rnd(0.15,0.7)*g,-rnd(1.0,2.6)*(0.6+0.5*g),rnd(0.55,1.2),0.05,rnd(0.16,0.36)*(0.8+0.15*Math.min(h,3)),rnd(0.035,0.07)*(0.55+0.45*g)*nk,1.1,0.85)}}   /* (a light offshore: the crest frays into mist instead of ending in a line) */
   accCurl+=700*dt*pw;
   while(accCurl>=1){accCurl--;const s=Math.random()<0.45?rnd(-0.3,6.5):rnd(6,52),i=Math.round(colIndex(s)),cr=Math.floor(Math.random()*NC),k=i*NV+R_CUR+cr;if(colAEnd[i]<3.2)continue;
     if(cr>NC-3&&PY[k]<0.5){emit(s,0.1,PZ[k]+rnd(-0.3,0.3),-CP*0.3+rnd(-1,1),rnd(1.5,4.5),rnd(-0.8,1.6),rnd(0.5,1.0),0.25,rnd(0.8,1.6),0.30,5,1.0);continue}
     emit(s,PY[k]+rnd(-0.1,0.1),PZ[k]+rnd(-0.15,0.15),-CP*0.25+rnd(-1,1),rnd(-3,-0.5),rnd(0.3,2),rnd(0.35,0.7),0.05,rnd(0.12,0.26),0.4,8,0.5)}
-  accVap+=1100*dt*pw;   /* the lip and the falling curtain smoke as they go: a fine vapour peeling off the edge and hanging a moment */
+  accVap+=800*dt*pw;   /* the lip and the falling curtain smoke as they go: a fine vapour peeling off the edge and hanging a moment */
   while(accVap>=1){accVap--;const s=Math.random()<0.4?rnd(-0.3,7):rnd(7,54),i=Math.round(colIndex(s));if(colAEnd[i]<2.2&&colW[i]<0.3)continue;const onC=colAEnd[i]>=3.2&&Math.random()<0.7,k=onC?i*NV+R_CUR+Math.floor(rnd(0.15,1)*NC):i*NV+NF+NQ-Math.floor(rnd(0,4));if(PY[k]<0.35)continue;
-    if(onC)emit(s+rnd(-0.15,0.15),PY[k]+rnd(-0.06,0.1),PZ[k]+rnd(-0.1,0.1),-CP*0.3+rnd(-0.5,0.3),rnd(0.2,0.9),-rnd(1.6,4.2),rnd(0.5,1.0),0.04,rnd(0.2,0.5),rnd(0.06,0.11)*(1-0.4*TOD.value),0.8,0.8);   /* the tip of the curtain combed back by the wind: wisps of water like hair, carried behind the wave and dissolving */
-    else emit(s+rnd(-0.15,0.15),PY[k]+rnd(0,0.15),PZ[k]+rnd(-0.1,0.1),rnd(-1.2,0.3),rnd(0.4,1.4),-rnd(3.0,6.5),rnd(0.5,1.0),0.05,rnd(0.25,0.6),rnd(0.06,0.11)*(1-0.4*TOD.value),1.2,0.7)}   /* the lip still standing: the offshore wind combs a little water off its top and carries it over, behind the wave */
+    if(onC)emit(s+rnd(-0.15,0.15),PY[k]+rnd(-0.06,0.1),PZ[k]+rnd(-0.1,0.1),-CP*0.3+rnd(-0.5,0.3),rnd(0.2,0.8),-rnd(1.2,3.0),rnd(0.5,1.0),0.04,rnd(0.14,0.34),rnd(0.04,0.075)*(1-0.4*TOD.value),0.8,0.8);   /* the tip of the curtain combed back by the wind: wisps of water like hair, carried behind the wave and dissolving */
+    else emit(s+rnd(-0.15,0.15),PY[k]+rnd(0,0.15),PZ[k]+rnd(-0.1,0.1),rnd(-1.2,0.3),rnd(0.3,1.0),-rnd(2.0,4.2),rnd(0.5,1.0),0.05,rnd(0.16,0.4),rnd(0.04,0.075)*(1-0.4*TOD.value),1.2,0.7)}   /* the lip still standing: the offshore wind combs a little water off its top and carries it over, behind the wave */
   accLand+=1100*dt*pw;   /* wherever the lip lands on the flat, white water goes up */
   while(accLand>=1){accLand--;const s=Math.random()<0.5?rnd(0,7):rnd(7,66),i=Math.round(colIndex(s)),k=i*NV+R_CUR+NC-1;if(colAEnd[i]<3.0||PY[k]>0.55)continue;
     emit(s,0.1,PZ[k]+rnd(-0.2,0.9),-CP*0.35+rnd(-1.2,1.2),rnd(2.0,6.5),rnd(1.4,4.6),rnd(0.7,1.4),0.35,rnd(1.4,2.9),0.34,6,1.0)}
@@ -3395,7 +3396,7 @@ function setTOD(n,save){const md=n===2?2:n?1:0;n=md===1?1:0;game.tod=md;TOD.valu
     S3(U.uFoamA,0.68,0.80,0.90);S3(U.uFoamB,1.12,1.10,1.05);U.uFlK.value=1.0;partMat.uniforms.uTint.value.set(1,1,1);
     RIM.value.setRGB(0.30,0.36,0.42);palmMat.color.set(0xd0d4c2);lampMat.color.set(0x44484c);BAN.forEach(m=>m.material.color.setRGB(0.92,0.92,0.92));BILL.forEach(m=>m.material.color.setRGB(0.95,0.95,0.95))}
   if(typeof cityNight==='function')cityNight(n);spotTint(n);dawnTint(md===2);goldenTint(!n&&md!==2&&SPOT.id===2);coverTint(n);weatherTint(n||md===2);try{planetTint()}catch(e){console.warn('planet',e)}bakeEnv();   /* late afternoon: the low gold sun out over the sea behind the wave, the lip glowing, a gold road on the water (and no rain) */   /* Pipeline: the same sunny day as the pool */{const d=document.getElementById('todD'),e=document.getElementById('todN'),f=document.getElementById('todS');if(d){d.classList.toggle('on',md===0);e.classList.toggle('on',md===1);if(f)f.classList.toggle('on',md===2)}}}
-function todFor(id){const p=game.nightPref|0;if(plIs(id))return 0;return p===1&&id!==1?0:p}   /* the time of day picked, on this wave: night only at the pool */
+function todFor(id){const p=game.nightPref|0;if(plIs(id))return 0;return p===1&&id===1?1:0}   /* 2026-11-25 no SUNSET pick any more: day, or night at the pool */   /* the time of day picked, on this wave: night only at the pool */
 
 /* the PlaySurf cover palette, laid over every wave once its own look is set: deep navy water, cobalt-teal face, cyan-blue light through the lip, lavender shade in the foam, a rose glint */
 /* 2026-11-21 THE THAMES (the user: "a água tem que ser verde escuro, tá? A verde escuro, quase uma água de rio"): murky dark-green river water in the face and the flat,
@@ -4152,7 +4153,7 @@ function planetTint(){const P=SPOT&&SPOT.planet?SPOT.pk:0;PLU.value=P;document.b
   scene.fog.density=0.0011;renderer.toneMappingExposure=1.0;bloom.threshold=0.9}
 function setSpot(id){SPOT=SPOTS.find(o=>o.id===id&&!o.soon)||SPOTS[0];{const T=TUBE[SPOT.id]||{};TUBE_W=T.tw||1;TUBE_SP=T.sp||0}VMAX=clamp(11.4+3.2*(SPOT.hK||1),13.6,15.5);BIGK=sstep(1.8,3.0,SPOT.hK||1);VMAX+=5.5*BIGK;   /* 2026-11-22 the giant waves are fast: up to ~76 km/h at Nazare */{const wn=document.getElementById('waveNow');if(wn)wn.textContent=SPOT.name}SEC.length=0;SEC_BY[SPOT.id].forEach(C=>SEC.push({...C,c00:C.c0}));
   PROG.spot=SPOT.id;progSave();if(game.nightPref===undefined)game.nightPref=game.tod||0;setTOD(todFor(SPOT.id),false);   /* night only at the pool */
-  {const t=document.getElementById('todN');if(t)t.style.display=SPOT.id===1?'':'none'}if(typeof progUI==='function')progUI()}
+  {const t=document.getElementById('todN');if(t){t.style.display=SPOT.id===1?'':'none';if(t.parentNode)t.parentNode.style.display=t.style.display}}if(typeof progUI==='function')progUI()}
 /* Pororoca: the tidal bore of the Amazon. A brown river a few hundred metres wide between two walls of rainforest; the wave comes up the river with no
    barrel at all, one endless wall of white water on top, and the river brings what it carries: logs, branches, and canoes of fishermen and photographers */
 const amzG=new THREE.Group();amzG.visible=false;scene.add(amzG);const AMZ={logs:[],canoe:null,next:4};
@@ -8799,7 +8800,7 @@ function mapWire(root){let pt='mouse',ht=0;
     const o=g?wmSpot(g.dataset.spot):b?wmSpot(b.dataset.spot):near(e,tchNow()?28:16);if(b)b.blur();if(!o)return;
     if(g){go(o);return}wave(o)})}
 function progUI(){
-  const PK=game.pickSpot||SPOT.id;{const t=document.getElementById('todN');if(t)t.style.display=PK===1?'':'none'}
+  const PK=game.pickSpot||SPOT.id;{const t=document.getElementById('todN');if(t){t.style.display=PK===1?'':'none';if(t.parentNode)t.parentNode.style.display=t.style.display}}
   mapRender($('spotMap'),PK);
   const op=boardOpen(BOARD);$('bdName').textContent=BOARD.id==='soft'&&PROG.softRider!=='pro'&&!PROG.theo2?'SKETCH SOFTBOARD':BOARD.name;theoPage();{const nb=BOARDS.find(b=>!boardOpen(b)),el=$('bdGoal');if(el){el.innerHTML=nb?'NEXT BOARD &nbsp;<b>'+nb.name+'</b>&nbsp; · '+reqText(nb.req):'';el.style.display=nb?'':'none'}}$('bdInfo').innerHTML=BOARD.sub;
   const lv=lvlOf(PROG.xp);$('lvl').textContent='LEVEL '+lv;$('xpFill').style.width=(clamp((PROG.xp-lvlXP(lv))/(lvlXP(lv+1)-lvlXP(lv)),0,1)*100).toFixed(1)+'%';$('xpTxt').textContent=PROG.xp.toLocaleString('en-US')+' XP';
@@ -8915,7 +8916,7 @@ vin.addEventListener('playing',()=>$('intro').classList.add('live'));
 setTimeout(()=>{if(vin.paused||vin.readyState<2)introEnd()},9000);   // never stuck on the opening
 $('intro').addEventListener('click',()=>{if(!$('intro').classList.contains('snd')){$('intro').classList.add('snd');initAudio();musicGo()}else introEnd()});   // first click: the song (the vignette stays muted under it); second click skips
 $('rdN').addEventListener('click',e=>{e.stopPropagation();setRider(1);e.target.blur()});$('rdC').addEventListener('click',e=>{e.stopPropagation();setRider(0);e.target.blur()});
-$('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);game.nightPref=0;e.target.blur()});$('todS').addEventListener('click',e=>{e.stopPropagation();setTOD(2);game.nightPref=2;e.currentTarget.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();if(SPOT.id!==1)return;setTOD(1);game.nightPref=1;e.target.blur()});
+$('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);game.nightPref=0;e.target.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();if(SPOT.id!==1)return;setTOD(1);game.nightPref=1;e.target.blur()});
 $('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(ADS.busy)return;if(b.id==='eMenu')adShow('browse','end-menu',()=>{if(PARTY.on){ptEnd();startAttract();wzGo(0)}else toMenu()});else{const sp=b.dataset.spot;adShow('next','next-wave',()=>{if(game.state!=='end')return;if(sp)setSpot(+sp);startWave()})}return}if(game.state==='end'&&game.endT>1.2)startWave()});
 function toMenu(){if(WC.on){wcMenu();return}startAttract();wzGo(3)}   /* back to the start screen: pick a spot or a board you just opened */
 /* change wave in the middle of a ride: the wave pauses, pick a spot, a new wave starts there */
@@ -11555,7 +11556,7 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       gl_FragColor=vec4(col,1.);}`});
 try{if(localStorage.getItem('playsurf_wave')==='R')setMirror(1)}catch(e){}   /* the stance he picked last time */
 composer.addPass(gradePass);
-game.nightPref=(()=>{try{return +(localStorage.getItem('surfpool_night')||0)}catch(e){return 0}})();setTOD(todFor(SPOT.id),false);   /* night only at the pool */
+game.nightPref=(()=>{try{return +(localStorage.getItem('surfpool_night')||0)===1?1:0}catch(e){return 0}})();   /* (an old SUNSET pick comes back as DAY) */setTOD(todFor(SPOT.id),false);   /* night only at the pool */
 setBoard('pro',true);   /* every game starts on the PRO MODEL; the others are a pick away in the menu */setSpot(spotOpen(SPOTS.find(o=>o.id===PROG.spot)||SPOTS[0])&&!plIs(PROG.spot)?PROG.spot:5);game.pickSpot=SPOT.id;
 function resize(){const w=Math.max(innerWidth,16),h=Math.max(innerHeight,16);renderer.setSize(w,h,false);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);
   camera.aspect=w/h;camera.updateProjectionMatrix();gradePass.uniforms.uAspect.value=w/h;gradePass.uniforms.uTexel.value.set(1/(w*renderer.getPixelRatio()),1/(h*renderer.getPixelRatio()));
