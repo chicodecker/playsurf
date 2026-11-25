@@ -182,6 +182,7 @@ body .wzS.hm .hmLogo img{width:min(34vw,560px,calc((100svh - 2*var(--bar,5.5vh) 
 .wzS.hm .hmShine{opacity:.55}
 .wzS.hm .hmIn{max-width:min(1120px,80vw)}   /* (the three bigger buttons side by side) */
 .wzS.hm .hmCards{gap:clamp(10px,1vw,16px);margin-top:clamp(18px,3vh,32px)}
+@media (min-width:761px){.wzS.hm .hmCards{display:grid;grid-template-columns:repeat(2,max-content)}.wzS.hm .hmC{width:100%;box-sizing:border-box}}   /* 2026-11-25 four buttons: two by two */
 .wzS.hm .hmC{padding:clamp(16px,2.2vh,24px) clamp(26px,2.1vw,36px) clamp(16px,2.2vh,24px) clamp(18px,1.5vw,26px);gap:clamp(12px,1vw,16px);border-radius:14px}   /* bigger buttons */
 .wzS.hm .hmC b{font-size:clamp(16px,1.5vw,24px)}
 .wzS.hm .hmC i{font-size:clamp(7px,.56vw,8.5px);letter-spacing:.14em;opacity:.7;margin-top:4px}
@@ -1659,7 +1660,8 @@ body.wcOn #gm .gmSurf button:not([data-s="pro"]):not([data-s="girl"]):not([data-
         <p class="hmMore" aria-hidden="true">19 REAL WAVES<i>·</i>39 SURFERS, EACH WITH OWN BOARD &amp; THEME SONG<i>·</i>FREE, NO DOWNLOAD</p>
         <div class="hmNow" id="hmNow"><i class="hmLive" aria-hidden="true"></i><small>NOW SURFING</small><b id="hmNowN"></b><em id="hmNowL"></em></div>
         <div class="hmCards">
-          <button id="hmFree" class="hmC" type="button" style="--d:0s"><svg class="hmI" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30c4-11 13-18 23-18 6 0 10 3 11 7-4-2-9-1-11 3s0 9 4 11"/><path d="M4 38c4 0 5-3 9-3s5 3 9 3 5-3 9-3 5 3 9 3 5-3 6-3"/></svg><span class="hmT"><b>FREESURF</b><i>ANY WAVE · SOLO OR PARTY</i></span></button>
+          <button id="hmFree" class="hmC" type="button" style="--d:0s"><svg class="hmI" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30c4-11 13-18 23-18 6 0 10 3 11 7-4-2-9-1-11 3s0 9 4 11"/><path d="M4 38c4 0 5-3 9-3s5 3 9 3 5-3 9-3 5 3 9 3 5-3 6-3"/></svg><span class="hmT"><b>FREESURF</b><i>ANY WAVE · YOUR OWN SESSION</i></span></button>
+          <button id="hmParty" class="hmC" type="button" style="--d:.03s"><svg class="hmI" viewBox="0 0 48 48" aria-hidden="true"><circle cx="17" cy="15" r="5"/><circle cx="32" cy="15" r="5"/><path d="M7 36c1-7 5-11 10-11s9 4 10 11M22 36c1-7 5-11 10-11s9 4 10 11"/></svg><span class="hmT"><b>PARTY SURF</b><i>2–6 FRIENDS · ONE DEVICE · TAKE TURNS</i></span></button>
           <button id="hmTour" class="hmC" type="button" style="--d:.06s"><svg class="hmI" viewBox="0 0 48 48" aria-hidden="true"><path d="M15 7h18v8c0 7-4 12-9 13-5-1-9-6-9-13z"/><path d="M15 10H9c0 6 3 9 7 10M33 10h6c0 6-3 9-7 10M24 28v7M17 41h14M19 35h10v6H19z"/></svg><span class="hmT"><b>WORLD CHAMPIONSHIP TOUR</b><i id="hmTourSub">36 SURFERS · 10 STOPS · ONE WORLD TITLE</i></span><span class="hmProg" id="hmProg"></span></button>
           <button id="hmGuide" class="hmC" type="button" style="--d:.12s"><svg class="hmI" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 10.5A4.5 4.5 0 0 1 13.5 6H39v30H13.5A4.5 4.5 0 0 0 9 40.5z"/><path d="M9 40.5A4.5 4.5 0 0 0 13.5 45H39v-9M17 15h14M17 22h9"/></svg><span class="hmT"><b>MANEUVER GUIDE</b><i>EVERY MOVE, ONE AT A TIME</i></span></button>
         </div>
@@ -2844,9 +2846,9 @@ const waveDef={
 #else
       vec4 r2=texture2D(uRip,uv*vec2(0.47,0.43)+vec2(-0.031,0.024)*uTime+w2*0.08);
       vec4 r3=vec4(0.5,0.5,0.45,0.5);if(steep>0.03)r3=textureGrad(uRip,uv*vec2(0.42,0.045)+vec2(-0.031,0.024)*uTime,dUx*vec2(0.42,0.045),dUy*vec2(0.42,0.045));   /* 1121 the lines up the face: the fine layer drawn out up the slope, read at ONE fixed scale (scaling the coordinate by the slope tore it into horizontal bands) */   /* on the face the fine layer is drawn out up the slope: lines of water running up the wall */
-      vec2 rs=w3*mix(0.32,0.28,steep)+mix((r2.rg-0.5)*0.21*df,(r3.rg-0.5)*0.40,steep);
+      vec2 rs=w3*mix(0.26,0.24,steep)+mix((r2.rg-0.5)*0.11*df,(r3.rg-0.5)*0.26,steep);
 #endif
-      vec2 sl=(w1*0.60+w2*0.62)*mix(0.33,0.20,steep)+rs;
+      vec2 sl=(w1*0.60+w2*0.62)*mix(0.27,0.18,steep)+rs;
 #else
       vec2 w3=texture2D(uNoise,uv*0.21+vec2(0.045,-0.038)*uTime+w2*0.04).rg-0.5;
       vec2 w4=texture2D(uNoise,uv*0.67+vec2(-0.08,0.10)*uTime).rg-0.5;
@@ -2862,7 +2864,7 @@ const waveDef={
       if(uFace.x>0.){float fw=max(length(dUx),length(dUy));fdk=uFace.x*(1.-smoothstep(0.12,0.45,fw));   /* far away they fade out (mip-filtered as well): no shimmer */
        if(fdk>0.){q1=textureGrad(uRip,uv*vec2(1.05,0.80)+vec2(0.061,-0.083)*uTime+w3*0.20,dUx*vec2(1.05,0.80),dUy*vec2(1.05,0.80));
         vec4 q2=textureGrad(uRip,uv*vec2(2.45,1.90)+vec2(-0.097,0.071)*uTime+w3*0.12,dUx*vec2(2.45,1.90),dUy*vec2(2.45,1.90));
-        vec2 dsl=((q1.rg-0.5)*0.85+(q2.rg-0.5)*0.60*(1.-smoothstep(0.05,0.22,fw)))*uFace.y*fdk;
+        vec2 dsl=((q1.rg-0.5)*0.40+(q2.rg-0.5)*0.18*(1.-smoothstep(0.05,0.22,fw)))*uFace.y*fdk;
         Nd=normalize(N-(Ts*dsl.x+Tp*dsl.y));}}
 #endif
       float ndv=max(dot(N,V),0.);float fres=0.02+0.98*pow(1.-ndv,5.);
@@ -2872,8 +2874,8 @@ const waveDef={
       refl=mix(refl,uHzC*mix(1.0,0.78,steep),(1.-smoothstep(0.0,0.20,Rs.y))*0.30*(1.-steep));   /* near the horizon the flat water mirrors the haze of each wave's own sky */
       fres=0.02+0.98*pow(1.-max(dot(normalize(mix(Ng,N,0.55)),V),0.),5.);
 #ifndef SKIN_LITE
-      if(fdk>0.){float fd=0.02+0.98*pow(1.-max(dot(Nd,V),0.),5.);fres=mix(fres,fd,0.65*fdk);   /* gfx2 face: the fresnel follows the fine ripples: bright sky on the facets turned away, deep water on the ones facing the lens */
-       vec3 Rd=reflect(-V,Nd);refl*=1.+fdk*clamp((Rs.y-abs(Rd.y))*1.4+dot(Rd-Rs,uSun)*1.2,-0.30,0.40);}   /* lower and toward the sun the sky is brighter */
+      if(fdk>0.){float fd=0.02+0.98*pow(1.-max(dot(Nd,V),0.),5.);fres=mix(fres,fd,0.30*fdk);   /* gfx2 face: the fresnel follows the fine ripples: bright sky on the facets turned away, deep water on the ones facing the lens */
+       vec3 Rd=reflect(-V,Nd);refl*=1.+fdk*clamp((Rs.y-abs(Rd.y))*1.4+dot(Rd-Rs,uSun)*1.2,-0.12,0.18);}   /* lower and toward the sun the sky is brighter */
       refl*=mix(1.,1.30,smoothstep(0.25,0.85,fres)*uFace.w);   /* at grazing angles the water is a clear mirror */
 #endif
 #else
@@ -2897,14 +2899,14 @@ const waveDef={
       glow/=1.+0.25*max(max(glow.r,glow.g),glow.b);
 #ifndef SKIN_LITE
       if(uFace.w>0.){float gl=dot(glow,vec3(0.2126,0.7152,0.0722));vec3 gs=max(mix(vec3(gl),glow,1.5),0.);gs/=1.+0.35*max(max(gs.r,gs.g),gs.b);   /* gfx2 face: the light through the lip a clear, saturated green-turquoise that never washes out to a milky white */
-       glow=mix(glow,gs*0.85*(0.85+0.3*q1.b+0.7*dot(Nd-N,Tp)),uFace.w);}   /* and broken up by the fine ripples it comes through */
+       glow=mix(glow,gs*0.85*(0.92+0.15*q1.b+0.3*dot(Nd-N,Tp)),uFace.w);}   /* and broken up by the fine ripples it comes through */
 #endif
    /* a soft knee: it glows without burning to white or flooding the bloom */
       body+=glow+uWB*0.22*max(dot(N,L),0.);
-      body*=1.+(0.45*(r3.b-0.45)*steep*(1.-0.75*thin)+0.9*dot(N-Ng,normalize(L+V+vec3(0.,0.6,0.))));   /* the ripples and the lines running up the face shade the body of the water too */
+      body*=1.+(0.22*(r3.b-0.45)*steep*(1.-0.75*thin)+0.40*dot(N-Ng,normalize(L+V+vec3(0.,0.6,0.))));   /* the ripples and the lines running up the face shade the body of the water too */
 #ifndef SKIN_LITE
       if(uFace.w>0.)body*=mix(1.,mix(0.62,1.0,smoothstep(0.0,0.55,hf)),uFace.w*(1.-thin));   /* gfx2 face: deeper still at the foot of the wall */
-      body+=refl*0.45*smoothstep(0.30,0.95,hf)*steep*(1.-0.6*thin)*max(r3.b-0.45,0.);   /* the high part of the wall catches the sky on the crests of its ripples */
+      body+=refl*0.22*smoothstep(0.30,0.95,hf)*steep*(1.-0.6*thin)*max(r3.b-0.45,0.);   /* the high part of the wall catches the sky on the crests of its ripples */
 #endif
 #else
       float hf=clamp(vP.y/4.0,0.,1.);
@@ -2932,15 +2934,18 @@ const waveDef={
          float bd=smoothstep(1.0,0.55,length(lq/vec2(1.05,0.30))),bo=smoothstep(1.0,0.4,length((lq-vec2(-0.25,0.))/vec2(0.48,0.38)));floorC*=1.-uShdK*0.62*max(bd,bo);}
        body=mix(body,floorC*uFlK,vis);}   /* the bottom is only worked out where it shows through */
       float sd=max(dot(R,L),0.);
-      float spec=(pow(sd,420.)*9.+pow(sd,70.)*0.35)*(1.-occ)*(1.-fk);
 #ifdef SKIN
-      if(sd>0.3)spec+=smoothstep(0.3,0.6,sd)*smoothstep(0.86,0.99,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,8.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*(1.-0.8*uDusk)*4.;   /* WAVE SKIN: the sun glitter in fine sparks, not a soft glow */
+      sd=mix(sd,max(dot(Rs,L),0.),0.6);   /* q1126 glass: the sun read off the softened ripples, one smooth road instead of hot single pixels */
+#endif
+      float spec=(pow(sd,260.)*5.5+pow(sd,60.)*0.40)*(1.-occ)*(1.-fk);
+#ifdef SKIN
+      if(sd>0.3)spec+=smoothstep(0.3,0.6,sd)*smoothstep(0.74,0.97,textureGrad(uNoise,uv*1.35+vec2(0.07,-0.06)*uTime+w3*0.25,dUx*1.35,dUy*1.35).a)*pow(sd,20.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*(1.-0.8*uDusk)*0.9;   /* WAVE SKIN: the sun glitter in fine sparks, not a soft glow */
 #ifndef SKIN_LITE
-      if(steep>0.05)spec+=pow(sd,60.)*smoothstep(0.55,0.85,r3.b)*steep*(1.-occ)*(1.-0.5*thin)*(1.-0.8*uDusk)*2.5;   /* and the sun glinting on the ripples of the face */
+      if(steep>0.05)spec+=pow(sd,40.)*smoothstep(0.50,0.90,r3.b)*steep*(1.-occ)*(1.-0.5*thin)*(1.-0.8*uDusk)*1.0;   /* and the sun glinting on the ripples of the face */
       if(fdk*uFace.z>0.){vec3 H=normalize(L+V),Tx=normalize(Ts-Nd*dot(Ts,Nd)),Ty=cross(Nd,Tx);float hx=dot(H,Tx),hy=dot(H,Ty),hz=max(dot(H,Nd),0.05);
-       float an=exp(-(hx*hx*625.+hy*hy*60.)/(hz*hz));   /* gfx2 face: the sun in the fine ripples, glints drawn out in streaks up the face */
-       spec+=an*uFace.z*fdk*(0.25+1.5*smoothstep(0.45,0.85,q1.b))*(1.-occ)*(1.-0.5*thin)*(1.-clamp(foamA,0.,1.))*(1.-0.8*uDusk)*(1.-0.6*uNight)*2.2;
-       float tg=max(dot(refract(-V,Nd,0.75),L),0.);spec+=pow(tg,24.)*smoothstep(0.15,0.7,thin)*smoothstep(0.5,0.85,q1.b)*uFace.z*fdk*(1.-occ)*(1.-clamp(foamA,0.,1.))*(1.-0.8*uDusk)*(1.-0.6*uNight)*2.5;}   /* and with the sun behind the wave, sparks of it coming through the thin lip */
+       float an=exp(-(hx*hx*180.+hy*hy*22.)/(hz*hz));   /* gfx2 face: the sun in the fine ripples, glints drawn out in streaks up the face */
+       spec+=an*uFace.z*fdk*(0.25+0.6*smoothstep(0.45,0.85,q1.b))*0.36*(1.-occ)*(1.-0.5*thin)*(1.-clamp(foamA,0.,1.))*(1.-0.8*uDusk)*(1.-0.6*uNight)*2.2;
+       float tg=max(dot(refract(-V,Nd,0.75),L),0.);spec+=pow(tg,24.)*smoothstep(0.15,0.7,thin)*smoothstep(0.5,0.85,q1.b)*uFace.z*fdk*(1.-occ)*(1.-clamp(foamA,0.,1.))*(1.-0.8*uDusk)*(1.-0.6*uNight)*1.2;}   /* and with the sun behind the wave, sparks of it coming through the thin lip */
 #endif
 #else
       if(sd>0.12)spec+=smoothstep(0.12,0.3,sd)*smoothstep(0.80,0.97,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,3.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*5.;   // sun glitter dancing on the water
@@ -3099,8 +3104,8 @@ partGeo.setAttribute('aSA',new THREE.BufferAttribute(pSA,2).setUsage(THREE.Dynam
 partGeo.setAttribute('aV',new THREE.BufferAttribute(pV,3).setUsage(THREE.DynamicDrawUsage));   /* the velocity: the fan's streaks are drawn along it */
 {const sd=new Float32Array(PN*2);for(let i=0;i<PN*2;i++)sd[i]=Math.random();partGeo.setAttribute('aSeed',new THREE.BufferAttribute(sd,2))}
 const partMat=new THREE.ShaderMaterial({
-  uniforms:{uRep:{value:0},uScale:{value:800},uSun:{value:SUN},uNoise:{value:noiseTex},uRZ:{value:1e3},uTint:{value:new V3(1,1,1)},uRP:{value:new V3(0,-99,0)},uAsp:{value:1.7}},
-  vertexShader:`attribute vec2 aSA;attribute vec2 aSeed;attribute vec3 aV;uniform float uRep;uniform float uScale;uniform float uRZ;uniform vec3 uSun;uniform vec3 uRP;uniform float uAsp;varying float vA;varying float vB;varying vec2 vS;varying float vF;varying float vK;varying vec2 vDir;
+  uniforms:{uRep:{value:0},uScale:{value:800},uSun:{value:SUN},uNoise:{value:noiseTex},uRZ:{value:1e3},uTint:{value:new V3(1,1,1)},uWd:{value:waveMat.uniforms.uG1.value},uWl:{value:waveMat.uniforms.uG2.value},uRP:{value:new V3(0,-99,0)},uAsp:{value:1.7}},
+  vertexShader:`attribute vec2 aSA;attribute vec2 aSeed;attribute vec3 aV;uniform float uRep;uniform float uScale;uniform float uRZ;uniform vec3 uSun;uniform vec3 uRP;uniform float uAsp;varying float vA;varying float vB;varying vec2 vS;varying float vF;varying float vK;varying vec2 vDir;varying float vW;
 #ifdef SKIN
     varying float vSz;
 #endif
@@ -3109,11 +3114,11 @@ const partMat=new THREE.ShaderMaterial({
       vSz=aSA.x;
 #endif
 
-      float ps=aSA.x*uScale/max(-mv.z,0.3);vK=step(15.,aSA.y);vF=step(5.,aSA.y)*(1.-vK);vA=(aSA.y-10.*vF-20.*vK)*min(1.,ps*0.5)*mix(mix(1.,0.25,smoothstep(0.5,1.6,aSA.x)),1.,vF)*smoothstep(2.2+3.8*uRep,9.0+9.0*uRep,-mv.z)*mix(0.15,1.,smoothstep(uRZ-1.6,uRZ+0.1,-mv.z))*(1.-uRep*0.85*smoothstep(90.,260.,ps)*smoothstep(0.9,2.0,aSA.x));   /* 2026-11-18 replay cameras come in close: big soft puffs near the lens fade out instead of standing in the air as white clouds */
-      {vec3 ca=uRP-cameraPosition;float L=length(ca);vec3 cd=ca/max(L,1e-3);float tq=dot(position-cameraPosition,cd);vec3 qp=position-cameraPosition-cd*tq;float rd=length(qp),near=1.-smoothstep(1.2+0.6*aSA.x,2.4+1.0*aSA.x,rd);vA*=1.-0.985*near*smoothstep(L+0.8,L-0.3,tq)*step(0.,tq);}   /* 2026-11-18 spray and white water between the camera and the surfer fade out around him: he is never lost in a cloud (only the water itself may cover him, in the barrel or when he goes down) */gl_PointSize=clamp(ps,0.,380.-150.*uRep);if(vA<0.004)gl_Position=vec4(2.,2.,2.,1.);
-      vDir=vec2(1.,0.);if(vK>0.5){vec4 p1=projectionMatrix*viewMatrix*vec4(position+aV*0.06,1.);vec2 d=(p1.xy/p1.w-gl_Position.xy/gl_Position.w)*vec2(uAsp,1.);float dl=length(d);vDir=dl>1e-5?vec2(d.x,-d.y)/dl:vec2(1.,0.);}
+      float ps=aSA.x*uScale/max(-mv.z,0.3);vW=step(25.,aSA.y);vK=step(15.,aSA.y)*(1.-vW);vF=step(5.,aSA.y)*(1.-step(15.,aSA.y));vA=(aSA.y-10.*vF-20.*vK-30.*vW)*min(1.,ps*0.5)*mix(mix(1.,0.25,smoothstep(0.5,1.6,aSA.x)),1.,max(vF,vW))*smoothstep(2.2+3.8*uRep,9.0+9.0*uRep,-mv.z)*mix(0.15,1.,smoothstep(uRZ-1.6,uRZ+0.1,-mv.z))*(1.-uRep*0.85*smoothstep(90.,260.,ps)*smoothstep(0.9,2.0,aSA.x));   /* 2026-11-18 replay cameras come in close: big soft puffs near the lens fade out instead of standing in the air as white clouds */
+      {vec3 ca=uRP-cameraPosition;float L=length(ca);vec3 cd=ca/max(L,1e-3);float tq=dot(position-cameraPosition,cd);vec3 qp=position-cameraPosition-cd*tq;float rd=length(qp),near=1.-smoothstep(1.2+0.6*aSA.x,2.4+1.0*aSA.x,rd);vA*=1.-0.985*near*smoothstep(L+0.8,L-0.3,tq)*step(0.,tq);}   /* 2026-11-18 spray and white water between the camera and the surfer fade out around him: he is never lost in a cloud (only the water itself may cover him, in the barrel or when he goes down) */gl_PointSize=clamp(ps,0.,mix(380.-150.*uRep,150.,vW));if(vA<0.004)gl_Position=vec4(2.,2.,2.,1.);
+      vDir=vec2(1.,0.);if(vK+vW>0.5){vec4 p1=projectionMatrix*viewMatrix*vec4(position+aV*0.06,1.);vec2 d=(p1.xy/p1.w-gl_Position.xy/gl_Position.w)*vec2(uAsp,1.);float dl=length(d);vDir=dl>1e-5?vec2(d.x,-d.y)/dl:vec2(1.,0.);}
       vec3 V=normalize(cameraPosition-position);vB=pow(clamp(dot(V,-uSun)*.5+.5,0.,1.),3.);}`,
-  fragmentShader:`precision highp float;uniform sampler2D uNoise;uniform vec3 uTint;varying float vA;varying float vB;varying vec2 vS;varying float vF;varying float vK;varying vec2 vDir;
+  fragmentShader:`precision highp float;uniform sampler2D uNoise;uniform vec3 uTint;uniform vec3 uWd;uniform vec3 uWl;varying float vA;varying float vB;varying vec2 vS;varying float vF;varying float vK;varying vec2 vDir;varying float vW;
 #ifdef SKIN
     varying float vSz;
 #endif
@@ -3125,6 +3130,14 @@ const partMat=new THREE.ShaderMaterial({
         float sh=(1.-smoothstep(0.30,0.50,abs(al)))*(1.-smoothstep(0.10,0.30,abs(ac)))*(0.35+0.65*strands);
         vec3 lit=mix(vec3(0.62,0.78,0.88),vec3(1.04,1.02,0.98),0.35+0.65*vB)*(0.78+0.30*strands);
         gl_FragColor=vec4(lit*uTint,sh*vA*1.5);return;}
+      if(vW>0.5){float al=dot(c,vDir),ac=dot(c,vec2(-vDir.y,vDir.x));vec2 qd=vec2(al*0.80,ac*1.16);float dq=length(qd)*2.;   /* 2026-11-26 the bucket: a mass of thrown water, a glassy lobed slug drawn out a little along its flight, water-coloured and lit through by the sun, never white paint */
+        if(dq>=1.21)discard;   /* outside the largest lobe: no texture reads for the corners of the sprite */
+        float n=texture2D(uNoise,gl_PointCoord*0.22+vS).b,n2=texture2D(uNoise,gl_PointCoord*0.6+vS*1.7).a,lb=texture2D(uNoise,(qd/max(dq*0.5,1e-3))*0.06+vS*3.1).a;
+        float e=dq/(0.60+0.38*lb)+(n-0.5)*0.30+(n2-0.5)*0.16;if(e>=1.0)discard;
+        float body=smoothstep(1.0,0.52,e),rim=smoothstep(0.50,0.90,e)*smoothstep(1.0,0.86,e),tl=1.-gl_PointCoord.y;body*=mix(0.7,1.,smoothstep(0.25,0.6,e+0.4*n));   /* thinner in the middle: glassy, the light shows through */
+        vec3 wc=mix(uWd*1.25+0.06,uWl*0.7+0.08,0.30+0.70*vB)*(0.70+0.50*tl);   /* the wave's own water: deep body, glowing like the lip with the sun behind it */
+        float sp=smoothstep(0.62,0.92,n*0.45+tl*0.55+0.25*(1.-e))*(1.-e);wc=mix(wc,vec3(1.04,1.03,1.0)*uTint,clamp(sp*0.85+rim*0.45+smoothstep(0.66,0.84,n2)*0.40,0.,1.));   /* sunlit highlight, bright skin at its edge, a few flecks of foam (only these take the light's tint) */
+        gl_FragColor=vec4(wc,min(body*(0.62+0.30*n)*vA*1.15,0.82));return;}
       if(vF<0.5?d>1.005:d>1.27)discard;   /* perf 2026-11-19: a spray drop is fully clear past its round edge (exp(-2.8 d^2) - 0.06 <= 0), a lump of white water past 1.27 (its widest lobe with the most noise): the square's corners skip the shading */
       float n=texture2D(uNoise,gl_PointCoord*0.20+vS).b,n2=texture2D(uNoise,gl_PointCoord*0.55+vS*1.7).a;
       float edge=d+(n-0.5)*0.55+(n2-0.5)*0.25;
@@ -3188,13 +3201,14 @@ const plumeMat=new THREE.ShaderMaterial({
   transparent:true,depthWrite:false,side:THREE.DoubleSide});
 const plume=new THREE.Mesh(plumeGeo,plumeMat);plume.frustumCulled=false;plume.renderOrder=4;scene.add(plume);
 
-function updateParticles(dt){
+let slSplat=0,slF=0;   /* 2026-11-26 the bucket: splats this frame (capped), and which half of the slugs test the water this frame */
+function updateParticles(dt){slSplat=0;slF^=1;
   if(pTot-pTail>PN)pTail=pTot-PN;
   for(let c=0,n=pTot-pTail,i=pTail%PN;c<n;c++,i=(i+1===PN?0:i+1)){   /* q1125 fps: only the window of the ring that can hold live drops */
     if(pLife[i]>0){pLife[i]-=dt;const k=1-pLife[i]/pMax[i],d=1-pDr[i]*dt;
       pV[i*3]*=d;pV[i*3+1]=pV[i*3+1]*d-pGr[i]*dt;pV[i*3+2]*=d;
       pP[i*3]+=pV[i*3]*dt;pP[i*3+1]+=pV[i*3+1]*dt;pP[i*3+2]+=pV[i*3+2]*dt;
-      pSA[i*2]=lerp(pS0[i],pS1[i],Math.sqrt(k));pSA[i*2+1]=pFd[i]===2?pAl[i]*Math.min(k*12,1)*(1-k)*(1.25-0.25*k)+20:pAl[i]*Math.min(k*10,1)*(pFd[i]?1-sstep(0.5,1,k):(1-k)*(1-k)*1.6)+(pFd[i]?10:0);
+      pSA[i*2]=lerp(pS0[i],pS1[i],Math.sqrt(k));pSA[i*2+1]=pFd[i]===3?pAl[i]*Math.min(k*30,1)*(1-sstep(0.88,1,k))+30:pFd[i]===2?pAl[i]*Math.min(k*12,1)*(1-k)*(1.25-0.25*k)+20:pAl[i]*Math.min(k*10,1)*(pFd[i]?1-sstep(0.5,1,k):(1-k)*(1-k)*1.6)+(pFd[i]?10:0);if(pFd[i]===3&&pV[i*3+1]<0)slugHit(i);
       if(pLife[i]<=0)pSA[i*2]=0}
   }
   while(pTail<pTot&&pLife[pTail%PN]<=0)pTail++}
@@ -4556,11 +4570,11 @@ const UL_L=[[11,'surf',['alien']],[15,'surf',['wchamp']],[0,'spot',[5,3,6,1,9,8,
   [18,'spot',[11]],[18,'surf',['duke','santos','pedro2','tiradentes','carmen']],[20,'spot',[10]],[20,'board',['lucha']],
   [22,'spot',[16]],[22,'surf',['einstein','napoleon','cleopatra','leonardo','frida']],[24,'spot',[17]],[26,'surf',['joan','lincoln','caesar','mozart','darwin']],
   [30,'spot',[19]],[30,'surf',['newton','curie','shakespeare','tut','chaplin']],[32,'spot',[20,21,24]]];
-UL_L.push([33,'spot',[22]],[34,'spot',[23]]);   /* 2026-11-21 the Thames and Dubai pools, after the planet */const UL_AT={spot:{},surf:{},board:{}};UL_L.forEach(([n,k,ids])=>ids.forEach(id=>{UL_AT[k][id]=n}));
+UL_L.push([33,'spot',[22]],[34,'spot',[23]]);UL_L.forEach(e=>{if(e[1]==='surf')e[0]=0});   /* 2026-11-25 (the user) every surfer open from the start; their own boards with them */   /* 2026-11-21 the Thames and Dubai pools, after the planet */const UL_AT={spot:{},surf:{},board:{}};UL_L.forEach(([n,k,ids])=>ids.forEach(id=>{UL_AT[k][id]=n}));
 function ulStep(){return (PROG.waves||0)+(PROG.ulB||0)}
 function ulAt(kind,id){const m=UL_AT[kind];if(m[id]!==undefined)return m[id];if(kind==='board'){if(typeof NX!=='undefined')for(const q in NX)if(NX[q].board===id&&UL_AT.surf[q]!==undefined)return UL_AT.surf[q];return 20}return kind==='spot'?99:20}
 function ulKeys(){const k=['pro','girl','theo2','kid'];if(typeof NX!=='undefined')for(const q in NX)k.push(q);if(typeof HIST!=='undefined')for(const q in HIST)if(k.indexOf(q)<0)k.push(q);return k}
-function surfOpen(k){return !!PROG.open||ulStep()>=ulAt('surf',k)}
+function surfOpen(k){return true}
 function ulBtnId(k){return k==='pro'?'chPro':k==='girl'?'chGirl':k==='theo2'?'chTheo2':k==='kid'?'chKid':(typeof NX!=='undefined'&&NX[k])?NX[k].id:(typeof HIST!=='undefined'&&HIST[k])?HIST[k].id:''}
 function ulName(k){const b=document.getElementById(ulBtnId(k));const t=b&&b.childNodes[0]?String(b.childNodes[0].textContent||'').trim():'';return t||k.toUpperCase()}
 function ulSpotName(id){const o=SPOTS.find(q=>q.id===id);return o?(o.full||o.name):''}
@@ -5839,7 +5853,7 @@ function svhLoop(now){if(!SVH.on){SVH.raf=0;return}SVH.raf=requestAnimationFrame
 {const gs=document.querySelector('.svGroups');if(gs){const on=e=>{if(e.pointerType&&e.pointerType!=='mouse')return;const b=e.target.closest&&e.target.closest('.svGB');if(!b){SVH.btn=null;return}if(b!==SVH.btn){SVH.btn=b;svhShow(b.dataset.g)}};   /* a new pick on every new button (and on coming back to one) */
   gs.addEventListener('pointerover',on);gs.addEventListener('focusin',on);gs.addEventListener('pointerleave',()=>{SVH.btn=null;svhHide()});gs.addEventListener('focusout',e=>{if(!gs.contains(e.relatedTarget)){SVH.btn=null;svhHide()}})}
  const _sg=svGroup;svGroup=function(g){SVH.btn=null;svhHide();_sg(g)}}   /* (opening a group, or coming back to the buttons, hides him) */
-function wzBackGo(){if(WZ.s===4&&SVG.g){svGroup(null);return}wzGo(WZ.s===2?0:WZ.s-1)}   /* BACK, Esc or B: from a group's names to the groups first */
+function wzBackGo(){if(WZ.s===4&&SVG.g){svGroup(null);return}wzGo(WZ.s===2?-1:WZ.s-1)}   /* BACK, Esc or B: from a group's names to the groups first */
 function svNeed(k){const B=k&&k!=='pro'&&k!=='kid'?BODIES[k]:null;return B&&B.file&&!B.ready?B:null}   /* (THE PRO and THE CRAFT are made from the rig the game already has) */
 function svLoad(){if(!SV.on||!RIG.ready)return;if(SVQ.k){const Q=BODIES[SVQ.k];if(Q&&!Q.ready&&performance.now()-SVQ.t<25000)return;SVQ.k=null}const k=SV_L[SV.i][1],B=svNeed(k);if(B&&!B.req){SVQ.k=k;SVQ.t=performance.now();try{bodyEnsure(k)}catch(e){}if(!B.req)SVQ.k=null}}   /* the one on its way finishes first, then whoever is in front by then */
 function svAhead(){if(SVQ.lite||SVQ.k)return;const B=svNeed(SV_L[svNext(SV.i)][1]);if(B&&!B.req&&!MAGP[B.file])try{magFetch(B.file)}catch(e){}}   /* the turntable about to move on: the next one's download starts a second early (built when he comes round) */
@@ -8078,7 +8092,7 @@ $('ptCount').addEventListener('click',e=>{const b=e.target.closest('button');if(
 $('ptBack').addEventListener('click',e=>{e.stopPropagation();ptClose()});$('ptGo').addEventListener('click',e=>{e.stopPropagation();ptStart()});
 ['party','champ'].forEach(id=>{$(id).addEventListener('click',e=>e.stopPropagation());$(id).addEventListener('pointerdown',e=>e.stopPropagation())});
 $('chAgain').addEventListener('click',e=>{e.stopPropagation();champClose();PARTY.players.forEach(p=>p.scores=[]);PARTY.round=0;PARTY.turn=0;PARTY.done=false;PARTY.last=null;startWave()});
-$('chMenu').addEventListener('click',e=>{e.stopPropagation();champClose();ptEnd();startAttract();wzGo(0)});
+$('chMenu').addEventListener('click',e=>{e.stopPropagation();champClose();ptEnd();startAttract();wzGo(-1)});
 /* a Bluetooth or USB controller (standard mapping): the left stick or the d-pad steer, a button for each move, and the menus driven like a console's:
    d-pad / stick to move between buttons (a gold ring shows where you are), A to press, B to go back, START to go */
 const GP={prev:[],focus:null,rep:0,held:false};
@@ -8687,7 +8701,8 @@ $('wct').addEventListener('keydown',e=>{if(e.target.id==='wcName')e.stopPropagat
 /* back from CHOOSE YOUR SURFER / BOARD to the tour */
 $('goPlay').addEventListener('click',e=>{if(!WC.pick)return;e.stopImmediatePropagation();WC.pick=false;wcHub()},true);
 /* the first menu */
-$('hmFree').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();wzGo(0)});
+$('hmFree').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();ptEnd();wzGo(2)});   /* 2026-11-25 (the user) FREESURF straight to the solo session */
+$('hmParty').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();initAudio();ptOpen()});   /* PARTY SURF: its own button on the home */
 $('hmTour').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();wcOpen()});
 $('hmGuide').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();initAudio();const top=document.querySelector('#tutL .tlTop small'),old=top?top.textContent:'';if(top)top.textContent='MANEUVER GUIDE · THE MAIN MOVES';document.body.classList.add('tlHome');
   tutLShow(()=>{document.body.classList.remove('tlHome');if(top)top.textContent=old;wzGo(-1)},{inRide:true})});
@@ -8917,7 +8932,7 @@ setTimeout(()=>{if(vin.paused||vin.readyState<2)introEnd()},9000);   // never st
 $('intro').addEventListener('click',()=>{if(!$('intro').classList.contains('snd')){$('intro').classList.add('snd');initAudio();musicGo()}else introEnd()});   // first click: the song (the vignette stays muted under it); second click skips
 $('rdN').addEventListener('click',e=>{e.stopPropagation();setRider(1);e.target.blur()});$('rdC').addEventListener('click',e=>{e.stopPropagation();setRider(0);e.target.blur()});
 $('todD').addEventListener('click',e=>{e.stopPropagation();setTOD(0);game.nightPref=0;e.target.blur()});$('todN').addEventListener('click',e=>{e.stopPropagation();if(SPOT.id!==1)return;setTOD(1);game.nightPref=1;e.target.blur()});
-$('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(ADS.busy)return;if(b.id==='eMenu')adShow('browse','end-menu',()=>{if(PARTY.on){ptEnd();startAttract();wzGo(0)}else toMenu()});else{const sp=b.dataset.spot;adShow('next','next-wave',()=>{if(game.state!=='end')return;if(sp)setSpot(+sp);startWave()})}return}if(game.state==='end'&&game.endT>1.2)startWave()});
+$('end').addEventListener('click',e=>{const b=e.target.closest('button');if(b){e.stopPropagation();if(game.state!=='end')return;if(ADS.busy)return;if(b.id==='eMenu')adShow('browse','end-menu',()=>{if(PARTY.on){ptEnd();startAttract();wzGo(-1)}else toMenu()});else{const sp=b.dataset.spot;adShow('next','next-wave',()=>{if(game.state!=='end')return;if(sp)setSpot(+sp);startWave()})}return}if(game.state==='end'&&game.endT>1.2)startWave()});
 function toMenu(){if(WC.on){wcMenu();return}startAttract();wzGo(3)}   /* back to the start screen: pick a spot or a board you just opened */
 /* change wave in the middle of a ride: the wave pauses, pick a spot, a new wave starts there */
 let wpPaused=false;
@@ -9067,7 +9082,7 @@ function startWave(att){if(!att&&plCrewGate())return;if(!att&&WC.on&&wcGate())re
   $('menu').classList.add('off');$('end').classList.add('off');$('hud').classList.add('on');$('wavebar').classList.add('on');$('camBtn').classList.add('on');$('waveBtn').classList.add('on');keysRoll(!att);$('pop').innerHTML='';$('say').innerHTML='';
   if(game.attract){$('menu').classList.remove('off');progUI();return}   // behind the start screen
   sfxNoise(1.2,900,0.25);if((SPOT.id===5||SPOT.id===3||SPOT.id===1||SPOT.pool||SPOT.id===8||SPOT.id===9)&&!window.__manual)pickOpen()}   /* the pool, Lower Trestles and Pipeline break both ways: pick a side before the drop */
-function startAttract(){try{if(!(WC.on&&!WC.pick)){game.wx='';setTOD(2,false)}}catch(e){}startWave(true)}   /* 2026-11-22 the menus always in the golden morning light */
+function startAttract(){try{if(!(WC.on&&!WC.pick)){game.wx='';setTOD(0,false)}}catch(e){}startWave(true)}   /* 2026-11-22 the menus always in the golden morning light */
 function beginPlay(){if(tutLNeed()){tutLShow(beginPlay0);return}if(game.homeGuide){game.homeGuide=false;tutLShow(beginPlay0,{per:2.0});return}   /* 2026-11-18 after going back home, the guide again before the first wave, quicker, with SKIP */beginPlay0()}
 function beginPlay0(){initAudio();riderPrep(beginPlay1)}function beginPlay1(){trCancel();try{setTOD(todFor(SPOT.id),false)}catch(e){}   /* (the player's own light for the ride) */ADS.rode=true;initAudio();game.ts=1;startWave();musicGo()}   /* (initAudio first, inside the click, so the sound still unlocks if a loading screen comes before the wave) */
 /* 2026-11-18 the first time on a device, before the first wave: a quick tour of the six main moves, dressed as the loading screen (a drawing of the line on the wave, and how to do it) */
@@ -10638,6 +10653,51 @@ function landFoam(dt){if(game.state!=='ride'&&!game.attract)return;const FH=SPOT
   while(n>0&&tries<220){tries++;const i=(Math.random()*NS)|0,k=LANDK[i];if(k<0.3)continue;const s=colS[i];if(s<-10||s>80)continue;n--;const x=s+rnd(-0.45,0.45),z=LANDZ[i]+rnd(-0.7,0.5);
     emit(x,0.15,z,rnd(-1.2,1.2)-CP*0.25,rnd(2.8,7.6)*k*FV,rnd(0.4,2.6),rnd(1.1,2.0),rnd(0.7,1.1),rnd(2.3,4.2),rnd(0.44,0.58),4.4,1.25,1);
     if(Math.random()<0.6)emit(x,0.35,z,rnd(-1.6,1.6)-CP*0.2,rnd(5.5,11)*k*FV,rnd(-0.5,3),rnd(0.6,1.2),rnd(0.12,0.22),rnd(0.5,1.3),rnd(0.45,0.7),9.5,0.85,0)}}
+/* 2026-11-26 (the user) THE BUCKET: every maneuver, on every wave, throws a VOLUME of water with its spray, like a bucket thrown off the tail.
+   One pour lasts 0.12-0.21 s: a cohesive sheet of water slugs (type 3: glassy, in the wave's own water colour), strands of the sheet (type 2) and drops (type 0) leave together,
+   fan out wide, break into chunks and fall with gravity on top of the wave or behind it, where part of the slugs land as a small white splat with a few drops.
+   Its height and size follow the wave under it (never much higher than the wave). Fixed pool of 6 pours and a shared parcel budget, no allocation;
+   respects pThin (inside emit), phones and the picture level. Never touches sf.burst, scoring or the wave's geometry. */
+const SLUG=[];for(let i=0;i<6;i++)SLUG.push({on:0,x:0,y:0,z:0,dx:0,dy:1,dz:0,ax:1,az:0,bx:0,by:0,bz:1,sp:8,sz:1,t:0,T:0.16,acc:0,n:0,fol:0,sg:1});
+let slCD=0,slBtCD=0,slTN=-1,slNow=0,slLast=-9,slLipT=-9,slBud=240;   /* maneuver and bottom-turn cooldowns, own clock, last board pour, last lip pour, parcels left to throw */
+function waterSlug(x,y,z,dx,dy,dz,pw,fol,sg){if(!(pw>0)||!isFinite(x+y+z))return;
+  const hs=clamp(0.3+0.3*colH[Math.round(colIndex(x))],0.5,1.15),q=(QCOARSE?0.7:1)*(qLevel>=5?0.85:1)*(qLite||pThin?0.75:1);   /* the wave under it, and the device */
+  pw=clamp(pw,0.15,2.2);const n=Math.min(Math.round((30+40*Math.min(pw,1.4))*q*hs),Math.floor(slBud));if(n<8)return;   /* a bounded amount of water per maneuver */
+  let o=null;for(let i=0;i<SLUG.length;i++)if(!SLUG[i].on){o=SLUG[i];break}
+  if(!o){o=SLUG[0];for(let i=1;i<SLUG.length;i++)if(SLUG[i].t/SLUG[i].T>o.t/o.T)o=SLUG[i]}   /* all six pouring: the one nearest its end gives way */
+  slBud-=n;if(fol)slLast=slNow;
+  let L=Math.hypot(dx,dy,dz)||1;dx/=L;dy/=L;dz/=L;
+  let ax=-dz,az=dx;L=Math.hypot(ax,az);if(L<0.2){ax=1;az=0}else{ax/=L;az/=L}   /* across the sheet: flat, square to the throw */
+  o.on=1;o.x=x;o.y=y;o.z=z;o.dx=dx;o.dy=dy;o.dz=dz;o.ax=ax;o.az=az;o.bx=-az*dy;o.by=az*dx-ax*dz;o.bz=ax*dy;
+  o.sp=(4.2+1.9*Math.min(pw,1.6))*Math.sqrt(hs);o.sz=(0.7+0.22*Math.min(pw,1.6))*hs*(0.75+0.25*q);o.n=n;o.T=0.12+0.06*Math.min(pw,1.5);o.t=0;o.acc=0.999;o.fol=fol?1:0;o.sg=sg||1}
+function slugParcel(o){const u=Math.min(o.t/o.T,1),w=(2*u-1)*0.7+(Math.random()-0.5),h=Math.random()-0.5,sp=o.sp*(0.78+0.42*Math.random());   /* the sheet sweeps across as it pours, every bit a little apart */
+  const vx=(o.dx+o.ax*w*0.62+o.bx*h*0.42)*sp-CP*0.3,vy=(o.dy+o.by*h*0.42)*sp,vz=(o.dz+o.az*w*0.62+o.bz*h*0.42)*sp;
+  const px=o.x+o.ax*w*0.3+rnd(-0.1,0.1),py=o.y+rnd(0,0.15)+o.by*h*0.2,pz=o.z+o.az*w*0.3+rnd(-0.1,0.1);
+  emit(px,py,pz,vx,vy,vz,rnd(2.2,2.8),rnd(0.22,0.38)*o.sz,rnd(0.5,0.95)*o.sz,rnd(0.5,0.7),9.8,rnd(0.10,0.28),3);   /* a slug of water: it lives until it lands */
+  if(Math.random()<0.45)emit(px,py,pz,vx*0.96,vy*0.96,vz*0.96,rnd(0.45,0.8),rnd(0.18,0.28),rnd(0.8,1.3)*o.sz,rnd(0.34,0.48),9.8,0.3,2);   /* a strand of the sheet */
+  emit(px,py,pz,vx*1.08+rnd(-2.6,2.6),vy*1.05+rnd(-1,2.2),vz*1.08+rnd(-2.6,2.6),rnd(0.6,1.1),0.05,rnd(0.12,0.24),rnd(0.4,0.55),9.5,0.5,0)}   /* and the drops it breaks into */
+function slugTick(dt){slNow+=dt;slBud=Math.min(240,slBud+200*dt);
+  for(let j=0;j<SLUG.length;j++){const o=SLUG[j];if(!o.on)continue;
+    if(o.fol&&sf.f&&sf.right&&(sf.mode==='ride'||sf.mode==='float')){o.x=sf.pos.x-sf.f.x*0.68+sf.right.x*o.sg*0.18;o.y=sf.pos.y-sf.f.y*0.68+sf.right.y*o.sg*0.18+0.06;o.z=sf.pos.z-sf.f.z*0.68+sf.right.z*o.sg*0.18}   /* poured off the tail as it goes by */
+    else o.x-=CP*0.3*dt;
+    o.t+=dt;o.acc+=o.n*dt/o.T;let m=0;while(o.acc>=1&&m<60){o.acc--;m++;slugParcel(o)}
+    if(o.t>=o.T)o.on=0}}
+function slugHit(i){if((i+slF)&1)return;const x=pP[i*3],y=pP[i*3+1],ci=Math.round(colIndex(x));if(y>colH[ci]*1.4+0.6)return;
+  const z=pP[i*3+2],sy=seaY(x,z);if(y>sy+0.06||y<sy-0.9)return;   /* the slug comes down on the water (the face, the top of the wave or its back); far under the surface found = under the curling lip or in the barrel: it keeps falling */
+  if(slSplat>=14||(i&1)){pLife[i]=0;pSA[i*2]=0;return}slSplat++;   /* half of them just sink into the water */
+  const s0=Math.min(Math.max(pSA[i*2],0.3),0.8);pFd[i]=1;pS0[i]=s0;pS1[i]=Math.min(s0*rnd(1.4,1.9),1.5);pLife[i]=pMax[i]=rnd(0.4,0.65);pAl[i]=rnd(0.26,0.36);pGr[i]=0.4;pDr[i]=2.6;   /* the rest burst into a small splat of white water on the surface */
+  pP[i*3+1]=sy+0.04;pV[i*3]=pV[i*3]*0.18-CP*0.35;pV[i*3+1]=rnd(0.3,1.0);pV[i*3+2]*=0.18;
+  for(let j=0;j<2;j++)emit(x,sy+0.05,z,rnd(-1.6,1.6)-CP*0.3,rnd(1.6,3.4),rnd(-1.6,1.6),rnd(0.4,0.8),0.05,rnd(0.14,0.26),0.45,9,0.8,0)}
+function slugBoard(b,kx,tpk){if(!sf.f||!sf.right||!S.tp)return;const sg=Math.sign(sf.om)||1,rel=clamp(sf.p/Math.max(S.top||1,0.1),0,1),
+    pw=clamp(b/1.6,0.45,1.5)*clamp(0.55+(sf.V||0)/16,0.7,1.3)*clamp(0.6+0.22*(S.H||2),0.5,1.5)*(kx||1),tk=tpk===undefined?0.3+0.55*rel:tpk;   /* harder, faster, on a bigger wave: more water */
+  waterSlug(sf.pos.x-sf.f.x*0.68,sf.pos.y-sf.f.y*0.68+0.06,sf.pos.z-sf.f.z*0.68,
+    sf.right.x*sg+S.tp.x*tk-sf.f.x*0.25,sf.right.y*sg+S.tp.y*tk+0.55-sf.f.y*0.25,sf.right.z*sg+S.tp.z*tk-sf.f.z*0.25-0.3*rel,pw,1,sg)}   /* out of the turn, up the face and over the back of the wave */
+function slugHook(dt){slCD-=dt;slBtCD-=dt;const b=sf.burst||0,pv=sf.slPrev||0;
+  if(TURBO.n!==slTN){slTN=TURBO.n;if(b-pv>0.3)return}   /* the turbo's push is not a maneuver */
+  if(b>=0.62&&(pv<0.62||b-pv>0.5))sf.slPend=1;else if(b<0.62)sf.slPend=0;   /* a maneuver starts: snap, re-entry, off the lip, cutback, roundhouse, carve, tail slide, layback, 360, grab snap, landing */
+  if(slCD>0||!sf.slPend)return;sf.slPend=0;slCD=0.28;slugBoard(b)}   /* one that starts inside the cooldown throws as soon as it ends */
+function slugLip(k){if(!_lbP||!isFinite(_lbP.x)||sf.mode==='float'||slNow-slLipT<0.45||slNow-slLast<0.3)return;slLipT=slNow;   /* the floater has its own landing throw; never a fountain */
+  waterSlug(_lbP.x,_lbP.y,_lbP.z,rnd(-0.35,0.35),0.7,-0.8,0.3+0.4*k,0,1)}   /* the torn lip throws its own water up and back over the wave */
 function splash(n,pos,pow){for(let i=0;i<n;i++){const a=rnd(PI*2),r=rnd(0.5,1)*pow;
   emit(pos.x+rnd(-0.3,0.3),pos.y+rnd(0,0.3),pos.z+rnd(-0.3,0.3),Math.cos(a)*r*1.6-CP*0.3,rnd(1.5,5.5)*pow*0.6,Math.sin(a)*r*1.6,rnd(0.5,1.2),0.2,rnd(0.7,1.8),0.5,8,1.0)}}
 
@@ -11041,7 +11101,7 @@ function launchAir(vp,inp){game.airReq=0;sf.ar=null;sfxPlay('wind',{vol:0.55,off
   sf.airT=0;sf.airDur=2*sf.vh/GA;sf.spin=0;sf.flip=0;sf.th0=sf.th;
   sf.alley=!!(inp&&inp.x<-0.3);if(sf.alley){sf.vh*=1.16;sf.airDur=2*sf.vh/GA}   /* alley-oop: off the lip turning back against the way he is going, high, drifting back over the curl */
   sf.vsAir=sf.V*Math.cos(sf.th)-CP*0.42-(sf.alley?2.4:0);sf.grabT=0;sf.hMax=0;sf.airShot=null;sf.wantAirShot=false;sf.burst=0;
-  sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);sfxNoise(0.4,3000,0.3);if(sf.p>0.7*Math.max(S.top||1,0.5))lipBreak(0.38,sf.s)}   /* (2026-11-20 the lip he launches off is torn where he left it) */
+  sampleSurf(sf.s,sf.p,S);splash(46,S.pos,1.0);waterSlug(S.pos.x,S.pos.y+0.1,S.pos.z,(sf.f?sf.f.x:0)*0.35,1,-0.6,clamp(0.55+(sf.V||0)/16,0.7,1.4)*clamp(0.6+0.22*(S.H||2),0.8,1.5),0,1);sfxNoise(0.4,3000,0.3);if(sf.p>0.7*Math.max(S.top||1,0.5))lipBreak(0.38,sf.s)}   /* (2026-11-20 the lip he launches off is torn where he left it) */
 function stepAir(dt){
   sf.airT+=dt;sf.vh-=GA*dt;sf.h+=sf.vh*dt;sf.hMax=Math.max(sf.hMax,sf.h);if(sf.alley&&sf.vsAir<0)sf.vsAir=Math.max(sf.vsAir,-Math.max(0,sf.s-0.9)*2.5);sf.s+=sf.vsAir*dt;   /* the alley-oop drifts back over the curl but comes down on the wave, never behind it */
   if(sf.np){const u=clamp(sf.airT/sf.airDur,0,1);sf.spin=sf.npDir*PI*sstep(0.16,0.86,u);sf.flip=0}   // the nose pick turns a reverse: 180 in the air, landing tail first
@@ -11083,7 +11143,7 @@ function stepFloat(dt){
     if((input.y<-0.3&&sf.fT>0.25)||(S.foam<0.3&&!(sf.fForce&&sf.fT<1.1))||sf.fT>(busy?2.4:1.7)){
       sf.mode='ride';sf.fFoam=false;sf.fForce=false;sf.p=S.top-0.16;sf.th=Math.min(sf.th,-0.12);sf.om=0;sf.pivot=0;sf.lastTop=game.waveAge;sf.glideT=0.8;sf.V=Math.max(sf.V,CP+2.0);
       if(sf.fT>0.3){const nm=sf.fT>1.4?'Long Floater':'Floater',pt=500+650*sf.fT;award(nm,pt);reqShot(nm,pt,0)}
-      sampleSurf(sf.s,sf.p,S);splash(12,S.pos,0.7);A.impact=0.08;sf.rail=0}   // no jolt coming off the foam
+      sampleSurf(sf.s,sf.p,S);splash(12,S.pos,0.7);waterSlug(S.pos.x,S.pos.y+0.05,S.pos.z,sf.f.x*0.5,1,sf.f.z*0.5+0.2,0.5,1,Math.sign(sf.om)||1);A.impact=0.08;sf.rail=0}   // no jolt coming off the foam
     return}
   sf.V=damp(sf.V,CP+2.6,1.6,dt);sf.s+=(sf.V-CP)*dt;sf.th=damp(sf.th,0.05,6,dt);
   sampleSurf(sf.s,1e6,S);sf.p=damp(sf.p,S.top,7,dt);sf.burst=Math.max(sf.burst,0.35);
@@ -11092,7 +11152,7 @@ function stepFloat(dt){
   if((input.y<-0.3&&sf.fT>0.25)||S.aEnd<2.5||sf.fT>(busyL?1.8:1.3)){
     sf.mode='ride';sf.p=S.top-0.3;sf.th=-0.5;sf.om=0;sf.pivot=0;sf.lastTop=game.waveAge;sf.glideT=0.6;
     if(sf.fT>0.3){const pt=500+650*sf.fT;award('Floater',pt);reqShot('Floater',pt,0);if(sf.fT>0.7&&!game.attract&&Math.random()<0.07)sf.fallAt=game.waveAge+0.22}
-    sampleSurf(sf.s,sf.p,S);splash(30,S.pos,0.9);A.impact=0.8;game.shake=0.4;sf.rail=0}}
+    sampleSurf(sf.s,sf.p,S);splash(30,S.pos,0.9);waterSlug(S.pos.x,S.pos.y+0.05,S.pos.z,sf.f.x*0.5+S.n.x*0.3,1+S.n.y*0.3,sf.f.z*0.5+S.n.z*0.3+0.2,0.85*clamp(0.6+0.22*(S.H||2),0.8,1.4),1,Math.sign(sf.om)||1);A.impact=0.8;game.shake=0.4;sf.rail=0}}
 
 /* ───────────────────────── board/rider placement ───────────────────────── */
 const _flTop=new V3();const bX=new V3,bY=new V3,bZ=new V3,bP=new V3,tL=new V3,qT=new THREE.Quaternion,mB=new THREE.Matrix4,qS=new THREE.Quaternion,qBase=new THREE.Quaternion;let accHand=0;
@@ -11314,7 +11374,7 @@ const _fl=new V3();function placeSurfer(dt,time){
       if(sf.exV===11){_kd.set(0,1,0).applyQuaternion(boardG.quaternion);qS.setFromAxisAngle(_kd,2*PI*sstep(0.06,0.92,u));riderG.position.sub(boardG.position).applyQuaternion(qS).add(boardG.position);riderG.quaternion.premultiply(qS);boardG.quaternion.premultiply(qS)}   /* 2026-11-18 the ollie 360: board and rider go round together */
       if(sf.exV===1)boardG.quaternion.multiply(qS.setFromAxisAngle(ZV,0.30*Math.sin(PI*u)*(1-u)));else if(sf.exV===2)boardG.quaternion.multiply(qS.setFromAxisAngle(UPV,2*PI*sstep(0.1,0.88,u)));
       AT.crouch=u<0.12?0.85:u<0.8?0.7:0.55;AT.claim=0}
-    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);if(!game.attract){const v=sf.claimV;if(PROG.celeb.indexOf(v)<0){PROG.celeb.push(v);progSave()}if(PROG.celeb.length>=Math.min(CELEB.length,21))giveTro('show')}sf.celebN=''}}}
+    else if(!sf.exLand){sf.exLand=true;splash(14,sf.pos,0.6);waterSlug(sf.pos.x,sf.pos.y,sf.pos.z,rnd(-0.5,0.5),1,rnd(-0.5,0.3),0.5,1,1);sfxNoise(0.25,2000,0.16);A.impact=0.35;if(sf.celebN){award(sf.celebN,500,true);if(!game.attract){const v=sf.claimV;if(PROG.celeb.indexOf(v)<0){PROG.celeb.push(v);progSave()}if(PROG.celeb.length>=Math.min(CELEB.length,21))giveTro('show')}sf.celebN=''}}}
   A.prone=proneT>A.prone?Math.min(proneT,A.prone+dt/0.3):Math.max(proneT,A.prone-dt/0.48);
   if(sf.mode==='ride'&&(sf.grabSnap||0)>0){sf.grabSnap-=dt;grabT=1;sf.burst=Math.max(sf.burst||0,1.6)}   /* hand on the rail through the snap: the tail throws a wide open fan */
   A.flail=damp(A.flail,0,8,dt);A.grab=damp(A.grab,grabT,12,dt);A.air=damp(A.air,Math.max(airT,sf.ffU>0?0.75*Math.sin(PI*Math.min(sf.ffU,1)):0),9,dt);A.claim=damp(A.claim,AT.claim,7,dt);
@@ -11328,13 +11388,15 @@ const _fl=new V3();function placeSurfer(dt,time){
 }
 function mapUp(){return !!game.attract&&typeof WZ!=='undefined'&&!!WZ&&WZ.s===3}   /* the wave map is on screen (the menu's wave step) */
 function boardSpray(dt){if(mapUp())return;   /* (no spray off an unseen board behind the wave map) */
-  if(!sf.visible||(sf.mode!=='ride'&&sf.mode!=='float'))return;
-  if(sf.cv&&sf.cv.ph===1&&sf.mode==='ride'){const sg=Math.sign(sf.om)||1,u=clamp((sf.cv.t1||0)/0.9,0,1),k=Math.sin(PI*u)*(BOARD.spr||1);accArc=(accArc||0)+420*k*dt;   /* the carve's second half: hand on the rail, he pulls it round and the tail throws one long clean arc of water far out */
+  if(!sf.visible||(sf.mode!=='ride'&&sf.mode!=='float')){sf.slPrev=0;sf.slPend=0;return}
+  if(sf.cv&&sf.cv.ph===1&&sf.mode==='ride'){const sg=Math.sign(sf.om)||1,u=clamp((sf.cv.t1||0)/0.9,0,1),k=Math.sin(PI*u)*(BOARD.spr||1);accArc=(accArc||0)+420*k*dt;if(!sf.cv.wsl&&u>0.42){sf.cv.wsl=1;slugBoard(1.9,1.1)}   /* the carve's second half: hand on the rail, he pulls it round and the tail throws one long clean arc of water far out */
     while(accArc>=1){accArc--;const r=Math.random(),tx=sf.pos.x-sf.f.x*0.75,ty=sf.pos.y-sf.f.y*0.75+0.1,tz=sf.pos.z-sf.f.z*0.75,sp=7+r*7,upv=4.5+5.5*Math.random();
       emit(tx,ty,tz,sf.right.x*sg*sp+sf.up.x*upv-sf.f.x*(1.5+2*r)-CP*0.3,sf.right.y*sg*sp+sf.up.y*upv+2.2-sf.f.y*(1.5+2*r),sf.right.z*sg*sp+sf.up.z*upv-sf.f.z*(1.5+2*r),rnd(1.0,1.7),0.05,rnd(0.12,0.3),rnd(0.42,0.62),9.2,0.25);
       if(Math.random()<0.35)emit(tx,ty,tz,sf.right.x*sg*sp+sf.up.x*upv-sf.f.x*(1.5+2*r)-CP*0.3,sf.right.y*sg*sp+sf.up.y*upv+2.2-sf.f.y*(1.5+2*r),sf.right.z*sg*sp+sf.up.z*upv-sf.f.z*(1.5+2*r),rnd(0.5,0.9),rnd(0.2,0.32),rnd(0.8,1.4),rnd(0.30,0.45),9.2,0.3,2)}}
-  const inten=(clamp(Math.abs(sf.om)*sf.V/19-0.16,0,1)*(sf.cv&&sf.cv.ph===0?0.3:1)+sf.burst+(sf.pivot>0?0.9:0))*(BOARD.spr||1)*(1+0.30*wcK());sf.burst=Math.max(0,sf.burst-dt*3.5);   /* every snap throws a big fan off the tail; boards with more foam up front throw more */
+  slugHook(dt);
+  const inten=(clamp(Math.abs(sf.om)*sf.V/19-0.16,0,1)*(sf.cv&&sf.cv.ph===0?0.3:1)+sf.burst+(sf.pivot>0?0.9:0))*(BOARD.spr||1)*(1+0.30*wcK());sf.burst=Math.max(0,sf.burst-dt*3.5);sf.slPrev=sf.burst;   /* every snap throws a big fan off the tail; boards with more foam up front throw more */
   const sg=Math.sign(sf.om)||1,rel=clamp(sf.p/Math.max(S.top,0.1),0,1),btK=sf.mode==='ride'&&!game.inTube&&!sf.tt?sstep(0.45,0.12,rel)*clamp(Math.abs(sf.om)*sf.V/12-0.35,0,1):0,k=Math.min(Math.max(inten,1.25*btK),2.1),lowK=Math.max(lerp(0.30,1,sstep(0.25,0.6,rel)),0.95*btK);   /* the bottom turn: the rail buried at the base throws a tall fan of water up the face, from the middle of the board and forward, the way he is going (2026-11-18: more of it) */
+  if(btK>0.55&&!sf.slBt&&slBtCD<=0){sf.slBt=1;slBtCD=0.5;slugBoard(1.1+0.5*btK,1,0.95)}else if(btK<0.2)sf.slBt=0;   /* the bottom turn throws its bucket up the face */
   accSpr+=(inten*2700*lerp(0.55,1,lowK)+btK*3000+(sf.V>4?80:0))*dt;
   while(accSpr>=1){accSpr--;const r=Math.random(),r2=Math.random();
     const rs=sg*0.22,off=lerp(0.6+r*0.3,0.02+r*0.38,btK),tx=sf.pos.x-sf.f.x*off+sf.right.x*rs,ty=sf.pos.y-sf.f.y*off+sf.right.y*rs,tz=sf.pos.z-sf.f.z*off+sf.right.z*rs;   /* off the working rail, not the middle of the tail; in the bottom turn (cavada) from the middle of the rail (2026-11-18) */
@@ -11504,14 +11566,14 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       for(int i=0;i<6;i++){vec4 d=uDrops[i];vec2 q=(fUv-d.xy)*vec2(uAspect,1.);float r=length(q)/d.z;
         if(d.w>0.002&&r<1.){float k=sqrt(1.-r*r)*min(d.w*3.,1.);uv-=(fUv-d.xy)*k*k*0.7;}}
       if(uFish>0.001){vec2 fc=uv-.5,fa=fc*vec2(uAspect,1.);float fr=dot(fa,fa);uv=.5+fc*(1.+uFish*fr)/(1.+uFish*0.62);}   // fisheye: the middle swells, the edges bend
-      vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*(0.014+0.03*uFish);
+      vec2 c=uv-.5;float r2=dot(c,c);vec2 o=c*r2*(0.004+0.03*uFish);
       vec3 c0=texture2D(tDiffuse,uv).rgb;
       vec3 col=tm(vec3(texture2D(tDiffuse,uv+o).r,c0.g,texture2D(tDiffuse,uv-o).b));
       {vec2 tx=uTexel*1.3;vec3 nb=tm((texture2D(tDiffuse,uv+vec2(tx.x,0.)).rgb+texture2D(tDiffuse,uv-vec2(tx.x,0.)).rgb+texture2D(tDiffuse,uv+vec2(0.,tx.y)).rgb+texture2D(tDiffuse,uv-vec2(0.,tx.y)).rgb)*0.25);
-       col=max(col+clamp(tm(c0)-nb,-0.08,0.08)*0.6,0.);}
+       col=max(col+clamp(tm(c0)-nb,-0.025,0.025)*0.2,0.);}
       if(uClar>0.001){vec2 tq=uTexel*3.5;const vec3 LW=vec3(0.2126,0.7152,0.0722);   /* q1125 gfx: clarity, a wider ring of local contrast on the luminance only (depth in the ripples, the foam and the rider), weighted to the midtones so nothing clips */
        float la=dot(texture2D(tDiffuse,uv+tq).rgb+texture2D(tDiffuse,uv-tq).rgb+texture2D(tDiffuse,uv+vec2(tq.x,-tq.y)).rgb+texture2D(tDiffuse,uv+vec2(-tq.x,tq.y)).rgb,LW)*0.25,lc=dot(c0,LW);
-       float dl=clamp(log2((lc+0.02)/(la+0.02)),-1.,1.),lo=clamp(dot(col,vec3(0.3,0.59,0.11)),0.,1.);col=max(col*(1.+uClar*0.12*dl*4.*lo*(1.-lo)),0.);}   /* a light unsharp mask: crisp edges on the lip, the spray and the rider */
+       float dl=clamp(log2((lc+0.02)/(la+0.02)),-1.,1.),lo=clamp(dot(col,vec3(0.3,0.59,0.11)),0.,1.);col=max(col*(1.+uClar*0.04*dl*4.*lo*(1.-lo)),0.);}   /* a light unsharp mask: crisp edges on the lip, the spray and the rider */
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.16);
       {float mx=max(col.r,max(col.g,col.b)),mn=min(col.r,min(col.g,col.b));col=max(mix(vec3(l),col,1.+0.36*(1.-clamp((mx-mn)/(mx+1e-3),0.,1.))*(1.-uWarm)),0.);}   /* vibrance: washed-out colours (hazy sky, pale water) gain the most, skin and strong colours stay put */
@@ -11533,8 +11595,8 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       if(uWarm>0.001){float l2=dot(col,vec3(0.3,0.59,0.11));col=mix(vec3(l2),col,1.+0.32*uWarm);col+=(vec3(0.030,-0.006,0.034)*(1.-smoothstep(0.,0.45,l2))+vec3(0.050,0.018,-0.030)*smoothstep(0.45,1.,l2))*uWarm;col=max(col,0.);}   /* golden hour: richer colour, violet in the shadows, gold in the lights */
       col=col*1.01+0.003;
       vec2 cv=fUv-.5;col*=1.-dot(cv,cv)*(0.9+1.4*uFish);
-      float g=fract(sin(dot(gl_FragCoord.xy+fract(uTime)*91.7,vec2(12.9898,78.233)))*43758.5453);
-      col+=(g-.5)*0.032;
+      float g=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453);
+      col+=(g-.5)*0.004;   /* q1126 glass: no film grain, only a static hair of dither against banding */
       if(uTrK>0.){   /* the cut from one wave to the next: a quick sheet of sea water sweeps across the lens (the picture bent through it, tinted like the game's water, light rippling in it); the wave changes in the instant it covers the screen */
         vec2 sq=vec2((vUv.x-.5)*uAspect,vUv.y-.5),dir=normalize(vec2(uTrDir,-0.30)),ns=vUv*vec2(uAspect,1.);
         float x=dot(sq,dir)/(abs(dir.x)*0.5*uAspect+abs(dir.y)*0.5),y=dot(sq,vec2(-dir.y,dir.x));
@@ -11668,7 +11730,7 @@ function trStep(dtR){if(!TR.on)return;const U=gradePass.uniforms.uTrK;TR.t+=dtR;
   const p=TR.t/TR.TB;if(p>=1){TR.on=false;U.value=0}else U.value=0.5+0.5*p}
 function reelCut(){const ids=SPOTS.filter(o=>!o.soon&&!o.planet).map(o=>o.id);if(ids.length<1)return;const nx=ids[(ids.indexOf(SPOT.id)+1)%ids.length];REEL.i++;
   if(nx!==SPOT.id)setSpot(nx);startAttract();
-  const wx='';   /* 2026-11-22 (the user) the menus in clear morning light: no rain */   /* (no rain over the desert waves) */if(wx!==(game.wx||''))game.wx=wx;setTOD(2,false);
+  const wx='';   /* 2026-11-22 (the user) the menus in clear morning light: no rain */   /* (no rain over the desert waves) */if(wx!==(game.wx||''))game.wx=wx;setTOD(0,false);
   const ff=0.9+((REEL.i*0.7)%1);TR.ffN=Math.round(ff*20);   /* straight into the middle of the ride, a few ticks per frame while the foam covers the screen */
   const jt=WZ.s===-1,cam='jet',jv=cam==='jet'?1+(REEL.i>>1)%WC_JETV.length:0;if(cam==='jet')TR.ffN+=50;   /* 2026-11-20 (the user) the reels only from the JET SKI and the SIDE camera, one cut each in turn */TR.after=()=>{REEL.cam=cam;REEL.jv=jv;camInit=false}}   /* behind the first menu: the jet ski's takes, 1.5 s further into the ride (he is up and riding, not still paddling behind the lip) */
 /* 2026-11-18 the surfer is never lost: where the wave itself stands between him and the camera (the curl of a foam section, the lip from outside the barrel,
@@ -11710,7 +11772,7 @@ function xrayTick(dt){if(!XR.mat){XR.mat=new THREE.MeshBasicMaterial({color:0xae
     const st=[];scene.traverse(o=>{if(o.userData&&o.userData.xr&&!XR.mine.has(o))st.push(o)});st.forEach(o=>o.parent&&o.parent.remove(o))}
   for(const [o,gm] of XR.pairs){gm.visible=o.visible;gm.position.copy(o.position);gm.quaternion.copy(o.quaternion);gm.scale.copy(o.scale)}}
 function tick(dtR,draw){xrayTick(dtR);if(draw){trStep(dtR);reelTick(dtR)}
-  clockT+=dtR;if(game.lipQ&&game.lipQ.length){const rX=sf.s+CP*game.t+game.xOff;for(let i=game.lipQ.length-1;i>=0;i--){const q=game.lipQ[i];if(game.waveAge>=q.at&&(rX-q.X>=0.7||game.waveAge>q.at+1.6)){game.lipQ.splice(i,1);const sH=q.X-CP*game.t-game.xOff;if((game.state==='ride'||game.attract)&&sH>0.3)lipBurst(q.k,sH)}}}   /* 1118o the lip comes apart only once the board has gone past that bit of it (0.7 m behind him), never ahead of him; if he never gets past it, it goes a moment later */if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(SNOW.pts.visible){SNOW.m.uniforms.uT.value=clockT;SNOW.m.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
+  clockT+=dtR;if(game.lipQ&&game.lipQ.length){const rX=sf.s+CP*game.t+game.xOff;for(let i=game.lipQ.length-1;i>=0;i--){const q=game.lipQ[i];if(game.waveAge>=q.at&&(rX-q.X>=0.7||game.waveAge>q.at+1.6)){game.lipQ.splice(i,1);const sH=q.X-CP*game.t-game.xOff;if((game.state==='ride'||game.attract)&&sH>0.3){lipBurst(q.k,sH);slugLip(q.k)}}}}   /* 1118o the lip comes apart only once the board has gone past that bit of it (0.7 m behind him), never ahead of him; if he never gets past it, it goes a moment later */if(RAINM.visible){RAINM.material.uniforms.uT.value=clockT;RAINM.material.uniforms.uC.value.copy(camera.position)}if(SNOW.pts.visible){SNOW.m.uniforms.uT.value=clockT;SNOW.m.uniforms.uC.value.copy(camera.position)}if(ULU.beams&&ULU.party&&ULU.party.visible)ULU.beams.forEach((b,i)=>{b.rotation.z=0.42*Math.sin(clockT*0.55+i*2.1);b.rotation.x=0.30*Math.sin(clockT*0.41+i*1.3)});   /* the club beams sweep slowly */readInput();if(game.attract&&game.state==='ride')autoPilot(dtR*game.ts*GSPD);
   let dt;const rp=game.replay;
   if(rp){
     const R=game.rec;let rate=1;
@@ -11783,7 +11845,7 @@ function tick(dtR,draw){xrayTick(dtR);if(draw){trStep(dtR);reelTick(dtR)}
     const a0=game.spPrev===undefined?game.secAge:game.spPrev,a1=game.secAge;if(a1>a0&&a1-a0<0.5)for(const C of SEC){if(C.k!==0||!C.d)continue;const T=C.t0+C.d+0.2;if(a0<T&&a1>=T&&C.c>2){const m=tubeMouth(C.c-C.h*0.7,C.c+C.h*0.8);if(m!==null)tubeSpit(m-0.8,Math.min(1,TUBE_SP*1.15))}}}   /* and a barrel section closing down blows out of its end, the big one */
   game.spPrev=game.secAge;
   sunL.target.position.copy(sf.pos);sunL.position.copy(sf.pos).addScaledVector(SUN,14);
-  emitWave(dt);plumeTick(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
+  emitWave(dt);plumeTick(dt);boardSpray(dt);slugTick(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
   updateCamera(dt,clockT);if(WC.drone)wcCam(dtR);if(BOW.value>0&&game.bowT!==undefined&&(game.bowT-=dtR)<=0){game.bowT=undefined;camera.getWorldDirection(_bowF);const h=Math.hypot(_bowF.x,_bowF.z)||1,top=Math.asin(clamp(_bowF.y,-1,1))/DEG+camera.fov*0.40,E=clamp(42-top,12,41)*DEG;BOWC.value.set(_bowF.x/h*Math.cos(E),-Math.sin(E),_bowF.z/h*Math.cos(E))}   /* at each cut the rainbow is set where this shot sees sky, then it stays put in the world */
   /* the camera follows in game time: the same lag in slow motion and in replays, so he doesn't swing across the screen each time the speed changes */
   updateEnv();updateNeon(dtR,clockT);if(uluG.visible&&ULU.foamT){ULU.foamT.offset.x=(clockT*0.012)%1;ULU.foamT.offset.y=0.04*Math.sin(clockT*0.9)}if(!game.replay){faunaTick(dtR,clockT);crowdTick(dtR,clockT)}droneTick(dtR,clockT);wcSite.tick(dtR,clockT);try{expTick(dtR)}catch(e){}boteTick(dtR,clockT);try{plTick(dtR,clockT)}catch(e){}amzTick(dtR,clockT);softBreakTick(dtR);girlHairTick(dtR);if(campG.visible&&ULU.campFoam)ULU.campFoam.offset.x=(clockT*0.01)%1;mk_('camenv');
