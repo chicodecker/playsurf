@@ -3115,7 +3115,7 @@ const partMat=new THREE.ShaderMaterial({
 #endif
 
       float ps=aSA.x*uScale/max(-mv.z,0.3);vW=step(25.,aSA.y);vK=step(15.,aSA.y)*(1.-vW);vF=step(5.,aSA.y)*(1.-step(15.,aSA.y));vA=(aSA.y-10.*vF-20.*vK-30.*vW)*min(1.,ps*0.5)*mix(mix(1.,0.25,smoothstep(0.5,1.6,aSA.x)),1.,max(vF,vW))*smoothstep(2.2+3.8*uRep,9.0+9.0*uRep,-mv.z)*mix(0.15,1.,smoothstep(uRZ-1.6,uRZ+0.1,-mv.z))*(1.-uRep*0.85*smoothstep(90.,260.,ps)*smoothstep(0.9,2.0,aSA.x));   /* 2026-11-18 replay cameras come in close: big soft puffs near the lens fade out instead of standing in the air as white clouds */
-      {vec3 ca=uRP-cameraPosition;float L=length(ca);vec3 cd=ca/max(L,1e-3);float tq=dot(position-cameraPosition,cd);vec3 qp=position-cameraPosition-cd*tq;float rd=length(qp),near=1.-smoothstep(1.2+0.6*aSA.x,2.4+1.0*aSA.x,rd);vA*=1.-0.985*near*smoothstep(L+0.8,L-0.3,tq)*step(0.,tq);}   /* 2026-11-18 spray and white water between the camera and the surfer fade out around him: he is never lost in a cloud (only the water itself may cover him, in the barrel or when he goes down) */gl_PointSize=clamp(ps,0.,mix(380.-150.*uRep,150.,vW));if(vA<0.004)gl_Position=vec4(2.,2.,2.,1.);
+      {vec3 ca=uRP-cameraPosition;float L=length(ca);vec3 cd=ca/max(L,1e-3);float tq=dot(position-cameraPosition,cd);vec3 qp=position-cameraPosition-cd*tq;float rd=length(qp),near=1.-smoothstep(1.2+0.6*aSA.x,2.4+1.0*aSA.x,rd);vA*=1.-0.985*near*smoothstep(L+0.8,L-0.3,tq)*step(0.,tq);}   /* 2026-11-18 spray and white water between the camera and the surfer fade out around him: he is never lost in a cloud (only the water itself may cover him, in the barrel or when he goes down) */gl_PointSize=clamp(ps,0.,mix(380.-150.*uRep,22.,vW));if(vA<0.004)gl_Position=vec4(2.,2.,2.,1.);
       vDir=vec2(1.,0.);if(vK+vW>0.5){vec4 p1=projectionMatrix*viewMatrix*vec4(position+aV*0.06,1.);vec2 d=(p1.xy/p1.w-gl_Position.xy/gl_Position.w)*vec2(uAsp,1.);float dl=length(d);vDir=dl>1e-5?vec2(d.x,-d.y)/dl:vec2(1.,0.);}
       vec3 V=normalize(cameraPosition-position);vB=pow(clamp(dot(V,-uSun)*.5+.5,0.,1.),3.);}`,
   fragmentShader:`precision highp float;uniform sampler2D uNoise;uniform vec3 uTint;uniform vec3 uWd;uniform vec3 uWl;varying float vA;varying float vB;varying vec2 vS;varying float vF;varying float vK;varying vec2 vDir;varying float vW;
@@ -3130,14 +3130,10 @@ const partMat=new THREE.ShaderMaterial({
         float sh=(1.-smoothstep(0.30,0.50,abs(al)))*(1.-smoothstep(0.10,0.30,abs(ac)))*(0.35+0.65*strands);
         vec3 lit=mix(vec3(0.62,0.78,0.88),vec3(1.04,1.02,0.98),0.35+0.65*vB)*(0.78+0.30*strands);
         gl_FragColor=vec4(lit*uTint,sh*vA*1.5);return;}
-      if(vW>0.5){float al=dot(c,vDir),ac=dot(c,vec2(-vDir.y,vDir.x));vec2 qd=vec2(al*0.80,ac*1.16);float dq=length(qd)*2.;   /* 2026-11-26 the bucket: a mass of thrown water, a glassy lobed slug drawn out a little along its flight, water-coloured and lit through by the sun, never white paint */
-        if(dq>=1.21)discard;   /* outside the largest lobe: no texture reads for the corners of the sprite */
-        float n=texture2D(uNoise,gl_PointCoord*0.22+vS).b,n2=texture2D(uNoise,gl_PointCoord*0.6+vS*1.7).a,lb=texture2D(uNoise,(qd/max(dq*0.5,1e-3))*0.06+vS*3.1).a;
-        float e=dq/(0.60+0.38*lb)+(n-0.5)*0.30+(n2-0.5)*0.16;if(e>=1.0)discard;
-        float body=smoothstep(1.0,0.52,e),rim=smoothstep(0.50,0.90,e)*smoothstep(1.0,0.86,e),tl=1.-gl_PointCoord.y;body*=mix(0.7,1.,smoothstep(0.25,0.6,e+0.4*n));   /* thinner in the middle: glassy, the light shows through */
-        vec3 wc=mix(uWd*1.25+0.06,uWl*0.7+0.08,0.30+0.70*vB)*(0.70+0.50*tl);   /* the wave's own water: deep body, glowing like the lip with the sun behind it */
-        float sp=smoothstep(0.62,0.92,n*0.45+tl*0.55+0.25*(1.-e))*(1.-e);wc=mix(wc,vec3(1.04,1.03,1.0)*uTint,clamp(sp*0.85+rim*0.45+smoothstep(0.66,0.84,n2)*0.40,0.,1.));   /* sunlit highlight, bright skin at its edge, a few flecks of foam (only these take the light's tint) */
-        gl_FragColor=vec4(wc,min(body*(0.62+0.30*n)*vA*1.15,0.82));return;}
+      if(vW>0.5){float al=dot(c,vDir),ac=dot(c,vec2(-vDir.y,vDir.x));float dq=length(vec2(al*0.95,ac*1.7))*2.;if(dq>=1.)discard;   /* 2026-11-25 (the user) the bucket is fine rain: each bit a tiny clear drop, a little drawn out along its fall */
+        float body=smoothstep(1.,0.45,dq),tl=clamp(0.5-ac*1.6+al*0.4,0.,1.);
+        vec3 wc=mix(uWd*1.3+0.10,uWl*0.8+0.16,0.35+0.65*vB);wc=mix(wc,vec3(1.04,1.03,1.)*uTint,0.45+0.45*tl*tl);   /* water colour, a bright glint on the lit side */
+        gl_FragColor=vec4(wc,body*min(vA*1.7,0.95));return;}
       if(vF<0.5?d>1.005:d>1.27)discard;   /* perf 2026-11-19: a spray drop is fully clear past its round edge (exp(-2.8 d^2) - 0.06 <= 0), a lump of white water past 1.27 (its widest lobe with the most noise): the square's corners skip the shading */
       float n=texture2D(uNoise,gl_PointCoord*0.20+vS).b,n2=texture2D(uNoise,gl_PointCoord*0.55+vS*1.7).a;
       float edge=d+(n-0.5)*0.55+(n2-0.5)*0.25;
@@ -10658,7 +10654,7 @@ function landFoam(dt){if(game.state!=='ride'&&!game.attract)return;const FH=SPOT
    fan out wide, break into chunks and fall with gravity on top of the wave or behind it, where part of the slugs land as a small white splat with a few drops.
    Its height and size follow the wave under it (never much higher than the wave). Fixed pool of 6 pours and a shared parcel budget, no allocation;
    respects pThin (inside emit), phones and the picture level. Never touches sf.burst, scoring or the wave's geometry. */
-const SLUG=[];for(let i=0;i<6;i++)SLUG.push({on:0,x:0,y:0,z:0,dx:0,dy:1,dz:0,ax:1,az:0,bx:0,by:0,bz:1,sp:8,sz:1,t:0,T:0.16,acc:0,n:0,fol:0,sg:1});
+const SLUG=[];for(let i=0;i<6;i++)SLUG.push({rn:4,dz0:1,on:0,x:0,y:0,z:0,dx:0,dy:1,dz:0,ax:1,az:0,bx:0,by:0,bz:1,sp:8,sz:1,t:0,T:0.16,acc:0,n:0,fol:0,sg:1});
 let slCD=0,slBtCD=0,slTN=-1,slNow=0,slLast=-9,slLipT=-9,slBud=240;   /* maneuver and bottom-turn cooldowns, own clock, last board pour, last lip pour, parcels left to throw */
 function waterSlug(x,y,z,dx,dy,dz,pw,fol,sg){if(!(pw>0)||!isFinite(x+y+z))return;
   const hs=clamp(0.3+0.3*colH[Math.round(colIndex(x))],0.5,1.15),q=(QCOARSE?0.7:1)*(qLevel>=5?0.85:1)*(qLite||pThin?0.75:1);   /* the wave under it, and the device */
@@ -10669,13 +10665,12 @@ function waterSlug(x,y,z,dx,dy,dz,pw,fol,sg){if(!(pw>0)||!isFinite(x+y+z))return
   let L=Math.hypot(dx,dy,dz)||1;dx/=L;dy/=L;dz/=L;
   let ax=-dz,az=dx;L=Math.hypot(ax,az);if(L<0.2){ax=1;az=0}else{ax/=L;az/=L}   /* across the sheet: flat, square to the throw */
   o.on=1;o.x=x;o.y=y;o.z=z;o.dx=dx;o.dy=dy;o.dz=dz;o.ax=ax;o.az=az;o.bx=-az*dy;o.by=az*dx-ax*dz;o.bz=ax*dy;
-  o.sp=(4.2+1.9*Math.min(pw,1.6))*Math.sqrt(hs);o.sz=(0.7+0.22*Math.min(pw,1.6))*hs*(0.75+0.25*q);o.n=n;o.T=0.12+0.06*Math.min(pw,1.5);o.t=0;o.acc=0.999;o.fol=fol?1:0;o.sg=sg||1}
+  o.sp=(4.2+1.9*Math.min(pw,1.6))*Math.sqrt(hs);o.sz=(0.7+0.22*Math.min(pw,1.6))*hs*(0.75+0.25*q);o.n=n;o.rn=q>=1?5:3;o.dz0=0.9+0.25*hs;o.T=0.12+0.06*Math.min(pw,1.5);o.t=0;o.acc=0.999;o.fol=fol?1:0;o.sg=sg||1}
 function slugParcel(o){const u=Math.min(o.t/o.T,1),w=(2*u-1)*0.7+(Math.random()-0.5),h=Math.random()-0.5,sp=o.sp*(0.78+0.42*Math.random());   /* the sheet sweeps across as it pours, every bit a little apart */
   const vx=(o.dx+o.ax*w*0.62+o.bx*h*0.42)*sp-CP*0.3,vy=(o.dy+o.by*h*0.42)*sp,vz=(o.dz+o.az*w*0.62+o.bz*h*0.42)*sp;
   const px=o.x+o.ax*w*0.3+rnd(-0.1,0.1),py=o.y+rnd(0,0.15)+o.by*h*0.2,pz=o.z+o.az*w*0.3+rnd(-0.1,0.1);
-  emit(px,py,pz,vx,vy,vz,rnd(2.2,2.8),rnd(0.22,0.38)*o.sz,rnd(0.5,0.95)*o.sz,rnd(0.5,0.7),9.8,rnd(0.10,0.28),3);   /* a slug of water: it lives until it lands */
-  if(Math.random()<0.45)emit(px,py,pz,vx*0.96,vy*0.96,vz*0.96,rnd(0.45,0.8),rnd(0.18,0.28),rnd(0.8,1.3)*o.sz,rnd(0.34,0.48),9.8,0.3,2);   /* a strand of the sheet */
-  emit(px,py,pz,vx*1.08+rnd(-2.6,2.6),vy*1.05+rnd(-1,2.2),vz*1.08+rnd(-2.6,2.6),rnd(0.6,1.1),0.05,rnd(0.12,0.24),rnd(0.4,0.55),9.5,0.5,0)}   /* and the drops it breaks into */
+  const rn=o.rn;for(let r=0;r<rn;r++){const j=0.55+0.6*Math.random();emit(px+rnd(-0.12,0.12),py+rnd(-0.06,0.1),pz+rnd(-0.12,0.12),vx*j+rnd(-1.1,1.1),vy*(0.8+0.35*Math.random())+rnd(-0.6,0.6),vz*j+rnd(-1.1,1.1),rnd(2.2,2.8),rnd(0.03,0.045),rnd(0.05,0.085)*o.dz0,rnd(0.8,1.0),9.8,rnd(0.12,0.3),3)}   /* 2026-11-25 (the user) fine rain: a burst of tiny drops that spread and fall on the wave */
+  if(Math.random()<0.25)emit(px,py,pz,vx*1.08+rnd(-2.6,2.6),vy*1.05+rnd(-1,2.2),vz*1.08+rnd(-2.6,2.6),rnd(0.5,0.9),0.03,rnd(0.05,0.08),rnd(0.3,0.42),9.5,0.5,0)}   /* 2026-11-25 only a little fine mist, never white puffs */
 function slugTick(dt){slNow+=dt;slBud=Math.min(240,slBud+200*dt);
   for(let j=0;j<SLUG.length;j++){const o=SLUG[j];if(!o.on)continue;
     if(o.fol&&sf.f&&sf.right&&(sf.mode==='ride'||sf.mode==='float')){o.x=sf.pos.x-sf.f.x*0.68+sf.right.x*o.sg*0.18;o.y=sf.pos.y-sf.f.y*0.68+sf.right.y*o.sg*0.18+0.06;o.z=sf.pos.z-sf.f.z*0.68+sf.right.z*o.sg*0.18}   /* poured off the tail as it goes by */
@@ -10684,10 +10679,8 @@ function slugTick(dt){slNow+=dt;slBud=Math.min(240,slBud+200*dt);
     if(o.t>=o.T)o.on=0}}
 function slugHit(i){if((i+slF)&1)return;const x=pP[i*3],y=pP[i*3+1],ci=Math.round(colIndex(x));if(y>colH[ci]*1.4+0.6)return;
   const z=pP[i*3+2],sy=seaY(x,z);if(y>sy+0.06||y<sy-0.9)return;   /* the slug comes down on the water (the face, the top of the wave or its back); far under the surface found = under the curling lip or in the barrel: it keeps falling */
-  if(slSplat>=14||(i&1)){pLife[i]=0;pSA[i*2]=0;return}slSplat++;   /* half of them just sink into the water */
-  const s0=Math.min(Math.max(pSA[i*2],0.3),0.8);pFd[i]=1;pS0[i]=s0;pS1[i]=Math.min(s0*rnd(1.4,1.9),1.5);pLife[i]=pMax[i]=rnd(0.4,0.65);pAl[i]=rnd(0.26,0.36);pGr[i]=0.4;pDr[i]=2.6;   /* the rest burst into a small splat of white water on the surface */
-  pP[i*3+1]=sy+0.04;pV[i*3]=pV[i*3]*0.18-CP*0.35;pV[i*3+1]=rnd(0.3,1.0);pV[i*3+2]*=0.18;
-  for(let j=0;j<2;j++)emit(x,sy+0.05,z,rnd(-1.6,1.6)-CP*0.3,rnd(1.6,3.4),rnd(-1.6,1.6),rnd(0.4,0.8),0.05,rnd(0.14,0.26),0.45,9,0.8,0)}
+  pLife[i]=0;pSA[i*2]=0;if(slSplat>=40||(i%5))return;slSplat++;   /* 2026-11-25 a raindrop sinks; one in five kicks up a tiny splash */
+  emit(x,sy+0.03,z,rnd(-0.6,0.6)-CP*0.3,rnd(0.8,1.8),rnd(-0.6,0.6),rnd(0.25,0.45),0.02,rnd(0.04,0.07),0.4,9,0.8,0)}
 function slugBoard(b,kx,tpk){if(!sf.f||!sf.right||!S.tp)return;const sg=Math.sign(sf.om)||1,rel=clamp(sf.p/Math.max(S.top||1,0.1),0,1),
     pw=clamp(b/1.6,0.45,1.5)*clamp(0.55+(sf.V||0)/16,0.7,1.3)*clamp(0.6+0.22*(S.H||2),0.5,1.5)*(kx||1),tk=tpk===undefined?0.3+0.55*rel:tpk;   /* harder, faster, on a bigger wave: more water */
   waterSlug(sf.pos.x-sf.f.x*0.68,sf.pos.y-sf.f.y*0.68+0.06,sf.pos.z-sf.f.z*0.68,
