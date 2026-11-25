@@ -2036,7 +2036,7 @@ function histBuild(B,g,gp,bx,bz,b,pm,pp,psi,psw,topY,neckY){
 
 
 
-window.addEventListener('error',e=>{document.getElementById('err').textContent+=e.message+'\n'});
+window.addEventListener('error',e=>{const el=document.getElementById('err');if(!el)return;const E=window.__errS||(window.__errS={seen:{},n:0}),m=String((e&&e.message)||'error');if(E.seen[m]||E.n>=6)return;E.seen[m]=1;E.n++;el.textContent+=m+'\n'});   /* q1125 freeze: each message once, 6 at most (it used to grow every frame while an error repeated) */
 
 /* ───────────────────────── util ───────────────────────── */
 const V3=THREE.Vector3, DEG=Math.PI/180, PI=Math.PI;
@@ -2803,15 +2803,17 @@ waveGeo.setAttribute('aInfo',new THREE.BufferAttribute(gInf,4).setUsage(THREE.Dy
  waveGeo.setIndex(new THREE.BufferAttribute(idx,1));waveGeo.addGroup(0,n0,0);waveGeo.addGroup(n0,k-n0,1)}
 const waveDef={
   uniforms:{uSun:{value:SUN},uNight:TOD,uDawn:DAWN,uDusk:DUSK,uRain:RAIN,uPl:PLU,uNoise:{value:noiseTex},uTime:{value:0},uX:{value:0},uPool:{value:new THREE.Vector4(62,0.866,0.5,0)},
-    uWDk:{value:0},uRefT:{value:new V3(1,1,1)},uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uBR:{value:0.11},uRR:{value:0},uRU:{value:new V3(0,1,0)},uRK:{value:(()=>{try{return /[?&]cut=0(&|$)/.test(location.search)?99:0.5}catch(e){return 0.5}})()},uRip:{value:ripTex},uFoamT:{value:foamTex},uHzC:{value:scene.fog.color},uScn:{value:new THREE.Vector4(1,1,1,0)},uScnH:{value:new THREE.Vector4(0.5,0.5,0.5,1)}},
+    uWDk:{value:0},uRefT:{value:new V3(1,1,1)},uWA:{value:new V3},uWB:{value:new V3},uG1:{value:new V3},uG2:{value:new V3},uFl:{value:new V3},uFlL:{value:new V3},uSpecC:{value:new V3},uFoamA:{value:new V3},uFoamB:{value:new V3},uFlK:{value:1},uReef:{value:0},uShd:{value:new THREE.Vector4(0,0,1,0)},uShdK:{value:0},uRA:{value:new V3(0,-99,0)},uRB:{value:new V3(0,-99,0)},uBA:{value:new V3(0,-99,0)},uBB:{value:new V3(0,-99,0)},uBR:{value:0.11},uRR:{value:0},uRU:{value:new V3(0,1,0)},uRK:{value:(()=>{try{return /[?&]cut=0(&|$)/.test(location.search)?99:0.5}catch(e){return 0.5}})()},uRip:{value:ripTex},uFace:{value:new THREE.Vector4(1,1,1,1)},uFoamT:{value:foamTex},uHzC:{value:scene.fog.color},uScn:{value:new THREE.Vector4(1,1,1,0)},uScnH:{value:new THREE.Vector4(0.5,0.5,0.5,1)}},
   vertexShader:`attribute vec4 aInfo;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     void main(){vP=position;vN=normal;vI=aInfo;gl_Position=projectionMatrix*viewMatrix*vec4(position,1.);}`,
   fragmentShader:`precision highp float;
     uniform sampler2D uNoise;uniform float uTime;uniform float uX;uniform vec4 uPool;varying vec3 vP;varying vec3 vN;varying vec4 vI;
     uniform vec3 uWA,uWB,uG1,uG2,uFl,uFlL,uSpecC,uFoamA,uFoamB;uniform float uFlK,uReef,uShdK,uWDk;uniform vec3 uRefT;uniform vec4 uShd;
     ${SKY_GLSL}
-    uniform sampler2D uRip;uniform sampler2D uFoamT;uniform vec3 uHzC;uniform vec4 uScn;uniform vec4 uScnH;
+    uniform sampler2D uRip;uniform sampler2D uFoamT;uniform vec4 uFace;uniform vec3 uHzC;uniform vec4 uScn;uniform vec4 uScnH;
     uniform vec3 uRA;uniform vec3 uRB;uniform vec3 uBA;uniform vec3 uBB;uniform float uRR;uniform float uBR;uniform vec3 uRU;uniform float uRK;
+    uniform vec3 uCsA;uniform vec3 uCsB;uniform vec3 uCsL;uniform float uCsK;
+    float csSh(vec3 p){vec3 a=uCsA-p,b=uCsB-p;float ta=dot(a,uCsL),tb=dot(b,uCsL);vec3 a2=a-uCsL*ta,ab=(b-uCsL*tb)-a2;float h=clamp(-dot(a2,ab)/max(dot(ab,ab),1e-5),0.,1.);float d=length(a2+ab*h),tt=mix(ta,tb,h),w=mix(0.19,0.12,h)+0.035*max(tt,0.);return smoothstep(0.02,0.35,tt)*(1.-smoothstep(2.0,3.6,tt))*(1.-smoothstep(w*0.75,w*1.45,d))*(1.-0.30*h);}   /* q1125 gfx2 rider: his shadow along the sun, a soft capsule from the feet to the head that widens with distance */
     float capD(vec3 p,vec3 a,vec3 b){vec3 ab=b-a;float t=clamp(dot(p-a,ab)/max(dot(ab,ab),1e-5),0.,1.);return length(p-a-ab*t);}
     float capF(vec3 p,vec3 a,vec3 b){vec3 ab=b-a;float t=clamp(dot(p-a,ab)/max(dot(ab,ab),1e-5),0.,1.);vec3 q=a+ab*t;return dot(p-q,normalize(cameraPosition-q));}   /* render1121: how far this bit of water stands in front of the capsule's axis, toward the lens (negative: behind it) */
     void main(){
@@ -2854,12 +2856,25 @@ const waveDef={
 
       vec3 Ts=normalize(vec3(1.,0.,0.)-Ng*Ng.x);vec3 Tp=cross(Ng,Ts);
       vec3 N=normalize(Ng-(Ts*sl.x+Tp*sl.y));
+#if defined(SKIN)&&!defined(SKIN_LITE)
+      vec3 Nd=N;float fdk=0.;vec4 q1=vec4(0.5,0.5,0.4,0.5);   /* gfx2 face: fine ripples, two layers about 25 and 10 cm, drifting their own ways over the running water */
+      if(uFace.x>0.){float fw=max(length(dUx),length(dUy));fdk=uFace.x*(1.-smoothstep(0.12,0.45,fw));   /* far away they fade out (mip-filtered as well): no shimmer */
+       if(fdk>0.){q1=textureGrad(uRip,uv*vec2(1.05,0.80)+vec2(0.061,-0.083)*uTime+w3*0.20,dUx*vec2(1.05,0.80),dUy*vec2(1.05,0.80));
+        vec4 q2=textureGrad(uRip,uv*vec2(2.45,1.90)+vec2(-0.097,0.071)*uTime+w3*0.12,dUx*vec2(2.45,1.90),dUy*vec2(2.45,1.90));
+        vec2 dsl=((q1.rg-0.5)*0.85+(q2.rg-0.5)*0.60*(1.-smoothstep(0.05,0.22,fw)))*uFace.y*fdk;
+        Nd=normalize(N-(Ts*dsl.x+Tp*dsl.y));}}
+#endif
       float ndv=max(dot(N,V),0.);float fres=0.02+0.98*pow(1.-ndv,5.);
       vec3 R=reflect(-V,N);R.y=abs(R.y);
 #ifdef SKIN
       vec3 Rs=reflect(-V,normalize(mix(Ng,N,0.6)));Rs.y=abs(Rs.y);vec3 refl=skyC(Rs)*mix(0.88,0.56,steep);   /* WAVE SKIN: the sky in the water through softened ripples, so they do not scatter bright flecks */
       refl=mix(refl,uHzC*mix(1.0,0.78,steep),(1.-smoothstep(0.0,0.20,Rs.y))*0.30*(1.-steep));   /* near the horizon the flat water mirrors the haze of each wave's own sky */
       fres=0.02+0.98*pow(1.-max(dot(normalize(mix(Ng,N,0.55)),V),0.),5.);
+#ifndef SKIN_LITE
+      if(fdk>0.){float fd=0.02+0.98*pow(1.-max(dot(Nd,V),0.),5.);fres=mix(fres,fd,0.65*fdk);   /* gfx2 face: the fresnel follows the fine ripples: bright sky on the facets turned away, deep water on the ones facing the lens */
+       vec3 Rd=reflect(-V,Nd);refl*=1.+fdk*clamp((Rs.y-abs(Rd.y))*1.4+dot(Rd-Rs,uSun)*1.2,-0.30,0.40);}   /* lower and toward the sun the sky is brighter */
+      refl*=mix(1.,1.30,smoothstep(0.25,0.85,fres)*uFace.w);   /* at grazing angles the water is a clear mirror */
+#endif
 #else
       vec3 refl=skyC(R)*mix(0.88,0.56,steep);   // the steep face mirrors less of the pale sky: it stays deep turquoise
 #endif
@@ -2878,10 +2893,16 @@ const waveDef={
       float thin=clamp(sss*sss*(0.55+0.65*lv+0.25*nz)*(0.82+0.36*tl)*(0.9+0.2*r1.b),0.,1.);
       vec3 glow=mix(uG1,uG2,clamp(thin*1.1,0.,1.))*mix(vec3(1.),vec3(0.70,1.10,0.86),smoothstep(0.02,0.25,uG2.b-uG2.r))*thin*(0.75+1.20*back+0.3*back*back)*(0.85+0.3*clamp(0.5-dot(N,L),0.,1.));   /* the light through the thin lip: a luminous aqua green seen from every camera, brighter still against the sun (the green only on blue or green water: the Pororoca's brown keeps its own colour) */
       glow+=mix(uG2,vec3(1.),0.3)*smoothstep(0.72,1.0,sss)*(0.14+0.34*back)*(0.75+0.5*tl);   /* a clear rim along the very top of the lip */
-      glow/=1.+0.25*max(max(glow.r,glow.g),glow.b);   /* a soft knee: it glows without burning to white or flooding the bloom */
+      glow/=1.+0.25*max(max(glow.r,glow.g),glow.b);
+#ifndef SKIN_LITE
+      if(uFace.w>0.){float gl=dot(glow,vec3(0.2126,0.7152,0.0722));vec3 gs=max(mix(vec3(gl),glow,1.5),0.);gs/=1.+0.35*max(max(gs.r,gs.g),gs.b);   /* gfx2 face: the light through the lip a clear, saturated green-turquoise that never washes out to a milky white */
+       glow=mix(glow,gs*0.85*(0.85+0.3*q1.b+0.7*dot(Nd-N,Tp)),uFace.w);}   /* and broken up by the fine ripples it comes through */
+#endif
+   /* a soft knee: it glows without burning to white or flooding the bloom */
       body+=glow+uWB*0.22*max(dot(N,L),0.);
       body*=1.+(0.45*(r3.b-0.45)*steep*(1.-0.75*thin)+0.9*dot(N-Ng,normalize(L+V+vec3(0.,0.6,0.))));   /* the ripples and the lines running up the face shade the body of the water too */
 #ifndef SKIN_LITE
+      if(uFace.w>0.)body*=mix(1.,mix(0.62,1.0,smoothstep(0.0,0.55,hf)),uFace.w*(1.-thin));   /* gfx2 face: deeper still at the foot of the wall */
       body+=refl*0.45*smoothstep(0.30,0.95,hf)*steep*(1.-0.6*thin)*max(r3.b-0.45,0.);   /* the high part of the wall catches the sky on the crests of its ripples */
 #endif
 #else
@@ -2915,6 +2936,10 @@ const waveDef={
       if(sd>0.3)spec+=smoothstep(0.3,0.6,sd)*smoothstep(0.86,0.99,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,8.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*(1.-0.8*uDusk)*4.;   /* WAVE SKIN: the sun glitter in fine sparks, not a soft glow */
 #ifndef SKIN_LITE
       if(steep>0.05)spec+=pow(sd,60.)*smoothstep(0.55,0.85,r3.b)*steep*(1.-occ)*(1.-0.5*thin)*(1.-0.8*uDusk)*2.5;   /* and the sun glinting on the ripples of the face */
+      if(fdk*uFace.z>0.){vec3 H=normalize(L+V),Tx=normalize(Ts-Nd*dot(Ts,Nd)),Ty=cross(Nd,Tx);float hx=dot(H,Tx),hy=dot(H,Ty),hz=max(dot(H,Nd),0.05);
+       float an=exp(-(hx*hx*625.+hy*hy*60.)/(hz*hz));   /* gfx2 face: the sun in the fine ripples, glints drawn out in streaks up the face */
+       spec+=an*uFace.z*fdk*(0.25+1.5*smoothstep(0.45,0.85,q1.b))*(1.-occ)*(1.-0.5*thin)*(1.-clamp(foamA,0.,1.))*(1.-0.8*uDusk)*(1.-0.6*uNight)*2.2;
+       float tg=max(dot(refract(-V,Nd,0.75),L),0.);spec+=pow(tg,24.)*smoothstep(0.15,0.7,thin)*smoothstep(0.5,0.85,q1.b)*uFace.z*fdk*(1.-occ)*(1.-clamp(foamA,0.,1.))*(1.-0.8*uDusk)*(1.-0.6*uNight)*2.5;}   /* and with the sun behind the wave, sparks of it coming through the thin lip */
 #endif
 #else
       if(sd>0.12)spec+=smoothstep(0.12,0.3,sd)*smoothstep(0.80,0.97,textureGrad(uNoise,uv*1.35+vec2(0.21,-0.17)*uTime+w3*0.6,dUx*1.35,dUy*1.35).a)*pow(sd,3.)*(1.-occ)*(1.-0.4*steep)*df*(1.-0.6*uNight)*5.;   // sun glitter dancing on the water
@@ -2981,6 +3006,10 @@ const waveDef={
       if(hk>0.){foamC=mix(foamC,uFoamB*min(lit+0.30,1.05)*mix(1.,0.42,occ),0.50*hk);foamC*=mix(vec3(1.),mix(vec3(0.60,0.68,0.76),vec3(1.06),smoothstep(0.28,0.64,hgt)),hk)*(1.+0.42*bmp*hk);}   /* white like the foot of the foam all the way up: lit tops of the lumps, only a cool grey in the hollows */
 #ifdef SKIN
       if(foamA>0.02)foamC*=mix(vec3(0.64,0.75,0.86),vec3(1.06),fT.b*0.55+fT.g*0.45)*(0.90+0.16*fT.a);   /* WAVE SKIN: the foam has a texture, bubbles with small blue-grey holes */
+#ifndef SKIN_LITE
+      if(foamA>0.02){float fsd=max(dot(reflect(-V,Nf),L),0.);if(fsd>0.2){float fsp=smoothstep(0.90,0.985,textureGrad(uNoise,uv*2.3+vec2(0.37,-0.21)*uTime+w2*0.4,dUx*2.3,dUy*2.3).a);
+       foamC+=uSpecC*fsp*pow(fsd,6.)*smoothstep(0.10,0.60,foamA)*(1.-occ)*(1.-0.7*uNight)*(1.-0.85*uDusk)*(1.-0.7*uRain)*df*1.6;}}   /* q1125 gfx: sunlit white water glitters in fine sparks (mip-filtered: far away they fade, never shimmer) */
+#endif
 #endif
       if(uPl>0.5){   /* 2026-11-21 KEPLER-452b */
         if(uPl<1.5){float cr=texture2D(uNoise,uv*0.055+w1*0.10+vec2(0.,uTime*0.010)).a,cr2=texture2D(uNoise,uv*0.17+w2*0.08).b;   /* lava */
@@ -3019,11 +3048,14 @@ const waveDef={
       fogC=mix(fogC,uScnH.rgb,0.35*uScn.w);   /* 1121 far out, the water fades into the haze of the painted scenery */
 #endif
       col=mix(col,fogC,(1.-exp(-dist*0.0010))*(1.-0.55*uDawn));   /* at sunrise the sea toward the sun stays dark, only the glitter road shines */
+      if(uCsK>0.001){vec3 cq=vP-(uCsA+uCsB)*0.5;if(dot(cq,cq)<49.){float cs=csSh(vP)*uCsK*smoothstep(0.,0.25,dot(Ng,uCsL));col*=mix(vec3(1.),vec3(0.42,0.56,0.68),cs);}}   /* q1125 gfx2 rider: the shadow on the face, only where the sun reaches the water and near him (a backlit steep face is in its own shade) */
       if(any(isnan(col))||any(isinf(col)))col=fogC;
       gl_FragColor=vec4(col,1.);}`,
   side:THREE.DoubleSide};
 const waveMat=new THREE.ShaderMaterial(waveDef),curMat=new THREE.ShaderMaterial({...waveDef,defines:{CURTAIN:1}});
-const waveMesh=new THREE.Mesh(waveGeo,[waveMat,curMat]);waveMesh.frustumCulled=false;scene.add(waveMesh);[waveMat,curMat].forEach(m=>{m.stencilWrite=false;m.stencilRef=1;m.stencilFunc=THREE.NotEqualStencilFunc;m.stencilWriteMask=0;m.stencilFuncMask=0xff;m.stencilFail=THREE.KeepStencilOp;m.stencilZFail=THREE.KeepStencilOp;m.stencilZPass=THREE.KeepStencilOp});const RSTEN={on:!(()=>{try{return /[?&]cut=0(&|$)/.test(location.search)}catch(e){return false}})(),n:0};function rStenMark(){for(const G of [riderG,boardG])G.traverse(o=>{if(!o.isMesh&&!o.isSkinnedMesh)return;o.renderOrder=-5;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(!m||m.userData.rSten)return;m.userData.rSten=1;m.stencilWrite=true;m.stencilRef=1;m.stencilFunc=THREE.AlwaysStencilFunc;m.stencilZPass=THREE.ReplaceStencilOp;m.stencilWriteMask=0xff})})}   /* 2026-11-21 (the user: the bugs round the surfers) the water's cut is the surfer's own outline: he and the board mark the stencil, the wave skips those pixels */
+const waveMesh=new THREE.Mesh(waveGeo,[waveMat,curMat]);waveMesh.frustumCulled=false;scene.add(waveMesh);[waveMat,curMat].forEach(m=>{m.stencilWrite=false;m.stencilRef=1;m.stencilFunc=THREE.NotEqualStencilFunc;m.stencilWriteMask=0;m.stencilFuncMask=0xff;m.stencilFail=THREE.KeepStencilOp;m.stencilZFail=THREE.KeepStencilOp;m.stencilZPass=THREE.KeepStencilOp});function rStenOff(G,own){G.traverse(o=>{if(!o.isMesh&&!o.isSkinnedMesh&&!o.isLine)return;if(o.renderOrder===-5)o.renderOrder=0;if(own)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(!m)return;m.stencilWrite=false;m.stencilFunc=THREE.AlwaysStencilFunc;m.stencilZPass=THREE.KeepStencilOp;if(m.userData)delete m.userData.rSten})})}   /* q1125 vanish: a copy for someone else is drawn and occluded as a normal mesh */
+const RSTEN={on:!(()=>{try{return /[?&]cut=0(&|$)/.test(location.search)}catch(e){return false}})(),n:0};function rStenMark(){const GS=[riderG,boardG];try{for(const k in BODIES){const B=BODIES[k];if(B&&B.prop&&B.prop.G)GS.push(B.prop.G)}}catch(e){}   /* q1125 vanish: the hand props ride outside riderG */
+  for(const G of GS)G.traverse(o=>{if((!o.isMesh&&!o.isSkinnedMesh&&!o.isLine)||(o.userData&&o.userData.xr))return;o.renderOrder=-5;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(!m||m.userData.rSten)return;m.userData.rSten=1;m.stencilWrite=true;m.stencilRef=1;m.stencilFunc=THREE.AlwaysStencilFunc;m.stencilZPass=THREE.ReplaceStencilOp;m.stencilWriteMask=0xff})})}   /* 2026-11-21 (the user: the bugs round the surfers) the water's cut is the surfer's own outline: he and the board mark the stencil, the wave skips those pixels */
 setInterval(()=>{scene.traverse(o=>{if((o.isSkinnedMesh||o.isPoints)&&o.frustumCulled)o.frustumCulled=false})},3000);   /* skinned bodies and particle clouds: their bounds lie, so they are always drawn */
 
 /* ───────────────────────── surface sampling ───────────────────────── */
@@ -3056,9 +3088,9 @@ function sampleSurf(s,p,o){
 /* ───────────────────────── particles ───────────────────────── */
 const PN=34000,pP=new Float32Array(PN*3),pV=new Float32Array(PN*3),pSA=new Float32Array(PN*2),
   pLife=new Float32Array(PN),pMax=new Float32Array(PN),pS0=new Float32Array(PN),pS1=new Float32Array(PN),pAl=new Float32Array(PN),pGr=new Float32Array(PN),pDr=new Float32Array(PN),pFd=new Uint8Array(PN);
-let pHead=0;
+let pHead=0,pTot=0,pTail=0,pUpLo=0;   /* q1125 fps: pTot = drops ever written (absolute), pTail = oldest slot that may be alive, pUpLo = first slot changed since the last drawn frame */
 let pThin=0,pSkip=0;   /* 2026-11-19 a ride that stutters even without the glow: two spray drops in five are skipped before the frame rate is halved */
-function emit(x,y,z,vx,vy,vz,life,s0,s1,al,grav,drag,fd){if(pThin&&(++pSkip%5)<2)return;const i=pHead;pHead=(pHead+1)%PN;
+function emit(x,y,z,vx,vy,vz,life,s0,s1,al,grav,drag,fd){if(pThin&&(++pSkip%5)<2)return;const i=pHead;pHead=(pHead+1)%PN;pTot++;
   pP[i*3]=x;pP[i*3+1]=y;pP[i*3+2]=z;pV[i*3]=vx;pV[i*3+1]=vy;pV[i*3+2]=vz;pLife[i]=life;pMax[i]=life;pS0[i]=s0;pS1[i]=s1;pAl[i]=al;pGr[i]=grav;pDr[i]=drag;pFd[i]=fd|0}   /* fd: 0 spray, 1 white water, 2 a streak of the water fan */
 const partGeo=new THREE.BufferGeometry();
 partGeo.setAttribute('position',new THREE.BufferAttribute(pP,3).setUsage(THREE.DynamicDrawUsage));
@@ -3114,6 +3146,8 @@ const partMat=new THREE.ShaderMaterial({
 #endif
       float a=mix(aS,aD,vF),thin=smoothstep(0.45,0.95,edge)*vF;
       vec3 lit=mix(vec3(0.58,0.72,0.85),vec3(1.06,1.03,0.99),0.30+0.70*vB)*(0.80+0.34*n)*(0.64+0.52*(1.-gl_PointCoord.y))*mix(1.,0.80+0.26*hb,vF);   // lit tops, shaded undersides, bubbly
+      if(vF>0.5){float cv=texture2D(uNoise,gl_PointCoord*1.25+vS*3.7).b,cv2=texture2D(uNoise,gl_PointCoord*2.6+vS*1.3).a;float cr=smoothstep(0.30,0.72,cv*0.6+cv2*0.4);   /* gfx2: white water with relief, sunlit domes of foam and shaded creases between them, not a flat white blob */
+        lit*=mix(vec3(0.60,0.71,0.80),vec3(1.07,1.05,1.01),0.25+0.75*cr)*mix(1.,0.86+0.22*hb,0.6);}
       vec3 col=mix(lit,lit*vec3(0.55,0.86,0.95),thin*0.6)*uTint;                           // the thin rim lets the blue of the water through
 #ifdef SKIN
       col*=1.+0.45*vB*(1.-vF);   /* WAVE SKIN: spray and the mist off the lip light up with the sun behind them */
@@ -3124,15 +3158,49 @@ const partMat=new THREE.ShaderMaterial({
 function skinSet(on){SKIN.on=!!on;for(const m of [waveMat,curMat,partMat]){if(SKIN.on){m.defines.SKIN=1;if(SKIN.lite)m.defines.SKIN_LITE=1;else delete m.defines.SKIN_LITE}else{delete m.defines.SKIN;delete m.defines.SKIN_LITE}m.needsUpdate=true}return SKIN.on}
 skinSet(SKIN.on);
 const parts=new THREE.Points(partGeo,partMat);parts.frustumCulled=false;parts.renderOrder=5;scene.add(parts);
+/* gfx2 2026-11-25 the offshore plume: a veil of mist torn off the crest all along the breaking line and blown back over the wave, soft and lit through by the sun.
+   One ribbon of quads on the wave's own columns (base on the crest, rising and bending back with the wind); drawn once, a few texture reads; off on the lowest picture level */
+const PLR=7,PLI0=(()=>{let i=0;while(i<NS-1&&colS[i]<-6)i++;return i})(),PLI1=(()=>{let i=PLI0;while(i<NS-1&&colS[i]<74)i++;return i})(),PLC=PLI1-PLI0+1;
+const plP=new Float32Array(PLC*PLR*3),plA=new Float32Array(PLC*PLR*2);
+const plumeGeo=new THREE.BufferGeometry();
+plumeGeo.setAttribute('position',new THREE.BufferAttribute(plP,3).setUsage(THREE.DynamicDrawUsage));
+plumeGeo.setAttribute('aPl',new THREE.BufferAttribute(plA,2).setUsage(THREE.DynamicDrawUsage));   /* x: how far up the plume (0 at the crest, 1 at its end), y: how strong it is in this column */
+{const ix=[];for(let c=0;c<PLC-1;c++)for(let r=0;r<PLR-1;r++){const a=c*PLR+r,b=a+PLR;ix.push(a,b,a+1,b,b+1,a+1)}plumeGeo.setIndex(ix)}
+const plumeMat=new THREE.ShaderMaterial({
+  uniforms:{uNoise:{value:noiseTex},uSun:{value:SUN},uTint:partMat.uniforms.uTint,uT:{value:0},uK:{value:1},uCP:{value:CP}},
+  vertexShader:`attribute vec2 aPl;varying vec2 vPl;varying vec3 vW;varying float vB;varying float vNear;uniform vec3 uSun;
+    void main(){vec4 mv=viewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;vPl=aPl;vW=position;
+      vec3 V=normalize(cameraPosition-position);vB=pow(clamp(dot(V,-uSun)*.5+.5,0.,1.),2.5);vNear=smoothstep(2.5,9.,-mv.z);}`,
+  fragmentShader:`precision highp float;uniform sampler2D uNoise;uniform vec3 uTint;uniform float uT;uniform float uK;uniform float uCP;varying vec2 vPl;varying vec3 vW;varying float vB;varying float vNear;
+    void main(){float t=vPl.x;if(vPl.y<0.004)discard;
+      float u=vW.x+uCP*0.32*uT;   /* the spray leaves the crest a little slower than the wave runs: its pattern drifts back along the line */
+      float n1=texture2D(uNoise,vec2(u*0.07,t*0.22-uT*0.12)).b,n2=texture2D(uNoise,vec2(u*0.33+n1*0.25,t*0.42-uT*0.36)).a,n3=texture2D(uNoise,vec2(u*0.75+n2*0.3,t*0.6-uT*0.85)).b;   /* wind-combed: fine along the crest, drawn out with the wind */
+      float lv=texture2D(uNoise,vec2(u*0.021+0.37,uT*0.02)).a;float tt=t/mix(0.5,1.,smoothstep(0.25,0.75,lv));if(tt>=1.)discard;float body=smoothstep(0.,0.08,t)*pow(1.-tt,1.7);   /* ragged: some stretches of the plume reach twice as far as others */
+      float tex=n1*0.45+n2*0.35+n3*0.20;
+      float d=smoothstep(0.40+0.20*t,0.82,tex+0.26*(1.-t))*body;
+      d=max(d,0.40*body*smoothstep(0.2,0.75,n1*0.7+n2*0.3+0.2*(1.-t)));   /* a soft veil under the streaks */
+      float a=d*vPl.y*uK*vNear*1.45;
+      if(a<0.004)discard;
+      vec3 lit=mix(vec3(0.70,0.82,0.92),vec3(1.06,1.04,1.00),0.45+0.55*smoothstep(0.35,0.9,tex));   /* thick bits sunlit, the thin veil carries the sky's blue */
+      lit*=1.+0.85*vB*(1.-0.5*d);   /* the sun behind it shines through */
+      gl_FragColor=vec4(lit*uTint,clamp(a,0.,0.68));}`,
+  transparent:true,depthWrite:false,side:THREE.DoubleSide});
+const plume=new THREE.Mesh(plumeGeo,plumeMat);plume.frustumCulled=false;plume.renderOrder=4;scene.add(plume);
+
 function updateParticles(dt){
-  for(let i=0;i<PN;i++){
+  if(pTot-pTail>PN)pTail=pTot-PN;
+  for(let c=0,n=pTot-pTail,i=pTail%PN;c<n;c++,i=(i+1===PN?0:i+1)){   /* q1125 fps: only the window of the ring that can hold live drops */
     if(pLife[i]>0){pLife[i]-=dt;const k=1-pLife[i]/pMax[i],d=1-pDr[i]*dt;
       pV[i*3]*=d;pV[i*3+1]=pV[i*3+1]*d-pGr[i]*dt;pV[i*3+2]*=d;
       pP[i*3]+=pV[i*3]*dt;pP[i*3+1]+=pV[i*3+1]*dt;pP[i*3+2]+=pV[i*3+2]*dt;
       pSA[i*2]=lerp(pS0[i],pS1[i],Math.sqrt(k));pSA[i*2+1]=pFd[i]===2?pAl[i]*Math.min(k*12,1)*(1-k)*(1.25-0.25*k)+20:pAl[i]*Math.min(k*10,1)*(pFd[i]?1-sstep(0.5,1,k):(1-k)*(1-k)*1.6)+(pFd[i]?10:0);
       if(pLife[i]<=0)pSA[i*2]=0}
   }
-  partGeo.attributes.position.needsUpdate=true;partGeo.attributes.aSA.needsUpdate=true;partGeo.attributes.aV.needsUpdate=true}
+  while(pTail<pTot&&pLife[pTail%PN]<=0)pTail++}
+/* q1125 fps: right before a frame is drawn, upload only the slots changed since the last drawn frame (one or two ranges), or all of them when that is the whole ring */
+function partSync(){const A=partGeo.attributes,n=pTot-pUpLo;if(n<=0){pUpLo=pTail;return}const s=pUpLo%PN,e=s+n;
+  for(const [a,c] of [[A.position,3],[A.aSA,2],[A.aV,3]]){if(typeof a.clearUpdateRanges==='function'){a.clearUpdateRanges();if(n<PN){if(e<=PN)a.addUpdateRange(s*c,n*c);else{a.addUpdateRange(s*c,(PN-s)*c);a.addUpdateRange(0,(e-PN)*c)}}}a.needsUpdate=true}
+  pUpLo=pTail}
 /* Sponsor jet ski: every so often it runs past in front of the wave, flag flying (open ad slot) */
 const jetG=new THREE.Group();jetG.visible=false;scene.add(jetG);
 const jet={on:false,x:0,z0:7,v:0,dir:1,next:3,n:0,acc:0};
@@ -3173,6 +3241,20 @@ function updateJet(dt,time){
   jet.acc+=dt*110;while(jet.acc>=1){jet.acc--;const up=Math.random()<0.3;
     emit(jet.x-jet.dir*1.5+rnd(-0.2,0.2),0.2,z+rnd(-0.35,0.35),-jet.v*rnd(0.15,0.4),up?rnd(3,6):rnd(0.8,2.4),rnd(-1.4,1.4),rnd(0.45,0.9),0.15,rnd(0.6,1.3),0.26,7,1.2)}}
 let accArc=0,accHandF=0,accVap=0,accLip=0,accCrest=0,accRail=0,accWW=0,accCurl=0,accSpr=0,accLand=0,accBall=0,accFm=0,accJet=0,accFh=0,accPile=0,accSecF=0,accCloud=0,accSkirt=0,accEndC=0;const JETS=[];
+
+/* gfx2 the plume follows the crest each frame: from the top of the wave, up and back with the wind; strongest where the lip stands and throws, thin on the low shoulder, gone where the wave has turned to white water */
+function plumeTick(dt){const on=qLevel<6&&!(qLevel>=5&&qLite)&&!SPOT.planet;   /* review 2026-11-25: off on the lowest picture level (only slow machines land there: the floor is never made heavier), and on the next one up once the frame rate has had to give way */plume.visible=on;if(!on)return;
+  const pw=(qLevel>=5?0.85:1)*(qLite?0.8:1),gst=game.t;plumeMat.uniforms.uT.value=gst;plumeMat.uniforms.uK.value=pw*(1-0.45*TOD.value)*(SPOT.pool?0.55:1)*(1-0.5*RAIN.value);
+  for(let c=0;c<PLC;c++){const i=PLI0+c,s=colS[i],H=colH[i],k=i*NV+NF+NQ;
+    const y0=Math.max(colH[i],PY[k]),z0=PY[k]>=colH[i]-0.05?PZ[k]:colCZ[i];
+    const hk=sstep(0.9,3.2,H),ek=1-0.9*colEnd[i],bk=s<0?Math.exp(s/2.2):1,lk=0.55+0.45*Math.min(1,colW[i]*1.3+(colAEnd[i]>2.2?0.5:0));
+    const gust=0.55+0.45*Math.sin(s*0.19+gst*1.3)*Math.sin(s*0.047-gst*0.5);
+    const edge=sstep(0,4,c)*sstep(0,4,PLC-1-c),st=hk*ek*bk*lk*gust*edge*(1-0.6*colFoam[i]*(1-colEnd[i]))*0.85;
+    const Hk=Math.min(0.7+0.5*H,6)*(0.75+0.35*gust),Bk=Math.min(1.2+0.8*H,9)*(0.85+0.3*gust);
+    for(let r=0;r<PLR;r++){const u=r/(PLR-1),o=(c*PLR+r);
+      plP[o*3]=s-u*u*0.9;plP[o*3+1]=y0-0.18+Hk*(1-(1-u)*(1-u));plP[o*3+2]=z0+0.15-Bk*u;
+      plA[o*2]=u;plA[o*2+1]=st}}
+  plumeGeo.attributes.position.needsUpdate=true;plumeGeo.attributes.aPl.needsUpdate=true}
 function emitWave(dt){
   const pw=game.Hbase*(qLevel>=7?0.55:qLevel>=5?0.78:1)*(qLite?0.7:1);   /* 2026-11-17 on the lower picture levels the wave's own mist and white water are thinned out as well (the spray off the board is not): they are big soft sprites drawn over each other, the heaviest thing left for a slow graphics chip */
   accLip+=2100*dt*pw;   /* the offshore wind combing the crest: a veil of fine water torn off low and blown back flat, in gusts along the line */
@@ -3273,7 +3355,7 @@ const wakeMesh=new THREE.Mesh(wakeGeo,wakeMat);wakeMesh.frustumCulled=false;wake
 let wakeAcc=0;
 function updateWake(dt){
   wakeAcc+=dt;
-  if(wakeAcc>0.028){wakeAcc=0;
+  if(wakeAcc>=0.0295-dt*0.5){wakeAcc-=0.0295;if(wakeAcc>0.0295)wakeAcc=0;   /* q1125 fps: a point every 0.0295 s of game time on average at any frame rate, on the frame nearest that time (it was a whole number of frames, so 75 and 100 Hz screens drew a longer wake) */
     if(sf.mode==='ride'&&sf.visible&&sf.p>-6)wake.unshift({s:sf.s-Math.cos(sf.th)*0.7,p:sf.p-Math.sin(sf.th)*0.7,age:0,w:0.11+clamp(Math.abs(sf.om)*sf.V*0.011,0,0.26),gap:false});
     else if(wake.length&&!wake[0].gap)wake.unshift({s:0,p:0,age:9,w:0,gap:true});
     if(wake.length>WN)wake.length=WN}
@@ -6189,7 +6271,7 @@ function bod3Mat(map,text,face,noSuit,sy,hair,jy,jyRest){if(map){map.colorSpace=
        float pa=bk*step(0.,pu.x)*step(pu.x,1.)*step(0.,pu.y)*step(pu.y,1.)*texture2D(uLycTex,pu).a;fab=mix(fab,uLycT,pa*0.95);
        diffuseColor.rgb=mix(diffuseColor.rgb,fab,lycK);hairK*=1.-lycK;suitK*=1.-lycK;}
      #endif`)
-      .replace('#include <lights_fragment_end>','#include <lights_fragment_end>\n#ifdef WARMSK\nvec3 skC=diffuseColor.rgb;float skMx=max(skC.r,max(skC.g,skC.b)),skMn=min(skC.r,min(skC.g,skC.b)),skS=(skMx-skMn)/max(skMx,1e-4),skL=dot(skC,vec3(.3,.59,.11));\nfloat skK=step(skC.b,skC.g)*step(skC.g,skC.r)*smoothstep(0.015,0.05,skC.r-skC.b)*smoothstep(0.10,0.20,skS)*(1.-smoothstep(0.72,0.85,skS))*smoothstep(0.02,0.06,skL)*(1.-hairK)*(1.-suitK)*(1.-lycK);\n{vec3 dfc=max(material.diffuseColor,vec3(1e-3)),irr=reflectedLight.indirectDiffuse/dfc;float il=dot(irr,vec3(.3,.59,.11));reflectedLight.indirectDiffuse=mix(reflectedLight.indirectDiffuse,il*vec3(1.06,0.99,0.92)*dfc,0.85*skK);\n vec3 isp=reflectedLight.indirectSpecular;reflectedLight.indirectSpecular=mix(isp,vec3(dot(isp,vec3(.3,.59,.11))),0.8*skK)*(1.-0.35*skK);}\n#define RIMW mix(uRim,vec3(dot(uRim,vec3(.3,.59,.11)))*vec3(1.10,0.98,0.88),skK)\n#else\n#define RIMW uRim\n#endif').replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.roughness=mix(mix(material.roughness,0.86,hairK),0.80,suitK);material.specularColor*=(1.-0.8*hairK)*mix(1.,0.10,suitK);material.roughness=mix(material.roughness,0.78,lycK);material.specularColor*=1.-0.6*lycK;')
+      .replace('#include <lights_fragment_end>','#include <lights_fragment_end>\n#ifdef WARMSK\nvec3 skC=diffuseColor.rgb;float skMx=max(skC.r,max(skC.g,skC.b)),skMn=min(skC.r,min(skC.g,skC.b)),skS=(skMx-skMn)/max(skMx,1e-4),skL=dot(skC,vec3(.3,.59,.11));\nfloat skK=step(skC.b,skC.g)*step(skC.g,skC.r)*smoothstep(0.015,0.05,skC.r-skC.b)*smoothstep(0.10,0.20,skS)*(1.-smoothstep(0.72,0.85,skS))*smoothstep(0.02,0.06,skL)*(1.-hairK)*(1.-suitK)*(1.-lycK);\n{vec3 dfc=max(material.diffuseColor,vec3(1e-3)),irr=reflectedLight.indirectDiffuse/dfc;float il=dot(irr,vec3(.3,.59,.11));reflectedLight.indirectDiffuse=mix(reflectedLight.indirectDiffuse,il*vec3(1.06,0.99,0.92)*dfc,0.85*skK);\n vec3 isp=reflectedLight.indirectSpecular;reflectedLight.indirectSpecular=mix(isp,vec3(dot(isp,vec3(.3,.59,.11))),0.8*skK)*(1.-0.35*skK);}\n#define RIMW mix(uRim,vec3(dot(uRim,vec3(.3,.59,.11)))*vec3(1.10,0.98,0.88),skK)\n#else\n#define RIMW uRim\n#endif').replace('#include <lights_physical_fragment>','#include <lights_physical_fragment>\n material.roughness=mix(mix(material.roughness,0.86,hairK),0.80,suitK);material.specularColor*=(1.-0.8*hairK)*mix(1.,0.10,suitK);material.roughness=mix(material.roughness,0.78,lycK);material.specularColor*=1.-0.6*lycK;\n {vec3 wc=diffuseColor.rgb;float wmx=max(wc.r,max(wc.g,wc.b)),wmn=min(wc.r,min(wc.g,wc.b)),ws=(wmx-wmn)/max(wmx,1e-4);float wk=step(wc.b,wc.g)*step(wc.g,wc.r)*smoothstep(0.10,0.20,ws)*(1.-smoothstep(0.75,0.88,ws))*smoothstep(0.02,0.06,wmx)*(1.-hairK)*(1.-suitK)*(1.-lycK);material.roughness=mix(material.roughness,0.46,0.8*wk);}   /* q1125 gfx: wet skin, a tighter sun highlight on bare skin only */')
       .replace('#include <opaque_fragment>','{float rv=1.-clamp(dot(normal,normalize(vViewPosition)),0.,1.);outgoingLight+=RIMW*rv*rv*rv*(0.6+0.4*diffuseColor.g)*(1.-0.55*suitK)*(1.-0.9*hairK)*0.72;}\n#include <opaque_fragment>')};
   return mat}
 /* 2026-11-19 (the user) skin the colour of real skin. Some 3D textures came out grey-violet on the face and arms (THE SHREDDER, THE LEGEND) or with a dark smudge baked over half the face (THE FLYER).
@@ -7503,9 +7585,41 @@ function poseRider0(time,dt){
 /* contact shadow */
 const shadowM=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.ShaderMaterial({uniforms:{uA:{value:0.4}},
   vertexShader:`varying vec2 vU;void main(){vU=uv*2.-1.;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`precision highp float;varying vec2 vU;uniform float uA;void main(){float a=max(1.-dot(vU,vU),0.);gl_FragColor=vec4(0.0,0.035,0.055,a*a*uA);}`,
+  fragmentShader:`precision highp float;varying vec2 vU;uniform float uA;void main(){float a=max(1.-dot(vU,vU),0.);gl_FragColor=vec4(0.0,0.035,0.055,min(a*a*uA*(1.+0.45*a*a*a*a),0.62));   /* q1125 gfx: a denser core under the board */}`,
   transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3}));
 shadowM.frustumCulled=false;shadowM.renderOrder=1;scene.add(shadowM);
+/* q1125 gfx2 rider: real light on the surfers and boards. A back light from the sun side outlines the body against the water, the light from the sky
+   falls off under the body (arms, chin, the inside of the legs read as creases), the board's deck has a wet sheen, and his shadow is cast along the sun
+   onto the face (waveMat: uCsA/uCsB/uCsL/uCsK). Every MeshStandard/Physical material of the riders and boards is hooked once (rlPatch, chained after its
+   own onBeforeCompile, with its own program key); clones made later are found and hooked by the scan. Off (uRLk=0, no shadow) in the quality controller's lite mode. */
+const RLU={uRLs:{value:new V3(0,1,0)},uRLc:{value:new THREE.Color(0,0,0)},uRLk:{value:new THREE.Vector4(1,1,1,1)}},RLK=new THREE.Vector4(2.3,1.0,1,1.6),RLW=new WeakSet(),RLF={n:0,sk:0.7},_rlB=new V3(),_rlU=new V3();   /* uRLk: x rim, y occlusion, z wet deck, w key light */
+const RL_AO=`{vec3 rlUp=normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz);float rlY=dot(normal,rlUp);
+ reflectedLight.indirectDiffuse*=mix(1.,mix(0.30,1.08,smoothstep(-0.85,0.65,rlY)),uRLk.y);reflectedLight.indirectSpecular*=mix(1.,mix(0.35,1.,smoothstep(-0.6,0.45,rlY)),uRLk.y);
+ reflectedLight.directDiffuse*=1.+0.25*uRLk.w;}`;
+const RL_RIM=`{vec3 rlV=normalize(vViewPosition);vec3 rlS=normalize((viewMatrix*vec4(uRLs,0.)).xyz);float rlF=1.-clamp(dot(normal,rlV),0.,1.);
+ float rlR=smoothstep(0.38,0.95,rlF)*smoothstep(-0.10,0.65,dot(normal,rlS))*(0.55+0.45*smoothstep(-0.3,0.7,-rlS.z));outgoingLight+=uRLc*rlR*uRLk.x*RLRK;}`;
+const RL_WET=`{vec3 rlV2=normalize(vViewPosition);vec3 rlS2=normalize((viewMatrix*vec4(uRLs,0.)).xyz);float rlNh=max(dot(normal,normalize(rlV2+rlS2)),0.);
+ float rlFr=1.-clamp(dot(normal,rlV2),0.,1.);rlFr*=rlFr*rlFr;outgoingLight+=uRLk.z*(uRLc*(pow(rlNh,140.)*2.6+pow(rlNh,24.)*0.08)+reflectedLight.indirectSpecular*rlFr*0.45);}`;
+function rlPatch(m,bd){if(!m||!m.isMeshStandardMaterial||RLW.has(m))return;RLW.add(m);const ob=m.onBeforeCompile,k0=m.customProgramCacheKey();
+  m.onBeforeCompile=function(sh,r){ob.call(this,sh,r);const f=sh.fragmentShader;if(f.indexOf('#include <opaque_fragment>')<0||f.indexOf('#include <lights_fragment_end>')<0)return;
+    sh.uniforms.uRLs=RLU.uRLs;sh.uniforms.uRLc=RLU.uRLc;sh.uniforms.uRLk=RLU.uRLk;
+    sh.fragmentShader='uniform vec3 uRLs;uniform vec3 uRLc;uniform vec4 uRLk;\n'+f.replace('#include <lights_fragment_end>','#include <lights_fragment_end>\n'+RL_AO).replace('#include <opaque_fragment>',(bd?RL_WET+RL_RIM.replace('RLRK','0.30'):RL_RIM.replace('RLRK','1.0'))+'\n#include <opaque_fragment>')};
+  m.customProgramCacheKey=()=>k0+(bd?'|RLb':'|RL');m.needsUpdate=true}
+function rlScan(){const P=(m,bd)=>{if(Array.isArray(m))m.forEach(q=>rlPatch(q,bd));else rlPatch(m,bd)},S=(G,bd)=>{if(G)G.traverse(o=>{if(o.isMesh)P(o.material,!!(bd&&o.userData.board))})};
+  S(riderG);S(boardG,1);try{S(npcG);S(npcBoard,1)}catch(e){}try{if(PAD.g){S(PAD.g);S(PAD.board,1)}}catch(e){}try{for(const k in BODIES){const B=BODIES[k];if(B&&B.prop&&B.prop.G)S(B.prop.G)}}catch(e){}}
+function rlWU(){const U=waveMat.uniforms;if(!U.uCsA){U.uCsA={value:new V3()};U.uCsB={value:new V3()};U.uCsL={value:new V3(0,1,0)};U.uCsK={value:0};const C=curMat.uniforms;if(C!==U){C.uCsA=U.uCsA;C.uCsB=U.uCsB;C.uCsL=U.uCsL;C.uCsK=U.uCsK}}return U}
+try{rlWU()}catch(e){}   /* (registered now, before the wave is first compiled: three links a program's uniform list once, so uniforms added after that are never uploaded) */
+function rlFrame(){let on=true;try{on=!qLite}catch(e){}   /* (off when the quality controller has dropped to its lite mode: a machine that struggles even at the floor level) */
+  if(on)RLU.uRLk.value.copy(RLK);else RLU.uRLk.value.set(0,0,0,0);
+  RLU.uRLs.value.copy(sunL.position).sub(sunL.target.position).normalize();RLU.uRLc.value.copy(sunL.color).multiplyScalar(sunL.intensity*0.20);
+  if((RLF.n++%30)===0)rlScan();
+  const U=rlWU();
+  const ok=on&&sf.visible&&riderG.visible&&boardG.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float');
+  U.uCsK.value=ok?(1-0.85*TOD.value)*(1-0.8*RAIN.value)*RLF.sk:0;if(!ok)return;
+  const sc=Math.abs(riderG.scale.x)||1;_rlU.set(0,1,0).applyQuaternion(boardG.quaternion);U.uCsA.value.copy(boardG.position).addScaledVector(_rlU,0.10*sc);
+  if(RIG.on&&RIG.b&&RIG.b.head&&RIG.b.head.bone){if(RIG.kid&&RIG.kHead)_rlB.setFromMatrixPosition(RIG.kHead.matrixWorld);else _rlB.setFromMatrixPosition(RIG.b.head.bone.matrixWorld)}else _rlB.copy(boardG.position).addScaledVector(_rlU,1.45*sc);
+  if(_rlB.distanceTo(U.uCsA.value)>2.4)_rlB.copy(U.uCsA.value).addScaledVector(_rlU,1.3*sc);U.uCsB.value.copy(_rlB);U.uCsL.value.copy(RLU.uRLs.value)}
+
 function setShadow(o,fwd,alpha,sc){
   _z.copy(o.n);_x.copy(fwd).addScaledVector(_z,-fwd.dot(_z)).normalize();_y.crossVectors(_z,_x);
   _m.makeBasis(_x,_y,_z);shadowM.quaternion.setFromRotationMatrix(_m);
@@ -7529,7 +7643,7 @@ function makeNPC(){const src=RIG.mesh,sk=src.skeleton,nb=sk.bones.length;
   mat.customProgramCacheKey=()=>'npc-red';
   npcMesh=new THREE.SkinnedMesh(src.geometry,mat);npcMesh.frustumCulled=false;npcG.add(npcMesh);npcMesh.bind(new THREE.Skeleton(npcBones,sk.boneInverses),new THREE.Matrix4());
   npcBoard=boardG.clone(true);npcBoard.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(0xffa400);o.castShadow=o.receiveShadow=false}});
-  npcBoard.visible=false;scene.add(npcBoard)}
+  rStenOff(npcBoard,true);npcBoard.visible=false;scene.add(npcBoard)}
 function npcSnap(){riderG.updateMatrixWorld(true);_ni.copy(riderG.matrixWorld).invert();const bs=RIG.mesh.skeleton.bones,a=new Float32Array(bs.length*16);
   for(let i=0;i<bs.length;i++){_nm.multiplyMatrices(_ni,bs[i].matrixWorld);_nm.toArray(a,i*16)}return a}
 function npcCapture(){if(!RIG.on||game.replay||game.state!=='ride'||RIG.kid)return;   /* the other surfers are grown-ups: never copy them from the kid */
@@ -7599,7 +7713,7 @@ const SPD=mkS(),_pdv=new V3(),_pdq=new THREE.Quaternion();
 function padMake(){const src=RIG.mesh,sk=src.skeleton,nb=sk.bones.length,g=new THREE.Group();g.visible=false;scene.add(g);const bones=[];for(let i=0;i<nb;i++){const b=new THREE.Bone();b.matrixAutoUpdate=false;g.add(b);bones.push(b)}
   const mat=src.material.clone();mat.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n  {float cool=max(diffuseColor.g,diffuseColor.b)-diffuseColor.r;float l=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.30,1.7,0.55)*l*3.0,smoothstep(0.008,0.024,cool));}')};mat.customProgramCacheKey=()=>'pad-green';   /* his blue boardshorts turn green */
   const m=new THREE.SkinnedMesh(src.geometry,mat);m.frustumCulled=false;g.add(m);m.bind(new THREE.Skeleton(bones,sk.boneInverses),new THREE.Matrix4());
-  const bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(0x3cc4ff);o.castShadow=o.receiveShadow=false}});bd.visible=false;scene.add(bd);
+  const bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(0x3cc4ff);o.castShadow=o.receiveShadow=false}});rStenOff(bd,true);bd.visible=false;scene.add(bd);
   PAD.g=g;PAD.bones=bones;PAD.board=bd}
 function padApply(a,b,f){const B=PAD.bones;for(let i=0;i<B.length;i++){const e=B[i].matrix.elements,o=i*16;if(b&&f>0.001)for(let k=0;k<16;k++)e[k]=a[o+k]+(b[o+k]-a[o+k])*f;else for(let k=0;k<16;k++)e[k]=a[o+k];B[i].matrixWorldNeedsUpdate=true}}
 function padRot(i,pv,q){if(i<0)return;_pM.makeRotationFromQuaternion(q);_pT.makeTranslation(-pv.x,-pv.y,-pv.z);_pM.multiply(_pT);_pT.makeTranslation(pv.x,pv.y,pv.z);_pT.multiply(_pM);PAD.bones[i].matrix.premultiply(_pT);PAD.bones[i].matrixWorldNeedsUpdate=true}
@@ -7945,8 +8059,8 @@ function champShow(){const rows=[...PARTY.players].map(p=>({p,a:ptAvg(p),b:p.sco
 function champClose(){const C=$('champ');C.classList.add('off');$('ptTag').style.visibility='';C.classList.remove('rev');clearTimeout(C._t);cancelAnimationFrame(chRaf);chRaf=0;const cv=$('chConf');cv.getContext('2d').clearRect(0,0,cv.width,cv.height)}
 function ptConfetti(cols){const cv=$('chConf'),pr=Math.min(devicePixelRatio||1,2),W=cv.width=Math.max(1,cv.clientWidth*pr|0),H=cv.height=Math.max(1,cv.clientHeight*pr|0),x=cv.getContext('2d'),pal=[...cols,'#ffd23a','#ffffff','#ff4f9e','#2a8fd6'],P=[];
   for(let i=0;i<240;i++)P.push({x:W*(0.5+(Math.random()-0.5)*0.24),y:H*0.42,vx:(Math.random()-0.5)*W*0.02,vy:-(0.4+Math.random())*H*0.024,s:(5+Math.random()*8)*pr,r:Math.random()*6,vr:(Math.random()-0.5)*0.32,c:pal[i%pal.length]});
-  const t0=performance.now();cancelAnimationFrame(chRaf);const step=now=>{const el=(now-t0)/1000;x.clearRect(0,0,W,H);x.globalAlpha=Math.max(0,1-Math.max(0,el-4.2)/1.4);
-    P.forEach(p=>{p.vy+=H*0.00055;p.vx*=0.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2*Math.abs(Math.cos(p.r*1.7))+1);x.restore()});
+  const t0=performance.now();cancelAnimationFrame(chRaf);let pN=t0;const step=now=>{const el=(now-t0)/1000,f=Math.min(3,Math.max(0,(now-pN)*0.06)),fr=Math.pow(0.99,f);pN=now;x.clearRect(0,0,W,H);x.globalAlpha=Math.max(0,1-Math.max(0,el-4.2)/1.4);   /* q1125 fps: f = this frame in 60 Hz frames, so the confetti falls at the same speed on a 120 Hz screen */
+    P.forEach(p=>{p.vy+=H*0.00055*f;p.vx*=fr;p.x+=p.vx*f;p.y+=p.vy*f;p.r+=p.vr*f;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2*Math.abs(Math.cos(p.r*1.7))+1);x.restore()});
     if(el<5.6&&!$('champ').classList.contains('off'))chRaf=requestAnimationFrame(step);else{x.clearRect(0,0,W,H);chRaf=0}};chRaf=requestAnimationFrame(step)}
 function ptDrumRoll(){const C=audio.ctx;if(!C||!audio.master)return;const t=C.currentTime,len=1.45,b=C.createBuffer(1,Math.ceil(C.sampleRate*len),C.sampleRate),d=b.getChannelData(0);   /* the drum roll before the name */
   for(let i=0;i<d.length;i++){const tt=i/C.sampleRate,hit=(tt*(16+8*tt/len))%1;d[i]=(Math.random()*2-1)*Math.exp(-hit*8)*(0.3+0.7*tt/len)}
@@ -8941,7 +9055,7 @@ function startWave(att){if(!att&&plCrewGate())return;if(!att&&WC.on&&wcGate())re
   if(!att&&typeof setLycra==='function'){const L=['red','blue','yellow','black'];game.lycI=((game.lycI===undefined?Math.max(0,L.indexOf(PROG.lyc||'red')):game.lycI)+1)%L.length;setLycra(L[game.lycI]);if(localOn())localApply()}if(!att&&WC.on)wcRide();
   if(!att)try{musTheo()}catch(e){}   /* Theo's own songs on his waves */   /* (THE LOCAL always in his faded olive) */   /* a different jersey every wave */
   {const w=att?'':(!SPOT.planet&&SPOT.id!==1&&SPOT.id!==23&&SPOT.id!==2&&SPOT.id!==8&&SPOT.id!==10&&SPOT.id!==13&&Math.random()<(SPOT.id===22?0.45:0.28)?(Math.random()<0.5?'shower':'rain'):'');if(w!==(game.wx||'')){game.wx=w;setTOD(game.tod||0,false)}}   /* now and then a ride comes with rain, sometimes a sun shower with a rainbow */
-  try{window.__qHold=false;if(!game.attract){setQuality(qNextWave());qFloor=QL.length-1}   /* every wave starts at its own level, set before it is seen; the menu screen behind it is drawn at whatever this machine holds (it used to be forced to the top level, which even a fast laptop could not keep up with) */}catch(e){}if(!att)try{qCalStart()}catch(e){}if(!att)try{const rt0=renderer.getRenderTarget();renderer.setRenderTarget(composer.readBuffer);renderer.compile(scene,camera);renderer.setRenderTarget(rt0)}catch(e){}   /* 2026-11-17 built for the off-screen picture the game really draws into: built for the screen (as it was) they were a different set, and the real ones were still being made the first time each thing showed up in the ride */   /* every shader the wave will use is built now, under the cut between waves, not in its first seconds */   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
+  try{window.__qHold=false;if(!game.attract){setQuality(qNextWave());qFloor=QL.length-1}   /* every wave starts at its own level, set before it is seen; the menu screen behind it is drawn at whatever this machine holds (it used to be forced to the top level, which even a fast laptop could not keep up with) */}catch(e){}if(!att)try{qCalStart()}catch(e){}if(!att)try{const rt0=renderer.getRenderTarget();renderer.setRenderTarget(composer.readBuffer);renderer.compile(scene,camera);renderer.setRenderTarget(rt0);for(const q of renderer.info.programs)if(q.getUniforms)q.getUniforms()}catch(e){}   /* q1125 freeze: and linked now, at the cut, not on first draw in the ride */   /* 2026-11-17 built for the off-screen picture the game really draws into: built for the screen (as it was) they were a different set, and the real ones were still being made the first time each thing showed up in the ride */   /* every shader the wave will use is built now, under the cut between waves, not in its first seconds */   /* the start screen renders sharp; the game goes back to the automatic quality */document.body.classList.toggle('attract',game.attract);sf.rh=null;sf.rhLock=false;sf.rhHold=0;game.rhK=0;
   game.state='ride';game.waveAge=0;camInit=false;lastShot='';camShotT=9;camBlend=0;if(!att){setCam(1);game.camPicked=false}   /* 2026-11-20 every wave starts on the SIDE camera, whichever one was picked last */   /* 2026-11-19 QA: every wave starts with its own opening shot, cut clean (the camera used to glide in from where the last replay left it, the surfer off the frame for the first half second) */
   game.jsN=0;game.jsLeft=0;game.jsEndAt=-99;game.jsDue=null;game.tubeOut=undefined;endSignPlace();game.pts=0;game.combo=0;game.comboT=-99;game.list=[];game.photos=[];game.Hbase=1;game.inTube=false;game.paused=false;game.lipHits=[];game.lipQ=[];game.lipHold=1;game.wo=null;game.woNext=0;game.fin='';game.finale=0;game.closeFate=null;game.exPlan=null;game.passAt=-1;sf.hideT=0;sf.softBroke=0;if(!att&&game.softNew&&BOARD.id==='soft'){game.softNew=0;setBoard('soft');setTimeout(()=>{try{toast('NEW SOFTBOARD')}catch(e){}},1200)}   /* a fresh board, a new colour */
   game.xOff=rnd(1500);game.endKind='';game.slowT=0;game.replay=null;game.hl=false;game.showCard=null;game.waveId=(game.waveId||0)+1;game.rec=[];game.marks=[];jet.on=false;jet.n=0;jet.next=0.6;
@@ -9806,8 +9920,8 @@ function g2HoldA(G,t,sc){return _h3.copy(G.c).addScaledVector(G.W,lerp(0.42,0.30
 function g2HoldQ(G,t){_h7.copy(G.L);_h8.copy(G.W).multiplyScalar(-0.55).addScaledVector(UPV,0.84).normalize();_h9.crossVectors(_h7,_h8).normalize();_h8.crossVectors(_h9,_h7);_hm.makeBasis(_h7,_h8,_h9);return _hqH.setFromRotationMatrix(_hm)}
 /* perf 2026-11-20: the funny endings' props (jet ski, boat, net, the snapped board's halves with their clipping planes, the gull, the drone...) are built and their
    shaders compiled and linked under the first LOADING card, not the first time an ending plays: that first frame froze 50-200 ms right at the punch line */
-function gagWarm(){if(gagWarm.d||!RIG.ready)return;gagWarm.d=1;try{gProps();g2Props();g3Props();g2Halves();const L=[];for(const O of [GG,GG2,GG3])for(const k in O){const v=O[k];for(const o of Array.isArray(v)?v:[v])if(o&&o.isObject3D)L.push(o)}if(typeof npcG!=='undefined'&&npcG)L.push(npcG);if(typeof npcBoard!=='undefined'&&npcBoard)L.push(npcBoard);   /* (and the other surfer the lifeguard and fisherman endings bring in) */
-  scene.traverse(o=>{if(o.isSkinnedMesh&&o.parent&&!L.includes(o.parent)){let q=o,mine=false;while(q){if(q===riderG){mine=true;break}q=q.parent}if(!mine)L.push(o.parent)}});   /* every other person already built (the crowd, the paddler, the drop-in): first seen mid-ride, each froze a frame 50-150 ms */
+function gagWarm(){if(gagWarm.d||!RIG.ready)return;gagWarm.d=1;try{gProps();g2Props();g3Props();g2Halves();const L=[];for(const O of [GG,GG2,GG3])for(const k in O){const v=O[k];for(const o of Array.isArray(v)?v:[v])if(o&&o.isObject3D)L.push(o)}if(typeof npcG!=='undefined'&&npcG)L.push(npcG);if(typeof npcBoard!=='undefined'&&npcBoard)L.push(npcBoard);try{if(!PAD.g&&RIG.mesh)padMake();if(PAD.g){L.push(PAD.g);if(PAD.board)L.push(PAD.board)}}catch(e){}try{if(supMake()&&SUP.g)L.push(SUP.g)}catch(e){}try{if(!reefG)reefMake();if(reefG)L.push(reefG.g)}catch(e){}   /* q1125 freeze: the paddler, the stand-up paddler and the reef walk-out were built and compiled the first time they showed up mid-ride */   /* (and the other surfer the lifeguard and fisherman endings bring in) */
+  try{rlScan()}catch(e){}scene.traverse(o=>{if(o.isSkinnedMesh&&o.parent&&!L.includes(o.parent)){let q=o,mine=false;while(q){if(q===riderG){mine=true;break}q=q.parent}if(!mine)L.push(o.parent)}});   /* every other person already built (the crowd, the paddler, the drop-in): first seen mid-ride, each froze a frame 50-150 ms */
   const n0=renderer.info.programs.length,sv=[],sm=[],add=[];for(const o of L){if(!o.parent){scene.add(o);add.push(o)}for(let q=o;q&&q!==scene;q=q.parent){sv.push([q,q.visible]);q.visible=true}o.traverse(q=>{if(q.isMesh||q.isPoints||q.isLine){sm.push([q,q.frustumCulled,q.visible]);q.frustumCulled=false;q.visible=true}})}
   composer.render();   /* one frame with every prop drawn (under the card): colour and shadow shaders compiled, textures uploaded */
   for(let i=sm.length-1;i>=0;i--){sm[i][0].frustumCulled=sm[i][1];sm[i][0].visible=sm[i][2]}for(let i=sv.length-1;i>=0;i--)sv[i][0].visible=sv[i][1];for(const o of add)scene.remove(o);
@@ -10073,7 +10187,7 @@ function reefMake(){const g=new THREE.IcosahedronGeometry(1,4),P=g.attributes.po
     x.globalCompositeOperation='destination-out';for(let i=0;i<70;i++){x.beginPath();x.arc(Math.random()*128,Math.random()*128,2+Math.random()*7,0,PI*2);x.fillStyle='rgba(0,0,0,'+(0.3+Math.random()*0.6)+')';x.fill()}const t=new THREE.CanvasTexture(cv);return t})();   /* froth: soft at both edges, full of holes */
   const rg=new THREE.PlaneGeometry(2.6,2.6);rg.rotateX(-Math.PI/2);const ring=new THREE.InstancedMesh(rg,new THREE.MeshBasicMaterial({map:ft,color:0xf2fbff,transparent:true,opacity:0.55,depthWrite:false}),N);ring.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   im.frustumCulled=false;ring.frustumCulled=false;   /* the heads move every reef run: no stale bounds */
-  const pt=new THREE.TextureLoader().load((typeof MAGB!=='undefined'&&MAGB.reef)||'models/reef.jpg');pt.wrapS=pt.wrapT=THREE.RepeatWrapping;pt.repeat.set(2.2,2.2);pt.colorSpace=THREE.SRGBColorSpace;pt.anisotropy=4;
+  const pt=new THREE.TextureLoader().load((typeof MAGB!=='undefined'&&MAGB.reef)||'models/reef.jpg',t=>{const up=()=>{if(game.state==='ride'&&!game.attract){setTimeout(up,1500);return}try{renderer.initTexture(t)}catch(e){}};up()});   /* q1125 freeze: uploaded between rides */pt.wrapS=pt.wrapT=THREE.RepeatWrapping;pt.repeat.set(2.2,2.2);pt.colorSpace=THREE.SRGBColorSpace;pt.anisotropy=4;
   const am=(()=>{const cv=document.createElement('canvas');cv.width=cv.height=256;const x=cv.getContext('2d'),gd=x.createRadialGradient(128,128,40,128,128,126);gd.addColorStop(0,'#fff');gd.addColorStop(0.62,'#ddd');gd.addColorStop(1,'#000');x.fillStyle=gd;x.fillRect(0,0,256,256);
     x.globalCompositeOperation='destination-out';for(let i=0;i<260;i++){const r=Math.hypot(Math.random()-0.5,Math.random()-0.5);const a=Math.random()*PI*2,d=60+Math.random()*70;x.beginPath();x.arc(128+Math.cos(a)*d,128+Math.sin(a)*d,3+Math.random()*12,0,PI*2);x.fillStyle='rgba(0,0,0,'+(0.25+Math.random()*0.6)+')';x.fill()}
     const t=new THREE.CanvasTexture(cv);return t})();   /* a ragged edge where the reef goes under */
@@ -10201,9 +10315,9 @@ function rgMake(o){const src=RIG.mesh,sk=src.skeleton,nb=sk.bones.length,g=new T
   if(o.kid){if(!RIG.kidMap)RIG.kidMap=kidTexBuild();if(RIG.kidMap)mat.map=RIG.kidMap}else if(RIG.baseMap)mat.map=RIG.baseMap;
   const m=new THREE.SkinnedMesh(src.geometry,mat);m.frustumCulled=false;m.castShadow=m.receiveShadow=false;g.add(m);m.bind(new THREE.Skeleton(bones,sk.boneInverses),new THREE.Matrix4());
   const C={g,bones,m,kid:!!o.kid,girl:!!o.girl,U,M:bones.map(()=>new THREE.Matrix4()),head:null,glb:false,hair:null};if(o.kid)rgKidHead(C);
-  if(o.girl){girlBones();const H=girlHair(),h=H.clone(true);h.matrixAutoUpdate=false;h.visible=true;h.traverse(q=>{if(q.isMesh){q.castShadow=false;q.frustumCulled=false}});C.g.add(h);C.hair=h}return C}
+  if(o.girl){girlBones();const H=girlHair(),h=H.clone(true);h.matrixAutoUpdate=false;h.visible=true;h.traverse(q=>{if(q.isMesh){q.castShadow=false;q.frustumCulled=false}});rStenOff(h,false);C.g.add(h);C.hair=h}return C}
 function rgKidHead(C){if(!RIG.kHead&&RIG.b.head){kidHeadBuild();RIG.kHead.visible=!!RIG.kid}if(!RIG.kHead)return;
-  if(C.head)C.g.remove(C.head);const h=RIG.kHead.clone(true);h.matrixAutoUpdate=false;h.visible=true;h.traverse(o=>{if(o.isMesh){o.castShadow=false;o.frustumCulled=false}});C.g.add(h);C.head=h;C.glb=!!RIG.kGLB}
+  if(C.head)C.g.remove(C.head);const h=RIG.kHead.clone(true);h.matrixAutoUpdate=false;h.visible=true;h.traverse(o=>{if(o.isMesh){o.castShadow=false;o.frustumCulled=false}});rStenOff(h,false);C.g.add(h);C.head=h;C.glb=!!RIG.kGLB}
 /* the bones the drive does not move (fingers, toes, the ends of the chains) ride along with the nearest one it does, as they sit on the rider */
 function rgFollow(){if(RGX.fol)return RGX.fol;const bs=RIG.mesh.skeleton.bones,dr=new Set(),b=RIG.b,add=r=>{if(r)dr.add(r.bone)};
   add(b.pel);RIG.spine.forEach(add);add(b.chest);add(b.neck);add(b.head);RIG.arm.forEach(a=>{add(a.cl);add(a.up);add(a.fo);a.tw.forEach(add);add(a.ha)});RIG.leg.forEach(l=>{add(l.th);add(l.sh);add(l.ft)});
@@ -10347,7 +10461,7 @@ function exTint(m,look,tag){const ob=m.onBeforeCompile,ck=m.customProgramCacheKe
       'float gr=cs.g/max(cs.r,1e-3),br=cs.b/max(cs.r,1e-3),skinK=step(br,gr+0.02)*step(gr,1.02)*smoothstep(0.40,0.50,gr)*smoothstep(0.03,0.09,gr-br)*smoothstep(0.08,0.16,ls)*(1.-smoothstep(0.80,0.92,gr)*smoothstep(0.75,0.88,br));',   /* skin (and tan, blond, brown hair): red over green over blue with green at least half the red and clearly above the blue (in display colours); a red shirt has far less green and turns; greys and whites are left to the white tint */
       'float cloth=(1.-skinK)*smoothstep(0.16,0.30,sat);float ca=cos(uXH*6.2832),sa=sin(uXH*6.2832);vec3 kk=vec3(0.57735);vec3 rc=c*ca+cross(kk,c)*sa+kk*dot(kk,c)*(1.-ca);rc=mix(vec3(dot(rc,vec3(0.3,0.59,0.11))),rc,uXS);',
       'c=mix(c,max(rc,0.),cloth);float wh=(1.-smoothstep(0.08,0.16,sat))*smoothstep(0.55,0.75,ls)*(1.-skinK);c=mix(c,c*uXW,wh);float dk=(1.-smoothstep(0.025,0.06,lum))*(1.-skinK);c=mix(c,uXD*clamp(lum*30.,0.35,1.6),dk*0.65);',
-      hv?'c=mix(c,uXR*clamp(lum*14.,0.35,1.7),smoothstep(0.02,0.22,vHr)*uXRa);':'','diffuseColor.rgb=c;}','#include <alphamap_fragment>'].join('\n'))};
+      hv?'#ifdef HAIR\nc=mix(c,uXR*clamp(lum*14.,0.35,1.7),smoothstep(0.02,0.22,vHr)*uXRa);\n#endif':'','diffuseColor.rgb=c;}','#include <alphamap_fragment>'].join('\n'))};
   m.customProgramCacheKey=()=>(ck?ck.call(m):'')+'|ex|'+tag;return m}
 function exMake(B,look){let C;if(!B){C=rgMake({lyc:null,skin:look.skin||null});C.m.castShadow=C.m.receiveShadow=false;exTint(C.m.material,look,'pro')}
   else{const sk=RIG.mesh.skeleton,nb=sk.bones.length,g=new THREE.Group(),bones=[];for(let i=0;i<nb;i++){const b=new THREE.Bone();b.matrixAutoUpdate=false;g.add(b);bones.push(b)}
@@ -10366,7 +10480,7 @@ function exSit(C,t,ph){const P=C.P,f=0.6+0.8*((ph*7.3)%1),lk=0.5*Math.sin(t*0.31
   rgFZ(P.hq,RGX.t2.set(Math.cos(lk),-0.06,Math.sin(lk)),RGX.t3.set(0,1,0));
   for(let i=0;i<2;i++){const sg=i?-1:1;P.ha[i].set(0.30,0.12,sg*0.21);rgFZ(P.hR[i],RGX.t2.set(1,-0.3,0),RGX.t3.set(0,1,0));P.ep[i].set(-0.4,-1,sg*0.7);P.an[i].set(0.16,-0.40,sg*0.30);rgFZ(P.fR[i],RGX.t2.set(0.25,1,0),RGX.t3.set(-1,0.25,0));P.kp[i].set(1,0.2,sg*0.45)}
   rgPose(C,P);exHead(C.bones,C.hk)}
-function exBoard(k){const bc=[0xf6f2e8,0x7fd3ff,0xffd94a,0xff6b3d,0xe8e0ff,0xf6f2e8,0x9be7c4,0xffb3c6],bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(bc[k%bc.length]);o.castShadow=o.receiveShadow=false;o.frustumCulled=false}});bd.visible=false;scene.add(bd);return bd}
+function exBoard(k){const bc=[0xf6f2e8,0x7fd3ff,0xffd94a,0xff6b3d,0xe8e0ff,0xf6f2e8,0x9be7c4,0xffb3c6],bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(bc[k%bc.length]);o.castShadow=o.receiveShadow=false;o.frustumCulled=false}});rStenOff(bd,true);bd.visible=false;scene.add(bd);return bd}
 function exNeeds(){return !EXB.built}
 /* in the LOADING veil: the extra bodies (unless on data saver), then the people built and their shaders compiled, so nothing is made during a wave */
 function exBuild(){if(EXB.built||!RIG.ready||!RIG.mesh||!RIG.b.head||!RIG.leg[1])return;EXB.built=true;
@@ -10386,7 +10500,7 @@ function cnpcMake(){if(CNPC.length||!RIG.ready||!RIG.mesh)return;const src=RIG.m
     mat.onBeforeCompile=sh=>{sh.uniforms.uTint=tint;sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;').replace('#include <map_fragment>','#include <map_fragment>\n  {float cool=max(diffuseColor.g,diffuseColor.b)-diffuseColor.r;float l=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(diffuseColor.rgb,uTint*(0.22+l*2.4),smoothstep(0.008,0.024,cool));}')};
     mat.customProgramCacheKey=()=>'crowd-tint';
     const m=new THREE.SkinnedMesh(src.geometry,mat);m.frustumCulled=false;g.add(m);m.bind(new THREE.Skeleton(bones,sk.boneInverses),new THREE.Matrix4());
-    const bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(bc[k]);o.castShadow=o.receiveShadow=false;o.frustumCulled=false}});bd.visible=false;scene.add(bd);
+    const bd=boardG.clone(true);bd.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.color&&o.material.type==='MeshPhysicalMaterial')o.material.color.set(bc[k]);o.castShadow=o.receiveShadow=false;o.frustumCulled=false}});rStenOff(bd,true);bd.visible=false;scene.add(bd);
     CNPC.push({g,bones,m,bd,busy:null})}}
 function cnpcPose(N,t){const u=((t*9.5)%(2*PI)+2*PI)%(2*PI)/(2*PI)*12,i0=Math.floor(u)%12,f=u-Math.floor(u),a=NPCP.pad[i0],b=NPCP.pad[(i0+1)%12];
   for(let i=0;i<N.bones.length;i++){const e=N.bones[i].matrix.elements,o=i*16;for(let k=0;k<16;k++)e[k]=a[o+k]+(b[o+k]-a[o+k])*f;N.bones[i].matrixWorldNeedsUpdate=true}}
@@ -11306,6 +11420,7 @@ function camClear(){if(game.state==='menu'||!sf.visible||!riderG.visible||!J.hea
   if(d>1e-3)_ccD.multiplyScalar(1/d);else{_ccD.subVectors(c,camL);const l=_ccD.length();if(l>1e-3)_ccD.multiplyScalar(1/l);else _ccD.set(0,0,1)}   /* right on his axis: back out the way the camera looks from */
   _ccD.multiplyScalar(R-d);c.add(_ccD);camP.add(_ccD);c.y=Math.max(c.y,0.45);return 1}
 function updateCamera(dt,time){
+  if(!Number.isFinite(camP.x+camP.y+camP.z+camL.x+camL.y+camL.z+camFov+camRP+camRL)){camInit=false;camFov=30}if(!Number.isFinite(camBlend))camBlend=0;if(!Number.isFinite(camGP))camGP=0;if(!Number.isFinite(_gfS.x+_gfS.y+_gfS.z))_gfS.set(1,0,0);if(!Number.isFinite(_guS.x+_guS.y+_guS.z))_guS.set(0,1,0);if(!Number.isFinite(camera.up.x+camera.up.y+camera.up.z))camera.up.set(0,1,0);   /* q1125 freeze: one NaN used to poison the damped camera for good */
   if(!camInit&&game.state!=='menu'&&(game.replay||game.attract||game.waveAge<0.2)){sf.camDir=clamp(Math.cos(sf.th)*1.4,-1,1);sf.tubeK=game.inTube&&sf.tube>0.35?1:0;sf.tubeKv=0;sf.airK=sf.mode==='air'?1:0;sf.airKv=0;_gT.set(sf.f.x,0,sf.f.z);if(_gT.lengthSq()>1e-4)_gfS.copy(_gT.normalize());_guS.copy(sf.up);camBlend=0}   /* 2026-11-19 QA: a cut in a replay (or a new wave) starts framed for where he is going now: camDir and the barrel/air springs are not in the recording, and carried over from the end of the ride the chase camera opened on the wrong side, the surfer off the frame for a moment */
   {_gT.set(sf.f.x,0,sf.f.z);if(_gT.lengthSq()>1e-4){_gT.normalize();_gfS.lerp(_gT,1-Math.exp(-3.2*dt)).normalize()}_guS.lerp(sf.up,1-Math.exp(-2.6*dt)).normalize()}   /* the board's heading and tilt, smoothed over ~0.3 s for the GoPro */
   let fov=30,rp=3.2,rl=7,kind='menu';const p=sf.mode==='kickout'&&sf.ko&&riderG.visible?riderG.position:sf.mode==='wipe'?VC.F:sf.mode==='kickout'?sf.wPos:sf.pos;
@@ -11373,14 +11488,14 @@ class MSScenePass extends RenderPass{constructor(sc,cam){super(sc,cam);this.ms=n
   setSize(w,h){this.ms.setSize(w,h)}
   render(r,wb,rb,dt,mask){if(!this.ms.samples){super.render(r,wb,rb,dt,mask);return}super.render(r,wb,this.ms,dt,mask);this.cp.render(r,rb,this.ms)}}
 const scenePass=new MSScenePass(scene,camera);composer.addPass(scenePass);
-const bokeh=new BokehPass(scene,camera,{focus:20,aperture:0.00045,maxblur:0.0045});bokeh.materialDepth.side=THREE.DoubleSide;composer.addPass(bokeh);
+const bokeh=new BokehPass(scene,camera,{focus:20,aperture:0.00045,maxblur:0.0045});bokeh.materialDepth.side=THREE.DoubleSide;composer.addPass(bokeh);{const br=bokeh.render.bind(bokeh);bokeh.render=(r,w,rb,d,m)=>{const sm=r.shadowMap,au=sm.autoUpdate;sm.autoUpdate=false;try{br(r,w,rb,d,m)}finally{sm.autoUpdate=au}}}   /* q1125 fps: the depth pass of the replay's depth of field reuses the shadow map the scene pass just drew (it used to draw it a second time) */
 const bloom=new UnrealBloomPass(new THREE.Vector2(4,4),0.36,0.75,0.9);composer.addPass(bloom);{const bs=bloom.setSize.bind(bloom);bloom.setSize=(w,h)=>bs(Math.round(w/2),Math.round(h/2))}   // a soft glow: half resolution looks the same and costs a quarter
 const drops=[];for(let i=0;i<6;i++)drops.push(new THREE.Vector4(0.5,0.5,0.05,0));
 function spawnDrops(n){for(const d of drops){if(n<=0)break;if(d.w<0.05){const ex=Math.random()<0.5?rnd(0.04,0.26):rnd(0.74,0.96);d.set(ex,rnd(0.2,0.85),rnd(0.015,0.04),1);n--}}}
 function updateDrops(dt){for(const d of drops)if(d.w>0){d.w=Math.max(0,d.w-dt*0.26);d.y-=dt*0.012*(1+d.z*30)}}
-const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0},uWarm:{value:0},uExp:{value:1},uTexel:{value:new THREE.Vector2(1e-3,1e-3)},uTrK:{value:0},uTrDir:{value:1},uNoise:{value:noiseTex},uWhite:{value:0}},
+const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uAspect:{value:1},uDrops:{value:drops},uSun:{value:new THREE.Vector2(0.5,0.5)},uSunK:{value:0},uFlip:{value:0},uFish:{value:0},uWarm:{value:0},uExp:{value:1},uTexel:{value:new THREE.Vector2(1e-3,1e-3)},uTrK:{value:0},uTrDir:{value:1},uNoise:{value:noiseTex},uWhite:{value:0},uClar:{value:0}},
   vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uWarm;uniform float uSunK;uniform float uFlip;uniform float uFish;uniform float uExp;uniform vec2 uTexel;uniform float uTrK;uniform float uTrDir;uniform sampler2D uNoise;uniform float uWhite;varying vec2 vUv;
+  fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform float uTime;uniform float uAspect;uniform vec4 uDrops[6];uniform vec2 uSun;uniform float uWarm;uniform float uSunK;uniform float uFlip;uniform float uFish;uniform float uExp;uniform vec2 uTexel;uniform float uTrK;uniform float uTrDir;uniform sampler2D uNoise;uniform float uWhite;uniform float uClar;varying vec2 vUv;
     vec3 tm(vec3 c){c*=uExp/0.6;c=mat3(0.59719,0.07600,0.02840,0.35458,0.90834,0.13383,0.04823,0.01566,0.83777)*c;   /* the output pass folded in here: ACES filmic tone mapping, then sRGB (one full-screen pass less) */
       c=(c*(c+0.0245786)-0.000090537)/(c*(0.983729*c+0.4329510)+0.238081);c=clamp(mat3(1.60475,-0.10208,-0.00327,-0.53108,1.10813,-0.07276,-0.07367,-0.00605,1.07602)*c,0.,1.);
       return mix(pow(c,vec3(0.41666))*1.055-0.055,c*12.92,vec3(lessThanEqual(c,vec3(0.0031308))));}
@@ -11392,7 +11507,10 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
       vec3 c0=texture2D(tDiffuse,uv).rgb;
       vec3 col=tm(vec3(texture2D(tDiffuse,uv+o).r,c0.g,texture2D(tDiffuse,uv-o).b));
       {vec2 tx=uTexel*1.3;vec3 nb=tm((texture2D(tDiffuse,uv+vec2(tx.x,0.)).rgb+texture2D(tDiffuse,uv-vec2(tx.x,0.)).rgb+texture2D(tDiffuse,uv+vec2(0.,tx.y)).rgb+texture2D(tDiffuse,uv-vec2(0.,tx.y)).rgb)*0.25);
-       col=max(col+clamp(tm(c0)-nb,-0.08,0.08)*0.6,0.);}   /* a light unsharp mask: crisp edges on the lip, the spray and the rider */
+       col=max(col+clamp(tm(c0)-nb,-0.08,0.08)*0.6,0.);}
+      if(uClar>0.001){vec2 tq=uTexel*3.5;const vec3 LW=vec3(0.2126,0.7152,0.0722);   /* q1125 gfx: clarity, a wider ring of local contrast on the luminance only (depth in the ripples, the foam and the rider), weighted to the midtones so nothing clips */
+       float la=dot(texture2D(tDiffuse,uv+tq).rgb+texture2D(tDiffuse,uv-tq).rgb+texture2D(tDiffuse,uv+vec2(tq.x,-tq.y)).rgb+texture2D(tDiffuse,uv+vec2(-tq.x,tq.y)).rgb,LW)*0.25,lc=dot(c0,LW);
+       float dl=clamp(log2((lc+0.02)/(la+0.02)),-1.,1.),lo=clamp(dot(col,vec3(0.3,0.59,0.11)),0.,1.);col=max(col*(1.+uClar*0.12*dl*4.*lo*(1.-lo)),0.);}   /* a light unsharp mask: crisp edges on the lip, the spray and the rider */
       float l=dot(col,vec3(0.3,0.59,0.11));
       col=mix(vec3(l),col,1.16);
       {float mx=max(col.r,max(col.g,col.b)),mn=min(col.r,min(col.g,col.b));col=max(mix(vec3(l),col,1.+0.36*(1.-clamp((mx-mn)/(mx+1e-3),0.,1.))*(1.-uWarm)),0.);}   /* vibrance: washed-out colours (hazy sky, pale water) gain the most, skin and strong colours stay put */
@@ -11406,6 +11524,10 @@ const gradePass=new ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},
         for(int i=1;i<5;i++){vec2 gp=uSun+ax*(0.42*float(i));float gd=length((fUv-gp)*vec2(uAspect,1.));float r=0.018+0.022*float(i);
           gh+=vec3(1.,0.72,0.42)*smoothstep(r,r*0.55,gd)*0.05/float(i)+vec3(0.85,0.75,0.6)*(smoothstep(r*1.7,r*1.4,gd)-smoothstep(r*1.4,r*1.1,gd))*0.025;}   // lens ghosts toward the centre
         col+=(vec3(1.,0.85,0.6)*fl+gh)*uSunK*see;}
+      {float mn=min(col.r,min(col.g,col.b)),mx=max(col.r,max(col.g,col.b));   /* q1125 gfx2 dehaze: the milky white mixed into coloured water and sky comes out (whites, foam, clouds and grey rain have little colour and stay put) */
+       float hz=mn*(1.-smoothstep(0.50,1.25,mx))*smoothstep(0.03,0.16,mx-mn);col=max(col-hz*0.32,0.);
+       float l1=dot(col,vec3(0.2126,0.7152,0.0722)),bl=clamp((col.b-col.r)*3.,0.,1.);col=max(mix(vec3(l1),col,1.+0.18*bl*(1.-0.5*uWarm)),0.);   /* deeper, richer sea blues and teals; skin, sand and sunsets untouched */
+       col=mix(col,col*col*(3.-2.*col),0.15);}   /* a crisper contrast curve */
       col=mix(col,col*col*(3.-2.*col),0.50);
       if(uWarm>0.001){float l2=dot(col,vec3(0.3,0.59,0.11));col=mix(vec3(l2),col,1.+0.32*uWarm);col+=(vec3(0.030,-0.006,0.034)*(1.-smoothstep(0.,0.45,l2))+vec3(0.050,0.018,-0.030)*smoothstep(0.45,1.,l2))*uWarm;col=max(col,0.);}   /* golden hour: richer colour, violet in the shadows, gold in the lights */
       col=col*1.01+0.003;
@@ -11438,7 +11560,7 @@ setBoard('pro',true);   /* every game starts on the PRO MODEL; the others are a 
 function resize(){const w=Math.max(innerWidth,16),h=Math.max(innerHeight,16);renderer.setSize(w,h,false);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);
   camera.aspect=w/h;camera.updateProjectionMatrix();gradePass.uniforms.uAspect.value=w/h;gradePass.uniforms.uTexel.value.set(1/(w*renderer.getPixelRatio()),1/(h*renderer.getPixelRatio()));
   document.documentElement.style.setProperty('--bar',clamp((h-w/2.2)/2,h*0.045,h*0.115).toFixed(0)+'px')}
-addEventListener('resize',resize);resize();
+{let rzT=0,rzL=0;addEventListener('resize',()=>{clearTimeout(rzT);const n=performance.now();if(n-rzL>120){rzL=n;resize()}else rzT=setTimeout(()=>{rzL=performance.now();resize()},120)})}resize();   /* q1125 freeze: a burst of resize events re-sizes every render target at most every 120 ms */
 // Steady frames matter more than sharp ones: resolution follows what the machine can hold at a locked cadence.
 // (the depth-of-field pass re-renders the scene and costs about as much as everything else together, so it is the first thing to go)
 // (4x multisampling is applied to every post pass, not only the scene, so it costs more than a resolution step and goes right after depth of field)
@@ -11466,7 +11588,7 @@ function qNextWave(){let L=qLevel;if(qRB>=3&&L<QMIN){L++;qLock=true;qLockT=40}qR
 function qSave(){if(qRideL!==qLevel){qRideL=qLevel;try{localStorage.setItem(QKEY,String(qLevel))}catch(e){}}}
 function setQuality(l){l=clamp(l,0,QMIN);const r0=renderer.getPixelRatio(),b0=bokeh.enabled,s0=scenePass.ms.samples;qLevel=l;const r=Math.min(QBASE,QL[l][0]),sm=QL[l][2];
   bokeh.enabled=QL[l][1];if(sm!==s0){scenePass.ms.samples=sm;scenePass.ms.dispose()}
-  bloom.enabled=l<=7&&!qLite;   /* the two lowest levels go without the glow as well */
+  bloom.enabled=l<=7&&!qLite;gradePass.uniforms.uClar.value=l<=5?1:0;   /* q1125 gfx: clarity only where the machine has room */   /* the two lowest levels go without the glow as well */
   if(Math.abs(r-r0)>1e-3){renderer.setPixelRatio(r);resize()}return r!==r0||b0!==bokeh.enabled||sm!==s0}
 /* a first visit starts from a guess by the name of the graphics chip (a strong one a step sharper, built-in laptop graphics two steps softer), so the first seconds are neither a slide show nor soft for nothing; from there the controller finds the real level */
 const QDEF=(()=>{let t=1;try{const gl=renderer.getContext(),e=gl.getExtension('WEBGL_debug_renderer_info'),r=String(e?gl.getParameter(e.UNMASKED_RENDERER_WEBGL):'');
@@ -11508,7 +11630,7 @@ function grab(){const c=renderer.domElement,zoom=1.2;let sw=c.width/zoom,sh=sw*9
 
 /* ───────────────────────── main loop ───────────────────────── */
 const elScore=$('score').querySelector('b'),elSpeed=$('speed').querySelector('b'),elCombo=$('combo'),elTube=$('tube'),elTubeB=elTube.querySelector('b'),elBar=$('wavebar').querySelector('i');
-let last=performance.now(),lastRaf=last,rafD=16.7,cadN=0,cadHold=4,cadBack=6,prPend=false,prOk=0,prN=0,clockT=0,hudAcc=0,hudPts=-1,hudSpd=-1,hudCmb=null,hudTube='',hudBar='';
+let tkErr=0,last=performance.now(),lastRaf=last,rafD=16.7,cadN=0,cadHold=4,cadBack=6,prPend=false,prOk=0,prN=0,clockT=0,hudAcc=0,hudPts=-1,hudSpd=-1,hudCmb=null,hudTube='',hudBar='';
 const REC_KEYS=['ffU','exV','exT','gag','standT','s','p','V','th','om','rail','steer','lam','lamG','mode','h','vh','spin','spinVis','airT','airDur','th0','pivot','introT','wT','burst','visible','splashed','tube','claimT','slip','fFoam','flip','layT','hit','fwT','pumpK','hideT','belly'],   /* (hideT, belly: an exit's hide-and-reappear and the belly ride, so the replay never starts with him hidden or lying down) */
       REC_LERP=['s','p','V','om','rail','steer','lam','lamG','h','vh','spin','spinVis','airT','wT','flip','fwT','pumpK'];
 function frame(nowMs){
@@ -11523,7 +11645,7 @@ function frame(nowMs){
   const dtRaw=Math.max(0,(nowMs-last)/1000),dtR=Math.min(dtRaw,0.05);last=nowMs;prPend=true;
   if(game.paused||window.__manual||innerWidth<16||qCalRun){return}
   autoQuality(dtRaw*1000,cadN*rafD,nMin);
-  tick(dtR,true)}
+  try{tick(dtR,true);tkErr=0}catch(e){if(++tkErr===1){console.error(e);try{window.dispatchEvent(new ErrorEvent('error',{message:'tick: '+((e&&e.message)||e)}))}catch(_){}}if(tkErr===30&&game.state==='ride'&&!game.attract)try{endRide('wipe')}catch(_){}}}   /* q1125 freeze: a frame that throws no longer freezes the picture for good: after half a second of them the ride ends (as a wipeout: no Full Ride bonus, XP boost or trophies for a crash) */
 const GSPD=0.885;   /* game speed: everything runs at about 88% of real time (2026-11-19 a touch slower again: smaller steps per frame read smoother) */
 /* the intro reel: while the player picks a stance, the demo behind the menu cuts every few seconds to another wave, another camera and other weather,
    dropped straight into the middle of a ride; each cut is washed across by a sheet of white water (washCut), never a dip to black */
@@ -11641,7 +11763,7 @@ function tick(dtR,draw){xrayTick(dtR);if(draw){trStep(dtR);reelTick(dtR)}
   buildWave(game.t);mk_('wave');
   waveGeo.attributes.position.needsUpdate=true;waveGeo.attributes.normal.needsUpdate=true;waveGeo.attributes.aInfo.needsUpdate=true;
   if(!rp&&game.state!=='menu'&&sf.visible){
-    const sub=Math.min(8,Math.max(2,Math.ceil(dt*MOVE*120-1e-6))),h=dt*MOVE/sub;   /* physics never steps more than 1/120 s: the same handling at 30 fps as at 144, no overshoot that rocks him side to side */
+    const sub=Math.min(8,Math.max(1,Math.ceil(dt*MOVE*120-1e-6)))   /* q1125 fps: at 100+ fps one step per frame, the same ~6.5 ms step as at 60 fps (it was forced to two half-size steps) */,h=dt*MOVE/sub;   /* physics never steps more than 1/120 s: the same handling at 30 fps as at 144, no overshoot that rocks him side to side */
     for(let i=0;i<sub;i++){
       if(sf.mode!=='ride'){sf.rh=null;sf.cv=null}{const on=sf.rh||game.waveAge<(sf.rhHold||0);game.rhK=damp(game.rhK||0,on?1:0,on?2.4:0.9,h)}   // the foam stays piled up until he has ridden clear of it
       if(sf.mode==='ride')stepRide(h);else if(sf.mode==='air')stepAir(h);else if(sf.mode==='float')stepFloat(h);
@@ -11660,21 +11782,21 @@ function tick(dtR,draw){xrayTick(dtR);if(draw){trStep(dtR);reelTick(dtR)}
     const a0=game.spPrev===undefined?game.secAge:game.spPrev,a1=game.secAge;if(a1>a0&&a1-a0<0.5)for(const C of SEC){if(C.k!==0||!C.d)continue;const T=C.t0+C.d+0.2;if(a0<T&&a1>=T&&C.c>2){const m=tubeMouth(C.c-C.h*0.7,C.c+C.h*0.8);if(m!==null)tubeSpit(m-0.8,Math.min(1,TUBE_SP*1.15))}}}   /* and a barrel section closing down blows out of its end, the big one */
   game.spPrev=game.secAge;
   sunL.target.position.copy(sf.pos);sunL.position.copy(sf.pos).addScaledVector(SUN,14);
-  emitWave(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
+  emitWave(dt);plumeTick(dt);boardSpray(dt);mk_('emit');updateJet(dt,clockT);updateParticles(dt);mk_('parts');updateWake(dt);mk_('wake');
   updateCamera(dt,clockT);if(WC.drone)wcCam(dtR);if(BOW.value>0&&game.bowT!==undefined&&(game.bowT-=dtR)<=0){game.bowT=undefined;camera.getWorldDirection(_bowF);const h=Math.hypot(_bowF.x,_bowF.z)||1,top=Math.asin(clamp(_bowF.y,-1,1))/DEG+camera.fov*0.40,E=clamp(42-top,12,41)*DEG;BOWC.value.set(_bowF.x/h*Math.cos(E),-Math.sin(E),_bowF.z/h*Math.cos(E))}   /* at each cut the rainbow is set where this shot sees sky, then it stays put in the world */
   /* the camera follows in game time: the same lag in slow motion and in replays, so he doesn't swing across the screen each time the speed changes */
   updateEnv();updateNeon(dtR,clockT);if(uluG.visible&&ULU.foamT){ULU.foamT.offset.x=(clockT*0.012)%1;ULU.foamT.offset.y=0.04*Math.sin(clockT*0.9)}if(!game.replay){faunaTick(dtR,clockT);crowdTick(dtR,clockT)}droneTick(dtR,clockT);wcSite.tick(dtR,clockT);try{expTick(dtR)}catch(e){}boteTick(dtR,clockT);try{plTick(dtR,clockT)}catch(e){}amzTick(dtR,clockT);softBreakTick(dtR);girlHairTick(dtR);if(campG.visible&&ULU.campFoam)ULU.campFoam.offset.x=(clockT*0.01)%1;mk_('camenv');
   waveMat.uniforms.uTime.value=game.t;waveMat.uniforms.uX.value=CP*game.t+game.xOff;riderCut();
-  {const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
+  rlFrame();{const U=waveMat.uniforms,P=sf.pos,k=(P.y+1.3)/Math.max(SUN.y,0.2),fx=sf.f.x,fz=sf.f.z,l=Math.hypot(fx,fz)||1;U.uShd.value.set(P.x-SUN.x*k,P.z-SUN.z*k,fx/l,fz/l);   // the rider's shadow on the bottom
    U.uShdK.value=sf.visible&&game.state!=='menu'&&(sf.mode==='ride'||sf.mode==='air'||sf.mode==='float')?(1-0.85*TOD.value)*clamp(1-sf.h*0.2,0.4,1):0}skyMat.uniforms.uTime.value=clockT;
   gradePass.uniforms.uTime.value=clockT;{const W=game.wo;let w=0;if(W){W.t+=dtR;const t=W.t-W.dl;w=t<0?0:t<W.up?sstep(0,W.up,t):t<W.up+W.hold?1:1-sstep(0,W.dn,t-W.up-W.hold);if(t>W.up+W.hold+W.dn)game.wo=null;w*=W.K}gradePass.uniforms.uWhite.value=w*sstep(0.25,0.8,camGP)}gradePass.uniforms.uExp.value=renderer.toneMappingExposure;{_sunP.copy(SUN).multiplyScalar(900).add(camera.position).project(camera);const on=_sunP.z<1&&Math.abs(_sunP.x)<1.15&&Math.abs(_sunP.y)<1.15;   // lens flare follows the sun on screen
     gradePass.uniforms.uSun.value.set(_sunP.x*0.5+0.5,_sunP.y*0.5+0.5);gradePass.uniforms.uWarm.value=DAWN.value;gradePass.uniforms.uSunK.value=on?(1-0.75*TOD.value)*(1-0.6*DAWN.value)*(1-DUSK.value)*(1-0.9*RAIN.value)*(1-sstep(0.85,1.15,Math.max(Math.abs(_sunP.x),Math.abs(_sunP.y)))):0}   /* a low sun flares soft and warm */bokeh.uniforms.focus.value=damp(bokeh.uniforms.focus.value,camFocus,8,dtR);bokeh.enabled=QL[qLevel][1]&&!!game.replay&&!game.attract;   /* depth of field only for the replay: live, nothing goes soft */partMat.uniforms.uRep.value=damp(partMat.uniforms.uRep.value,game.replay&&!game.attract?1:0,6,dtR);
   partMat.uniforms.uScale.value=renderer.domElement.height/(2*Math.tan(camera.fov*DEG/2));partMat.uniforms.uAsp.value=camera.aspect;
   hudAcc+=dtR;if(!draw)return;
   {const hv=mapUp(),rv=riderG.visible,bv=boardG.visible,wv=wakeMesh.visible,sv=shadowM.visible;if(hv){riderG.visible=boardG.visible=wakeMesh.visible=shadowM.visible=false}   /* 2026-11-19 behind the wave map only the wave breaking: no surfer, board, wake or shadow in the way */
-  composer.render();if(hv){riderG.visible=rv;boardG.visible=bv;wakeMesh.visible=wv;shadowM.visible=sv}}mk_('render');
+  partSync();waveMat.uniforms.uFace.value.x=bloom.enabled&&qLevel<=4?1:0;composer.render();   /* gfx2 face: the fine ripples and sun streaks go when the frame rate fallback switches the glow off (qLite), and on the two softest levels */if(hv){riderG.visible=rv;boardG.visible=bv;wakeMesh.visible=wv;shadowM.visible=sv}}mk_('render');
   if(sf.wantAirShot){sf.wantAirShot=false;sf.airShot=grab()}
-  if(game.shotReq){game.shotReq.delay-=dtR;if(game.shotReq.delay<=0&&!(gradePass.uniforms.uWhite.value>0.12&&(game.shotReq.wt=(game.shotReq.wt||0)+dtR)<2.0)){addPhoto(game.shotReq.name,game.shotReq.pts,grab());game.shotReq=null}}
+  if(game.shotReq){game.shotReq.delay-=dtR;if(game.shotReq.delay<=0&&!(gradePass.uniforms.uWhite.value>0.12&&(game.shotReq.wt=(game.shotReq.wt||0)+dtR)<2.0)){{const _sr=game.shotReq,_ph=game.photos;if(_ph.length<4||_sr.pts>_ph[_ph.length-1].pts)addPhoto(_sr.name,_sr.pts,grab())}game.shotReq=null}}
   updateAudio();
   if(hudAcc>0.08){hudAcc=0;document.body.classList.toggle('riding',game.state==='ride'&&!game.attract&&!game.replay);document.body.classList.toggle('gmShow',(game.state==='ride'||game.state==='end')&&!game.attract);tipTick();
     if(game.pts!==hudPts){hudPts=game.pts;elScore.textContent=game.pts.toLocaleString('en-US')}{const v=Math.round(sf.V*3.6*GSPD);if(v!==hudSpd){hudSpd=v;elSpeed.textContent=v}}   /* 2026-11-17 the page is only touched when a number really changed */
