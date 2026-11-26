@@ -82,6 +82,15 @@ document.addEventListener('DOMContentLoaded',()=>{started=true;all()});
 .ps-delta{font-weight:800;font-style:italic}
 .ps-delta.up{color:var(--mint)} .ps-delta.down{color:var(--bad)} .ps-delta.flat{color:var(--mute2);font-weight:600}
 .ps-k-s{font-size:12px;color:var(--mute2)}
+.ps-cpc{display:flex;align-items:flex-end;gap:3px;height:46px;margin-top:auto}
+.ps-cpc-c{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%;cursor:pointer}
+.ps-cpc-v{font:700 9px/1 var(--f);color:var(--mute2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ps-cpc-b{width:100%;max-width:16px;min-height:2px;border-radius:3px 3px 1px 1px;background:rgba(255,255,255,.2)}
+.ps-cpc-d{font:700 9px/1 var(--f);color:var(--mute);font-variant-numeric:tabular-nums}
+.ps-cpc-c.sel .ps-cpc-b{background:var(--grad)}
+.ps-cpc-c.sel .ps-cpc-v,.ps-cpc-c.sel .ps-cpc-d{color:var(--ink)}
+.ps-cpc-c:hover .ps-cpc-b{filter:brightness(1.25)}
+.ps-cpc-vazio{font-size:12px;color:var(--mute2);align-self:center}
 
 .ps-card{position:relative;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:0 24px 54px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.07);padding:18px clamp(14px,2vw,22px) 20px;min-width:0}
 .ps-ch{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
@@ -261,6 +270,13 @@ document.addEventListener('DOMContentLoaded',()=>{started=true;all()});
       <b class="ps-k-n" data-draw="k-custo" data-source="ads_tot" data-field="custo" data-row="0">—</b>
       <span class="ps-k-d"><span data-draw="k-cliques" data-source="ads_tot" data-field="cliques" data-row="0">—</span> cliques</span>
       <span class="ps-k-s">teto de <span data-draw="k-orc" data-source="ads_campanha" data-field="orcamento_dia" data-row="0">—</span> por dia</span>
+    </div>
+    <div class="ps-k" id="k-cpc">
+      <span class="ps-k-l">CPC médio</span>
+      <b class="ps-k-n" data-draw="k-cpc" data-source="cpc_var" data-field="cpc" data-row="0">—</b>
+      <span class="ps-k-d"><span class="ps-delta" data-draw="d-cpc" data-source="cpc_var" data-field="var" data-row="0" title="Para o CPC, subir é pior">—</span><span data-draw="k-comp">—</span></span>
+      <span class="ps-k-s">custo por clique, dia a dia</span>
+      <div class="ps-cpc" data-draw="cpc-dias" data-source="cpc_dia" role="img" aria-label="CPC de cada dia"></div>
     </div>
   </section>
 
@@ -885,6 +901,39 @@ dash.calc('organico_serie', {
   }
 });
 
+dash.calc('cpc_dia', {
+  inputs: ['ads_diario', 'periodo'],
+  title: 'CPC por dia',
+  description: 'Custo por clique do Google Ads em cada dia com cliques (custo ÷ cliques). Com um dia só no filtro, mostra os 7 dias até ele; sel = 1 nos dias do filtro.',
+  fn: (ads, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0];
+    const de = p.dias === 1 ? new Date(Date.parse(p.ate + 'T12:00:00Z') - 6 * 864e5).toISOString().slice(0, 10) : p.de;
+    return ads.filter((r) => r.dia >= de && r.dia <= p.ate && Number(r.cliques) > 0).map((r) => ({
+      dia: r.dia, cpc: Math.round(Number(r.custo) / Number(r.cliques) * 100) / 100,
+      custo: Number(r.custo), cliques: Number(r.cliques), sel: r.dia >= p.de ? 1 : 0,
+    }));
+  }
+});
+
+dash.calc('cpc_var', {
+  inputs: ['ads_diario', 'periodo'],
+  title: 'CPC médio x período anterior',
+  description: 'CPC médio (custo ÷ cliques) no período e no período anterior de mesmo tamanho; var = variação em %. Para o CPC, subir é pior.',
+  fn: (ads, periodo) => {
+    if (!periodo.length) return [];
+    const p = periodo[0];
+    const cpc = (de, ate) => {
+      const d = ads.filter((r) => r.dia >= de && r.dia <= ate);
+      const c = d.reduce((a, r) => a + Number(r.cliques), 0);
+      return c ? d.reduce((a, r) => a + Number(r.custo), 0) / c : null;
+    };
+    const a = cpc(p.de, p.ate), b = cpc(p.ant_de, p.ant_ate);
+    const r2 = (v) => v == null ? null : Math.round(v * 100) / 100;
+    return [{cpc: r2(a), cpc_ant: r2(b), var: a != null && b ? Math.round((a - b) / b * 100) : null}];
+  }
+});
+
 dash.calc('ads_tot', {
   inputs: ['ads_diario', 'periodo', 'eventos'],
   title: 'Google Ads no período',
@@ -952,6 +1001,33 @@ texto('k-taxa', 'kpis', (r) => PS.n(r.taxa_jogou));
 texto('k-custo', 'ads_tot', (r) => PS.brl(r.custo));
 texto('k-cliques', 'ads_tot', (r) => PS.n(r.cliques));
 texto('k-orc', 'ads_campanha', (r) => PS.brl(r.orcamento_dia));
+texto('k-cpc', 'cpc_var', (r) => PS.brl(r.cpc));
+dash.draw('d-cpc', (el) => {
+  const r = PS.row('cpc_var');
+  el.classList.remove('up', 'down', 'flat');
+  if (!r || r.cpc == null) { el.textContent = 'sem cliques'; el.classList.add('flat'); return; }
+  if (r.var == null) { el.textContent = 'sem comparação'; el.classList.add('flat'); return; }
+  el.textContent = (r.var > 0 ? '▲ +' : r.var < 0 ? '▼ ' : '= ') + PS.nf.format(r.var) + '%';
+  el.classList.add(r.var > 0 ? 'down' : r.var < 0 ? 'up' : 'flat');
+});
+dash.draw('cpc-dias', (el) => {
+  const d = dash.data('cpc_dia');
+  el.replaceChildren();
+  const rows = d.status === 'ok' ? d.data.slice(-10) : [];
+  if (!rows.length) { el.append(PS.el('span', 'ps-cpc-vazio', 'Sem cliques nestes dias.')); return; }
+  const max = Math.max(...rows.map((r) => r.cpc)) || 1;
+  for (const r of rows) {
+    const c = PS.el('div', 'ps-cpc-c' + (r.sel ? ' sel' : ''));
+    c.title = PS.dm(r.dia) + ': ' + PS.brl(r.cpc) + ' por clique (' + PS.n(r.cliques) + ' cliques, ' + PS.brl(r.custo) + ')';
+    const v = PS.el('span', 'ps-cpc-v', r.cpc.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+    v.dataset.source = 'cpc_dia'; v.dataset.field = 'cpc'; v.dataset.where = 'dia=' + r.dia;
+    const b = PS.el('span', 'ps-cpc-b'); b.style.height = Math.max(2, r.cpc / max * 20) + 'px';
+    const dd = PS.el('span', 'ps-cpc-d', r.dia.slice(8));
+    c.append(v, b, dd);
+    c.addEventListener('click', () => dash.setParams({de: r.dia, ate: r.dia}));
+    el.append(c);
+  }
+});
 
 texto('a-imp', 'ads_tot', (r) => PS.n(r.impressoes));
 texto('a-cli', 'ads_tot', (r) => PS.n(r.cliques));
