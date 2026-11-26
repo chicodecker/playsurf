@@ -626,7 +626,7 @@ d.prerendering?d.addEventListener('prerenderingchange',go,{once:true}):go()})();
   '#lbRow .lbOk{font:800 11px/1 var(--ps-f,Saira,sans-serif);font-style:italic;letter-spacing:.18em;color:#9ff5dc;opacity:0;transition:opacity .2s}#lbRow .lbOk.on{opacity:1}'+
   '#lbRow small{flex-basis:100%;font:600 10.5px/1.4 var(--ps-f,Saira,sans-serif);letter-spacing:.12em;opacity:.6}#lbRow small a{color:inherit}'+
   '@media (max-height:540px){#lbRow{margin-top:8px}#lbRow small{display:none}#lbName{padding:6px 10px;font-size:13px}}';
- function row(){var E=document.getElementById('end');if(!E||E.querySelector('#lbRow')||!E.querySelector('.heat')||!document.querySelector('script[data-goatcounter]'))return;var btns=E.querySelector('.endBtns');if(!btns)return;
+ function row(){if(window.psRank)return;var E=document.getElementById('end');if(!E||E.querySelector('#lbRow')||!E.querySelector('.heat')||!document.querySelector('script[data-goatcounter]'))return;var btns=E.querySelector('.endBtns');if(!btns)return;
   if(!document.getElementById('lbCss')){var c=document.createElement('style');c.id='lbCss';c.textContent=css;document.head.appendChild(c)}
   var d=document.createElement('div');d.id='lbRow';
   var l=document.createElement('label');l.htmlFor='lbName';l.textContent='RANKING NICKNAME';
@@ -640,6 +640,66 @@ d.prerendering?d.addEventListener('prerenderingchange',go,{once:true}):go()})();
   n.addEventListener('click',function(e){e.stopPropagation()});n.addEventListener('pointerdown',function(e){e.stopPropagation()});
   d.appendChild(l);d.appendChild(n);d.appendChild(ok);d.appendChild(sm);E.insertBefore(d,btns)}
  function watch(){var E=document.getElementById('end');if(!E){setTimeout(watch,500);return}new MutationObserver(row).observe(E,{childList:true});row()}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watch);else watch();
+})();</script>
+<script>/* 2026-11-25 (the user) PLAYSURF RANKING: shown when every wave ends; to enter it the player types NAME and picks COUNTRY (optional).
+   Ranking points = judges' score x 1000 x wave difficulty + 250 for a full ride; each player once (his best); TODAY / THIS WEEK / ALL TIME.
+   A new best goes out as a GoatCounter event rk-CODE-POINTS (title NAME|CC|WAVE|SCORE); /ranking.json is rebuilt from them every hour. Described in /privacy. */
+(function(){
+ if(!document.querySelector('script[data-goatcounter]'))return;
+ var KN='playsurf_nick',KC='playsurf_cc',KO='playsurf_rank',KB='playsurf_rkbest',DIF={2:1.25,3:1.35,4:1.1,5:1.05,6:1.15},q=[],tries=0,last=null,data=null,tab='all',dl=0;
+ var CC='AF AL DZ AD AO AG AR AM AU AT AZ BS BH BD BB BY BE BZ BJ BT BO BA BW BR BN BG BF BI CV KH CM CA CF TD CL CN CO KM CG CD CR CI HR CU CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FJ FI FR GA GM GE DE GH GR GD GT GN GW GY HT HN HK HU IS IN ID IR IQ IE IL IT JM JP JO KZ KE KI KW KG LA LV LB LS LR LY LI LT LU MO MG MW MY MV ML MT MH MR MU MX FM MD MC MN ME MA MZ MM NA NR NP NL NZ NI NE NG KP MK NO OM PK PW PS PA PG PY PE PH PL PT PR QA RO RU RW KN LC VC WS SM ST SA SN RS SC SL SG SK SI SB SO ZA KR SS ES LK SD SR SE CH SY TW TJ TZ TH TL TG TO TT TN TR TM TV UG UA AE GB US UY UZ VU VA VE VN YE ZM ZW'.split(' ');
+ var dn=null;try{dn=new Intl.DisplayNames(['en'],{type:'region'})}catch(e){}
+ function cn(c){try{return dn?dn.of(c):c}catch(e){return c}}
+ function flag(c){return /^[A-Z]{2}$/.test(c||'')?String.fromCodePoint(127397+c.charCodeAt(0),127397+c.charCodeAt(1)):''}
+ function clean(v){return String(v||'').replace(/[\u0000-\u001f\u007f<>"'`\\|]/g,'').replace(/\s+/g,' ').trim().slice(0,16)}
+ function esc(v){return String(v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+ function get(k){try{return localStorage.getItem(k)||''}catch(e){return ''}}
+ function put(k,v){try{if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){}}
+ function guessCC(){var l=(navigator.languages&&navigator.languages[0])||navigator.language||'',m=/[-_]([A-Za-z]{2})\b/.exec(l);var c=m?m[1].toUpperCase():'';return CC.indexOf(c)>=0?c:''}
+ function id(){try{return window.psPlayerId?psPlayerId():''}catch(e){return ''}}
+ function day(t){var d=new Date(t);return d.getUTCFullYear()+'-'+(d.getUTCMonth()+1)+'-'+d.getUTCDate()}
+ function week(t){var d=new Date(t);d.setUTCHours(0,0,0,0);d.setUTCDate(d.getUTCDate()+3-(d.getUTCDay()+6)%7);var y=new Date(Date.UTC(d.getUTCFullYear(),0,4));return d.getUTCFullYear()+'w'+(1+Math.round(((d-y)/864e5-3+(y.getUTCDay()+6)%7)/7))}
+ function bests(){var b={};try{b=JSON.parse(get(KB)||'{}')||{}}catch(e){}var t=Date.now();if(b.d!==day(t)){b.d=day(t);b.today=null}if(b.w!==week(t)){b.w=week(t);b.week=null}return b}
+ function on(){return get(KO)==='1'&&!!clean(get(KN))&&/^[A-Z]{2}$/.test(get(KC))}
+ function send(){var g=window.goatcounter;while(q.length&&g&&g.count){var e=q.shift();g.count({path:e.p,title:e.t,event:true})}if(q.length&&++tries<60)setTimeout(send,1000)}
+ function push(e){if(!id())return;q.push({p:e.p.replace('CODE',id()),t:e.t});tries=0;send()}
+ function title(r){return clean(get(KN))+'|'+get(KC)+'|'+r.name+'|'+r.fin.toFixed(2)}
+ function shout(r){push({p:'rk-CODE-'+r.pts,t:title(r)})}
+ window.psRank=function(o){var pts=Math.round(o.fin*1000*(DIF[o.spot]||1)+(o.kind==='done'?250:0)),r={pts:pts,fin:o.fin,name:String(o.name||''),t:Date.now()},b=bests(),nb=0;
+  ['today','week','all'].forEach(function(k){if(!b[k]||pts>b[k].pts){b[k]=r;nb=1}});put(KB,JSON.stringify(b));last=r;if(nb&&on())shout(r);load()};
+ function load(){var h=Math.floor(Date.now()/36e5);if(data&&dl===h)return paint();dl=h;fetch('/ranking.json?h='+h,{cache:'no-store'}).then(function(x){return x.ok?x.json():null}).then(function(j){data=j||{};paint()}).catch(function(){data={};paint()})}
+ function list(){var L=((data&&data[tab])||[]).filter(function(e){return e&&e.c!==id()}).slice(),b=bests()[tab];if(on()&&b)L.push({n:clean(get(KN)),cc:get(KC),p:b.pts,w:b.name,me:1});L.sort(function(a,b){return b.p-a.p});return L}
+ var css='#rkBox{margin:14px 0 0 4px;max-width:min(520px,90vw);padding:12px 14px 12px;border-radius:16px;background:rgba(4,10,26,.62);border:1px solid rgba(255,255,255,.14);pointer-events:auto;font-family:var(--ps-f,Saira,sans-serif)}'+
+  '#rkBox .rkH{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px}#rkBox .rkH b{font:900 15px/1 var(--ps-f);font-style:italic;letter-spacing:.14em;background:var(--ps-grad);-webkit-background-clip:text;background-clip:text;color:transparent}'+
+  '#rkBox .rkT{display:flex;gap:4px;margin-left:auto}#rkBox .rkT button{padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;font:800 9.5px/1 var(--ps-f);font-style:italic;letter-spacing:.14em;cursor:pointer}#rkBox .rkT button.on{background:#fff;color:#0b1520}'+
+  '#rkBox ol{list-style:none;margin:0;padding:0;display:grid;gap:3px}#rkBox li{display:grid;grid-template-columns:28px 22px minmax(0,1fr) auto;align-items:center;gap:6px;padding:4px 8px;border-radius:8px;font:800 12.5px/1.2 var(--ps-f);font-style:italic;letter-spacing:.06em}'+
+  '#rkBox li:nth-child(odd){background:rgba(255,255,255,.04)}#rkBox li.me{background:linear-gradient(90deg,rgba(247,90,120,.35),rgba(255,171,61,.22));outline:1px solid rgba(255,255,255,.35)}#rkBox li i{font-style:normal;opacity:.65}#rkBox li span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#rkBox li em{font-style:normal;color:#ffd27a}'+
+  '#rkBox li.gap{display:block;text-align:center;padding:0;opacity:.5}#rkBox .rkF{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}#rkBox label{font:800 10px/1 var(--ps-f);font-style:italic;letter-spacing:.2em;opacity:.85}'+
+  '#rkBox input,#rkBox select{padding:7px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.28);background:rgba(2,6,16,.7);color:#fff;font:900 13px/1.1 var(--ps-f);font-style:italic;letter-spacing:.05em;outline:none;pointer-events:auto;user-select:text;-webkit-user-select:text}#rkBox input{width:min(170px,40vw);text-transform:uppercase}#rkBox select{max-width:min(190px,44vw)}'+
+  '#rkBox input:focus,#rkBox select:focus{border-color:#ff7a8e;box-shadow:0 0 0 3px rgba(247,90,120,.25)}#rkBox .rkGo{padding:8px 14px;border-radius:10px;border:0;background:var(--ps-grad);color:#fff;font:900 11px/1 var(--ps-f);font-style:italic;letter-spacing:.14em;cursor:pointer}#rkBox .rkGo:disabled{opacity:.45;cursor:default}'+
+  '#rkBox small{display:block;margin-top:8px;font:600 10px/1.45 var(--ps-f);letter-spacing:.1em;opacity:.6}#rkBox small a,#rkBox .rkL{color:inherit;background:none;border:0;padding:0;font:inherit;letter-spacing:inherit;text-decoration:underline;cursor:pointer}'+
+  '#rkBox .rkMe{font:800 11px/1.4 var(--ps-f);font-style:italic;letter-spacing:.12em;margin-top:8px;opacity:.85}'+
+  '@media (max-height:980px){#rkBox{margin-top:10px;padding:9px 12px}#rkBox li{padding:2px 8px;font-size:11.5px}#rkBox ol li:nth-child(n+6):not(.me):not(.gap){display:none}#rkBox small.rkX{display:none}#rkBox .rkF{margin-top:7px}#rkBox input,#rkBox select{padding:5px 8px;font-size:12px}#rkBox .rkGo{padding:6px 11px}}'+
+  '@media (max-height:640px){#rkBox{margin-top:6px;padding:7px 10px}#rkBox .rkH{margin-bottom:4px}#rkBox ol li:nth-child(n+4):not(.me):not(.gap){display:none}#rkBox small{display:none}}';
+ function paint(){var E=document.getElementById('end');if(!E||E.classList.contains('off'))return;var bx=document.getElementById('rkBox');if(!bx){var btns=E.querySelector('.endBtns');if(!btns||!E.querySelector('.heat'))return;
+   if(!document.getElementById('rkCss')){var c=document.createElement('style');c.id='rkCss';c.textContent=css;document.head.appendChild(c)}bx=document.createElement('div');bx.id='rkBox';E.insertBefore(bx,btns);
+   ['click','pointerdown','keydown','keyup'].forEach(function(t){bx.addEventListener(t,function(e){e.stopPropagation()})})}
+  var L=list(),mi=-1;L.forEach(function(e,i){if(e.me)mi=i});var rows=[];L.slice(0,10).forEach(function(e,i){rows.push([i,e])});if(mi>=10){rows.push(null);rows.push([mi,L[mi]])}
+  var h='<div class="rkH"><b>PLAYSURF RANKING</b><div class="rkT">'+[['today','TODAY'],['week','THIS WEEK'],['all','ALL TIME']].map(function(t){return '<button type="button" data-t="'+t[0]+'" class="'+(tab===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div></div>';
+  h+=rows.length?'<ol>'+rows.map(function(r){if(!r)return '<li class="gap">···</li>';var e=r[1];return '<li class="'+(e.me?'me':'')+'"><i>'+(r[0]+1)+'</i><span>'+flag(e.cc)+'</span><span>'+esc(e.n||'?')+(e.me?' · YOU':'')+'</span><em>'+Number(e.p).toLocaleString('en-US')+'</em></li>'}).join('')+'</ol>':'<div class="rkMe">NOBODY YET · BE THE FIRST</div>';
+  if(on()){var b=bests()[tab];h+='<div class="rkMe">'+(b?'YOUR BEST '+({today:'TODAY',week:'THIS WEEK',all:'EVER'})[tab]+': '+b.pts.toLocaleString('en-US')+' PTS · '+esc(b.name.toUpperCase()):'')+' · <button type="button" class="rkL" id="rkEdit">CHANGE NAME / COUNTRY</button> · <button type="button" class="rkL" id="rkOut">LEAVE THE RANKING</button></div>'}
+  else{var cc=get(KC)||guessCC(),nm=clean(get(KN));h+='<div class="rkF"><label for="rkN">NAME</label><input id="rkN" maxlength="16" autocomplete="off" spellcheck="false" placeholder="NICKNAME" value="'+esc(nm)+'"><label for="rkC">COUNTRY</label><select id="rkC"><option value="">—</option>'+CC.map(function(c){return [c,cn(c)]}).sort(function(a,b){return a[1].localeCompare(b[1])}).map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cc?' selected':'')+'>'+flag(o[0])+' '+esc(o[1])+'</option>'}).join('')+'</select><button type="button" class="rkGo" id="rkJoin">JOIN THE RANKING</button></div>'+
+   '<small>OPTIONAL · YOUR NAME, COUNTRY AND BEST SCORE SHOW UP PUBLICLY · USE A NICKNAME, NOT YOUR FULL NAME · <a href="/privacy#ranking" target="_blank" rel="noopener">PRIVACY</a></small>'}
+  h+='<small class="rkX">POINTS = JUDGES’ SCORE × 1000 × WAVE DIFFICULTY + 250 FOR A FULL RIDE · YOUR BEST WAVE COUNTS · UPDATED EVERY HOUR</small>';
+  bx.innerHTML=h;
+  bx.querySelectorAll('.rkT button').forEach(function(x){x.onclick=function(){tab=x.dataset.t;paint()}});
+  var j=document.getElementById('rkJoin');if(j){var n=document.getElementById('rkN'),c=document.getElementById('rkC'),chk=function(){j.disabled=!(clean(n.value)&&c.value)};chk();n.oninput=chk;c.onchange=chk;
+   n.onkeydown=function(e){if(e.key==='Enter'&&!j.disabled){e.preventDefault();j.click()}};
+   j.onclick=function(){var v=clean(n.value);if(!v||!c.value)return;put(KN,v);put(KC,c.value);put(KO,'1');push({p:'rkj-CODE-'+Math.floor(Date.now()/6e4),t:clean(v)+'|'+c.value});var b=bests();if(b.all)shout(b.all);paint()}}
+  var ed=document.getElementById('rkEdit');if(ed)ed.onclick=function(){put(KO,'');paint()};
+  var out=document.getElementById('rkOut');if(out)out.onclick=function(){put(KO,'');push({p:'rkx-CODE-'+Math.floor(Date.now()/6e4),t:'left'});paint()}}
+ function watch(){var E=document.getElementById('end');if(!E){setTimeout(watch,500);return}new MutationObserver(function(){if(!document.getElementById('rkBox'))paint()}).observe(E,{childList:true});}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watch);else watch();
 })();</script>
 <script>/* 2026-11-24 waves played: onda-<name> once per wave per session, title = the wave's name */(function(){var K='playsurf_waves',seen={};try{seen=JSON.parse(sessionStorage.getItem(K)||'{}')}catch(e){}var q=[],tries=0;function send(){var g=window.goatcounter;while(q.length&&g&&g.count){var w=q.shift();g.count({path:'onda-'+w.s,title:w.n,event:true})}if(q.length&&++tries<60)setTimeout(send,1000)}window.psWave=function(S){if(!S||!S.name)return;var n=String(S.name),sl=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');if(!sl||seen[sl])return;seen[sl]=1;try{sessionStorage.setItem(K,JSON.stringify(seen))}catch(e){}q.push({s:sl,n:n});send()}})();</script>
@@ -10839,7 +10899,7 @@ function endRide(kind){
   const JL=wcJudge(),nota=Math.min(9.9,10*Math.pow(1-Math.exp(-eff/(JL.k*1.2)),JL.e));   /* 2026-11-23 the general difficulty +20%: 1.2x the ride for the same score */   /* (the tour's level: EASY gentler, ADVANCED stricter; everywhere else as it was) */   /* strict judges: a good wave is a 5, a great one an 8, a 9.5 takes something special */
   const js=[];for(let i=0;i<5;i++)js.push(clamp(nota+rnd(-0.4,0.4)*(nota>0.3?1:0),0,10));
   const srt=[...js].sort((a,b)=>a-b),fin=(srt[1]+srt[2]+srt[3])/3;
-  const lo=js.indexOf(srt[0]),hi=js.lastIndexOf(srt[4]);judgeCard(js,lo,hi,fin);if(PARTY.on)ptRecord(fin);if(WC.on)wcRecord(fin);   /* the five scores flash up the moment the wave is over */
+  const lo=js.indexOf(srt[0]),hi=js.lastIndexOf(srt[4]);judgeCard(js,lo,hi,fin);if(PARTY.on)ptRecord(fin);if(WC.on)wcRecord(fin);if(!PARTY.on)try{window.psRank&&psRank({fin:fin,spot:SPOT.id,name:SPOT.name,kind:kind})}catch(_){}   /* 2026-11-25 (the user) the ranking gets every solo wave */   /* the five scores flash up the moment the wave is over */
   game.heat.push(fin);const top2=[...game.heat].sort((a,b)=>b-a).slice(0,2),sum=top2.reduce((a,b)=>a+b,0);
   if(fin>game.best){game.best=fin;try{localStorage.setItem('surfpool_best',fin.toFixed(2))}catch(e){}}
   const o0=openState(),lv0=lvlOf(PROG.xp),gain=Math.round(game.pts*({2:1.25,3:1.35,4:1.1,5:1.05,6:1.15}[SPOT.id]||1));PROG.xp+=gain;PROG.waves++;ulAfterRide(fin,kind);if(fin>bestAt(SPOT.id))PROG.best[SPOT.id]=+fin.toFixed(2);progSave();
